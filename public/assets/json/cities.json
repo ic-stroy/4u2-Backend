@@ -1,0 +1,1140 @@
+[
+    {
+        "region": "Toshkent shahri",
+        "lat": 41.311081,
+        "long": 69.240562,
+        "cities": [
+            {
+                "name": "Bektemir tumani",
+                "lat": 41.223643,
+                "long": 69.334327
+            },
+            {
+                "name": "Mirzo Ulug‘bek tumani",
+                "lat": 41.326219,
+                "long": 69.326916
+            },
+            {
+                "name": "Mirobod tumani",
+                "lat": 41.292562,
+                "long": 69.285692
+            },
+            {
+                "name": "Olmazor tumani",
+                "lat": 41.354356,
+                "long": 69.223358
+            },
+            {
+                "name": "Sirg‘ali tumani",
+                "lat": 41.235070,
+                "long": 69.247361
+            },
+            {
+                "name": "Uchtepa tumani",
+                "lat": 41.295991,
+                "long": 69.175200
+            },
+            {
+                "name": "Chilonzor tumani",
+                "lat": 41.281410,
+                "long": 69.212668
+            },
+            {
+                "name": "Shayxontohur tumani",
+                "lat": 41.317653,
+                "long": 69.230581
+            },
+            {
+                "name": "Yunusobod tumani",
+                "lat": 41.364664,
+                "long": 69.287696
+            },
+            {
+                "name": "Yakkasaroy tumani",
+                "lat": 41.286004,
+                "long": 69.253748
+            },
+            {
+                "name": "Yashnobod tumani",
+                "lat": 41.283463,
+                "long": 69.339798
+            }
+        ]
+    },
+    {
+        "region": "Andijon viloyati",
+        "lat": 40.73615,
+        "long": 72.43336,
+        "cities": [
+            {
+                "name": "Andijon",
+                "lat": 40.78206000,
+                "long": 72.34424000
+            },
+            {
+                "name": "Xonabod shahri",
+                "lat": 39.061425,
+                "long": 66.697574
+            },
+            {
+                "name": "Andijon tumani",
+                "lat": 40.80000000,
+                "long": 72.41667000
+            },
+            {
+                "name": "Asaka",
+                "lat": 40.64153000,
+                "long": 72.23868000
+            },
+            {
+                "name": "Asaka tumani",
+                "lat": 40.66667000,
+                "long": 72.25000000
+            },
+            {
+                "name": "Baliqchi tumani",
+                "lat": 40.86667000,
+                "long": 72.00000000
+            },
+            {
+                "name": "Bo‘z tumani",
+                "lat": 40.66667000,
+                "long": 71.91667000
+            },
+            {
+                "name": "Buloqboshi tumani",
+                "lat": 40.61667000,
+                "long": 72.46667000
+            },
+            {
+                "name": "Izboskan tumani",
+                "lat": 40.91667000,
+                "long": 72.25000000
+            },
+            {
+                "name": "Jalaquduq tumani",
+                "lat": 40.733920,
+                "long": 72.635528
+            },
+            {
+                "name": "Xo‘jaobod tumani",
+                "lat": 40.66667000,
+                "long": 72.58333000
+            },
+            {
+                "name": "Marhamat",
+                "lat": 40.48048000,
+                "long": 72.31388000
+            },
+            {
+                "name": "Marhamat tumani",
+                "lat": 40.50000000,
+                "long": 72.31667000
+            },
+            {
+                "name": "Oltinko‘l tumani",
+                "lat": 40.80000000,
+                "long": 72.16667000
+            },
+            {
+                "name": "Paxtaobod tumani",
+                "lat": 40.93333000,
+                "long": 72.50000000
+            },
+            {
+                "name": "Paxtaobod",
+                "lat": 40.92936000,
+                "long": 72.49687000
+            },
+            {
+                "name": "Qo‘rg‘ontepa",
+                "lat": 40.73192000,
+                "long": 72.76177000
+            },
+            {
+                "name": "Qo‘rg‘ontepa tumani",
+                "lat": 40.75000000,
+                "long": 72.83333000
+            },
+            {
+                "name": "Shahrixon tumani",
+                "lat": 40.71667000,
+                "long": 72.06667000
+            },
+            {
+                "name": "Shahrixon",
+                "lat": 40.71331000,
+                "long": 72.05706000
+            },
+            {
+                "name": "Ulug‘nor tumani",
+                "lat": 40.75000000,
+                "long": 71.70000000
+            },
+            {
+                "name": "Xo‘jaobod",
+                "lat": 40.66886000,
+                "long": 72.56002000
+            }
+        ]
+    },
+    {
+        "region": "Buxoro viloyati",
+        "lat": 40.229366,
+        "long": 63.5470584,
+        "cities": [
+            {
+                "name": "Olot tumani",
+                "lat": 39.251207,
+                "long": 64.116768
+            },
+            {
+                "name": "Buxoro tumani",
+                "lat": 39.547177,
+                "long": 64.431736
+            },
+            {
+                "name": "Gʻijduvon tumani",
+                "lat": 40.480082,
+                "long": 64.785483
+            },
+            {
+                "name": "Jondor tumani",
+                "lat": 39.928717,
+                "long": 63.668680
+            },
+            {
+                "name": "Kogon tumani",
+                "lat": 39.753143,
+                "long": 64.582132
+            },
+            {
+                "name": "Kogon shahri",
+                "lat": 39.723543,
+                "long": 64.547178
+            },
+            {
+                "name": "Qorakoʻl tumani",
+                "lat": 39.785142,
+                "long": 63.166450
+            },
+            {
+                "name": "Qorovulbozor tumani",
+                "lat": 39.398799,
+                "long": 64.772431
+            },
+            {
+                "name": "Peshku tumani",
+                "lat": 40.591524,
+                "long": 63.394020
+            },
+            {
+                "name": "Romitan tumani",
+                "lat": 39.962542,
+                "long": 64.100069
+            },
+            {
+                "name": "Shofirkon tumani",
+                "lat": 40.455754,
+                "long": 64.311011
+            },
+            {
+                "name": "Vobkent tumani",
+                "lat": 39.980498,
+                "long": 64.538833
+            }
+        ]
+    },
+    {
+        "region": "Fargʻona viloyati",
+        "lat": 40.5000,
+        "long": 71.2500,
+        "cities": [
+            {
+                "name": "Beshariq tumani",
+                "lat": 40.438027,
+                "long": 70.528916
+            },
+            {
+                "name": "Farg‘ona shahri",
+                "lat": 40.389448,
+                "long": 71.783135
+            },
+            {
+                "name": "Marg‘ilon shahri",
+                "lat": 40.469065,
+                "long": 71.720774
+            },
+            {
+                "name": "Quvasoy shahri",
+                "lat": 40.296393,
+                "long": 71.982624
+            },
+            {
+                "name": "Qo‘qon shahri",
+                "lat": 40.539151,
+                "long": 70.940425
+            },
+            {
+                "name": "Bog‘dod tumani",
+                "lat": 40.495830,
+                "long": 71.219648
+            },
+            {
+                "name": "Buvayda tumani",
+                "lat": 40.615228,
+                "long": 71.140965
+            },
+            {
+                "name": "Dang‘ara tumani",
+                "lat": 40.633106,
+                "long": 70.865030
+            },
+            {
+                "name": "Yozyovon tumani",
+                "lat": 40.646348,
+                "long": 71.658763
+            },
+            {
+                "name": "Quva tumani",
+                "lat": 40.525580,
+                "long": 72.022913
+            },
+            {
+                "name": "Qo‘shtepa tumani",
+                "lat": 40.531330,
+                "long": 71.612338
+            },
+            {
+                "name": "Oltiariq tumani",
+                "lat": 40.463302,
+                "long": 71.456543
+            },
+            {
+                "name": "Rishton tumani",
+                "lat": 40.368501,
+                "long": 71.201116
+            },
+            {
+                "name": "So‘x tumani",
+                "lat": 40.038723,
+                "long": 71.066674
+            },
+            {
+                "name": "Toshloq tumani",
+                "lat": 40.513980,
+                "long": 71.823200
+            },
+            {
+                "name": "O‘zbekiston tumani",
+                "lat": 40.348050,
+                "long": 70.876124
+            },
+            {
+                "name": "Uchko‘prik tumani",
+                "lat": 40.523845,
+                "long": 71.043660
+            },
+            {
+                "name": "Farg‘ona tumani",
+                "lat": 40.290016,
+                "long": 71.758674
+            },
+            {
+                "name": "Furqat tumani",
+                "lat": 40.509866,
+                "long": 70.760313
+            }
+        ]
+    },
+    {
+        "region": "Jizzax viloyati",
+        "lat": 40.33191,
+        "long": 67.4551198,
+        "cities": [
+            {
+                "name": "Jizzax shahri",
+                "lat": 40.120302,
+                "long": 67.828544
+            },
+            {
+                "name": "Arnasoy tumani",
+                "lat": 40.569319,
+                "long": 67.831670
+            },
+            {
+                "name": "Baxmal tumani",
+                "lat": 39.750439,
+                "long": 67.864647
+            },
+            {
+                "name": "Do‘stlik tumani",
+                "lat": 40.542550,
+                "long": 68.048838
+            },
+            {
+                "name": "Zarbdor tumani",
+                "lat": 40.156499,
+                "long": 68.175330
+            },
+            {
+                "name": "Zafarobod tumani",
+                "lat": 40.358751,
+                "long": 67.796771
+            },
+            {
+                "name": "Zomin tumani",
+                "lat": 39.895395,
+                "long": 68.341806
+            },
+            {
+                "name": "Mirzacho‘l tumani",
+                "lat": 40.699033,
+                "long": 68.093763
+            },
+            {
+                "name": "Paxtakor tumani",
+                "lat": 40.346586,
+                "long": 68.033665
+            },
+            {
+                "name": "Forish tumani",
+                "lat": 40.649433,
+                "long": 67.178460
+            },
+            {
+                "name": "Sharof Rashidov tumani",
+                "lat": 40.010601,
+                "long": 67.881491
+            },
+            {
+                "name": "G‘allaorol tumani",
+                "lat": 40.056059,
+                "long": 67.399859
+            },
+            {
+                "name": "Yangiobod tumani",
+                "lat": 40.003196,
+                "long": 68.766304
+            }
+        ]
+    },
+    {
+        "region": "Qoraqalpogʻiston",
+        "lat": 43.7738841,
+        "long": 57.6234617,
+        "cities": [
+            {
+                "name": "Nukus shahri",
+                "lat": 42.460341,
+                "long": 59.617996
+            },
+            {
+                "name": "Amudaryo tumani",
+                "lat": 42.104719,
+                "long": 60.071734
+            },
+            {
+                "name": "Beruniy tumani",
+                "lat": 41.692763,
+                "long": 60.747749
+            },
+            {
+                "name": "Chimboy tumani",
+                "lat": 43.102616,
+                "long": 59.605572
+            },
+            {
+                "name": "Ellikqalʼa tumani",
+                "lat": 41.843881,
+                "long": 60.920971
+            },
+            {
+                "name": "Kegeyli tumani",
+                "lat": 42.759253,
+                "long": 59.728979
+            },
+            {
+                "name": "Moʻynoq tumani",
+                "lat": 43.771514,
+                "long": 59.021003
+            },
+            {
+                "name": "Nukus tumani",
+                "lat": 42.538940,
+                "long": 59.524904
+            },
+            {
+                "name": "Qanlikoʻl tumani",
+                "lat": 42.766203,
+                "long": 59.087604
+            },
+            {
+                "name": "Qoʻngʻirot tumani",
+                "lat": 43.048023,
+                "long": 58.850008
+            },
+            {
+                "name": "Qoraoʻzak tumani",
+                "lat": 43.022847,
+                "long": 60.016426
+            },
+            {
+                "name": "Shumanay tumani",
+                "lat": 42.634753,
+                "long": 58.934261
+            },
+            {
+                "name": "Taxtakoʻpir tumani",
+                "lat": 43.159008,
+                "long": 61.186275
+            },
+            {
+                "name": "Toʻrtkoʻl tumani",
+                "lat": 41.571313,
+                "long": 61.413270
+            },
+            {
+                "name": "Xoʻjayli tumani",
+                "lat": 42.412544,
+                "long": 59.453057
+            },
+            {
+                "name": "Taxiatosh tumani",
+                "lat": 42.322428,
+                "long": 59.512687
+            },
+            {
+                "name": "Boʻzatov tumani",
+                "lat": 42.962202,
+                "long": 59.350227
+            }
+        ]
+    },
+    {
+        "region": "Namangan viloyati",
+        "lat": 41.0036287,
+        "long": 71.2611952,
+        "cities": [
+            {
+                "name": "Namangan shahri",
+                "lat": 41.000085,
+                "long": 71.672579
+            },
+            {
+                "name": "Kosonsoy tumani",
+                "lat": 41.182108,
+                "long": 71.553220
+            },
+            {
+                "name": "Mingbuloq tumani",
+                "lat": 40.772558,
+                "long": 71.366191
+            },
+            {
+                "name": "Namangan tumani",
+                "lat": 40.922597,
+                "long": 71.654658
+            },
+            {
+                "name": "Norin tumani",
+                "lat": 40.934316,
+                "long": 72.013768
+            },
+            {
+                "name": "Pop tumani",
+                "lat": 41.012198,
+                "long": 70.780651
+            },
+            {
+                "name": "To‘raqo‘rg‘on tumani",
+                "lat": 40.956378,
+                "long": 71.482522
+            },
+            {
+                "name": "Uychi tumani",
+                "lat": 41.039077,
+                "long": 71.920298
+            },
+            {
+                "name": "Uchqo‘rg‘on tumani",
+                "lat": 41.114592,
+                "long": 72.077593
+            },
+            {
+                "name": "Chortoq tumani",
+                "lat": 41.129428,
+                "long": 71.835911
+            },
+            {
+                "name": "Chust tumani",
+                "lat": 41.050516,
+                "long": 71.201646
+            },
+            {
+                "name": "Yangiqo‘rg‘on tumani",
+                "lat": 41.279546,
+                "long": 71.719381
+            }
+        ]
+    },
+    {
+        "region": "Navoiy viloyati",
+        "lat": 42.000,
+        "long": 64.0000,
+        "cities": [
+            {
+                "name": "Navoiy shahri",
+                "lat": 41.058907,
+                "long": 64.622457
+            },
+            {
+                "name": "Zarafshon shahri",
+                "lat": 41.568824,
+                "long": 64.202665
+            },
+            {
+                "name": "Konimex tumani",
+                "lat": 41.058907,
+                "long": 64.622457
+            },
+            {
+                "name": "Karmana tumani",
+                "lat": 40.038130,
+                "long": 65.278461
+            },
+            {
+                "name": "Qiziltepa tumani",
+                "lat": 40.035485,
+                "long": 64.847009
+            },
+            {
+                "name": "Xatirchi tumani",
+                "lat": 40.191456,
+                "long": 65.943645
+            },
+            {
+                "name": "Navbahor tumani",
+                "lat": 40.258977,
+                "long": 65.439654
+            },
+            {
+                "name": "Nurota tumani",
+                "lat": 40.714975,
+                "long": 66.045191
+            },
+            {
+                "name": "Tomdi tumani",
+                "lat": 41.763163,
+                "long": 64.643460
+            },
+            {
+                "name": "Uchquduq tumani",
+                "lat": 42.309007,
+                "long": 63.140174
+            }
+        ]
+    },
+    {
+        "region": "Qashqadaryo viloyati",
+        "lat": 38.5639397,
+        "long": 65.5311095,
+        "cities": [
+            {
+                "name": "Qarshi shahri",
+                "lat": 39.215982,
+                "long": 66.530515
+            },
+            {
+                "name": "Shahrisabz shahri",
+                "lat": 39.060073,
+                "long": 66.829474
+            },
+            {
+                "name": "Chiroqchi tumani",
+                "lat": 39.215982,
+                "long": 66.530515
+            },
+            {
+                "name": "Dehqonobod tumani",
+                "lat": 38.367516,
+                "long": 66.629823
+            },
+            {
+                "name": "Gʻuzor tumani",
+                "lat": 38.540298,
+                "long": 66.146422
+            },
+            {
+                "name": "Qamashi tumani",
+                "lat": 38.540298,
+                "long": 66.146422
+            },
+            {
+                "name": "Qarshi tumani",
+                "lat": 38.781238,
+                "long": 65.797013
+            },
+            {
+                "name": "Koson tumani",
+                "lat": 39.041560,
+                "long": 65.585352
+            },
+            {
+                "name": "Kasbi tumani",
+                "lat": 38.893996,
+                "long": 65.453686
+            },
+            {
+                "name": "Kitob tumani",
+                "lat": 39.191100,
+                "long": 67.059793
+            },
+            {
+                "name": "Mirishkor tumani",
+                "lat": 38.819690,
+                "long": 64.977902
+            },
+            {
+                "name": "Muborak tumani",
+                "lat": 39.261236,
+                "long": 65.156811
+            },
+            {
+                "name": "Nishon tumani",
+                "lat": 38.519312,
+                "long": 65.578031
+            },
+            {
+                "name": "Shahrisabz tumani",
+                "lat": 38.980256,
+                "long": 67.140812
+            },
+            {
+                "name": "Yakkabogʻ tumani",
+                "lat": 38.977353,
+                "long": 66.687890
+            },
+            {
+                "name": "Koʻkdala tumani",
+                "lat": 39.172950,
+                "long": 66.180504
+            }
+        ]
+    },
+    {
+        "region": "Samarqand viloyati",
+        "lat": 39.7337023,
+        "long": 66.1282889,
+        "cities": [
+            {
+                "name": "Samarqand shahri",
+                "lat": 39.654397,
+                "long": 66.975836
+            },
+            {
+                "name": "Kattaqo‘rg‘on shahri",
+                "lat": 39.903504,
+                "long": 66.265035
+            },
+            {
+                "name": "Bulungʻur tumani",
+                "lat": 39.711916,
+                "long": 67.326979
+            },
+            {
+                "name": "Ishtixon tumani",
+                "lat": 40.021425,
+                "long": 66.526490
+            },
+            {
+                "name": "Jomboy tumani",
+                "lat": 40.021425,
+                "long": 66.526490
+            },
+            {
+                "name": "Kattaqoʻrgʻon tumani",
+                "lat": 40.046822,
+                "long": 66.261478
+            },
+            {
+                "name": "Qoʻshrabot tumani",
+                "lat": 40.379515,
+                "long": 66.533389
+            },
+            {
+                "name": "Narpay tumani",
+                "lat": 40.379515,
+                "long": 66.533389
+            },
+            {
+                "name": "Nurobod tumani",
+                "lat": 39.631006,
+                "long": 65.993636
+            },
+            {
+                "name": "Oqdaryo tumani",
+                "lat": 39.837136,
+                "long": 66.752398
+            },
+            {
+                "name": "Paxtachi tumani",
+                "lat": 39.885257,
+                "long": 65.569120
+            },
+            {
+                "name": "Payariq tumani",
+                "lat": 40.016908,
+                "long": 66.886589
+            },
+            {
+                "name": "Pastdargʻom tumani",
+                "lat": 39.660431,
+                "long": 66.662297
+            },
+            {
+                "name": "Samarqand tumani",
+                "lat": 39.671595,
+                "long": 66.894727
+            },
+            {
+                "name": "Toyloq tumani",
+                "lat": 39.570805,
+                "long": 67.150172
+            },
+            {
+                "name": "Urgut tumani",
+                "lat": 39.405588,
+                "long": 67.145501
+            }
+        ]
+    },
+    {
+        "region": "Sirdaryo viloyati",
+        "lat": 40.5018473,
+        "long": 68.7426643,
+        "cities": [
+            {
+                "name": "Guliston shahri",
+                "lat": 40.509489,
+                "long": 68.769089
+            },
+            {
+                "name": "Yangiyer shahri",
+                "lat": 40.274089,
+                "long": 68.813655
+            },
+            {
+                "name": "Shirin shahri",
+                "lat": 40.230259,
+                "long": 69.127661
+            },
+            {
+                "name": "Boyovut tumani",
+                "lat": 40.366103,
+                "long": 68.941144
+            },
+            {
+                "name": "Guliston tumani",
+                "lat": 40.516668,
+                "long": 68.914715
+            },
+            {
+                "name": "Mirzaobod tumani",
+                "lat": 40.451136,
+                "long": 68.633875
+            },
+            {
+                "name": "Oqoltin tumani",
+                "lat": 40.533352,
+                "long": 68.326193
+            },
+            {
+                "name": "Sardoba tumani",
+                "lat": 40.338235,
+                "long": 68.308415
+            },
+            {
+                "name": "Sayxunobod tumani",
+                "lat": 40.657411,
+                "long": 68.832052
+            },
+            {
+                "name": "Sirdaryo tumani",
+                "lat": 40.797671,
+                "long": 68.684073
+            },
+            {
+                "name": "Xovos tumani",
+                "lat": 40.230734,
+                "long": 68.713843
+            }
+        ]
+    },
+    {
+        "region": "Surxondaryo viloyati",
+        "lat": 37.9520843,
+        "long": 67.1265996,
+        "cities": [
+            {
+                "name": "Termiz shahri",
+                "lat": 37.228581,
+                "long": 67.275451
+            },
+            {
+                "name": "Angor tumani",
+                "lat": 37.435600,
+                "long": 67.221094
+            },
+            {
+                "name": "Boysun tumani",
+                "lat": 37.99944000,
+                "long": 67.78750000
+            },
+            {
+                "name": "Denov tumani",
+                "lat": 38.323682,
+                "long": 67.820837
+            },
+            {
+                "name": "Jarqo‘rg‘on tumani",
+                "lat": 37.504300,
+                "long": 67.464421
+            },
+            {
+                "name": "Muzrobod tumani",
+                "lat": 37.423107,
+                "long": 66.864104
+            },
+            {
+                "name": "Oltinsoy tumani",
+                "lat": 38.181924,
+                "long": 67.733628
+            },
+            {
+                "name": "Sariosiyo tumani",
+                "lat": 38.732662,
+                "long": 67.801783
+            },
+            {
+                "name": "Termiz tumani",
+                "lat": 37.304361,
+                "long": 67.444595
+            },
+            {
+                "name": "Uzun tumani",
+                "lat": 38.168273,
+                "long": 68.182696
+            },
+            {
+                "name": "Sherobod tumani",
+                "lat": 37.728920,
+                "long": 66.848725
+            },
+            {
+                "name": "Sho‘rchi tumani",
+                "lat": 37.954163,
+                "long": 67.863641
+            },
+            {
+                "name": "Qiziriq tumani",
+                "lat": 37.648587,
+                "long": 67.245160
+            },
+            {
+                "name": "Qumqo‘rg‘on tumani",
+                "lat": 37.825369,
+                "long": 67.591793
+            }
+        ]
+    },
+    {
+        "region": "Toshkent viloyati",
+        "lat": 41.0496815,
+        "long": 69.3711365,
+        "cities": [
+            {
+                "name": "Nurafshon shahri",
+                "lat": 41.042709,
+                "long": 69.357612
+            },
+            {
+                "name": "Angren shahri",
+                "lat": 41.012661,
+                "long": 70.085301
+            },
+            {
+                "name": "Bekobod shahri",
+                "lat": 40.217699,
+                "long": 69.265804
+            },
+            {
+                "name": "Olmaliq shahri",
+                "lat": 40.845891,
+                "long": 69.607110
+            },
+            {
+                "name": "Ohangaron shahri",
+                "lat": 40.910447,
+                "long": 69.643680
+            },
+            {
+                "name": "Chirchiq shahri",
+                "lat": 41.472659,
+                "long": 69.581229
+            },
+            {
+                "name": "Yangiyo‘l shahri",
+                "lat": 41.118933,
+                "long": 69.058544
+            },
+            {
+                "name": "Bekobod tumani",
+                "lat": 40.391034,
+                "long": 69.200029
+            },
+            {
+                "name": "Bo‘ka tumani",
+                "lat": 40.725945,
+                "long": 69.191109
+            },
+            {
+                "name": "Bo‘stonliq tumani",
+                "lat": 41.571610,
+                "long": 69.939352
+            },
+            {
+                "name": "Zangiota tumani",
+                "lat": 41.260515,
+                "long": 69.085656
+            },
+            {
+                "name": "Qibray tumani",
+                "lat": 41.428722,
+                "long": 69.488361
+            },
+            {
+                "name": "Quyichirchiq tumani",
+                "lat": 40.934418,
+                "long": 68.997737
+            },
+            {
+                "name": "Oqqo‘rg‘on tumani",
+                "lat": 40.819383,
+                "long": 69.002966
+            },
+            {
+                "name": "Ohangaron tumani",
+                "lat": 40.980318,
+                "long": 69.867001
+            },
+            {
+                "name": "Parkent tumani",
+                "lat": 41.257878,
+                "long": 69.751999
+            },
+            {
+                "name": "Piskent tumani",
+                "lat": 40.833850,
+                "long": 69.482163
+            },
+            {
+                "name": "Toshkent tumani",
+                "lat": 41.429405,
+                "long": 69.234515
+            },
+            {
+                "name": "O‘rtachirchiq tumani",
+                "lat": 41.057031,
+                "long": 69.307782
+            },
+            {
+                "name": "Chinoz tumani",
+                "lat": 40.999343,
+                "long": 68.825926
+            },
+            {
+                "name": "Yuqorichirchiq tumani",
+                "lat": 41.187374,
+                "long": 69.498081
+            },
+            {
+                "name": "Yangiyo‘l tumani",
+                "lat": 41.128545,
+                "long": 68.995968
+            }
+        ]
+    },
+    {
+        "region": "Xorazm viloyati",
+        "lat": 41.2902835,
+        "long": 60.5428537,
+        "cities": [
+            {
+                "name": "Urganch shahri",
+                "lat": 41.550458,
+                "long": 60.631476
+            },
+            {
+                "name": "Xiva shahri",
+                "lat": 41.550458,
+                "long": 60.631476
+            },
+            {
+                "name": "Bogʻot tumani",
+                "lat": 42.962202,
+                "long": 59.350227
+            },
+            {
+                "name": "Gurlan tumani",
+                "lat": 41.880465,
+                "long": 60.354633
+            },
+            {
+                "name": "Xonqa tumani",
+                "lat": 41.486238,
+                "long": 60.834450
+            },
+            {
+                "name": "Hazorasp tumani",
+                "lat": 41.284269,
+                "long": 61.140964
+            },
+            {
+                "name": "Xiva tumani",
+                "lat": 41.284269,
+                "long": 61.140964
+            },
+            {
+                "name": "Qoʻshkoʻpir tumani",
+                "lat": 41.503981,
+                "long": 60.261981
+            },
+            {
+                "name": "Shovot tumani",
+                "lat": 41.691029,
+                "long": 60.255234
+            },
+            {
+                "name": "Urganch tumani",
+                "lat": 41.603834,
+                "long": 60.598660
+            },
+            {
+                "name": "Yangiariq tumani",
+                "lat": 41.325265,
+                "long": 60.585814
+            },
+            {
+                "name": "Yangibozor tumani",
+                "lat": 41.729620,
+                "long": 60.489380
+            },
+            {
+                "name": "Tuproqqalʼa tumani",
+                "lat": 41.205986,
+                "long": 61.286042
+            }
+        ]
+    }
+]

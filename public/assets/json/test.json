@@ -1,0 +1,62 @@
+[
+    {
+        "region": "Toshkent shahri",
+        "cities": [
+            {
+                "name": "Bektemir tumani",
+                "lat": 41.223643,
+                "long": 69.334327
+            },
+            {
+                "name": "Mirzo Ulug‘bek tumani",
+                "lat": 41.326219,
+                "long": 69.326916
+            },
+            {
+                "name": "Mirobod tumani",
+                "lat": 41.292562,
+                "long": 69.285692
+            },
+            {
+                "name": "Olmazor tumani",
+                "lat": 41.354356,
+                "long": 69.223358
+            },
+            {
+                "name": "Sirg‘ali tumani",
+                "lat": 41.235070,
+                "long": 69.247361
+            },
+            {
+                "name": "Uchtepa tumani",
+                "lat": 41.295991,
+                "long": 69.175200
+            },
+            {
+                "name": "Chilonzor tumani",
+                "lat": 41.281410,
+                "long": 69.212668
+            },
+            {
+                "name": "Shayxontohur tumani",
+                "lat": 41.317653,
+                "long": 69.230581
+            },
+            {
+                "name": "Yunusobod tumani",
+                "lat": 41.364664,
+                "long": 69.287696
+            },
+            {
+                "name": "Yakkasaroy tumani",
+                "lat": 41.286004,
+                "long": 69.253748
+            },
+            {
+                "name": "Yashnobod tumani",
+                "lat": 41.283463,
+                "long": 69.339798
+            }
+        ]
+    }
+]
