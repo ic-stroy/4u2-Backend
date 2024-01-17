@@ -24,7 +24,7 @@ class SizeSeeder extends Seeder
             $last_size_id = isset($sizes->id)?$sizes->id:0;
             $size_array = [];
             foreach ($categories as $category){
-                if($category->name != 'Accessories'){
+                if(in_array($category->name, ['Shoes', 'Clothes'])){
                     foreach ($this->all_sizes as $all_size){
                         $last_size_id++;
                         $size_array[] = [

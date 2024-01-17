@@ -4,6 +4,11 @@ namespace App;
 
 class Constants {
 
+    //active or not active
+
+    const ACTIVE = 1;
+    const NOT_ACTIVE = 1;
+
    // Order    type_ids
    const BASKED = 1;
    const ORDERED = 2;
