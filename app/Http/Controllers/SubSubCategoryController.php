@@ -34,11 +34,17 @@ class SubSubCategoryController extends Controller
      */
     public function store(Request $request)
     {
-        $model = new Category();
+        $last_category = Category::withTrashed()->orderBy('id', 'desc')->first();
+        if(!$last_category){
+            $model = new Category();
+        }else{
+            $model = (int)$last_category->id + 1;
+        }
         $model->name = $request->name;
         $model->parent_id = $request->subcategory_id;
         $model->step = 2;
         $model->save();
+
         return redirect()->route('subsubcategory.subsubcategory', $request->subcategory_id)->with('status', __('Successfully created'));
     }
 

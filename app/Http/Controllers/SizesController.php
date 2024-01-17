@@ -32,6 +32,12 @@ class SizesController extends Controller
      */
     public function store(Request $request)
     {
+        $last_size = Sizes::withTrashed()->orderBy('id', 'desc')->first();
+        if(!$last_size){
+            $model = new Sizes();
+        }else{
+            $model = (int)$last_size->id + 1;
+        }
         $model = new Sizes();
         $model->name = $request->name;
         $model->category_id = $request->category_id;
