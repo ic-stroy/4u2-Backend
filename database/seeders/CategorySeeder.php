@@ -24,7 +24,7 @@ class CategorySeeder extends Seeder
             $last_category_id = -1;
             foreach ($this->categories as $key => $category){
                 $category_id_++;
-                $all_categories[] = ['id'=>$category_id_, 'name'=>$category, 'step'=>0, 'parent_id'=>0];
+                $all_categories[] = ['id'=>(int)$category_id_, 'name'=>$category, 'step'=>0, 'parent_id'=>0];
                 if($key < 2){
                     if($last_category_id < $sub_category_id_){
                         $sub_category_id_ = $category_id_ + count($this->categories)-1;
@@ -34,7 +34,7 @@ class CategorySeeder extends Seeder
                     foreach ($this->sub_categories as $sub_category){
                         $sub_category_id_++;
                         $last_category_id = $sub_category_id_;
-                        $all_sub_categories[] = ['id'=>$sub_category_id_, 'name'=>$sub_category, 'step'=>1, 'parent_id'=>$category_id_];
+                        $all_sub_categories[] = ['id'=>(int)$sub_category_id_, 'name'=>$sub_category, 'step'=>1, 'parent_id'=>$category_id_];
                     }
                 }
             }
@@ -42,7 +42,7 @@ class CategorySeeder extends Seeder
             foreach($all_sub_categories as $subCategory){
                 foreach ($this->sub_sub_categories as $sub_sub_category){
                     $sub_sub_category_id_++;
-                    $all_sub_sub_categories[] = ['id'=>$sub_sub_category_id_, 'name'=>$sub_sub_category, 'step'=>2, 'parent_id'=>$subCategory['id']];
+                    $all_sub_sub_categories[] = ['id'=>(int)$sub_sub_category_id_, 'name'=>$sub_sub_category, 'step'=>2, 'parent_id'=>$subCategory['id']];
                 }
             }
             $all_categories_ = array_merge($all_categories, $all_sub_categories, $all_sub_sub_categories);

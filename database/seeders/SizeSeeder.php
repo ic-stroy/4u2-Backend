@@ -29,7 +29,7 @@ class SizeSeeder extends Seeder
                     foreach ($this->all_clothes_sizes as $all_cloth_size){
                         $last_size_id++;
                         $size_array[] = [
-                            'id'=>$last_size_id,
+                            'id'=>(int)$last_size_id,
                             'name'=>$all_cloth_size,
                             'category_id'=>$category->id,
                         ];
@@ -39,7 +39,7 @@ class SizeSeeder extends Seeder
                     foreach ($this->all_shoes_sizes as $all_shoes_size){
                         $last_size_id++;
                         $size_array[] = [
-                            'id'=>$last_size_id,
+                            'id'=>(int)$last_size_id,
                             'name'=>$all_shoes_size,
                             'category_id'=>$category->id,
                         ];
