@@ -32,7 +32,6 @@ class SizeSeeder extends Seeder
                             'id'=>$last_size_id,
                             'name'=>$all_cloth_size,
                             'category_id'=>$category->id,
-                            'status'=>Constants::ACTIVE,
                         ];
                     }
                 }
@@ -43,7 +42,6 @@ class SizeSeeder extends Seeder
                             'id'=>$last_size_id,
                             'name'=>$all_shoes_size,
                             'category_id'=>$category->id,
-                            'status'=>Constants::ACTIVE,
                         ];
                     }
                 }
