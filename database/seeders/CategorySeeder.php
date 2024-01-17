@@ -11,9 +11,9 @@ class CategorySeeder extends Seeder
     /**
      * Run the database seeds.
      */
+    public $sub_sub_categories = ['Sneaker', 'T-shirt', 'Sweater', 'Jacket', 'Cap', 'Trousers', 'Boots', 'Dress'];
     public $sub_categories = ['Unisex', 'Women', 'Men', 'Boys and girls', 'Boys', 'Girls'];
-
-    public $categories = ['T-shirts', 'Sweatshirts', 'Hoodies', 'Accessories'];
+    public $categories = ['Shoes', 'Clothes', 'Beauty and healty', 'Medicine and vitamins', 'Accessories', 'Toys'];
 
     public function run(): void
     {
@@ -22,21 +22,32 @@ class CategorySeeder extends Seeder
             $category_id_ = isset($category_id->id)?$category_id->id:0;
             $sub_category_id_ = 0;
             $last_category_id = -1;
-            foreach ($this->categories as $category){
+            foreach ($this->categories as $key => $category){
                 $category_id_++;
-                if($last_category_id < $sub_category_id_){
-                    $sub_category_id_ = $category_id_ + count($this->categories);
-                }else{
-                    $sub_category_id_ = $last_category_id;
-                }
                 $all_categories[] = ['id'=>$category_id_, 'name'=>$category, 'step'=>0, 'parent_id'=>0];
-                foreach ($this->sub_categories as $sub_category){
-                    $sub_category_id_++;
-                    $last_category_id = $sub_category_id_;
-                    $all_sub_categories[] = ['id'=>$sub_category_id_, 'name'=>$sub_category, 'step'=>1, 'parent_id'=>$category_id_];
+                if($key < 2){
+                    if($last_category_id < $sub_category_id_){
+                        $sub_category_id_ = $category_id_ + count($this->categories)-1;
+                    }else{
+                        $sub_category_id_ = $last_category_id;
+                    }
+                    foreach ($this->sub_categories as $sub_category){
+                        $sub_category_id_++;
+                        $last_category_id = $sub_category_id_;
+                        $all_sub_categories[] = ['id'=>$sub_category_id_, 'name'=>$sub_category, 'step'=>1, 'parent_id'=>$category_id_];
+                    }
                 }
             }
-            $all_categories_ = array_merge($all_categories, $all_sub_categories);
+            $sub_sub_category_id_ = $last_category_id;
+            foreach($all_sub_categories as $subCategory){
+                foreach ($this->sub_sub_categories as $key => $sub_sub_category){
+                    if($key > 1){
+                        $sub_sub_category_id_++;
+                        $all_sub_sub_categories[] = ['id'=>$sub_sub_category_id_, 'name'=>$sub_sub_category, 'step'=>1, 'parent_id'=>$subCategory['id']];
+                    }
+                }
+            }
+            $all_categories_ = array_merge($all_categories, $all_sub_categories, $all_sub_sub_categories);
             foreach ($all_categories_ as $all_category){
                 Category::create($all_category);
             }
