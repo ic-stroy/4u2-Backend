@@ -55,6 +55,7 @@ class CategorySeeder extends Seeder
         "Sports clothes",
         "Tops and T-shirts",
         "Tunics",
+        "T-shirts",
         "T-shirts and polo shirts",
         "Hoodies and sweatshirts",
         "Shorts",
@@ -70,6 +71,7 @@ class CategorySeeder extends Seeder
         "Suits and jackets",
         "Socks",
         "Shirts",
+        "T-shirts",
         "Sports clothes",
         "Tolstovka and the Olympians",
         "School uniform for boys",
@@ -101,7 +103,7 @@ class CategorySeeder extends Seeder
         "Underwear",
         "Socks, booties",
         "Dresses and skirts",
-        "Trousers and trousers",
+        "Trousers",
         "T-shirts, shirts and raspashonkas",
         "Caps, mittens and gloves",
     ];
@@ -217,7 +219,6 @@ class CategorySeeder extends Seeder
         [
             'name'=>"Equipment and supplies for the tattoo parlor",
             'sub_sub_category'=>[
-                "Equipment and supplies for the tattoo parlor",
                 "Equipment for piercing",
                 "Cartridges",
                 "Tattoo machines and accessories",
