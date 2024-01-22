@@ -26,7 +26,7 @@ use \App\Http\Controllers\UsersController;
 
 Auth::routes();
 
-Route::group(['middleware'=>'isAdmin'], function(){
+Route::group(['middleware'=>['isAdmin', 'language']], function(){
     Route::get('/', [HomeController::class, 'index'])->name('dashboard');
     Route::resource('color', ColorController::class);
     Route::resource('size', SizesController::class);
@@ -40,6 +40,7 @@ Route::group(['middleware'=>'isAdmin'], function(){
     Route::get('characterized-product-by-category/{id}', [CharacterizedProductsController::class, 'characterizedProduct'])->name('characterizedProducts.category.characterized_product');
     Route::get('create-characterized-product-by-category/{id}', [CharacterizedProductsController::class, 'createCharacterizedProduct'])->name('characterizedProducts.category.create_characterized_product');
 
+    Route::post('change-language', [HomeController::class, 'changeLanguage'])->name('language.change');
     Route::resource('coupons', CouponController::class);
     Route::resource('user', UsersController::class);
     Route::resource('category', CategoryController::class);
@@ -51,6 +52,7 @@ Route::group(['middleware'=>'isAdmin'], function(){
     Route::get('sub-sub-category/subcategory/{id}', [SubSubCategoryController::class, 'subcategory'])->name('subsubcategory.subcategory');
     Route::get('sub-sub-category/subsubcategory/{id}', [SubSubCategoryController::class, 'subsubcategory'])->name('subsubcategory.subsubcategory');
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+    Route::get('/set-cities', [HomeController::class, 'setCities']);
 });
 
 Route::get('/welcome', [App\Http\Controllers\HomeController::class, 'welcome'])->name('welcome');
