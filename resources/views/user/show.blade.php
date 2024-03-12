@@ -4,16 +4,6 @@
     {{-- Your page title --}}
 @endsection
 @section('content')
-    <style>
-        .hide_pagination{
-            position: absolute;
-            z-index:4;
-            background-color: white;
-            width: 270px;
-            height: 80px;
-            margin-top: -80px
-        }
-    </style>
     <div class="card">
         <div class="card-body">
             <h4 class="mt-0 header-title">{{__('User informations')}}</h4>
@@ -126,7 +116,7 @@
                 </div>
             </div>
         </div>
-        <table id="datatable-buttons" class="table dt-responsive nowrap table_show" style="display:none;">
+        <table class="table dt-responsive nowrap table_show" style="display:none;">
             <thead>
             <tr>
                 <th>{{__('Attributes')}}</th>
@@ -183,16 +173,5 @@
             </tr>
             </tbody>
         </table>
-        <div class="d-flex justify-content-end">
-            <div class="hide_pagination"></div>
-        </div>
     </div>
-    <script>
-        let hide_pagination = document.getElementsByClassName('hide_pagination')
-        if(localStorage.getItem('layout_local') == undefined || localStorage.getItem('layout_local') == null){
-            hide_pagination[0].style.backgroundColor = 'white'
-        }else{
-            hide_pagination[0].style.backgroundColor = '#313844'
-        }
-    </script>
 @endsection

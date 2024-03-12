@@ -37,8 +37,6 @@
                         <label class="form-label">{{__('Coupon price')}}</label>
                         <input type="number" name="price" class="form-control" id="coupon_price_input"  min="0" value="{{old('price')}}"/>
                     </div>
-                </div>
-                <div class="row">
                     <div class="mb-3 col-4 display-none" id="coupon_percent">
                         <label class="form-label">{{__('Coupon percent')}}</label>
                         <input type="number" name="percent" class="form-control" id="coupon_percent_input" step="0.01" min="0" max="100" value="{{old('percent')}}"/>
@@ -51,12 +49,10 @@
                         <label class="form-label">{{__('Number of orders')}}</label>
                         <input type="number" name="order_count" class="form-control"/>
                     </div>
-                    <div class="mb-3 col-4">
+                    <div class="mb-3 col-3">
                         <label class="form-label">{{__('Start date')}}</label>
                         <input type="date" name="start_date" class="form-control" required value="{{old('start_date')}}"/>
                     </div>
-                </div>
-                <div class="row">
                     <div class="mb-3 col-3">
                         <label class="form-label">{{__('End date')}}</label>
                         <input type="date" name="end_date" class="form-control" required value="{{old('end_date')}}"/>

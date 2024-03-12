@@ -15,13 +15,14 @@ return new class extends Migration
             $table->id();
             $table->integer('order_id')->nullable();
             $table->integer('warehouse_id')->nullable();
-            $table->integer('product_id')->nullable();
             $table->integer('quantity');
             $table->bigInteger('coupon_id')->nullable();
+            $table->integer('discount')->nullable();
+            $table->double('discount_price')->nullable();
             $table->double('price')->nullable();
             $table->integer('size_id')->nullable();
             $table->integer('color_id')->nullable();
-            $table->foreign('coupon_id')->references('id')->on('coupons');
+            $table->tinyInteger('status')->default(1);
             $table->timestamps();
             $table->softDeletes();
         });

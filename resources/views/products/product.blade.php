@@ -7,10 +7,11 @@
     <div class="card">
         <div class="card-body">
             <h4 class="mt-0 header-title">{{__('Products lists')}}</h4>
-            <div class="dropdown float-end">
+            <div class="dropdown float-end mb-2">
                 <a class="form_functions btn btn-success" href="{{route('product.create')}}">{{__('Create')}}</a>
             </div>
             <table id="datatable-buttons" class="table table-striped table-bordered dt-responsive nowrap">
+{{--            <table class="table table-striped table-bordered dt-responsive nowrap">--}}
                 <thead>
                 <tr>
                     <th>#</th>

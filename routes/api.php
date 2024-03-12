@@ -28,6 +28,7 @@ Route::post('phone-register', [AuthController::class, 'PhoneRegister']);
 Route::post('login', [AuthController::class, 'login']);
 Route::post('google-login-or-register', [AuthController::class, 'googleLoginOrRegister']);
 
+Route::get('get-products-by-category', [\App\Http\Controllers\CategoryController::class, 'getProductsByCategory']);
 Route::get('categories', [\App\Http\Controllers\CategoryController::class, 'getCategories'])->name('get_categories');
 Route::get('subcategory/{id}', [\App\Http\Controllers\SubCategoryController::class, 'getSubcategory'])->name('get_subcategory');
 Route::get('sizes-types/{id}', [\App\Http\Controllers\ProductsController::class, 'getSizes'])->name('get_sizes');
@@ -38,8 +39,7 @@ Route::get('products', [\App\Http\Controllers\ProductsController::class, 'getPro
 Route::get('products-by-category', [\App\Http\Controllers\ProductsController::class, 'getProductsByCategory']);
 Route::get('product/{id}', [\App\Http\Controllers\ProductsController::class, 'getProduct']);
 Route::get('best-seller', [\App\Http\Controllers\ProductsController::class, 'BestSeller']);
-
-Route::group(['middleware'=>['auth:sanctum']], function (){
+Route::group(['middleware'=>['auth:sanctum', 'is_auth']], function (){
     Route::post('set-address', [AddressController::class, 'setAddress']);
     Route::post('edit-address', [AddressController::class, 'editAddress']);
     Route::get('get-address', [AddressController::class, 'getAddress']);

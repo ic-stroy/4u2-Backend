@@ -247,35 +247,7 @@
                                 </a>
 
                                 <!-- item-->
-                                <a href="javascript:void(0);" class="dropdown-item notify-item">
-                                    <div class="notify-icon bg-warning">
-                                        <i class="mdi mdi-account-plus"></i>
-                                    </div>
-                                    <p class="notify-details">{{ __('New user registered.')}}
-                                        <small class="text-muted">{{ __('5 hours ago')}}</small>
-                                    </p>
-                                </a>
 
-                                <!-- item-->
-                                <a href="javascript:void(0);" class="dropdown-item notify-item">
-                                    <div class="notify-icon bg-info">
-                                        <i class="mdi mdi-comment-account-outline"></i>
-                                    </div>
-                                    <p class="notify-details">{{ __('Caleb Flakelar commented on Admin')}}
-                                        <small class="text-muted">{{ __('4 days ago')}}</small>
-                                    </p>
-                                </a>
-
-                                <!-- item-->
-                                <a href="javascript:void(0);" class="dropdown-item notify-item">
-                                    <div class="notify-icon bg-secondary">
-                                        <i class="mdi mdi-heart"></i>
-                                    </div>
-                                    <p class="notify-details">Carlos Crouch {{ __('liked')}}
-                                        <b>Admin</b>
-                                        <small class="text-muted">{{ __('13 days ago')}}</small>
-                                    </p>
-                                </a>
                             </div>
 
                             <!-- All-->
@@ -376,9 +348,7 @@
                     <ul class="list-inline">
                         <li class="list-inline-item dropdown notification-list topbar-dropdown">
                             <a class="nav-link dropdown-toggle nav-user d-flex me-0 waves-effect waves-light mt-8"
-                               data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="false"
-                               aria-expanded="false">
-                                <i class="mdi mdi-cog"></i>
+                                href="{{route('getUser')}}"><i class="mdi mdi-cog"></i>
                             </a>
                             <div class="dropdown-menu dropdown-menu-center profile-dropdown ">
                                 <!-- item-->
@@ -455,13 +425,19 @@
                             </a>
                         </li>
                         <li>
-                            <a href="{{ route('product.category') }}">
+                            <a href="{{ route('product.index') }}">
                                 <i class="mdi mdi-basket-outline"></i>
                                 <span> {{ __('Products') }} </span>
                             </a>
                         </li>
                         <li>
-                            <a href="{{ route('characterizedProducts.category') }}">
+                            <a href="{{ route('discount.index') }}">
+                                <i class="mdi mdi-percent-outline"></i>
+                                <span> {{ __('Discount') }} </span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('characterizedProducts.index') }}">
                                 <i class="mdi mdi-shopping-outline"></i>
                                 <span> {{ __('Characterized products') }} </span>
                             </a>

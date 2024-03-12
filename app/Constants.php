@@ -12,10 +12,18 @@ class Constants {
    // Order    type_ids
    const BASKED = 1;
    const ORDERED = 2;
-   const ACCEPTED = 3;
-   const ON_THE_WAY = 4;
-   const FINISHED = 5;
+   const PERFORMED = 3;
+   const CANCELLED = 4;
+   const ACCEPTED_BY_RECIPIENT = 5;
 
+    //Order detail companyalar ga notificatsiya borganda ular qabul qilishi yoki kechiktrishi
+
+    const ORDER_DETAIL_BASKET = 1;
+    const ORDER_DETAIL_ORDERED = 2;
+    const ORDER_DETAIL_PERFORMED = 3;
+    const ORDER_DETAIL_PERFORMED_BY_SUPERADMIN = 4;
+    const ORDER_DETAIL_CANCELLED = 5;
+    const ORDER_DETAIL_ACCEPTED_BY_RECIPIENT = 6;
 
    // 1 basked 2 ordered 3 accepted 4 on_the_way 5 finished
 
@@ -29,4 +37,6 @@ class Constants {
     const ADMIN = 1;
     const USER = NULL;
 
+    const DISCOUNT_WAREHOUSE_TYPE = 2;
+    const DISCOUNT_PRODUCT_TYPE = 1;
 }

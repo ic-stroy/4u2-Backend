@@ -33,8 +33,6 @@
                             <option value="percent" class="form-control" {{$coupon->percent != NULL?'selected':''}}>{{__('Percent')}}</option>
                         </select>
                     </div>
-                </div>
-                <div class="row">
                     <div class="mb-3 col-6" id="coupon_price">
                         <label class="form-label">{{__('Coupon price')}}</label>
                         <input type="number" name="price" class="form-control" id="coupon_price_input"  min="0"  value="{{$coupon->price}}"/>
@@ -47,8 +45,6 @@
                         <label class="form-label">{{__("Order's min price")}}</label>
                         <input type="number" name="min_price" class="form-control" min="0" value="{{$coupon->min_price??''}}"/>
                     </div>
-                </div>
-                <div class="row">
                     <div class="mb-3 col-6">
                         <label class="form-label">{{__('Number of orders')}}</label>
                         <input type="number" name="order_count" class="form-control" value="{{$coupon->order_count}}"/>

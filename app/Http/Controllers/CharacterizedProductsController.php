@@ -17,8 +17,21 @@ class CharacterizedProductsController extends Controller
      */
     public function index()
     {
-        $products = CharacterizedProducts::orderBy('created_at', 'desc')->get();
-        return view('characterized-products.index', ['products'=> $products]);
+        $categories = Category::where('step', 0)->get();
+        $all_products = [];
+        foreach($categories as $category){
+            $categories_id = [];
+            $sub_categories_id = Category::where('parent_id', $category->id)->pluck('id')->all();
+            foreach($sub_categories_id as $sub_category_id){
+                $sub_sub_categories_id = Category::where('parent_id', $sub_category_id)->pluck('id')->all();
+                $categories_id = array_merge($categories_id, $sub_sub_categories_id);
+            }
+            $categories_id = array_merge($categories_id, $sub_categories_id);
+            array_push($categories_id, $category->id);
+            $products = Products::orderBy('created_at', 'desc')->whereIn('category_id', $categories_id)->get();
+            $all_products[$category->id] = $products;
+        }
+        return view('characterized-products.index', ['all_products'=> $all_products, 'categories'=> $categories]);
     }
 
     /**
@@ -43,7 +56,7 @@ class CharacterizedProductsController extends Controller
         $model->color_id = $request->color_id;
         $model->count = $request->count;
         $model->save();
-        return redirect()->route('characterizedProducts.category')->with('status', __('Successfully created'));
+        return redirect()->route('characterizedProducts.index')->with('status', __('Successfully created'));
     }
 
     /**
@@ -88,7 +101,7 @@ class CharacterizedProductsController extends Controller
         $model->color_id = $request->color_id;
         $model->count = $request->count;
         $model->save();
-        return redirect()->route('characterizedProducts.category')->with('status', __('Successfully updated'));
+        return redirect()->route('characterizedProducts.index')->with('status', __('Successfully updated'));
     }
 
     /**
@@ -98,7 +111,7 @@ class CharacterizedProductsController extends Controller
     {
         $model = CharacterizedProducts::find($id);
         $model->delete();
-        return redirect()->route('characterizedProducts.category')->with('status', __('Successfully deleted'));
+        return redirect()->route('characterizedProducts.index')->with('status', __('Successfully deleted'));
     }
 
     public function category()

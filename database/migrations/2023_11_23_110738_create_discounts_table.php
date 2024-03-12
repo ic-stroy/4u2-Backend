@@ -11,21 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('coupons', function (Blueprint $table) {
+        Schema::create('discounts', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->nullable();
             $table->string('percent', 100)->nullable();
-            $table->double('price', 15, 8)->nullable();
-            $table->double('min_price', 15, 8)->nullable();
-            $table->integer('order_quantity')->nullable();
-            $table->integer('order_number')->nullable();
+            $table->integer('product_id')->nullable();
+            $table->integer('category_id')->nullable();
+            $table->integer('discount_number')->nullable();
             $table->timestamp('start_date')->nullable();
             $table->timestamp('end_date')->nullable();
-            $table->tinyInteger('status')->default(1);
             $table->timestamps();
-            $table->softDeletes();
-
         });
+
     }
 
     /**
@@ -33,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('coupons');
+        Schema::dropIfExists('discounts');
     }
 };

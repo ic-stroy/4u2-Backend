@@ -30,6 +30,13 @@ class ColorController extends Controller
      */
     public function store(Request $request)
     {
+        $this->validate($request, [
+            'name'=>'required',
+            'code'=>'required'
+        ], [
+            'name.required'=>__('Color name required'),
+            'code.required'=>__('Please select a color'),
+        ]);
         $model = new Color();
         $model->name = $request->name;
         $model->code = $request->code;
@@ -60,6 +67,13 @@ class ColorController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        $this->validate($request, [
+            'name'=>'required',
+            'code'=>'required'
+        ], [
+            'name.required'=>__('Color name required'),
+            'code.required'=>__('Please select a color'),
+        ]);
         $model = Color::find($id);
         $model->name = $request->name;
         $model->code = $request->code;

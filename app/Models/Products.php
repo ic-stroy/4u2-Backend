@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Constants;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -27,6 +28,10 @@ class Products extends Model
     }
     public function subSubCategory(){
         return $this->hasOne(Category::class, 'id','category_id')->where('step', 2);
+    }
+    public function discount()
+    {
+        return $this->hasOne(Discount::class, 'product_id','id')->where('start_date', '<=', date('Y-m-d H:i:s'))->where('end_date', '>=', date('Y-m-d H:i:s'));
     }
     public function category_(){
         return $this->hasOne(Category::class, 'parent_id','category_id');

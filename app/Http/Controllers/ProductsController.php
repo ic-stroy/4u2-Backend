@@ -16,9 +16,21 @@ class ProductsController extends Controller
      */
     public function index()
     {
-
-        $products = Products::orderBy('created_at', 'desc')->get();
-        return view('products.index', ['products'=> $products]);
+        $categories = Category::where('step', 0)->get();
+        $all_products = [];
+        foreach($categories as $category){
+            $categories_id = [];
+            $sub_categories_id = Category::where('parent_id', $category->id)->pluck('id')->all();
+            foreach($sub_categories_id as $sub_category_id){
+                $sub_sub_categories_id = Category::where('parent_id', $sub_category_id)->pluck('id')->all();
+                $categories_id = array_merge($categories_id, $sub_sub_categories_id);
+            }
+            $categories_id = array_merge($categories_id, $sub_categories_id);
+            array_push($categories_id, $category->id);
+            $products = Products::orderBy('created_at', 'desc')->whereIn('category_id', $categories_id)->get();
+            $all_products[$category->id] = $products;
+        }
+        return view('products.index', ['all_products'=> $all_products, 'categories'=> $categories]);
     }
 
     /**
@@ -156,7 +168,7 @@ class ProductsController extends Controller
             }
         }
         $model->delete();
-        return redirect()->route('product.category')->with('status', __('Successfully deleted'));
+        return redirect()->route('product.index')->with('status', __('Successfully deleted'));
     }
 
 

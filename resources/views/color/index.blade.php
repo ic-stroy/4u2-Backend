@@ -4,6 +4,7 @@
     {{-- Your page title --}}
 @endsection
 @section('content')
+    </style>
     <div class="card">
         <div class="card-body">
             <h4 class="mt-0 header-title">{{__('Color lists')}}</h4>
@@ -50,11 +51,7 @@
                             <td class="function_column">
                                 <div class="d-flex justify-content-center">
                                     <a class="form_functions btn btn-info" href="{{route('color.edit', $color->id)}}"><i class="fe-edit-2"></i></a>
-                                    <form action="{{route('color.destroy', $color->id)}}" method="POST">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button class="form_functions btn btn-danger" type="submit"><i class="fe-trash-2"></i></button>
-                                    </form>
+                                    <button type="button" class="btn btn-danger delete-datas btn-sm waves-effect" data-bs-toggle="modal" data-bs-target="#warning-alert-modal" data-url="{{route('color.destroy', $color->id)}}"><i class="fe-trash-2"></i></button>
                                 </div>
                             </td>
                         </tr>
@@ -63,5 +60,4 @@
             </table>
         </div>
     </div>
-
 @endsection
