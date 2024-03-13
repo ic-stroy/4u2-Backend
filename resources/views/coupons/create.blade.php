@@ -46,8 +46,19 @@
                         <input type="number" name="min_price" class="form-control" min="0" value="{{old('min_price')}}"/>
                     </div>
                     <div class="mb-3 col-4">
-                        <label class="form-label">{{__('Number of orders')}}</label>
-                        <input type="number" name="order_count" class="form-control"/>
+                        <label class="form-label">{{__('Coupon quantity or number')}}</label>
+                        <select name="coupon__type" class="form-control" id="coupon__type">
+                            <option value="quantity" class="form-control">{{__('Quantity')}}</option>
+                            <option value="number" class="form-control">{{__('Number')}}</option>
+                        </select>
+                    </div>
+                    <div class="mb-3 col-4" id="coupon_quantity">
+                        <label class="form-label">{{__('Quntity of orders')}}</label>
+                        <input type="number" name="order_quantity" class="form-control" id="coupon_quantity_input"/>
+                    </div>
+                    <div class="mb-3 col-4 display-none" id="coupon_number">
+                        <label class="form-label">{{__('Number of order')}}</label>
+                        <input type="number" name="order_number" class="form-control" id="coupon_number_input"/>
                     </div>
                     <div class="mb-3 col-3">
                         <label class="form-label">{{__('Start date')}}</label>
@@ -69,6 +80,8 @@
     <script>
         let coupon_price_value = ""
         let coupon_percent_value = ""
+        let coupon_quantity_value = ""
+        let coupon_number_value = ""
     </script>
     <script src="{{asset('assets/js/coupon.js')}}"></script>
 @endsection

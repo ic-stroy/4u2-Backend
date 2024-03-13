@@ -45,9 +45,20 @@
                         <label class="form-label">{{__("Order's min price")}}</label>
                         <input type="number" name="min_price" class="form-control" min="0" value="{{$coupon->min_price??''}}"/>
                     </div>
-                    <div class="mb-3 col-6">
-                        <label class="form-label">{{__('Number of orders')}}</label>
-                        <input type="number" name="order_count" class="form-control" value="{{$coupon->order_count}}"/>
+                    <div class="mb-3 col-4">
+                        <label class="form-label">{{__('Coupon quantity or number')}}</label>
+                        <select name="coupon__type" class="form-control" id="coupon__type">
+                            <option value="quantity" class="form-control" {{$coupon->order_quantity != NULL?'selected':''}}>{{__('Quantity')}}</option>
+                            <option value="number" class="form-control" {{$coupon->order_number != NULL?'selected':''}}>{{__('Number')}}</option>
+                        </select>
+                    </div>
+                    <div class="mb-3 col-4" id="coupon_quantity">
+                        <label class="form-label">{{__('Quntity of orders')}}</label>
+                        <input type="number" name="order_quantity" class="form-control" id="coupon_quantity_input" value="{{$coupon->order_quantity}}"/>
+                    </div>
+                    <div class="mb-3 col-4 display-none" id="coupon_number">
+                        <label class="form-label">{{__('Number of order')}}</label>
+                        <input type="number" name="order_number" class="form-control" id="coupon_number_input" value="{{$coupon->order_number}}"/>
                     </div>
                     <div class="mb-3 col-3">
                         <label class="form-label">{{__('Start date')}}</label>
@@ -69,6 +80,8 @@
     <script>
         let coupon_price_value = "{{$coupon->price??''}}"
         let coupon_percent_value = "{{$coupon->percent??''}}"
+        let coupon_quantity_value = "{{$coupon->order_quantity}}"
+        let coupon_number_value = "{{$coupon->order_number}}"
     </script>
     <script src="{{asset('assets/js/coupon.js')}}"></script>
 @endsection

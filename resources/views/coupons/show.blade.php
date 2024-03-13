@@ -39,16 +39,17 @@
                             <td>{{$model->min_price??''}}</td>
                         </tr>
                     @endif
-                    @if($model->company)
+                    @if($model->order_quantity)
                         <tr>
-                            <th>{{__('Company')}}</th>
-                            <td>{{$model->company->name??''}}</td>
+                            <th>{{__('Quantity of orders')}}</th>
+                            <td>{{$model->order_quantity??''}}</td>
+                        </tr>
+                    @elseif($model->order_number)
+                        <tr>
+                            <th>{{__('Number of orders')}}</th>
+                            <td>{{$model->order_number??''}}</td>
                         </tr>
                     @endif
-                    <tr>
-                        <th>{{__('Number of orders')}}</th>
-                        <td>{{$model->order_count??''}}</td>
-                    </tr>
                     @if($model->start_date)
                         <tr>
                             <th>{{__('Start date')}}</th>
@@ -69,15 +70,4 @@
             </table>
         </div>
     </div>
-    <style>
-        .color_content{
-            height: 40px;
-            width: 64px;
-            border-radius: 4px;
-            border: solid 1px;
-            display: flex;
-            align-items: center;
-            justify-content: center
-        }
-    </style>
 @endsection

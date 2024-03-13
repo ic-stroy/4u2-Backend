@@ -153,9 +153,13 @@ function addOption(item, index){
 
 category_id.addEventListener('change', function () {
     subcategory_id.innerHTML = ""
+    subsubcategory_id.innerHTML = ""
     product_id.innerHTML = ""
     if(!product_exists.classList.contains('display-none')){
         product_exists.classList.add('display-none')
+    }
+    if(!subsubcategory_exists.classList.contains('display-none')){
+        subsubcategory_exists.classList.add('display-none')
     }
     $(document).ready(function () {
         $.ajax({
@@ -196,6 +200,10 @@ function addOptionToSubSubCategory(item, index){
 }
 subcategory_id.addEventListener('change', function () {
     subsubcategory_id.innerHTML = ""
+    product_id.innerHTML = ""
+    if(!product_exists.classList.contains('display-none')){
+        product_exists.classList.add('display-none')
+    }
     $(document).ready(function () {
         $.ajax({
             url:`/../api/subcategory/${subcategory_id.value}`,

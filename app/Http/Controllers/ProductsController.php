@@ -63,7 +63,7 @@ class ProductsController extends Controller
         $images = $request->file('images');
         $model->images = $this->imageSave($model, $images, 'store');
         $model->save();
-        return redirect()->route('product.category.product', $request->category_id)->with('status', __('Successfully created'));
+        return redirect()->route('product.index')->with('status', __('Successfully created'));
     }
 
     /**
@@ -149,7 +149,7 @@ class ProductsController extends Controller
         $images = $request->file('images');
         $model->images = $this->imageSave($model, $images, 'update');
         $model->save();
-        return redirect()->route('product.category.product', $request->category_id)->with('status', __('Successfully updated'));
+        return redirect()->route('product.index')->with('status', __('Successfully updated'));
     }
 
     /**

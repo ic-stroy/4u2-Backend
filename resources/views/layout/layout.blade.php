@@ -437,15 +437,15 @@
                             </a>
                         </li>
                         <li>
-                            <a href="{{ route('characterizedProducts.index') }}">
-                                <i class="mdi mdi-shopping-outline"></i>
-                                <span> {{ __('Characterized products') }} </span>
-                            </a>
-                        </li>
-                        <li>
                             <a href="{{ route('coupons.index') }}">
                                 <i class="mdi mdi-gift-outline"></i>
                                 <span> {{ __('Coupon') }} </span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('characterizedProducts.index') }}">
+                                <i class="mdi mdi-shopping-outline"></i>
+                                <span> {{ __('Characterized products') }} </span>
                             </a>
                         </li>
                         <li>

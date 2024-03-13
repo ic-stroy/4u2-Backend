@@ -26,8 +26,6 @@
                         <label class="form-label">{{__('Discount percent')}}</label>
                         <input type="number" name="percent" value="{{$discount->percent}}" class="form-control" min="0" max="100" required/>
                     </div>
-                </div>
-                <div class="row">
                     <div class="mb-3 col-4">
                         <label class="form-label">{{__('Category')}}</label>
                         <select name="category_id" class="form-control" id="category_id" required>
@@ -49,8 +47,6 @@
                         <label class="form-label">{{__('Products')}}</label>
                         <select name="product_id" class="form-control" id="product_id"></select>
                     </div>
-                </div>
-                <div class="row">
                     <div class="mb-3 col-6">
                         <label class="form-label">{{__('Start date')}}</label>
                         <input type="date" name="start_date" class="form-control" required value="{{explode(' ', $discount->start_date)[0]}}"/>
