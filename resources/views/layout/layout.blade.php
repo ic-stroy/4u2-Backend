@@ -458,16 +458,19 @@
                                 <ul class="nav-second-level">
                                     <li>
                                         <a href="{{ route('category.index') }}">
+                                            <i class="mdi mdi-format-list-bulleted"></i>
                                             <span> {{ __('Category') }} </span>
                                         </a>
                                     </li>
                                     <li>
                                         <a href="{{ route('subcategory.category') }}">
+                                            <i class="mdi mdi-format-list-bulleted"></i>
                                             <span> {{ __('Sub Category') }} </span>
                                         </a>
                                     </li>
                                     <li>
                                         <a href="{{ route('subsubcategory.category') }}">
+                                            <i class="mdi mdi-format-list-bulleted"></i>
                                             <span> {{ __('Sub Sub Category') }} </span>
                                         </a>
                                     </li>

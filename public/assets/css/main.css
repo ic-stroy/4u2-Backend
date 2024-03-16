@@ -9714,17 +9714,20 @@ a:hover {
 }
 
 .show_page{
-  display: grid;
-  width: 100%;
-  padding: 24px 0px;
-  transition: all 0.1s ease;
+    width: 100%;
+    height: 84px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.1s ease;
 }
 .show_page_color{
   display: flex;
   color: white;
   justify-content: center;
   width: 100%;
-  padding: 14px 0px;
+  height:84px;
+  align-items: center;
   transition: all 0.1s ease;
 }
 .show_page_color_empty{

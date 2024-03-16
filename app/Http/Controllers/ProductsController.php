@@ -364,6 +364,7 @@ class ProductsController extends Controller
         $products = Products::take(10)->get();
         $goods = [];
         foreach ($products as $key => $product) {
+            $discount = $product->discount;
             $colors_array = [];
             if (isset($product->categorizedProducts)) {
                 foreach ($product->categorizedProducts as $categorizedProduct) {
@@ -374,9 +375,16 @@ class ProductsController extends Controller
                     foreach ($product->categorizedProducts as $categorizedProduct){
                         if($color ==  $categorizedProduct->color->id){
                             $colorModel = $categorizedProduct->color;
+                            if(!empty($discount)){
+                                $categorizedProductSum = $discount->percent?$categorizedProduct->sum - $categorizedProduct->sum*(int)$discount->percent/100:$categorizedProduct->sum;
+                            }else{
+                                $categorizedProductSum = $categorizedProduct->sum;
+                            }
                             $productsByColor[] = [
                                 'size' => $categorizedProduct->size ? $categorizedProduct->size->name:'',
-                                'sum' => $categorizedProduct->sum,
+                                'sum' => $categorizedProductSum,
+                                'discount' => !empty($product->discount)?$product->discount->percent:null,
+                                'price'=>$categorizedProduct->sum,
                                 'count' => $categorizedProduct->count
                             ];
                         }
@@ -397,7 +405,13 @@ class ProductsController extends Controller
             $current_category = $this->getProductCategory($product);
             $goods[$key]['category'] = $current_category->name??null;
             $goods[$key]['description'] = $product->description ?? null;
-            $goods[$key]['sum'] = $product->sum ?? null;
+            if(!empty($discount)){
+                $goods[$key]['sum'] = $discount->percent?$product->sum - $product->sum*(int)$discount->percent/100:$product->sum;
+            }else{
+                $goods[$key]['sum'] = $product->sum ?? null;
+            }
+            $goods[$key]['price'] = $product->sum;
+            $goods[$key]['discount'] = !empty($product->discount)?$product->discount->percent:null;
             $goods[$key]['company'] = $product->company ?? null;
             $goods[$key]['characters'] = $categorizedByColor??[];
             $goods[$key]['images'] = $images ?? [];
@@ -415,15 +429,23 @@ class ProductsController extends Controller
     public function getProduct($id)
     {
         $product = Products::find($id);
+        $discount = $product->discount;
         if (isset($product->categorizedProducts)) {
             $colors_array = [];
             foreach ($product->categorizedProducts as $categorizedProduct_) {
                 $colors_array[] = $categorizedProduct_->color->id;
                 if($colors_array[0] == $categorizedProduct_->color->id){
+                    if(!empty($discount)){
+                        $categorizedProductSum = $discount->percent?$categorizedProduct_->sum - $categorizedProduct_->sum*(int)$discount->percent/100:$categorizedProduct_->sum;
+                    }else{
+                        $categorizedProductSum = $categorizedProduct_->sum;
+                    }
                     $firstColorProducts[] = [
                         'id'=>$categorizedProduct_->id,
                         'size'=>$categorizedProduct_->size ? $categorizedProduct_->size->name:'',
-                        'sum' => $categorizedProduct_->sum,
+                        'sum' => $categorizedProductSum,
+                        'discount' => !empty($product->discount)?$product->discount->percent:null,
+                        'price'=>$categorizedProduct_->sum,
                         'count' => $categorizedProduct_->count
                     ];
                 }
@@ -433,10 +455,17 @@ class ProductsController extends Controller
                 foreach ($product->categorizedProducts as $categorizedProduct){
                     if($color == $categorizedProduct->color->id){
                         $colorModel = $categorizedProduct->color;
+                        if(!empty($discount)){
+                            $categorizedProductSum = $discount->percent?$categorizedProduct->sum - $categorizedProduct->sum*(int)$discount->percent/100:$categorizedProduct->sum;
+                        }else{
+                            $categorizedProductSum = $categorizedProduct->sum;
+                        }
                         $productsByColor[] = [
                             'id' => $categorizedProduct->id,
                             'size' => $categorizedProduct->size ? $categorizedProduct->size->name:'',
-                            'sum' => $categorizedProduct->sum,
+                            'sum' => $categorizedProductSum,
+                            'discount' => !empty($product->discount)?$product->discount->percent:null,
+                            'price'=>$categorizedProduct->sum,
                             'count' => $categorizedProduct->count
                         ];
                     }
@@ -459,7 +488,13 @@ class ProductsController extends Controller
             $current_category = $this->getProductCategory($product);
             $good['category'] = $current_category->name ?? null;
             $good['description'] = $product->description ?? null;
-            $good['sum'] = $product->sum ?? null;
+            if(!empty($discount)){
+                $good['sum'] = $discount->percent?$product->sum - $product->sum*(int)$discount->percent/100:$product->sum;
+            }else{
+                $good['sum'] = $product->sum ?? null;
+            }
+            $good['price'] = $product->sum;
+            $good['discount'] = !empty($product->discount)?$product->discount->percent:null;
             $good['company'] = $product->company ?? null;
             $good['characters'] = $categorizedByColor ?? [];
             $good['first_color_products'] = $firstColorProducts ?? [];
@@ -483,6 +518,7 @@ class ProductsController extends Controller
         $products = Products::orderBy('id', 'DESC')->get();
         $goods = [];
         foreach ($products as $key => $product){
+            $discount = $product->discount;
             $colors_array = [];
             if (isset($product->categorizedProducts)) {
                 foreach ($product->categorizedProducts as $categorizedProduct) {
@@ -493,9 +529,16 @@ class ProductsController extends Controller
                     foreach ($product->categorizedProducts as $categorizedProduct){
                         if($color ==  $categorizedProduct->color->id){
                             $colorModel = $categorizedProduct->color;
+                            if(!empty($discount)){
+                                $categorizedProductSum = $discount->percent?$categorizedProduct->sum - $categorizedProduct->sum*(int)$discount->percent/100:$categorizedProduct->sum;
+                            }else{
+                                $categorizedProductSum = $categorizedProduct->sum;
+                            }
                             $productsByColor[] = [
                                 'size' => $categorizedProduct->size ? $categorizedProduct->size->name:'',
-                                'sum' => $categorizedProduct->sum,
+                                'sum' => $categorizedProductSum,
+                                'discount' => !empty($product->discount)?$product->discount->percent:null,
+                                'price'=>$categorizedProduct->sum,
                                 'count' => $categorizedProduct->count
                             ];
                         }
@@ -516,7 +559,13 @@ class ProductsController extends Controller
             $current_category = $this->getProductCategory($product);
             $goods[$key]['category'] = $current_category->name??null;
             $goods[$key]['description'] = $product->description ?? null;
-            $goods[$key]['sum'] = $product->sum??null;
+            if(!empty($discount)){
+                $goods[$key]['sum'] = $discount->percent?$product->sum - $product->sum*(int)$discount->percent/100:$product->sum;
+            }else{
+                $goods[$key]['sum'] = $product->sum ?? null;
+            }
+            $goods[$key]['price'] = $product->sum;
+            $goods[$key]['discount'] = !empty($product->discount)?$product->discount->percent:null;
             $goods[$key]['company'] = $product->company??null;
             $goods[$key]['characters'] = $categorizedByColor??[];
             $goods[$key]['images'] = $images??[];

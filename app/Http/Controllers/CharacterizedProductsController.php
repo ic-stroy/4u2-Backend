@@ -29,9 +29,29 @@ class CharacterizedProductsController extends Controller
             $categories_id = array_merge($categories_id, $sub_categories_id);
             array_push($categories_id, $category->id);
             $products = Products::orderBy('created_at', 'desc')->whereIn('category_id', $categories_id)->get();
-            $all_products[$category->id] = $products;
+
+            $category_ = '';
+            $sub_category_ = '';
+            $sub_sub_category_ = '';
+            foreach($products as $product){
+                if(!empty($product->category)){
+                    $category_ = $product->category->name;
+                }elseif(!empty($product->subCategory)){
+                    $category_ = !empty($product->subCategory->category)?$product->subCategory->category->name:'';
+                    $sub_category_ = $product->subCategory->name;
+                }elseif(!empty($product->subSubCategory)){
+                    if(!empty($product->subSubCategory->sub_category)){
+                        $category_ = !empty($product->subSubCategory->sub_category->category)?$product->subSubCategory->sub_category->category->name:'';
+                        $sub_category_ = $product->subSubCategory->sub_category->name;
+                    }
+                    $sub_sub_category_ = $product->subSubCategory->name;
+                }
+            }
+            $all_products[$category->id] = ['products'=>$products, 'sub_sub_category_'=>$sub_sub_category_, 'sub_category_'=>$sub_category_, 'category_'=>$category_];
         }
-        return view('characterized-products.index', ['all_products'=> $all_products, 'categories'=> $categories]);
+
+//        dd($all_products);
+        return view('characterized-products.index', ['all_products'=> $all_products, 'categories'=> $categories, 'sub_sub_category_'=>$sub_sub_category_, 'sub_category_'=>$sub_category_, 'category_'=>$category_]);
     }
 
     /**

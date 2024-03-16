@@ -23,8 +23,8 @@
                     <li class="nav-item">
                         <a href="#category_{{$category->id}}" data-bs-toggle="tab" aria-expanded="{{$i == 1?'true':'false'}}" class="nav-link {{$i == 1?'active':''}}">
                             {{$category->name??''}}
-                            @if(count($all_products[$category->id]) > 0)
-                                <span class="badge bg-danger">{{count($all_products[$category->id])}}</span>
+                            @if(count($all_products[$category->id]['products']) > 0)
+                                <span class="badge bg-danger">{{count($all_products[$category->id]['products'])}}</span>
                             @endif
                         </a>
                     </li>
@@ -55,21 +55,16 @@
                             @php
                                 $i = 0
                             @endphp
-                            @foreach($all_products[$category->id] as $product)
+                            @foreach($all_products[$category->id]['products'] as $product)
                                 @php
                                     $i++;
-                                    if(isset($product->subCategory->id)){
-                                        $current_category = $product->subCategory->name;
-                                    }elseif(isset($product->category->id)){
-                                        $current_category = $product->category->name;
-                                    }
                                 @endphp
                                 <tr>
                                     <th scope="row">
-                                        <a class="show_page" href="{{route('product.show', $product->id)}}">{{$i}}</a>
+                                        <a class="show_page" href="{{route('characterizedProducts.category.characterized_product', $product->id)}}">{{$i}}</a>
                                     </th>
                                     <td>
-                                        <a class="show_page" href="{{route('product.show', $product->id)}}">
+                                        <a class="show_page" href="{{route('characterizedProducts.category.characterized_product', $product->id)}}">
                                             @if(isset($product->name))
                                                 @if(strlen($product->name)>34)
                                                     {{ substr($product->name, 0, 34) }}...
@@ -82,17 +77,21 @@
                                         </a>
                                     </td>
                                     <td>
-                                        <a class="show_page" href="{{route('product.show', $product->id)}}">
-                                            @if(isset($current_category)){{ $current_category }}@else <div class="no_text"></div> @endif
+                                        <a class="show_page" href="{{route('characterizedProducts.category.characterized_product', $product->id)}}">
+                                            @if($all_products[$category->id]['sub_sub_category_'] != '' || $all_products[$category->id]['sub_category_'] != '' || $all_products[$category->id]['category_'] != '')
+                                                {{ implode(', ', [$all_products[$category->id]['category_'], $all_products[$category->id]['sub_category_'], $all_products[$category->id]['sub_sub_category_']])}}
+                                            @else
+                                                <div class="no_text"></div>
+                                            @endif
                                         </a>
                                     </td>
                                     <td>
-                                        <a class="show_page" href="{{route('product.show', $product->id)}}">
+                                        <a class="show_page" href="{{route('characterizedProducts.category.characterized_product', $product->id)}}">
                                             {{$product->status == 1?__('Active'):__('No active') }}
                                         </a>
                                     </td>
                                     <td>
-                                        <a class="show_page_color" href="{{route('product.show', $product->id)}}">
+                                        <a class="show_page_color" href="{{route('characterizedProducts.category.characterized_product', $product->id)}}">
                                             <div class="d-flex">
                                                 @if(isset($product->images))
                                                     @php
@@ -118,7 +117,7 @@
                                         </a>
                                     </td>
                                     <td>
-                                        <a class="show_page" href="{{route('product.show', $product->id)}}">
+                                        <a class="show_page" href="{{route('characterizedProducts.category.characterized_product', $product->id)}}">
                                             @if(isset($product->updated_at)){{ $product->updated_at }}@else <div class="no_text"></div> @endif
                                         </a>
                                     </td>
