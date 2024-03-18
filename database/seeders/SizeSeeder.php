@@ -14,46 +14,53 @@ class SizeSeeder extends Seeder
      * Run the database seeds.
      */
     public $all_clothes_sizes = ['S', 'M', 'L', 'X', 'XL', 'XXL', 'XXXL', 'XXXXL', '6-7 years', '8-10 years', '11-13 years'];
-    public $all_shoes_sizes = ['S', 'M', 'L', 'X', 'XL', 'XXL', 'XXXL', 'XXXXL', '6-7 years', '8-10 years', '11-13 years'];
+    public $all_shoes_sizes = ['34', '35', '36', '37', '38', '39', '40', '41', '42', '43', '44', '45', '46', '6-7 years', '8-10 years', '11-13 years'];
 
 
     public function run(): void
     {
-        $categories = Category::withTrashed()->where('step', 0)->select('id', 'name')->get();
-        $sizes = Sizes::withTrashed()->select('id', 'deleted_at')->orderBy('id', 'desc')->first();
-        if(!$sizes){
-            $last_size_id = isset($sizes->id)?$sizes->id:0;
-            $size_array = [];
-            foreach ($categories as $category){
-                if($category->name == 'Clothes'){
-                    foreach ($this->all_clothes_sizes as $all_cloth_size){
+        $size_category = Category::where('name', 'Shoes')->first();
+        if($size_category) {
+            $all_sizes = Sizes::withTrashed()->where('category_id', $size_category->id)->get();
+            foreach ($all_sizes as $size) {
+                $size->forceDelete();
+            }
+            $categories = Category::withTrashed()->where('step', 0)->select('id', 'name')->get();
+            $sizes = Sizes::withTrashed()->orderBy('id', 'desc')->first();
+            if($sizes){
+                $last_size_id = isset($sizes->id)?$sizes->id:0;
+                $size_array = [];
+            foreach ($categories as $category) {
+    //                if($category->name == 'Clothes'){
+    //                    foreach ($this->all_clothes_sizes as $all_cloth_size){
+    //                        $last_size_id++;
+    //                        $size_array[] = [
+    //                            'id'=>(int)$last_size_id,
+    //                            'name'=>$all_cloth_size,
+    //                            'category_id'=>$category->id,
+    //                        ];
+    //                    }
+    //                }
+                if ($category->name == 'Shoes') {
+                    foreach ($this->all_shoes_sizes as $all_shoes_size) {
                         $last_size_id++;
                         $size_array[] = [
-                            'id'=>(int)$last_size_id,
-                            'name'=>$all_cloth_size,
-                            'category_id'=>$category->id,
-                        ];
-                    }
-                }
-                if($category->name == 'Shoes'){
-                    foreach ($this->all_shoes_sizes as $all_shoes_size){
-                        $last_size_id++;
-                        $size_array[] = [
-                            'id'=>(int)$last_size_id,
-                            'name'=>$all_shoes_size,
-                            'category_id'=>$category->id,
+                            'id' => (int)$last_size_id,
+                            'name' => $all_shoes_size,
+                            'category_id' => $category->id,
                         ];
                     }
                 }
             }
-            foreach($size_array as $size){
+            foreach ($size_array as $size) {
                 Sizes::create($size);
             }
-        }else{
-            if(!isset($sizes->deleted_at)){
-                echo "Size is exist status deleted";
-            }else{
-                echo "Size is exist status active";
+    //        }else{
+    //            if(!isset($sizes->deleted_at)){
+    //                echo "Size is exist status deleted";
+    //            }else{
+    //                echo "Size is exist status active";
+    //            }
             }
         }
     }

@@ -23,8 +23,8 @@
                     <li class="nav-item">
                         <a href="#category_{{$category->id}}" data-bs-toggle="tab" aria-expanded="{{$i == 1?'true':'false'}}" class="nav-link {{$i == 1?'active':''}}">
                             {{$category->name??''}}
-                            @if(count($all_products[$category->id]) > 0)
-                                <span class="badge bg-danger">{{count($all_products[$category->id])}}</span>
+                            @if(count($all_products[$category->id]['products']) > 0)
+                                <span class="badge bg-danger">{{count($all_products[$category->id]['products'])}}</span>
                             @endif
                         </a>
                     </li>
@@ -55,14 +55,9 @@
                             @php
                                 $i = 0
                             @endphp
-                            @foreach($all_products[$category->id] as $product)
+                            @foreach($all_products[$category->id]['products'] as $product)
                                 @php
                                     $i++;
-                                    if(isset($product->subCategory->id)){
-                                        $current_category = $product->subCategory->name;
-                                    }elseif(isset($product->category->id)){
-                                        $current_category = $product->category->name;
-                                    }
                                 @endphp
                                 <tr>
                                     <th scope="row">
@@ -83,7 +78,11 @@
                                     </td>
                                     <td>
                                         <a class="show_page" href="{{route('product.show', $product->id)}}">
-                                            @if(isset($current_category)){{ $current_category }}@else <div class="no_text"></div> @endif
+                                            @if($all_products[$category->id]['category_'] || $all_products[$category->id]['sub_category_'])
+                                                {{ implode(', ', [$all_products[$category->id]['category_'], $all_products[$category->id]['sub_category_']]) }}
+                                            @else
+                                                <div class="no_text"></div>
+                                            @endif
                                         </a>
                                     </td>
                                     <td>

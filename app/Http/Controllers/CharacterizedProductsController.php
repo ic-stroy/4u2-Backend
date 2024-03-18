@@ -46,12 +46,11 @@ class CharacterizedProductsController extends Controller
                     }
                     $sub_sub_category_ = $product->subSubCategory->name;
                 }
+                $all_products[$category->id][$product->id] = ['product'=>$product, 'sub_sub_category_'=>$sub_sub_category_, 'sub_category_'=>$sub_category_, 'category_'=>$category_];
             }
-            $all_products[$category->id] = ['products'=>$products, 'sub_sub_category_'=>$sub_sub_category_, 'sub_category_'=>$sub_category_, 'category_'=>$category_];
         }
 
-//        dd($all_products);
-        return view('characterized-products.index', ['all_products'=> $all_products, 'categories'=> $categories, 'sub_sub_category_'=>$sub_sub_category_, 'sub_category_'=>$sub_category_, 'category_'=>$category_]);
+        return view('characterized-products.index', ['all_products'=> $all_products, 'categories'=> $categories]);
     }
 
     /**

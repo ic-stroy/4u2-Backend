@@ -534,7 +534,7 @@ class CategorySeeder extends Seeder
                 'sub_category'=> $this->sub_toys
             ]
         ];
-        $category_id = Category::withTrashed()->select('id', 'deleted_at')->orderBy('id', 'desc')->first();
+        $category_id = Category::withTrashed()->select('id')->orderBy('id', 'desc')->first();
         if(!isset($category_id->id)){
             $all_categories = [];
             $all_sub_categories = [];
@@ -583,7 +583,8 @@ class CategorySeeder extends Seeder
                 Category::create($all_category);
             }
         }else{
-            if(!isset($category_id->deleted_at)){
+            $category_deleted_at = Category::withTrashed()->select('deleted_at')->find($category_id->id);
+            if(!isset($category_deleted_at->deleted_at)){
                 echo "Category is exist status deleted";
             }else{
                 echo "Category is exist status active";
