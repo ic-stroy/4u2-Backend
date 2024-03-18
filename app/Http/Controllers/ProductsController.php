@@ -524,6 +524,51 @@ class ProductsController extends Controller
         return response()->json($response, 200);
     }
 
+    public function getCharacterizedProduct($id)
+    {
+        $product = CharacterizedProducts::find($id);
+        if($product){
+            $image = null;
+            $product_ = Products::find($product->id);
+            if($product_){
+                $discount = $product_->discount;
+                if(!empty($discount)){
+                    $categorizedProductSum = $discount->percent?$product->sum - $product->sum*(int)$discount->percent/100:$product->sum;
+                }else{
+                    $categorizedProductSum = $product->sum;
+                }
+                $images_ = json_decode($product_->images);
+                if(count($images_)>0){
+                    $image = asset('storage/products/'.$images_[0]);
+                }
+            }
+            $good = [
+                'id'=>$product->id,
+                'name'=>$product->product->name,
+                'image'=>$image,
+                'product_id'=>$product->product_id,
+                'size_id'=>$product->size_id,
+                'color_id'=>$product->color_id,
+                'count'=>$product->count,
+                'discount' => !empty($product->discount)?$product->discount->percent:null,
+                'sum'=>$categorizedProductSum,
+                'price'=>$product->sum,
+            ];
+            $response = [
+                'status'=>true,
+                'data'=>$good
+            ];
+            return response()->json($response, 200);
+        }else{
+            $response = [
+                'status'=>true,
+                'data'=>[]
+            ];
+            return response()->json($response, 200);
+        }
+
+    }
+
     public function BestSeller()
     {
         $products = Products::orderBy('id', 'DESC')->get();

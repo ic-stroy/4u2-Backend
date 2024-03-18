@@ -35,6 +35,6 @@ class CharacterizedProducts extends Model
 
     public function discount()
     {
-        return $this->hasOne(Discount::class, 'warehouse_id','id')->where('start_date', '<=', date('Y-m-d H:i:s'))->where('end_date', '>=', date('Y-m-d H:i:s'));
+        return $this->hasOne(Discount::class, 'product_id','product_id')->where('start_date', '<=', date('Y-m-d H:i:s'))->where('end_date', '>=', date('Y-m-d H:i:s'));
     }
 }

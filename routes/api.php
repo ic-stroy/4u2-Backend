@@ -39,6 +39,7 @@ Route::get('products', [\App\Http\Controllers\ProductsController::class, 'getPro
 Route::get('products-by-category', [\App\Http\Controllers\ProductsController::class, 'getProductsByCategory']);
 Route::get('product/{id}', [\App\Http\Controllers\ProductsController::class, 'getProduct']);
 Route::get('best-seller', [\App\Http\Controllers\ProductsController::class, 'BestSeller']);
+Route::get('get-characterized-product/{id}', [\App\Http\Controllers\ProductsController::class, 'getCharacterizedProduct']);
 Route::group(['middleware'=>['auth:sanctum', 'is_auth']], function (){
     Route::post('set-address', [AddressController::class, 'setAddress']);
     Route::post('edit-address', [AddressController::class, 'editAddress']);

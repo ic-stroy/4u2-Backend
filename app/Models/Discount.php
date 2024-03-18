@@ -15,7 +15,6 @@ class Discount extends Model
       'id',
       'percent',
       'product_id',
-      'warehouse_id',
       'type',
       'start_date',
       'end_date',
