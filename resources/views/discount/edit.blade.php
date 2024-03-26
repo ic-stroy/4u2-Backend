@@ -69,7 +69,13 @@
         let discount_category_id = "{{$category_id}}"
         let discount_subcategory_id = "{{$subcategory_id}}"
         let discount_subsubcategory_id = "{{$subsubcategory_id}}"
-        let discount_product_id = "{{$discount->product_id}}"
+        @if($quantity == 1)
+            let discount_product_id = "{{$discount->product_id}}"
+        @elseif($quantity > 1)
+            let discount_product_id = "two"
+        @else
+            let discount_product_id = ""
+        @endif
         let discount_percent_value = "{{$discount->percent??''}}"
         let text_select_sub_category = "{{__('Select sub category')}}"
         let text_all_subcategory_products = "{{__('All subcategories`s products')}}"

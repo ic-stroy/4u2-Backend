@@ -47,8 +47,8 @@
                         </td>
                         <td>
                             <a class="show_page" href="{{route('discount.show', $discount_data['discount'][0]->id)}}">
-                                @if($category != '' || $subcategory != '' || $subsubcategory != '')
-                                    {{implode(', ', [$category, $subcategory, $subsubcategory])}}
+                                @if(!empty($discount_data['category'][0]) || !empty($discount_data['subcategory'][0]) || !empty($discount_data['subsubcategory'][0]))
+                                    {{implode(', ', [$discount_data['category'][0], $discount_data['subcategory'][0], $discount_data['subsubcategory'][0]])}}
                                 @else
                                     <div class="no_text"></div>
                                 @endif

@@ -37,6 +37,4 @@ class Constants {
     const ADMIN = 1;
     const USER = NULL;
 
-    const DISCOUNT_WAREHOUSE_TYPE = 2;
-    const DISCOUNT_PRODUCT_TYPE = 1;
 }
