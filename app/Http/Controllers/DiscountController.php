@@ -123,7 +123,6 @@ class DiscountController extends Controller
 
     public function getProducts($request){
         $all_category = [];
-//        dd($request->subcategory_id, $request->subsubcategory_id, $request->product_id, $request->category_id);
         if(isset($request->product_id) && $request->product_id != "all" && $request->product_id){
             $products = Products::where('id', $request->product_id)->get();
         }elseif(isset($request->subsubcategory_id) && $request->subsubcategory_id != "all" && $request->subsubcategory_id){

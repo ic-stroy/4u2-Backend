@@ -61,7 +61,6 @@ class AddressController extends Controller
     }
 
     public function editAddress(Request $request){
-        return $this->success('Success', 200, [$request->all()]);
         $user = Auth::user();
         $address = Address::where('user_id', $user->id)->find($request->id);
         if(!isset($address->id)){

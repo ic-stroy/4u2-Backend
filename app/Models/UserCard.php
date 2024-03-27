@@ -13,6 +13,7 @@ class UserCard extends Model
     public $fillable = [
       'id',
       'name',
+      'user_name',
       'card_number',
       'validity_period',
       'user_id',

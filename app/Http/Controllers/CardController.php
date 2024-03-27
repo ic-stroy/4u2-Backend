@@ -14,24 +14,22 @@ class CardController extends Controller
      */
     public function getCards(Request $request)
     {
-        $language = $request->header('language');
         $user = Auth::user();
         $user_cards = UserCard::where('user_id', $user->id)->get();
         foreach ($user_cards as $user_card){
             $data[] = [
               'id'=>$user_card->id,
               'name'=>$user_card->name??null,
+              'user_name'=>$user_card->user_name??null,
               'card_number'=>$user_card->card_number??null,
               'validity_period'=>$user_card->validity_period??null,
               'user_id'=>$user_card->user_id??null,
             ];
         }
         if(isset($data)){
-            $message = __('Success', $language);
-            return $this->success($message, 200, $data);
+            return $this->success("Success", 200, $data);
         }else{
-            $message = __('No cards', $language);
-            return $this->error($message, 400);
+            return $this->error('No cards', 400);
         }
     }
 
@@ -41,16 +39,16 @@ class CardController extends Controller
      */
     public function storeCard(Request $request)
     {
-        $language = $request->header('language');
         $user = Auth::user();
         $user_card = new UserCard();
-        $user_card->name = $request->name;
-        $user_card->card_number = $request->card_number;
-        $user_card->validity_period = $request->validity_period;
-        $user_card->user_id = $user->id;
+        $user_card->name = $request->card_name;
+        $user_card->user_name = $request->card_user_name;
+        $user_card->card_number = (int)$request->card_number;
+        $user_card->validity_period = $request->card_validity_period;
+        $user_card->user_id = (int)$user->id;
+//        return response()->json($user_card);
         $user_card->save();
-        $message = __('Success', $language);
-        return $this->success($message, 200);
+        return $this->success("Success", 200);
     }
 
     /**
@@ -58,24 +56,22 @@ class CardController extends Controller
      */
     public function showCard(Request $request)
     {
-        $language = $request->header('language');
         $user = Auth::user();
         $user_card = UserCard::where('user_id', $user->id)->find($request->id);
         if(isset($user_card->id)){
             $data = [
                 'id'=>$user_card->id,
                 'name'=>$user_card->name??null,
+                'user_name'=>$user_card->user_name??null,
                 'card_number'=>$user_card->card_number??null,
                 'validity_period'=>$user_card->validity_period??null,
                 'user_id'=>$user_card->user_id??null,
             ];
         }
         if(isset($data)){
-            $message = __('Success', $language);
-            return $this->success($message, 200, $data);
+            return $this->success('Success', 200, $data);
         }else{
-            $message = __('No cards', $language);
-            return $this->error($message, 400);
+            return $this->error("No cards", 400);
         }
     }
 
@@ -88,6 +84,7 @@ class CardController extends Controller
         $user = Auth::user();
         $user_card = UserCard::where('user_id', $user->id)->find($request->id);
         $user_card->name = $request->name;
+        $user_card->user_name = $request->user_name;
         $user_card->card_number = $request->card_number;
         $user_card->validity_period = $request->validity_period;
         $user_card->user_id = $user->id;
