@@ -46,7 +46,6 @@ class CardController extends Controller
         $user_card->card_number = (int)$request->card_number;
         $user_card->validity_period = $request->card_validity_period;
         $user_card->user_id = (int)$user->id;
-//        return response()->json($user_card);
         $user_card->save();
         return $this->success("Success", 200);
     }
@@ -80,17 +79,15 @@ class CardController extends Controller
      */
     public function updateCard(Request $request)
     {
-        $language = $request->header('language');
         $user = Auth::user();
         $user_card = UserCard::where('user_id', $user->id)->find($request->id);
-        $user_card->name = $request->name;
-        $user_card->user_name = $request->user_name;
-        $user_card->card_number = $request->card_number;
-        $user_card->validity_period = $request->validity_period;
-        $user_card->user_id = $user->id;
+        $user_card->name = $request->card_name;
+        $user_card->user_name = $request->card_user_name;
+        $user_card->card_number = (int)$request->card_number;
+        $user_card->validity_period = $request->card_validity_period;
+        $user_card->user_id = (int)$user->id;
         $user_card->save();
-        $message = __('Success', $language);
-        return $this->success($message, 200);
+        return $this->success("Success", 200);
     }
 
     /**
@@ -98,11 +95,9 @@ class CardController extends Controller
      */
     public function destroyCard(Request $request)
     {
-        $language = $request->header('language');
         $user = Auth::user();
         $user_card = UserCard::where('user_id', $user->id)->find($request->id);
         $user_card->delete();
-        $message = __('Success', $language);
-        return $this->success($message, 200, $user_card);
+        return $this->success("Success", 200, $user_card);
     }
 }
