@@ -2,12 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Constants;
 use App\Models\CharacterizedProducts;
 use App\Models\Color;
+use App\Models\Coupon;
+use App\Models\Order;
 use App\Models\Products;
 use App\Models\Sizes;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ProductsController extends Controller
 {
@@ -536,10 +540,12 @@ class ProductsController extends Controller
 
     public function getCharacterizedProduct(Request $request)
     {
+        $all_sum = 0;
+        $order_coupon_price = 0;
         $good = [];
-        $selected_products_id = $request->selected_products_id;
-        foreach($selected_products_id as $selected_product_id){
-            $product = CharacterizedProducts::find($selected_product_id);
+        $selected_products = $request->selected_products;
+        foreach($selected_products as $selected_product){
+            $product = CharacterizedProducts::find($selected_product['id']);
             if($product){
                 $images = null;
                 $company_name = null;
@@ -549,14 +555,18 @@ class ProductsController extends Controller
                     $discount = $product_->discount;
                     if($product->sum){
                         if(!empty($discount)){
-                            $categorizedProductSum = $discount->percent?$product->sum - $product->sum*(int)$discount->percent/100:$product->sum;
+                            $categorizedProductSum = $discount->percent?$product->sum - (int)$product->sum*(int)$discount->percent/100:$product->sum;
+                            $categorizedAllProductSum = $discount->percent?$product->sum*(int)$selected_product['count'] - (int)$product->sum*$selected_product['count']*(int)$discount->percent/100:$product->sum*(int)$selected_product['count'];
                         }else{
                             $categorizedProductSum = $product->sum;
+                            $categorizedAllProductSum = $product->sum*(int)$selected_product['count'];
                         }
                     }else{
                         if(!empty($discount)){
                             $categorizedProductSum = $discount->percent?$product_->sum - $product_->sum*(int)$discount->percent/100:$product_->sum;
+                            $categorizedAllProductSum = $discount->percent?$product_->sum*(int)$selected_product['count'] - $product_->sum*(int)$selected_product['count']*(int)$discount->percent/100:$product_->sum;
                         }else{
+                            $categorizedAllProductSum = $product_->sum*(int)$selected_product['count'];
                             $categorizedProductSum = $product_->sum;
                         }
                     }
@@ -569,6 +579,7 @@ class ProductsController extends Controller
                     $company_name = $product_->company??null;
                     $category_name = !empty($product_->category)?$product_->category->name:null;
                 }
+                $all_sum = $all_sum + $categorizedAllProductSum??$product->sum*(int)$selected_product['count'];
                 $good[] = [
                     'id'=>$product->id,
                     'product_id'=>$product_->id,
@@ -585,12 +596,51 @@ class ProductsController extends Controller
                 ];
             }
         }
+        if($request->coupon){
+            $coupon = Coupon::where('name', $request->coupon)->where('status', 1)
+                ->where('start_date', '<=', date('Y-m-d H:i:s'))
+                ->where('end_date', '>=', date('Y-m-d H:i:s'))->first();
+            $user = Auth::user();
+            $order_count = Order::where('user_id', $user->id)->where('status', '!=', Constants::BASKED)->count();
+            if($coupon) {
+                if($all_sum > $coupon->min_price){
+                    if($coupon->order_quantity) {
+                        if($coupon->order_quantity > 0){
+                            $order_coupon_price = (int)$this->setOrderCoupon($coupon, $all_sum);
+                        }else{
+                            $message = __("Coupon left 0 quantity");
+                            return $this->error($message, 400);
+                        }
+                    }elseif($coupon->order_number) {
+                        if($order_count+1 == $coupon->order_number){
+                            $order_coupon_price = (int)$this->setOrderCoupon($coupon, $all_sum);
+                        }else{
+                            $message = __("Coupon for your $coupon->order_number - order this is your $order_count - order");
+                            return $this->error($message, 400);
+                        }
+                    }else{
+                        $order_coupon_price = (int)$this->setOrderCoupon($coupon, $all_sum);
+                    }
+                }
+            }
+        }
+
         $response = [
             'status'=>true,
+            'coupon_price'=>$order_coupon_price,
             'data'=>$good
         ];
         return response()->json($response, 200);
 
+    }
+
+    public function setOrderCoupon($coupon, $price){
+        if ($coupon->percent) {
+            $order_coupon_price = ($price/100)*($coupon->percent);
+        }elseif($coupon->price){
+            $order_coupon_price = $coupon->price;
+        }
+        return $order_coupon_price;
     }
 
     public function getFavouriteProducts(Request $request)

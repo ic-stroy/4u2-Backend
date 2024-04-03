@@ -39,18 +39,19 @@ Route::get('products', [\App\Http\Controllers\ProductsController::class, 'getPro
 Route::get('products-by-category', [\App\Http\Controllers\ProductsController::class, 'getProductsByCategory']);
 Route::get('product/{id}', [\App\Http\Controllers\ProductsController::class, 'getProduct']);
 Route::get('best-seller', [\App\Http\Controllers\ProductsController::class, 'BestSeller']);
-Route::post('get-characterized-product', [\App\Http\Controllers\ProductsController::class, 'getCharacterizedProduct']);
 Route::post('get-favourite-products', [\App\Http\Controllers\ProductsController::class, 'getFavouriteProducts']);
 Route::group(['middleware'=>['auth:sanctum', 'is_auth']], function (){
     Route::post('set-address', [AddressController::class, 'setAddress']);
     Route::post('edit-address', [AddressController::class, 'editAddress']);
     Route::get('get-address', [AddressController::class, 'getAddress']);
-    Route::delete('destroy-address', [AddressController::class, 'destroy']);
+    Route::post('destroy-address', [AddressController::class, 'destroy']);
     Route::get('get-cards', [CardController::class, 'getCards']);
     Route::post('store-card', [CardController::class, 'storeCard']);
     Route::post('update-card', [CardController::class, 'updateCard']);
     Route::get('show-card', [CardController::class, 'showCard']);
     Route::post('destroy-card', [CardController::class, 'destroyCard']);
+    Route::post('get-coupon', [\App\Http\Controllers\ApiOrderController::class, 'getCoupon']);
+    Route::post('get-characterized-product', [\App\Http\Controllers\ProductsController::class, 'getCharacterizedProduct']);
     Route::post('register', [AuthController::class, 'register']);
     Route::post('logout', [AuthController::class, 'logout']);
     Route::get('get-user', [AuthController::class, 'getUser']);
