@@ -71,7 +71,9 @@ class AddressController extends Controller
             return $this->error('City or Region not found', 400);
         }
         $address->city_id = $request->city_id;
-        $address->name = $request->name;
+        if($request->name != ''){
+            $address->name = $request->name;
+        }
         $address->user_id = $user->id;
         $address->latitude = $request->latitude;
         $address->longitude = $request->longitude;
