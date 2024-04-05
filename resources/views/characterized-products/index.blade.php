@@ -23,8 +23,10 @@
                     <li class="nav-item">
                         <a href="#category_{{$category->id}}" data-bs-toggle="tab" aria-expanded="{{$i == 1?'true':'false'}}" class="nav-link {{$i == 1?'active':''}}">
                             {{$category->name??''}}
-                            @if(count($all_products[$category->id]) > 0)
-                                <span class="badge bg-danger">{{count($all_products[$category->id])}}</span>
+                            @if(isset($all_products[$category->id]))
+                                @if(count($all_products[$category->id]) > 0)
+                                    <span class="badge bg-danger">{{count($all_products[$category->id])}}</span>
+                                @endif
                             @endif
                         </a>
                     </li>
@@ -55,80 +57,82 @@
                             @php
                                 $i = 0
                             @endphp
-                            @foreach($all_products[$category->id] as $product)
-                                @php
-                                    $i++;
-                                @endphp
-                                <tr>
-                                    <th scope="row">
-                                        <a class="show_page" href="{{route('characterizedProducts.category.characterized_product', $product['product']->id)}}">{{$i}}</a>
-                                    </th>
-                                    <td>
-                                        <a class="show_page" href="{{route('characterizedProducts.category.characterized_product', $product['product']->id)}}">
-                                            @if(isset($product['product']->name))
-                                                @if(strlen($product['product']->name)>34)
-                                                    {{ substr($product['product']->name, 0, 34) }}...
-                                                @else
-                                                    {{$product['product']->name}}
-                                                @endif
-                                            @else
-                                                <div class="no_text"></div>
-                                            @endif
-                                        </a>
-                                    </td>
-                                    <td>
-                                        <a class="show_page" href="{{route('characterizedProducts.category.characterized_product', $product['product']->id)}}">
-                                            @if($product['sub_sub_category_'] != '' || $product['sub_category_'] != '' || $product['category_'] != '')
-                                                {{ implode(', ', [$product['category_'], $product['sub_category_'], $product['sub_sub_category_']])}}
-                                            @else
-                                                <div class="no_text"></div>
-                                            @endif
-                                        </a>
-                                    </td>
-                                    <td>
-                                        <a class="show_page" href="{{route('characterizedProducts.category.characterized_product', $product['product']->id)}}">
-                                            {{$product['product']->status == 1?__('Active'):__('No active') }}
-                                        </a>
-                                    </td>
-                                    <td>
-                                        <a class="show_page_color" href="{{route('characterizedProducts.category.characterized_product', $product['product']->id)}}">
-                                            <div class="d-flex">
-                                                @if(isset($product['product']->images))
-                                                    @php
-                                                        $images = json_decode($product['product']->images);
-                                                        $is_image = 0;
-                                                    @endphp
-                                                    @foreach($images as $image)
-                                                        @php
-                                                            $avatar_main = storage_path('app/public/products/'.$image);
-                                                        @endphp
-                                                        @if(file_exists($avatar_main))
-                                                            @php $is_image = 1; @endphp
-                                                            <div style="margin-right: 2px">
-                                                                <img src="{{ asset('storage/products/'.$image) }}" alt="" height="40px">
-                                                            </div>
-                                                        @endif
-                                                    @endforeach
-                                                    @if($is_image == 0)
-                                                        <img src="{{asset('icon/no_photo.jpg')}}" alt=""  height="40px">
+                            @if(isset($all_products[$category->id]))
+                                @foreach($all_products[$category->id] as $product)
+                                    @php
+                                        $i++;
+                                    @endphp
+                                    <tr>
+                                        <th scope="row">
+                                            <a class="show_page" href="{{route('characterizedProducts.category.characterized_product', $product['product']->id)}}">{{$i}}</a>
+                                        </th>
+                                        <td>
+                                            <a class="show_page" href="{{route('characterizedProducts.category.characterized_product', $product['product']->id)}}">
+                                                @if(isset($product['product']->name))
+                                                    @if(strlen($product['product']->name)>34)
+                                                        {{ substr($product['product']->name, 0, 34) }}...
+                                                    @else
+                                                        {{$product['product']->name}}
                                                     @endif
-                                                @else <img src="{{asset('icon/no_photo.jpg')}}" alt=""  height="40px"> @endif
+                                                @else
+                                                    <div class="no_text"></div>
+                                                @endif
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <a class="show_page" href="{{route('characterizedProducts.category.characterized_product', $product['product']->id)}}">
+                                                @if($product['sub_sub_category_'] != '' || $product['sub_category_'] != '' || $product['category_'] != '')
+                                                    {{ implode(', ', [$product['category_'], $product['sub_category_'], $product['sub_sub_category_']])}}
+                                                @else
+                                                    <div class="no_text"></div>
+                                                @endif
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <a class="show_page" href="{{route('characterizedProducts.category.characterized_product', $product['product']->id)}}">
+                                                {{$product['product']->status == 1?__('Active'):__('No active') }}
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <a class="show_page_color" href="{{route('characterizedProducts.category.characterized_product', $product['product']->id)}}">
+                                                <div class="d-flex">
+                                                    @if(isset($product['product']->images))
+                                                        @php
+                                                            $images = json_decode($product['product']->images);
+                                                            $is_image = 0;
+                                                        @endphp
+                                                        @foreach($images as $image)
+                                                            @php
+                                                                $avatar_main = storage_path('app/public/products/'.$image);
+                                                            @endphp
+                                                            @if(file_exists($avatar_main))
+                                                                @php $is_image = 1; @endphp
+                                                                <div style="margin-right: 2px">
+                                                                    <img src="{{ asset('storage/products/'.$image) }}" alt="" height="40px">
+                                                                </div>
+                                                            @endif
+                                                        @endforeach
+                                                        @if($is_image == 0)
+                                                            <img src="{{asset('icon/no_photo.jpg')}}" alt=""  height="40px">
+                                                        @endif
+                                                    @else <img src="{{asset('icon/no_photo.jpg')}}" alt=""  height="40px"> @endif
+                                                </div>
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <a class="show_page" href="{{route('characterizedProducts.category.characterized_product', $product['product']->id)}}">
+                                                @if(isset($product['product']->updated_at)){{ $product['product']->updated_at }}@else <div class="no_text"></div> @endif
+                                            </a>
+                                        </td>
+                                        <td class="function_column">
+                                            <div class="d-flex justify-content-center">
+                                                <a class="form_functions btn btn-info" href="{{route('product.edit', $product['product']->id)}}"><i class="fe-edit-2"></i></a>
+                                                <button type="button" class="btn btn-danger delete-datas btn-sm waves-effect" data-bs-toggle="modal" data-bs-target="#warning-alert-modal" data-url="{{route('product.destroy', $product['product']->id)}}"><i class="fe-trash-2"></i></button>
                                             </div>
-                                        </a>
-                                    </td>
-                                    <td>
-                                        <a class="show_page" href="{{route('characterizedProducts.category.characterized_product', $product['product']->id)}}">
-                                            @if(isset($product['product']->updated_at)){{ $product['product']->updated_at }}@else <div class="no_text"></div> @endif
-                                        </a>
-                                    </td>
-                                    <td class="function_column">
-                                        <div class="d-flex justify-content-center">
-                                            <a class="form_functions btn btn-info" href="{{route('product.edit', $product['product']->id)}}"><i class="fe-edit-2"></i></a>
-                                            <button type="button" class="btn btn-danger delete-datas btn-sm waves-effect" data-bs-toggle="modal" data-bs-target="#warning-alert-modal" data-url="{{route('product.destroy', $product['product']->id)}}"><i class="fe-trash-2"></i></button>
-                                        </div>
-                                    </td>
-                                </tr>
-                            @endforeach
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            @endif
                             </tbody>
                         </table>
                     </div>

@@ -40,6 +40,10 @@
     z-index: 1;
 }
 
+ .buttons-pdf, .buttons-copy{
+     display: none;
+ }
+
 </style>
 <!-- body start -->
 
