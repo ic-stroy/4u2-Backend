@@ -26,7 +26,7 @@ class AddressController extends Controller
             }
             $data[] = [
                 'id'=>$city->id,
-                'region'=>$city->name,
+                'name'=>$city->name,
                 'lat'=>$city->lat,
                 'long'=>$city->lng,
                 'cities'=>$cities_,
@@ -116,28 +116,39 @@ class AddressController extends Controller
         $city = [];
         $region = [];
         foreach ($user->addresses as $address_) {
-            if(isset($address_->cities->id)){
+            $region_city = [];
+            if(!empty($address_->cities)){
                 if($address_->cities->type == 'district'){
                     $city = [
                         'id' => $address_->cities->id,
                         'name' => $address_->cities->name??'',
                         'lat' => $address_->cities->lat??'',
-                        'lng' => $address_->cities->lng??'',
+                        'long' => $address_->cities->lng??'',
                     ];
-                    if(isset($address_->cities->region->id)){
+                    if(!empty($address_->cities->region)){
                         $region = [
                             'id' => $address_->cities->region->id,
                             'name' => $address_->cities->region->name??'',
                             'lat' => $address_->cities->region->lat??'',
-                            'lng' => $address_->cities->region->lng??'',
+                            'long' => $address_->cities->region->lng??'',
                         ];
+                        if(!empty($address_->cities->region->getDistricts)){
+                            foreach($address_->cities->region->getDistricts as $regionCity){
+                                $region_city[] = [
+                                    'id' => $regionCity->id,
+                                    'name' => $regionCity->name??'',
+                                    'lat' => $regionCity->lat??'',
+                                    'long' => $regionCity->lng??'',
+                                ];
+                            }
+                        }
                     }
                 }else{
                     $region = [
                         'id' => $address_->cities->id,
                         'name' => $address_->cities->name??'',
                         'lat' => $address_->cities->lat??'',
-                        'lng' => $address_->cities->lng??'',
+                        'long' => $address_->cities->lng??'',
                     ];
                 }
             }
@@ -147,6 +158,7 @@ class AddressController extends Controller
                 'name'=>$address_->name??null,
                 'region'=>$region,
                 'city'=>$city,
+                'region_cities'=>$region_city,
                 'latitude'=>$address_->latitude??null,
                 'longitude'=>$address_->longitude??null,
                 'postcode'=>$address_->postcode??null,
