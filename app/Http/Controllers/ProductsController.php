@@ -614,17 +614,17 @@ class ProductsController extends Controller
                     }elseif($coupon->order_number) {
                         if($order_count+1 == $coupon->order_number){
                             $order_coupon_price = (int)$this->setOrderCoupon($coupon, $all_sum);
-                        }else{
-                            $message = __("Coupon for your $coupon->order_number - order this is your $order_count - order");
-                            return $this->error($message, 400);
                         }
+//                        else{
+//                            $message = __("Coupon for your $coupon->order_number - order this is your $order_count - order");
+//                            return $this->error($message, 400);
+//                        }
                     }else{
                         $order_coupon_price = (int)$this->setOrderCoupon($coupon, $all_sum);
                     }
                 }
             }
         }
-
         $response = [
             'status'=>true,
             'coupon_price'=>$order_coupon_price,
@@ -689,7 +689,6 @@ class ProductsController extends Controller
             'data'=>$good
         ];
         return response()->json($response, 200);
-
     }
 
     public function BestSeller()

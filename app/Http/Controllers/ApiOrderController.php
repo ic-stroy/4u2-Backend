@@ -6,6 +6,7 @@ use App\Constants;
 use App\Models\CharacterizedProducts;
 use App\Models\Coupon;
 use App\Models\Order;
+use App\Models\OrderDetail;
 use App\Models\Products;
 use App\Providers\AuthServiceProvider;
 use Illuminate\Http\Request;
@@ -95,68 +96,106 @@ class ApiOrderController extends Controller
         }
         return $order_coupon_price;
     }
-//    public function addCoupon(Request $request){
-//        $order_coupon_price = 0;
-//        if ($coupon = Coupon::where('name', $request->coupon_name)
-//            ->where('status', 1)
-//            ->where('start_date', '<=', date('Y-m-d H:i:s'))
-//            ->where('end_date', '>=', date('Y-m-d H:i:s'))->first()) {
-//            if ($order=Order::where('id', $request->order_id)->first()) {
-//                $order_count = Order::where('user_id', $order->user_id)->where('status', '!=', Constants::BASKED)->count();
-//                if (!$order->coupon_id) {
-//                    if($order->all_price < $coupon->min_price){
-//                        $message= __("this order sum isn't enough for coupon. Coupon min price $coupon->min_price");
-//                        return $this->error($message, 400);
-//                    }
-//                    switch ($coupon->type){
-//                        case Constants::TO_ORDER_COUNT:
-//                            if($coupon->order_count > 0){
-//                                $coupon->order_count = $coupon->order_count - 1;
-//                                $order_coupon_price = (int)$this->setOrderCoupon($coupon, $order->all_price);
-//                                $coupon->save();
-//                            }else{
-//                                $message=__("Coupon left 0 quantity");
-//                                return $this->error($message, 400);
-//                            }
-//                            break;
-//                        case Constants::FOR_ORDER_NUMBER:
-//                            if($order_count == $coupon->order_count){
-//                                $order_coupon_price = (int)$this->setOrderCoupon($coupon, $order->all_price);
-//                            }else{
-//                                $message=__("Coupon for your $coupon->order_count - order this is your $order_count - order");
-//                                return $this->error($message, 400);
-//                            }
-//                            break;
-//                        default:
-//                            $order_coupon_price = (int)$this->setOrderCoupon($coupon, $order->all_price);
-//                    }
-//                    if((int)$order_coupon_price > 0){
-//                        $order->coupon_id = $coupon->id;
-//                        $order->coupon_price = $order_coupon_price;
-//                        $order->all_price = $order->all_price - $order_coupon_price;
-//                    }
-//                    $order->save();
-//                    $data=[
-//                        'id'=>$order->id,
-//                        'coupon_price'=>$order->coupon_price,
-//                        'price'=>$order->price,
-//                        'discount_price'=>$order->discount_price,
-//                        'grant_total'=>$order->all_price
-//                    ];
-//
-//                    $message = __('success');
-//                    return $this->success($message, 200,$data);
-//                }else {
-//                    $message=__('this order has a coupon');
-//                    return $this->error($message, 400);
-//                }
+
+    public function confirmOrder(Request $request){
+        if($request->selected_products){
+            $order = new Order();
+            $order_detail = new OrderDetail();
+            $user = Auth::user();
+            $data = [];
+            $products = $request->selected_products;
+            $order_coupon_price = 0;
+            $all_discount_price = 0;
+            $categorizedProductAllPrice = 0;
+            $order_count = Order::where('user_id', $user->id)->count();
+            foreach($products as $product_data){
+                $categorizedProductPrice = 0;
+                $discount_price = 0;
+                $product = CharacterizedProducts::find($product_data['id']);
+                if($product){
+                    $product_ = Products::find($product->product_id);
+                    if($product_){
+                        $discount = $product_->discount;
+                        $order_detail->warehouse_id = (int)$product_data['id'];
+                        $order_detail->quantity = (int)$product_data['count'];
+                        $order_detail->size_id = $product->size_id;
+                        $order_detail->color_id = (int)$product_data['color']['id'];
+                        $order_detail->discount = (int)$product_data['discount'];
+                        $order_detail->price = (int)$product->price;
+                        $order_detail->status = Constants::ACTIVE;
+
+                        if($product->sum){
+                            $categorizedProductPrice = $product->sum*(int)$product_data['count'];
+                            if(!empty($discount)){
+                                if((int)$discount->percent != 0){
+                                    $discount_price = $product->sum*(int)$product_data['count']*(int)$discount->percent/100;
+                                }
+                            }
+                        }else{
+                            $categorizedProductPrice = $product_->sum*(int)$product_data['count'];
+                            if(!empty($discount)){
+                                if((int)$discount->percent != 0){
+                                    $discount_price = $product_->sum*(int)$product_data['count']*(int)$discount->percent/100;
+                                }
+                            }
+                        }
+                        if($discount_price > 0){
+                            $all_discount_price = $all_discount_price + $discount_price;
+                            $order_detail->discount_price = $discount_price;
+                        }
+                    }
+                }
+                $categorizedProductAllPrice = $categorizedProductAllPrice + $categorizedProductPrice;
+            }
+
+            $all_sum = $categorizedProductAllPrice - $all_discount_price;
+            $coupon = Coupon::where('name', $request->coupon)->first();
+            if($coupon) {
+                if ($all_sum > $coupon->min_price) {
+                    if ($coupon->order_quantity) {
+                        if ($coupon->order_quantity > 0) {
+                            $order_coupon_price = (int)$this->setOrderCoupon($coupon, $all_sum);
+                        }
+                    } elseif ($coupon->order_number) {
+                        if ($order_count + 1 == $coupon->order_number) {
+                            $order_coupon_price = (int)$this->setOrderCoupon($coupon, $all_sum);
+                        }
+                    } else {
+                        $order_coupon_price = (int)$this->setOrderCoupon($coupon, $all_sum);
+                    }
+                }
+                $order->coupon_id = $coupon->id;
+            }
+
+            $order->price = $categorizedProductAllPrice;
+            $order->user_id = $user->id;
+            $order->all_price = $all_sum;
+            $order->status = Constants::ORDER_DETAIL_ORDERED;
+            $order->coupon_price = $order_coupon_price;
+            if($all_discount_price > 0){
+                $order->discount_price = $all_discount_price;
+            }
+
+            $order->save();
+            $order_detail->order_id = $order->id;
+            $order_detail->save();
+
+//                $good = [
+//                    'coupon_price'=>$order_coupon_price,
+//                    'coupon'=>[
+//                        'id'=>$coupon->id,
+//                        'name'=>$coupon->name,
+//                        'price'=>$coupon->price,
+//                        'percent'=>$coupon->percent
+//                    ]
+//                ];
+//                return $this->success('Success', 200, $good);
 //            }
-//            else {
-//                $message=__('order not found');
-//                return $this->error($message, 400);
-//            }
-//        }
-//        $message=__('coupon not found or expired or not active');
-//        return $this->error($message, 400);
-//    }
+
+            return $this->success('Success', 200, $data);
+        }else{
+            $message = __('There is no product');
+            return $this->error($message, 400);
+        }
+    }
 }
