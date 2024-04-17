@@ -253,15 +253,11 @@ class LanguageController extends Controller
      */
     public function update(Request $request ,$id)
     {
-
-
-
         // dd($request->all());
 
         $language = Language::where('id', $id)->first();
         $language->name = $request->name;
         if ($language->save()) {
-
 
             // dd(default_language());
             if (LanguageTranslation::where('language_id', $language->id)->where('lang', default_language())->first()) {

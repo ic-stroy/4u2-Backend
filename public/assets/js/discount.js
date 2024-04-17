@@ -172,7 +172,7 @@ category_id.addEventListener('change', function () {
         subsubcategory_exists.classList.add('display-none')
     }
     $(document).ready(function () {
-        if(subcategory_id.value != '') {
+        if(category_id.value != '') {
             $.ajax({
                 url: `/../api/subcategory/${category_id.value}`,
                 type: 'GET',
@@ -225,7 +225,6 @@ subcategory_id.addEventListener('change', function () {
                     if (subsubcategory_exists.classList.contains('display-none')) {
                         subsubcategory_exists.classList.remove('display-none')
                     }
-                    console.log(data)
                     let disabled_option = document.createElement('option')
                     disabled_option.text = text_select_product
                     disabled_option.selected = true
@@ -261,7 +260,6 @@ subsubcategory_id.addEventListener('change', function () {
                 url:`/../api/get-products-by-category?category_id=${subsubcategory_id.value}`,
                 type:'GET',
                 success: function (data) {
-                    console.log({'product':data})
                     if(product_exists.classList.contains('display-none')){
                         product_exists.classList.remove('display-none')
                     }
