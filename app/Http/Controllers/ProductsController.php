@@ -78,7 +78,7 @@ class ProductsController extends Controller
         $images = $request->file('images');
         $model->images = $this->imageSave($model, $images, 'store');
         $model->save();
-        return redirect()->route('product.index')->with('status', __('Successfully created'));
+        return redirect()->route('product.index')->with('status', translate('Successfully created'));
     }
 
     /**
@@ -164,7 +164,7 @@ class ProductsController extends Controller
         $images = $request->file('images');
         $model->images = $this->imageSave($model, $images, 'update');
         $model->save();
-        return redirect()->route('product.index')->with('status', __('Successfully updated'));
+        return redirect()->route('product.index')->with('status', translate('Successfully updated'));
     }
 
     /**
@@ -183,7 +183,7 @@ class ProductsController extends Controller
             }
         }
         $model->delete();
-        return redirect()->route('product.index')->with('status', __('Successfully deleted'));
+        return redirect()->route('product.index')->with('status', translate('Successfully deleted'));
     }
 
 
@@ -608,7 +608,7 @@ class ProductsController extends Controller
                         if($coupon->order_quantity > 0){
                             $order_coupon_price = (int)$this->setOrderCoupon($coupon, $all_sum);
                         }else{
-                            $message = __("Coupon left 0 quantity");
+                            $message = translate("Coupon left 0 quantity");
                             return $this->error($message, 400);
                         }
                     }elseif($coupon->order_number) {
@@ -616,7 +616,7 @@ class ProductsController extends Controller
                             $order_coupon_price = (int)$this->setOrderCoupon($coupon, $all_sum);
                         }
 //                        else{
-//                            $message = __("Coupon for your $coupon->order_number - order this is your $order_count - order");
+//                            $message = translate("Coupon for your $coupon->order_number - order this is your $order_count - order");
 //                            return $this->error($message, 400);
 //                        }
                     }else{
@@ -669,20 +669,20 @@ class ProductsController extends Controller
                 }
                 $company_name = $product->company??null;
                 $category_name = !empty($product->category)?$product->category->name:null;
+                $good[] = [
+                    'id'=>$product->id,
+                    'name'=>$product->name,
+                    'images'=>$images,
+                    'company'=>$company_name,
+                    'category'=>$category_name,
+                    'size_id'=>$product->size_id,
+                    'color'=>$product->color,
+                    'count'=>$product->count,
+                    'discount' => !empty($discount)?$discount->percent:null,
+                    'sum'=>$ProductSum,
+                    'price'=>$product->sum,
+                ];
             }
-            $good[] = [
-                'id'=>$product->id,
-                'name'=>$product->name,
-                'images'=>$images,
-                'company'=>$company_name,
-                'category'=>$category_name,
-                'size_id'=>$product->size_id,
-                'color'=>$product->color,
-                'count'=>$product->count,
-                'discount' => !empty($discount)?$discount->percent:null,
-                'sum'=>$ProductSum,
-                'price'=>$product->sum,
-            ];
         }
         $response = [
             'status'=>true,

@@ -59,7 +59,7 @@ class UsersController extends Controller
         }
         $model->save();
 
-        return redirect()->route('user.index')->with('status', __('Successfully created'));
+        return redirect()->route('user.index')->with('status', translate('Successfully created'));
     }
 
     /**
@@ -122,7 +122,7 @@ class UsersController extends Controller
         }
         $model->save();
 
-        return redirect()->route('user.index')->with('status', __('Successfully updated'));
+        return redirect()->route('user.index')->with('status', translate('Successfully updated'));
     }
 
     /**
@@ -142,7 +142,7 @@ class UsersController extends Controller
         }
 
         $model->delete();
-        return redirect()->route('user.index')->with('status', __('Successfully deleted'));
+        return redirect()->route('user.index')->with('status', translate('Successfully deleted'));
     }
 
     /**

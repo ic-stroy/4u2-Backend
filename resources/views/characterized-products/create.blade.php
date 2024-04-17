@@ -16,54 +16,54 @@
                 </div>
             @endif
             <p class="text-muted font-14">
-                {{__('Characterized Products list create')}}
+                {{translate('Characterized Products list create')}}
             </p>
             <form action="{{route('characterizedProducts.store')}}" class="parsley-examples" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method("POST")
                 <div class="mb-3 d-flex justify-content-between">
                     <div style="width: 45%">
-                        <label class="form-label">{{__('Product')}}</label>
+                        <label class="form-label">{{translate('Product')}}</label>
                         <select name="product_id" class="form-control" id="product_id" required>
-                            <option value="">{{__('Choose product')}}</option>
+                            <option value="">{{translate('Choose product')}}</option>
                             @foreach($products as $product)
                                 <option value="{{$product->id}}">{{$product->name}}</option>
                             @endforeach
                         </select>
                     </div>
                     <div style="width: 45%">
-                        <label class="form-label">{{__('Sum')}}</label>
+                        <label class="form-label">{{translate('Sum')}}</label>
                         <input name="sum" class="form-control" id="sum" required>
                     </div>
                 </div>
                 <div class="mb-3 d-flex justify-content-between">
                     <div style="width: 45%">
-                        <label class="form-label">{{__('Category')}}</label>
+                        <label class="form-label">{{translate('Category')}}</label>
                         <input class="form-control" type="text" readonly id="category_id">
                     </div>
                     <div style="width: 45%">
-                        <label class="form-label">{{__('Sizes')}}</label>
+                        <label class="form-label">{{translate('Sizes')}}</label>
                         <select name="size_id" class="form-control" id="size_types" required></select>
                     </div>
                 </div>
                 <div class="mb-3 d-flex justify-content-between">
                     <div style="width: 45%">
-                        <label class="form-label">{{__('Color')}}</label>
+                        <label class="form-label">{{translate('Color')}}</label>
                         <select name="color_id" class="form-control" id="colors_id" required>
-                            <option value="">{{__('Choose product color')}}</option>
+                            <option value="">{{translate('Choose product color')}}</option>
                             @foreach($colors as $color)
                                 <option value="{{$color->id}}" style="background-color: {{$color->code}}; color:{{strtolower($color->name)=='white'?'black':'white'}}">{{$color->name}}</option>
                             @endforeach
                         </select>
                     </div>
                     <div style="width: 45%">
-                        <label class="form-label">{{__('Count')}}</label>
+                        <label class="form-label">{{translate('Count')}}</label>
                         <input type="number" name="count" class="form-control" required value="{{old('count')}}"/>
                     </div>
                 </div>
                 <div>
-                    <button type="submit" class="btn btn-primary waves-effect waves-light">{{__('Create')}}</button>
-                    <button type="reset" class="btn btn-secondary waves-effect">{{__('Cancel')}}</button>
+                    <button type="submit" class="btn btn-primary waves-effect waves-light">{{translate('Create')}}</button>
+                    <button type="reset" class="btn btn-secondary waves-effect">{{translate('Cancel')}}</button>
                 </div>
             </form>
         </div>

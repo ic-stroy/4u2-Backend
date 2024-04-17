@@ -6,9 +6,9 @@
 @section('content')
     <div class="card">
         <div class="card-body">
-            <h4 class="mt-0 header-title">{{__('Category lists')}}</h4>
+            <h4 class="mt-0 header-title">{{translate('Category lists')}}</h4>
             <div class="dropdown float-end">
-                <a class="form_functions btn btn-success" href="{{route('subcategory.create')}}">{{__('Create')}}</a>
+                <a class="form_functions btn btn-success" href="{{route('subcategory.create')}}">{{translate('Create')}}</a>
             </div>
             <table class="table table-striped table-bordered dt-responsive nowrap">
                 <thead>

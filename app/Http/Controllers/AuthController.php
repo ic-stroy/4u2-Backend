@@ -74,7 +74,7 @@ class AuthController extends Controller
                 ],
                 [
                     'name' => 'message',
-                    'contents' => __('Easy Print - Sizni bir martalik tasdiqlash kodingiz').': '.$random
+                    'contents' => translate('Easy Print - Sizni bir martalik tasdiqlash kodingiz').': '.$random
                 ],
                 [
                     'name' => 'from',

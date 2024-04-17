@@ -13,6 +13,7 @@ use \App\Http\Controllers\SubSubCategoryController;
 use \App\Http\Controllers\CategoryController;
 use \App\Http\Controllers\DiscountController;
 use \App\Http\Controllers\UsersController;
+use \App\Http\Controllers\LanguageController;
 
 /*
 |--------------------------------------------------------------------------
@@ -42,7 +43,7 @@ Route::group(['middleware'=>['isAdmin', 'language']], function(){
     Route::get('create-characterized-product-by-category/{id}', [CharacterizedProductsController::class, 'createCharacterizedProduct'])->name('characterizedProducts.category.create_characterized_product');
 
     Route::get('get-user', [UsersController::class, 'getUser'])->name('getUser');
-    Route::post('change-language', [HomeController::class, 'changeLanguage'])->name('language.change');
+//    Route::post('change-language', [HomeController::class, 'changeLanguage'])->name('language.change');
     Route::resource('coupons', CouponController::class);
     Route::resource('discount', DiscountController::class);
     Route::resource('user', UsersController::class);
@@ -61,6 +62,19 @@ Route::group(['middleware'=>['isAdmin', 'language']], function(){
     Route::get('/order-category', [OrderController::class, 'category'])->name('order.category');
     Route::get('/show/{id}', [OrderController::class, 'show'])->name('order.show');
     Route::get('/destroy/{id}', [OrderController::class, 'destroy'])->name('order.destroy');
+    Route::group(['prefix' => 'language'], function () {
+        Route::get('/', [LanguageController::class, 'index'])->name('language.index');
+        Route::get('/language/show/{id}', [LanguageController::class, 'show'])->name('language.show');
+        Route::post('/translation/save/', [LanguageController::class, 'translation_save'])->name('translation.save');
+        Route::post('/language/change/', [LanguageController::class, 'changeLanguage'])->name('language.change');
+        Route::post('/env_key_update', [LanguageController::class, 'env_key_update'])->name('env_key_update.update');
+        Route::get('/language/create/', [LanguageController::class, 'create'])->name('languages.create');
+        Route::post('/language/added/', [LanguageController::class, 'store'])->name('languages.store');
+        Route::get('/language/edit/{id}', [LanguageController::class, 'languageEdit'])->name('language.edit');
+        Route::put('/language/update/{id}', [LanguageController::class, 'update'])->name('language.update');
+        Route::delete('/language/delete/{id}', [LanguageController::class, 'languageDestroy'])->name('language.destroy');
+        Route::post('/language/update/value', [LanguageController::class, 'updateValue'])->name('languages.update_value');
+    });
 });
 
 Route::get('/welcome', [App\Http\Controllers\HomeController::class, 'welcome'])->name('welcome');

@@ -51,7 +51,7 @@ class CouponController extends Controller
         $coupon->start_date = $request->start_date;
         $coupon->end_date = $request->end_date;
         $coupon->save();
-        return redirect()->route('coupons.index')->with('status', __('Successfully created'));
+        return redirect()->route('coupons.index')->with('status', translate('Successfully created'));
     }
 
     /**
@@ -103,7 +103,7 @@ class CouponController extends Controller
             $coupon->end_date = $request->end_date;
         }
         $coupon->save();
-        return redirect()->route('coupons.index')->with('status', __('Successfully created'));
+        return redirect()->route('coupons.index')->with('status', translate('Successfully created'));
     }
 
 
@@ -114,6 +114,6 @@ class CouponController extends Controller
     {
         $model = Coupon::find($id);
         $model->delete();
-        return redirect()->route('coupons.index')->with('status', __('Successfully created'));
+        return redirect()->route('coupons.index')->with('status', translate('Successfully created'));
     }
 }

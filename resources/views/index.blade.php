@@ -36,7 +36,7 @@
                             </div>
                         </div>
 
-                        <h4 class="header-title mt-0 mb-4">{{__('Offers on hold')}}</h4>
+                        <h4 class="header-title mt-0 mb-4">{{translate('Offers on hold')}}</h4>
                         <div class="widget-chart-1">
                             <div class="widget-chart-box-1 float-start" dir="ltr">
                                 <input data-plugin="knob" data-width="70" data-height="70" data-fgColor="#FF6C37"
@@ -71,7 +71,7 @@
                             </div>
                         </div>
 
-                        <h4 class="header-title mt-0 mb-3">{{__('Orders active')}}</h4>
+                        <h4 class="header-title mt-0 mb-3">{{translate('Orders active')}}</h4>
                         <div class="widget-box-2">
                             <div class="widget-detail-2 text-end">
                                 <span class="badge bg-success rounded-pill float-start mt-3">14% <i class="mdi mdi-trending-up"></i> </span>
@@ -109,7 +109,7 @@
                             </div>
                         </div>
 
-                        <h4 class="header-title mt-0 mb-4">{{__('Completed orders')}}</h4>
+                        <h4 class="header-title mt-0 mb-4">{{translate('Completed orders')}}</h4>
 
                         <div class="widget-chart-1">
                             <div class="widget-chart-box-1 float-start" dir="ltr">
@@ -145,7 +145,7 @@
                             </div>
                         </div>
 
-                        <h4 class="header-title mt-0 mb-3">{{__('Cancelled orders')}}</h4>
+                        <h4 class="header-title mt-0 mb-3">{{translate('Cancelled orders')}}</h4>
 
                         <div class="widget-box-2">
                             <div class="widget-detail-2 text-end">
@@ -187,23 +187,23 @@
                             </div>
                         </div>
 
-                        <h4 class="header-title mt-0">{{__('Orders by status')}}</h4>
+                        <h4 class="header-title mt-0">{{translate('Orders by status')}}</h4>
                         <div class="widget-chart text-center">
                             <div id="morris-donut-example" dir="ltr" style="height: 245px;" class="morris-chart"></div>
                             <ul class="list-inline chart-detail-list mb-0">
                                 <li class="list-inline-item">
-                                    <h5 style="color: #FF6C37;"><i class="fa fa-circle me-1"></i>{{__('Offers on hold')}}</h5>
+                                    <h5 style="color: #FF6C37;"><i class="fa fa-circle me-1"></i>{{translate('Offers on hold')}}</h5>
                                 </li>
                                 <li class="list-inline-item">
-                                    <h5 style="color: #10C469;"><i class="fa fa-circle me-1"></i>{{__('Orders active')}}</h5>
+                                    <h5 style="color: #10C469;"><i class="fa fa-circle me-1"></i>{{translate('Orders active')}}</h5>
                                 </li>
                             </ul>
                             <ul class="list-inline chart-detail-list mb-0">
                                 <li class="list-inline-item">
-                                    <h5 style="color: #00ADD7;"><i class="fa fa-circle me-1"></i>{{__('Completed orders')}}</h5>
+                                    <h5 style="color: #00ADD7;"><i class="fa fa-circle me-1"></i>{{translate('Completed orders')}}</h5>
                                 </li>
                                 <li class="list-inline-item">
-                                    <h5 style="color: #FF0000;"><i class="fa fa-circle me-1"></i>{{__('Cancelled orders')}}</h5>
+                                    <h5 style="color: #FF0000;"><i class="fa fa-circle me-1"></i>{{translate('Cancelled orders')}}</h5>
                                 </li>
                             </ul>
                         </div>
@@ -230,7 +230,7 @@
                                 <a href="javascript:void(0);" class="dropdown-item">Separated link</a>
                             </div>
                         </div>
-                        <h4 class="header-title mt-0">{{__('Orders by status')}}</h4>
+                        <h4 class="header-title mt-0">{{translate('Orders by status')}}</h4>
                         <div id="morris-line-example" dir="ltr" style="height: 280px;" class="morris-chart"></div>
                     </div>
                 </div>

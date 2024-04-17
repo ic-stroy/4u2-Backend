@@ -37,7 +37,7 @@ class CategoryController extends Controller
         $model->parent_id = 0;
         $model->step = 0;
         $model->save();
-        return redirect()->route('category.index')->with('status', __('Successfully created'));
+        return redirect()->route('category.index')->with('status', translate('Successfully created'));
     }
 
     /**
@@ -67,7 +67,7 @@ class CategoryController extends Controller
         $model->name = $request->name;
         $model->step = 0;
         $model->save();
-        return redirect()->route('category.index')->with('status', __('Successfully updated'));
+        return redirect()->route('category.index')->with('status', translate('Successfully updated'));
     }
 
     /**
@@ -77,7 +77,7 @@ class CategoryController extends Controller
     {
         $model = Category::where('step', 0)->find($id);
         $model->delete();
-        return redirect()->route('category.index')->with('status', __('Successfully deleted'));
+        return redirect()->route('category.index')->with('status', translate('Successfully deleted'));
     }
 
     //Json api

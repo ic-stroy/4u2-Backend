@@ -59,7 +59,7 @@ class DiscountController extends Controller
             if(count($category) == 1){
                 $category = [$category[0]];
             }elseif(count($category) > 1){
-                $category = [__('All categories')];
+                $category = [translate('All categories')];
             }else{
                 $category = [''];
             }
@@ -67,7 +67,7 @@ class DiscountController extends Controller
             if(count($subcategory) == 1){
                 $subcategory = [$subcategory[0]];
             }elseif(count($subcategory) > 1){
-                $subcategory = [__('All subcategories')];
+                $subcategory = [translate('All subcategories')];
             }else{
                 $subcategory = [''];
             }
@@ -75,7 +75,7 @@ class DiscountController extends Controller
             if(count($subsubcategory) == 1){
                 $subsubcategory = [$subsubcategory[0]];
             }elseif(count($subsubcategory) > 1){
-                $subsubcategory = [__('All subsubcategories')];
+                $subsubcategory = [translate('All subsubcategories')];
             }else{
                 $subsubcategory = [''];
             }
@@ -118,7 +118,7 @@ class DiscountController extends Controller
             $discount->discount_number = $discount_number;
             $discount->save();
         }
-        return redirect()->route('discount.index')->with('status', __('Successfully created'));
+        return redirect()->route('discount.index')->with('status', translate('Successfully created'));
     }
 
     public function getProducts($request){
@@ -231,7 +231,7 @@ class DiscountController extends Controller
         if(count($category) == 1){
             $category = [$category[0]];
         }elseif(count($category) > 1){
-            $category = [__('All categories')];
+            $category = [translate('All categories')];
         }else{
             $category = [''];
         }
@@ -239,7 +239,7 @@ class DiscountController extends Controller
         if(count($subcategory) == 1){
             $subcategory = [$subcategory[0]];
         }elseif(count($subcategory) > 1){
-            $subcategory = [__('All subcategories')];
+            $subcategory = [translate('All subcategories')];
         }else{
             $subcategory = [''];
         }
@@ -247,7 +247,7 @@ class DiscountController extends Controller
         if(count($subsubcategory) == 1){
             $subsubcategory = [$subsubcategory[0]];
         }elseif(count($subsubcategory) > 1){
-            $subsubcategory = [__('All subsubcategories')];
+            $subsubcategory = [translate('All subsubcategories')];
         }else{
             $subsubcategory = [''];
         }
@@ -366,7 +366,7 @@ class DiscountController extends Controller
             $discount->discount_number = $discount_number;
             $discount->save();
         }
-        return redirect()->route('discount.index')->with('status', __('Successfully updated'));
+        return redirect()->route('discount.index')->with('status', translate('Successfully updated'));
     }
 
     /**
@@ -379,6 +379,6 @@ class DiscountController extends Controller
         foreach ($current_discount_group as $currentDiscount){
             $currentDiscount->delete();
         }
-        return redirect()->route('discount.index')->with('status', __('Successfully created'));
+        return redirect()->route('discount.index')->with('status', translate('Successfully created'));
     }
 }

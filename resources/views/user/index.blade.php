@@ -12,18 +12,18 @@
     <div class="card">
         <div class="card-body">
             <div class="dropdown float-end">
-                <a class="form_functions btn btn-success" href="{{route('user.create')}}">{{__('Create')}}</a>
+                <a class="form_functions btn btn-success" href="{{route('user.create')}}">{{translate('Create')}}</a>
             </div>
             <table id="datatable-buttons" class="table table-striped table-bordered dt-responsive nowrap">
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>{{__('Avatar')}}</th>
-                        <th>{{__('Firstname')}}</th>
-                        <th>{{__('Lastname')}}</th>
-                        <th>{{__('Role')}}</th>
-                        <th>{{__('Phone number')}}</th>
-                        <th class="text-center">{{__('Functions')}}</th>
+                        <th>{{translate('Avatar')}}</th>
+                        <th>{{translate('Firstname')}}</th>
+                        <th>{{translate('Lastname')}}</th>
+                        <th>{{translate('Role')}}</th>
+                        <th>{{translate('Phone number')}}</th>
+                        <th class="text-center">{{translate('Functions')}}</th>
                     </tr>
                 </thead>
                 <tbody class="table_body">
@@ -70,7 +70,7 @@
                         </td>
                         <td>
                             <a class="show_page" href="{{ route('user.show', $user->id) }}">
-                                @if($user->is_admin == 1){{ __('Admin') }}@else {{ __('User') }} @endif
+                                @if($user->is_admin == 1){{ translate('Admin') }}@else {{ translate('User') }} @endif
                             </a>
                         </td>
                         <td>

@@ -15,40 +15,40 @@
     @endphp
     <div class="card">
         <div class="card-body">
-            <h4 class="mt-0 header-title">{{__('Products lists')}}</h4>
+            <h4 class="mt-0 header-title">{{translate('Products lists')}}</h4>
             <div class="dropdown float-end">
-                <a class="form_functions btn btn-success" href="{{route('product.create')}}">{{__('Create')}}</a>
+                <a class="form_functions btn btn-success" href="{{route('product.create')}}">{{translate('Create')}}</a>
             </div>
             <table id="datatable-buttons" class="table dt-responsive table_show">
                 <thead>
                 <tr>
-                    <th>{{__('Attributes')}}</th>
-                    <th>{{__('Informations')}}</th>
+                    <th>{{translate('Attributes')}}</th>
+                    <th>{{translate('Informations')}}</th>
                 </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <th>{{__('Name')}}</th>
+                        <th>{{translate('Name')}}</th>
                         <td>{{$model->name??''}}</td>
                     </tr>
                     <tr>
-                        <th>{{__('Company')}}</th>
+                        <th>{{translate('Company')}}</th>
                         <td>{{$model->company??''}}</td>
                     </tr>
                     <tr>
-                        <th>{{__('Current category')}}</th>
+                        <th>{{translate('Current category')}}</th>
                         <td>@if(isset($current_category)){{ $current_category }}@endif</td>
                     </tr>
                     <tr>
-                        <th>{{__('Status')}}</th>
-                        <td>{{$model->status == 1?__('Active'):__('No active') }}</td>
+                        <th>{{translate('Status')}}</th>
+                        <td>{{$model->status == 1?translate('Active'):translate('No active') }}</td>
                     </tr>
                     <tr>
-                        <th>{{__('Sum')}}</th>
+                        <th>{{translate('Sum')}}</th>
                         <td>{{$model->sum??'' }}</td>
                     </tr>
                     <tr>
-                        <th>{{__('image')}}</th>
+                        <th>{{translate('image')}}</th>
                         <td>
                             @if(isset($model->images))
                                 @php
@@ -81,11 +81,11 @@
                         </td>
                     </tr>
                     <tr>
-                        <th>{{__('Description')}}</th>
+                        <th>{{translate('Description')}}</th>
                         <td style="word-wrap: break-word">{!! $model->description??'' !!}</td>
                     </tr>
                     <tr>
-                        <th>{{__('Updated at')}}</th>
+                        <th>{{translate('Updated at')}}</th>
                         <td>{{$model->updated_at??''}}</td>
                     </tr>
                 </tbody>

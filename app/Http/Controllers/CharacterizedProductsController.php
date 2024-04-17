@@ -75,7 +75,7 @@ class CharacterizedProductsController extends Controller
         $model->color_id = $request->color_id;
         $model->count = $request->count;
         $model->save();
-        return redirect()->route('characterizedProducts.index')->with('status', __('Successfully created'));
+        return redirect()->route('characterizedProducts.index')->with('status', translate('Successfully created'));
     }
 
     /**
@@ -120,7 +120,7 @@ class CharacterizedProductsController extends Controller
         $model->color_id = $request->color_id;
         $model->count = $request->count;
         $model->save();
-        return redirect()->route('characterizedProducts.index')->with('status', __('Successfully updated'));
+        return redirect()->route('characterizedProducts.index')->with('status', translate('Successfully updated'));
     }
 
     /**
@@ -130,7 +130,7 @@ class CharacterizedProductsController extends Controller
     {
         $model = CharacterizedProducts::find($id);
         $model->delete();
-        return redirect()->route('characterizedProducts.index')->with('status', __('Successfully deleted'));
+        return redirect()->route('characterizedProducts.index')->with('status', translate('Successfully deleted'));
     }
 
     public function category()

@@ -74,7 +74,7 @@
                         <div class="card-header">
                             <div class="text-center">
                                 <i class="dripicons-warning h1 text-success"></i>
-                                <h4 class="mt-2">{{ __('Are you sure you want to accept this order')}}</h4>
+                                <h4 class="mt-2">{{ translate('Are you sure you want to accept this order')}}</h4>
                             </div>
                         </div>
                         <div class="card-body">
@@ -89,8 +89,8 @@
                             <form class="d-flex justify-content-between" action="" method="POST" id="perform_order">
                                 @csrf
                                 @method('POST')
-                                <button type="button" class="btn btn-danger my-2" data-bs-dismiss="modal"> {{ __('No')}}</button>
-                                <button type="submit" class="btn btn-success my-2"> {{ __('Yes')}} </button>
+                                <button type="button" class="btn btn-danger my-2" data-bs-dismiss="modal"> {{ translate('No')}}</button>
+                                <button type="submit" class="btn btn-success my-2"> {{ translate('Yes')}} </button>
                             </form>
                         </div>
                     </div>
@@ -141,12 +141,12 @@
                     <div class="modal-body">
                         <div class="text-center">
                             <i class="dripicons-warning h1 text-warning"></i>
-                            <h4 class="mt-2">{{ __('Are you sure to cancel this order')}}</h4>
+                            <h4 class="mt-2">{{ translate('Are you sure to cancel this order')}}</h4>
                             <form style="display: inline-block;" action="" method="POST" id="cancell_order">
                                 @csrf
                                 @method('DELETE')
-                                <button type="button" class="btn btn-danger my-2" data-bs-dismiss="modal"> {{ __('No')}}</button>
-                                <button type="submit" class="btn btn-warning my-2"> {{ __('Yes')}} </button>
+                                <button type="button" class="btn btn-danger my-2" data-bs-dismiss="modal"> {{ translate('No')}}</button>
+                                <button type="submit" class="btn btn-warning my-2"> {{ translate('Yes')}} </button>
                             </form>
                         </div>
                     </div>
@@ -159,7 +159,7 @@
                     <div class="modal-body">
                         <div class="text-center">
                             <i class="dripicons-warning h1 text-warning"></i>
-                            <h4 class="mt-2">{{__('Waiting for superadmin performing')}}</h4>
+                            <h4 class="mt-2">{{translate('Waiting for superadmin performing')}}</h4>
                         </div>
                     </div>
                 </div><!-- /.modal-content -->
@@ -171,8 +171,8 @@
                     <div class="modal-body">
                         <div class="text-center">
                             <i class="dripicons-warning h1 text-success"></i>
-                            {{--                        <h4 class="mt-2">{{__('Accepted by super admin')}}</h4>--}}
-                            <h4 class="mt-2">{{__('Performed by admin')}}</h4>
+                            {{--                        <h4 class="mt-2">{{translate('Accepted by super admin')}}</h4>--}}
+                            <h4 class="mt-2">{{translate('Performed by admin')}}</h4>
                         </div>
                     </div>
                 </div><!-- /.modal-content -->
@@ -184,7 +184,7 @@
                     <div class="modal-body">
                         <div class="text-center">
                             <i class="dripicons-warning h1 text-success"></i>
-                            <h4 class="mt-2">{{__('Accepted by recepient')}}</h4>
+                            <h4 class="mt-2">{{translate('Accepted by recepient')}}</h4>
                         </div>
                     </div>
                 </div><!-- /.modal-content -->
@@ -196,15 +196,15 @@
                 <ul class="nav nav-pills navtab-bg nav-justified">
                     <li class="nav-item">
                         <a href="#ordered" data-bs-toggle="tab" aria-expanded="true" class="nav-link active">
-                            {{__('Ordered')}}
+                            {{translate('Ordered')}}
                             @if(count($orderedOrders) > 0)
-                                <span class="badge bg-danger"> {{__('new')}} {{count($orderedOrders)}}</span>
+                                <span class="badge bg-danger"> {{translate('new')}} {{count($orderedOrders)}}</span>
                             @endif
                         </a>
                     </li>
                     <li class="nav-item">
                         <a href="#performed" data-bs-toggle="tab" aria-expanded="false" class="nav-link">
-                            {{__('Performed')}}
+                            {{translate('Performed')}}
                             @if(count($performedOrders) > 0)
                                 <span class="badge bg-danger"> {{count($performedOrders)}}</span>
                             @endif
@@ -212,7 +212,7 @@
                     </li>
                     <li class="nav-item">
                         <a href="#cancelled" data-bs-toggle="tab" aria-expanded="false" class="nav-link">
-                            {{__('Cancelled')}}
+                            {{translate('Cancelled')}}
                             @if(count($cancelledOrders) > 0)
                                 <span class="badge bg-danger"> {{count($cancelledOrders)}}</span>
                             @endif
@@ -220,7 +220,7 @@
                     </li>
                     <li class="nav-item">
                         <a href="#accepted_by_recepient" data-bs-toggle="tab" aria-expanded="false" class="nav-link">
-                            {{__('Accepted by recepient')}}
+                            {{translate('Accepted by recepient')}}
                             @if(count($acceptedByRecipientOrders) > 0)
                                 <span class="badge bg-danger"> {{count($acceptedByRecipientOrders)}}</span>
                             @endif
@@ -229,7 +229,7 @@
                 </ul>
                 <div class="tab-content">
                     <div class="tab-pane show active" id="ordered">
-                        <h4 class="mt-0 header-title">{{__('Ordered orders list')}}</h4>
+                        <h4 class="mt-0 header-title">{{translate('Ordered orders list')}}</h4>
                         @php
                             $i=0
                         @endphp
@@ -254,12 +254,12 @@
                                                 <div class="col-8 d-flex flex-column justify-content-center">
                                                     @if((int)$order['product_types'] < count($order['order']->orderDetail))
                                                         <h4 style="line-height: 2; font-size: 16px">
-                                                            {{__('There are ')}}
+                                                            {{translate('There are ')}}
                                                             <b>{{count($order['order']->orderDetail)}}</b>
-                                                            {{__('items in order. these are selling for')}}
+                                                            {{translate('items in order. these are selling for')}}
                                                             <b>{{$order['order']->all_price}}</b>
                                                             @if($order['order']->coupon_price)
-                                                                {{__('all coupon costed')}}
+                                                                {{translate('all coupon costed')}}
                                                                 <b style="color: #10C469">{{$order['order']->coupon_price}}</b>
                                                             @endif
                                                         </h4>
@@ -267,47 +267,47 @@
                                                     @endif
                                                     <h4 style="line-height: 2; font-size: 16px">
                                                         @if($user_name){{$user_name}}@endif
-                                                        <span style="color: orange">{{__('Ordered')}}</span>
+                                                        <span style="color: orange">{{translate('Ordered')}}</span>
                                                         @if($order['product_types'] != 0)
                                                             <b>{{ $order['product_types'] }}</b>
-                                                            {{__('products are yours. you will sell for')}}
+                                                            {{translate('products are yours. you will sell for')}}
                                                             <b style="color: #10C469">{{$order['company_product_price']}}</b>
                                                             @if($order['order_coupon_price'] != 0)
-                                                                {{__('Your coupon is costed')}}
+                                                                {{translate('Your coupon is costed')}}
                                                                 <b style="color: red">{{$order['order_coupon_price']}}</b>
                                                             @endif
                                                             @if($order['company_discount_price'] != 0)
-                                                                {{__('your discount is costed')}}
+                                                                {{translate('your discount is costed')}}
                                                                 <b style="color: red">{{$order['company_discount_price']}}</b>
                                                             @endif
                                                         @endif
                                                         @if($order['order']->payment_method == \App\Constants::CASH_ON_DELIVERY)
-                                                            <span class="badge bg-info">{{__('cash on delivery')}}</span>
+                                                            <span class="badge bg-info">{{translate('cash on delivery')}}</span>
                                                         @elseif($order['order']->payment_method == \App\Constants::BANK_CARD)
-                                                            <span class="badge bg-info">{{__('bank card')}}</span>
+                                                            <span class="badge bg-info">{{translate('bank card')}}</span>
                                                         @endif
                                                     </h4>
                                                     @if($order['performed_company_product_price'] != 0)
                                                         <hr style="margin:4px">
                                                         <h4 style="line-height: 2; font-size: 16px">
-                                                            <span style="color: #10C469">{{__('Performed')}}</span>
+                                                            <span style="color: #10C469">{{translate('Performed')}}</span>
                                                             @if($order['performed_product_types'] != 0)
                                                                 <b>{{ $order['performed_product_types'] }}</b>
-                                                                {{__('you are selling for')}}
+                                                                {{translate('you are selling for')}}
                                                                 <b style="color: #10C469">{{$order['performed_company_product_price']}}</b>
                                                                 @if($order['performed_order_coupon_price'] != 0)
-                                                                    {{__('your coupon is costed')}}
+                                                                    {{translate('your coupon is costed')}}
                                                                     <b style="color: red">{{$order['performed_order_coupon_price']}}</b>
                                                                 @endif
                                                                 @if($order['performed_company_discount_price'] != 0)
-                                                                    {{__('your discount is costed')}}
+                                                                    {{translate('your discount is costed')}}
                                                                     <b style="color: red">{{$order['performed_company_discount_price']}}</b>
                                                                 @endif
                                                             @endif
                                                         </h4>
                                                     @elseif($order['order']->status == \App\Constants::CANCELLED)
                                                         <hr style="margin:4px">
-                                                        <b style="line-height: 2; font-size: 16px; color: red">{{__('You cancelled all products !')}}</b>
+                                                        <b style="line-height: 2; font-size: 16px; color: red">{{translate('You cancelled all products !')}}</b>
                                                     @endif
                                                 </div>
                                                 <div class="col-4 d-flex justify-content-between">
@@ -315,40 +315,40 @@
                                                         @switch($order['order']->status)
                                                             @case(\App\Constants::ORDERED)
                                                             <span style="line-height: 1; font-size: 16px">
-                                                                    <b>{{__('ORDERED')}}</b>
+                                                                    <b>{{translate('ORDERED')}}</b>
                                                                 </span>
                                                             <span class="badge bg-danger">
-                                                                    {{__('New')}}
+                                                                    {{translate('New')}}
                                                                 </span>
                                                             @break
                                                             @case(\App\Constants::PERFORMED)
                                                             <span style="line-height: 1; font-size: 16px">
-                                                                    <b>{{__('PERFORMED')}}</b>
+                                                                    <b>{{translate('PERFORMED')}}</b>
                                                                 </span>
                                                             <span class="badge bg-success">
-                                                                    {{__('In progress')}}
+                                                                    {{translate('In progress')}}
                                                                 </span>
                                                             @break
                                                             @case(\App\Constants::CANCELLED)
                                                             <span style="line-height: 1; font-size: 16px">
-                                                                    <b>{{__('CANCELLED')}}</b>
+                                                                    <b>{{translate('CANCELLED')}}</b>
                                                                 </span>
                                                             <span class="badge bg-danger">
-                                                                    {{__('Cancelled')}}
+                                                                    {{translate('Cancelled')}}
                                                                 </span>
                                                             @break
                                                             @case(\App\Constants::ACCEPTED_BY_RECIPIENT)
                                                             <span style="line-height: 1; font-size: 16px">
-                                                                    <b>{{__('ACCEPTED BY RECIPIENT')}}</b>
+                                                                    <b>{{translate('ACCEPTED BY RECIPIENT')}}</b>
                                                                 </span>
                                                             <span class="badge bg-info">>
-                                                                    {{__('Delivered')}}
+                                                                    {{translate('Delivered')}}
                                                                 </span>
                                                             @break
                                                         @endswitch
                                                     @endif
                                                     {{--                                            @if($order['order_detail_is_ordered'] == true)--}}
-                                                    {{--                                                <span class="badge bg-danger">{{__('new')}}</span>--}}
+                                                    {{--                                                <span class="badge bg-danger">{{translate('new')}}</span>--}}
                                                     {{--                                            @endif--}}
                                                     <span>
                                                         <i class="mdi mdi-chevron-down accordion-arrow"></i>
@@ -402,52 +402,52 @@
                                                     <img src="{{$products_with_anime[2][0]}}" alt="" height="144px">
                                                 </div>
                                                 <div class="col-4 order_content">
-                                                    <h4>{{__('Animated order')}}</h4>
+                                                    <h4>{{translate('Animated order')}}</h4>
                                                     <span>{{!empty($products_with_anime[0]->product)?$products_with_anime[0]->product->name:''}}</span>
                                                     @if($product_discount_withouth_expire != 0)
-                                                        <span>{{__('Discount')}}: <b style="color:red">{{$product_discount_withouth_expire}} %</b></span>
+                                                        <span>{{translate('Discount')}}: <b style="color:red">{{$product_discount_withouth_expire}} %</b></span>
                                                     @endif
                                                     @if($products_with_anime[1])
-                                                        <span>{{__('Price')}}: <b>{{$products_with_anime[0]->price}}</b> {!! !empty($products_with_anime[0]->quantity)?__('Quantity').": <b>". $products_with_anime[0]->quantity."</b>":'' !!}</span>
+                                                        <span>{{translate('Price')}}: <b>{{$products_with_anime[0]->price}}</b> {!! !empty($products_with_anime[0]->quantity)?translate('Quantity').": <b>". $products_with_anime[0]->quantity."</b>":'' !!}</span>
                                                     @endif
                                                     @if($products_with_anime[1])
-                                                        <span>{{__('Sum')}}: <b>{{$products_with_anime[1]}}</b></span>
+                                                        <span>{{translate('Sum')}}: <b>{{$products_with_anime[1]}}</b></span>
                                                     @endif
                                                     @if(!empty($products_with_anime[0]->size))
-                                                        <span>{{__('Size')}}: <b>{{$products_with_anime[0]->size->name}}</b></span>
+                                                        <span>{{translate('Size')}}: <b>{{$products_with_anime[0]->size->name}}</b></span>
                                                     @endif
                                                     @if(!empty($products_with_anime[0]->color))
-                                                        <span>{{__('Color')}}: <b>{{$products_with_anime[0]->color->name}}</b></span>
+                                                        <span>{{translate('Color')}}: <b>{{$products_with_anime[0]->color->name}}</b></span>
                                                     @endif
                                                     @if(!empty($products_with_anime[0]->updated_at))
-                                                        <span>{{__('Ordered')}}: <b>{{$products_with_anime[0]->updated_at}}</b></span>
+                                                        <span>{{translate('Ordered')}}: <b>{{$products_with_anime[0]->updated_at}}</b></span>
                                                     @endif
                                                 </div>
                                                 <div class="col-1 d-flex justify-content-around align-items-center">
                                                     @switch($products_with_anime[0]->status)
                                                         @case(\App\Constants::ORDER_DETAIL_ORDERED)
                                                         <div>
-                                                            <span class="badge bg-danger">{{__('New')}}</span>
+                                                            <span class="badge bg-danger">{{translate('New')}}</span>
                                                         </div>
                                                         @break
                                                         @case(\App\Constants::ORDER_DETAIL_PERFORMED)
                                                         <div>
-                                                            <span class="badge bg-success">{{__('Performed')}}</span>
+                                                            <span class="badge bg-success">{{translate('Performed')}}</span>
                                                         </div>
                                                         @break
                                                         @case(\App\Constants::ORDER_DETAIL_CANCELLED)
                                                         <div>
-                                                            <span class="badge bg-danger">{{__('Cancelled')}}</span>
+                                                            <span class="badge bg-danger">{{translate('Cancelled')}}</span>
                                                         </div>
                                                         @break
                                                         @case(\App\Constants::ORDER_DETAIL_PERFORMED_BY_SUPERADMIN):
                                                         <div>
-                                                            <span class="badge bg-danger">{{__('Performed by superadmin')}}</span>
+                                                            <span class="badge bg-danger">{{translate('Performed by superadmin')}}</span>
                                                         </div>
                                                         @break
                                                         @case(\App\Constants::ORDER_DETAIL_ACCEPTED_BY_RECIPIENT)
                                                         <div>
-                                                            <span class="badge bg-info">{{__('Finished')}}</span>
+                                                            <span class="badge bg-info">{{translate('Finished')}}</span>
                                                         </div>
                                                         @break
                                                     @endswitch
@@ -471,7 +471,7 @@
                                                             <button type="button" class="btn btn-danger delete-datas btn-sm waves-effect" data-bs-toggle="modal" data-bs-target="#warning-order-alert-modal" onclick='cancelling_order("{{route('cancell_order_detail', $products_with_anime[0]->id)}}")' data-url=""><i class="fa fa-times"></i></button>
                                                             @break
                                                             @case(\App\Constants::ORDER_DETAIL_PERFORMED)
-                                                            {{--                                                    <button type="button" class="btn btn-warning delete-datas btn-sm waves-effect" data-bs-toggle="modal" data-bs-target="#waiting-to-perform-alert-modal" title="{{__('Waiting for superadmin performing')}}"><i class="fa fa-question"></i></button>--}}
+                                                            {{--                                                    <button type="button" class="btn btn-warning delete-datas btn-sm waves-effect" data-bs-toggle="modal" data-bs-target="#waiting-to-perform-alert-modal" title="{{translate('Waiting for superadmin performing')}}"><i class="fa fa-question"></i></button>--}}
                                                             <button type="button" class="btn btn-danger delete-datas btn-sm waves-effect" data-bs-toggle="modal" data-bs-target="#warning-order-alert-modal" onclick='cancelling_order("{{route('cancell_order_detail', $products_with_anime[0]->id)}}")' data-url=""><i class="fa fa-times"></i></button>
                                                             @break
                                                             @case(\App\Constants::ORDER_DETAIL_CANCELLED)
@@ -489,10 +489,10 @@
                                                             </button>
                                                             @break
                                                             @case(\App\Constants::ORDER_DETAIL_PERFORMED_BY_SUPERADMIN)
-                                                            <button type="button" class="btn btn-success delete-datas btn-sm waves-effect" data-bs-toggle="modal" data-bs-target="#accepted-success-modal" title="{{__('Performed by admin')}}"><i class="fa fa-ellipsis-h"></i></button>
+                                                            <button type="button" class="btn btn-success delete-datas btn-sm waves-effect" data-bs-toggle="modal" data-bs-target="#accepted-success-modal" title="{{translate('Performed by admin')}}"><i class="fa fa-ellipsis-h"></i></button>
                                                             @break
                                                             @case(\App\Constants::ORDER_DETAIL_ACCEPTED_BY_RECIPIENT)
-                                                            <button type="button" class="btn btn-success delete-datas btn-sm waves-effect" data-bs-toggle="modal" data-bs-target="#accepted-by-recepient-success-modal" title="{{__('Order accepted by recipient')}}"><i class="fa fa-ellipsis-h"></i></button>
+                                                            <button type="button" class="btn btn-success delete-datas btn-sm waves-effect" data-bs-toggle="modal" data-bs-target="#accepted-by-recepient-success-modal" title="{{translate('Order accepted by recipient')}}"><i class="fa fa-ellipsis-h"></i></button>
                                                             @break
                                                         @endswitch
                                                     </div>
@@ -531,53 +531,53 @@
                                                 </div>
                                                 <div class="col-1"></div>
                                                 <div class="col-4 order_content">
-                                                    <h4>{{__('Order')}}</h4>
+                                                    <h4>{{translate('Order')}}</h4>
                                                     @if(!empty($products[0]->warehouse) && $products[0]->warehouse->name)
                                                         <span><b>{{$products[0]->warehouse->name}}</b></span>
                                                     @elseif(!empty($products[0]->warehouse->product) && $products[0]->warehouse->product->name)
                                                         <span><b>{{$products[0]->warehouse->product->name}}</b></span>
                                                     @endif
                                                     @if($products[0]->price)
-                                                        <span>{{__('Price')}}: <b>{{$products[0]->price}}</b> {!! !empty($products[0]->quantity)?__('Quantity').': '."<b>".$products[0]->quantity."</b>":'' !!}</span>
+                                                        <span>{{translate('Price')}}: <b>{{$products[0]->price}}</b> {!! !empty($products[0]->quantity)?translate('Quantity').': '."<b>".$products[0]->quantity."</b>":'' !!}</span>
                                                     @endif
                                                     @if($products[1])
-                                                        <span>{{__('Sum')}}: <b>{{$products[1]}}</b></span>
+                                                        <span>{{translate('Sum')}}: <b>{{$products[1]}}</b></span>
                                                     @endif
                                                     @if($discount_withouth_expire != 0)
-                                                        <span>{{__('Discount')}}: <b style="color: red">{{(int)$discount_withouth_expire}} %</b></span>
+                                                        <span>{{translate('Discount')}}: <b style="color: red">{{(int)$discount_withouth_expire}} %</b></span>
                                                     @elseif($product_discount_withouth_expire != 0)
-                                                        <span>{{__('Discount')}}: <b style="color: red">{{(int)$product_discount_withouth_expire}} %</b></span>
+                                                        <span>{{translate('Discount')}}: <b style="color: red">{{(int)$product_discount_withouth_expire}} %</b></span>
                                                     @endif
                                                     @if(!empty($products[0]->size))
-                                                        <span>{{__('Size')}}: <b>{{$products[0]->size->name}}</b> {{__('Color')}}: <b>{{$products[0]->color->name}}</b></span>
+                                                        <span>{{translate('Size')}}: <b>{{$products[0]->size->name}}</b> {{translate('Color')}}: <b>{{$products[0]->color->name}}</b></span>
                                                     @endif
-                                                    <span>{{__('Ordered')}}: <b>{{$products[0]->updated_at}}</b></span>
+                                                    <span>{{translate('Ordered')}}: <b>{{$products[0]->updated_at}}</b></span>
                                                 </div>
                                                 <div class="col-1 d-flex justify-content-around align-items-center">
                                                     @switch($products[0]->status)
                                                         @case(\App\Constants::ORDER_DETAIL_ORDERED):
                                                         <div>
-                                                            <span class="badge bg-danger">{{__('New')}}</span>
+                                                            <span class="badge bg-danger">{{translate('New')}}</span>
                                                         </div>
                                                         @break
                                                         @case(\App\Constants::ORDER_DETAIL_PERFORMED)
                                                         <div>
-                                                            <span class="badge bg-success">{{__('Performed')}}</span>
+                                                            <span class="badge bg-success">{{translate('Performed')}}</span>
                                                         </div>
                                                         @break
                                                         @case(\App\Constants::ORDER_DETAIL_CANCELLED)
                                                         <div>
-                                                            <span class="badge bg-danger">{{__('Cancelled')}}</span>
+                                                            <span class="badge bg-danger">{{translate('Cancelled')}}</span>
                                                         </div>
                                                         @break
                                                         @case(\App\Constants::ORDER_DETAIL_PERFORMED_BY_SUPERADMIN)
                                                         <div>
-                                                            <span class="badge bg-danger">{{__('Performed by superadmin')}}</span>
+                                                            <span class="badge bg-danger">{{translate('Performed by superadmin')}}</span>
                                                         </div>
                                                         @break
                                                         @case(\App\Constants::ORDER_DETAIL_ACCEPTED_BY_RECIPIENT)
                                                         <div>
-                                                            <span class="badge bg-info">{{__('Finished')}}</span>
+                                                            <span class="badge bg-info">{{translate('Finished')}}</span>
                                                         </div>
                                                         @break
                                                     @endswitch
@@ -609,7 +609,7 @@
                                                             <button type="button" class="btn btn-danger delete-datas btn-sm waves-effect" data-bs-toggle="modal" data-bs-target="#warning-order-alert-modal" onclick='cancelling_order("{{route('cancell_order_detail', $products[0]->id)}}")' data-url=""><i class="fa fa-times"></i></button>
                                                             @break
                                                             @case(\App\Constants::ORDER_DETAIL_PERFORMED)
-                                                            {{--                                                    <button type="button" class="btn btn-warning delete-datas btn-sm waves-effect" data-bs-toggle="modal" data-bs-target="#waiting-to-perform-alert-modal" title="{{__('Waiting for superadmin performing')}}"><i class="fa fa-question"></i></button>--}}
+                                                            {{--                                                    <button type="button" class="btn btn-warning delete-datas btn-sm waves-effect" data-bs-toggle="modal" data-bs-target="#waiting-to-perform-alert-modal" title="{{translate('Waiting for superadmin performing')}}"><i class="fa fa-question"></i></button>--}}
                                                             <button type="button" class="btn btn-danger delete-datas btn-sm waves-effect" data-bs-toggle="modal" data-bs-target="#warning-order-alert-modal" onclick='cancelling_order("{{route('cancell_order_detail', $products[0]->id)}}")' data-url=""><i class="fa fa-times"></i></button>
                                                             @break
                                                             @case(\App\Constants::ORDER_DETAIL_CANCELLED)
@@ -628,10 +628,10 @@
                                                             </button>
                                                             @break
                                                             @case(\App\Constants::ORDER_DETAIL_PERFORMED_BY_SUPERADMIN)
-                                                            <button type="button" class="btn btn-success delete-datas btn-sm waves-effect" data-bs-toggle="modal" data-bs-target="#accepted-success-modal" title="{{__('Performed by admin')}}"><i class="fa fa-ellipsis-h"></i></button>
+                                                            <button type="button" class="btn btn-success delete-datas btn-sm waves-effect" data-bs-toggle="modal" data-bs-target="#accepted-success-modal" title="{{translate('Performed by admin')}}"><i class="fa fa-ellipsis-h"></i></button>
                                                             @break
                                                             @case(\App\Constants::ORDER_DETAIL_ACCEPTED_BY_RECIPIENT)
-                                                            <button type="button" class="btn btn-success delete-datas btn-sm waves-effect" data-bs-toggle="modal" data-bs-target="#accepted-by-recepient-success-modal" title="{{__('Order accepted by recipient')}}"><i class="fa fa-ellipsis-h"></i></button>
+                                                            <button type="button" class="btn btn-success delete-datas btn-sm waves-effect" data-bs-toggle="modal" data-bs-target="#accepted-by-recepient-success-modal" title="{{translate('Order accepted by recipient')}}"><i class="fa fa-ellipsis-h"></i></button>
                                                             @break
                                                         @endswitch
                                                     </div>
@@ -645,7 +645,7 @@
                         @endforeach
                     </div>
                     <div class="tab-pane" id="performed">
-                        <h4 class="mt-0 header-title">{{__('Performed orders list')}}</h4>
+                        <h4 class="mt-0 header-title">{{translate('Performed orders list')}}</h4>
                         @php
                             $i=0
                         @endphp
@@ -670,12 +670,12 @@
                                                 <div class="col-8 d-flex flex-column justify-content-center">
                                                     @if((int)$order['product_types'] < count($order['order']->orderDetail))
                                                         <h4 style="line-height: 2; font-size: 16px">
-                                                            {{__('There are ')}}
+                                                            {{translate('There are ')}}
                                                             <b>{{count($order['order']->orderDetail)}}</b>
-                                                            {{__('items in order. these are selling for')}}
+                                                            {{translate('items in order. these are selling for')}}
                                                             <b>{{$order['order']->all_price}}</b>
                                                             @if($order['order']->coupon_price)
-                                                                {{__('all coupon costed')}}
+                                                                {{translate('all coupon costed')}}
                                                                 <b style="color: #10C469">{{$order['order']->coupon_price}}</b>
                                                             @endif
                                                         </h4>
@@ -683,47 +683,47 @@
                                                     @endif
                                                     <h4 style="line-height: 2; font-size: 16px">
                                                         @if($user_name){{$user_name}}@endif
-                                                        <span style="color: orange">{{__('Ordered')}}</span>
+                                                        <span style="color: orange">{{translate('Ordered')}}</span>
                                                         @if($order['product_types'] != 0)
                                                             <b>{{ $order['product_types'] }}</b>
-                                                            {{__('products are yours. you will sell for')}}
+                                                            {{translate('products are yours. you will sell for')}}
                                                             <b style="color: #10C469">{{$order['company_product_price']}}</b>
                                                             @if($order['order_coupon_price'] != 0)
-                                                                {{__('Your coupon is costed')}}
+                                                                {{translate('Your coupon is costed')}}
                                                                 <b style="color: red">{{$order['order_coupon_price']}}</b>
                                                             @endif
                                                             @if($order['company_discount_price'] != 0)
-                                                                {{__('your discount is costed')}}
+                                                                {{translate('your discount is costed')}}
                                                                 <b style="color: red">{{$order['company_discount_price']}}</b>
                                                             @endif
                                                         @endif
                                                         @if($order['order']->payment_method == \App\Constants::CASH_ON_DELIVERY)
-                                                            <span class="badge bg-info">{{__('cash on delivery')}}</span>
+                                                            <span class="badge bg-info">{{translate('cash on delivery')}}</span>
                                                         @elseif($order['order']->payment_method == \App\Constants::BANK_CARD)
-                                                            <span class="badge bg-info">{{__('bank card')}}</span>
+                                                            <span class="badge bg-info">{{translate('bank card')}}</span>
                                                         @endif
                                                     </h4>
                                                     @if($order['performed_company_product_price'] != 0)
                                                         <hr style="margin:4px">
                                                         <h4 style="line-height: 2; font-size: 16px">
-                                                            <span style="color: #10C469">{{__('Performed')}}</span>
+                                                            <span style="color: #10C469">{{translate('Performed')}}</span>
                                                             @if($order['performed_product_types'] != 0)
                                                                 <b>{{ $order['performed_product_types'] }}</b>
-                                                                {{__('you are selling for')}}
+                                                                {{translate('you are selling for')}}
                                                                 <b style="color: #10C469">{{$order['performed_company_product_price']}}</b>
                                                                 @if($order['performed_order_coupon_price'] != 0)
-                                                                    {{__('your coupon is costed')}}
+                                                                    {{translate('your coupon is costed')}}
                                                                     <b style="color: red">{{$order['performed_order_coupon_price']}}</b>
                                                                 @endif
                                                                 @if($order['performed_company_discount_price'] != 0)
-                                                                    {{__('your discount is costed')}}
+                                                                    {{translate('your discount is costed')}}
                                                                     <b style="color: red">{{$order['performed_company_discount_price']}}</b>
                                                                 @endif
                                                             @endif
                                                         </h4>
                                                     @elseif($order['order']->status == \App\Constants::CANCELLED)
                                                         <hr style="margin:4px">
-                                                        <b style="line-height: 2; font-size: 16px; color: red">{{__('You cancelled all products !')}}</b>
+                                                        <b style="line-height: 2; font-size: 16px; color: red">{{translate('You cancelled all products !')}}</b>
                                                     @endif
                                                 </div>
                                                 <div class="col-4 d-flex justify-content-between">
@@ -731,40 +731,40 @@
                                                         @switch($order['order']->status)
                                                             @case(\App\Constants::ORDERED)
                                                             <span style="line-height: 1; font-size: 16px">
-                                                                        <b>{{__('ORDERED')}}</b>
+                                                                        <b>{{translate('ORDERED')}}</b>
                                                                     </span>
                                                             <span class="badge bg-danger">
-                                                                        {{__('New')}}
+                                                                        {{translate('New')}}
                                                                     </span>
                                                             @break
                                                             @case(\App\Constants::PERFORMED)
                                                             <span style="line-height: 1; font-size: 16px">
-                                                                        <b>{{__('PERFORMED')}}</b>
+                                                                        <b>{{translate('PERFORMED')}}</b>
                                                                     </span>
                                                             <span class="badge bg-success">
-                                                                        {{__('In progress')}}
+                                                                        {{translate('In progress')}}
                                                                     </span>
                                                             @break
                                                             @case(\App\Constants::CANCELLED)
                                                             <span style="line-height: 1; font-size: 16px">
-                                                                        <b>{{__('CANCELLED')}}</b>
+                                                                        <b>{{translate('CANCELLED')}}</b>
                                                                     </span>
                                                             <span class="badge bg-danger">
-                                                                        {{__('Cancelled')}}
+                                                                        {{translate('Cancelled')}}
                                                                     </span>
                                                             @break
                                                             @case(\App\Constants::ACCEPTED_BY_RECIPIENT)
                                                             <span style="line-height: 1; font-size: 16px">
-                                                                        <b>{{__('ACCEPTED BY RECIPIENT')}}</b>
+                                                                        <b>{{translate('ACCEPTED BY RECIPIENT')}}</b>
                                                                     </span>
                                                             <span class="badge bg-info">>
-                                                                        {{__('Delivered')}}
+                                                                        {{translate('Delivered')}}
                                                                     </span>
                                                             @break
                                                         @endswitch
                                                     @endif
                                                     {{--                                            @if($order['order_detail_is_ordered'] == true)--}}
-                                                    {{--                                                <span class="badge bg-danger">{{__('new')}}</span>--}}
+                                                    {{--                                                <span class="badge bg-danger">{{translate('new')}}</span>--}}
                                                     {{--                                            @endif--}}
                                                     <span>
                                                         <i class="mdi mdi-chevron-down accordion-arrow"></i>
@@ -818,52 +818,52 @@
                                                     <img src="{{$products_with_anime[2][0]}}" alt="" height="144px">
                                                 </div>
                                                 <div class="col-4 order_content">
-                                                    <h4>{{__('Animated order')}}</h4>
+                                                    <h4>{{translate('Animated order')}}</h4>
                                                     <span>{{!empty($products_with_anime[0]->product)?$products_with_anime[0]->product->name:''}}</span>
                                                     @if($product_discount_withouth_expire != 0)
-                                                        <span>{{__('Discount')}}: <b style="color:red">{{$product_discount_withouth_expire}} %</b></span>
+                                                        <span>{{translate('Discount')}}: <b style="color:red">{{$product_discount_withouth_expire}} %</b></span>
                                                     @endif
                                                     @if($products_with_anime[1])
-                                                        <span>{{__('Price')}}: <b>{{$products_with_anime[0]->price}}</b> {!! !empty($products_with_anime[0]->quantity)?__('Quantity').": <b>". $products_with_anime[0]->quantity."</b>":'' !!}</span>
+                                                        <span>{{translate('Price')}}: <b>{{$products_with_anime[0]->price}}</b> {!! !empty($products_with_anime[0]->quantity)?translate('Quantity').": <b>". $products_with_anime[0]->quantity."</b>":'' !!}</span>
                                                     @endif
                                                     @if($products_with_anime[1])
-                                                        <span>{{__('Sum')}}: <b>{{$products_with_anime[1]}}</b></span>
+                                                        <span>{{translate('Sum')}}: <b>{{$products_with_anime[1]}}</b></span>
                                                     @endif
                                                     @if(!empty($products_with_anime[0]->size))
-                                                        <span>{{__('Size')}}: <b>{{$products_with_anime[0]->size->name}}</b></span>
+                                                        <span>{{translate('Size')}}: <b>{{$products_with_anime[0]->size->name}}</b></span>
                                                     @endif
                                                     @if(!empty($products_with_anime[0]->color))
-                                                        <span>{{__('Color')}}: <b>{{$products_with_anime[0]->color->name}}</b></span>
+                                                        <span>{{translate('Color')}}: <b>{{$products_with_anime[0]->color->name}}</b></span>
                                                     @endif
                                                     @if(!empty($products_with_anime[0]->updated_at))
-                                                        <span>{{__('Ordered')}}: <b>{{$products_with_anime[0]->updated_at}}</b></span>
+                                                        <span>{{translate('Ordered')}}: <b>{{$products_with_anime[0]->updated_at}}</b></span>
                                                     @endif
                                                 </div>
                                                 <div class="col-1 d-flex justify-content-around align-items-center">
                                                     @switch($products_with_anime[0]->status)
                                                         @case(\App\Constants::ORDER_DETAIL_ORDERED)
                                                         <div>
-                                                            <span class="badge bg-danger">{{__('New')}}</span>
+                                                            <span class="badge bg-danger">{{translate('New')}}</span>
                                                         </div>
                                                         @break
                                                         @case(\App\Constants::ORDER_DETAIL_PERFORMED)
                                                         <div>
-                                                            <span class="badge bg-success">{{__('Performed')}}</span>
+                                                            <span class="badge bg-success">{{translate('Performed')}}</span>
                                                         </div>
                                                         @break
                                                         @case(\App\Constants::ORDER_DETAIL_CANCELLED)
                                                         <div>
-                                                            <span class="badge bg-danger">{{__('Cancelled')}}</span>
+                                                            <span class="badge bg-danger">{{translate('Cancelled')}}</span>
                                                         </div>
                                                         @break
                                                         @case(\App\Constants::ORDER_DETAIL_PERFORMED_BY_SUPERADMIN):
                                                         <div>
-                                                            <span class="badge bg-danger">{{__('Performed by superadmin')}}</span>
+                                                            <span class="badge bg-danger">{{translate('Performed by superadmin')}}</span>
                                                         </div>
                                                         @break
                                                         @case(\App\Constants::ORDER_DETAIL_ACCEPTED_BY_RECIPIENT)
                                                         <div>
-                                                            <span class="badge bg-info">{{__('Finished')}}</span>
+                                                            <span class="badge bg-info">{{translate('Finished')}}</span>
                                                         </div>
                                                         @break
                                                     @endswitch
@@ -872,7 +872,7 @@
                                                     <div class="d-flex justify-content-around">
                                                         @switch($products_with_anime[0]->status)
                                                             @case(\App\Constants::ORDER_DETAIL_PERFORMED)
-                                                            <button type="button" class="btn btn-danger delete-datas btn-sm waves-effect" data-bs-toggle="modal" data-bs-target="#warning-order-alert-modal" onclick='cancelling_order("{{route('cancell_order_detail', $products_with_anime[0]->id)}}")' data-url="">{{__('Cancel')}}</button>
+                                                            <button type="button" class="btn btn-danger delete-datas btn-sm waves-effect" data-bs-toggle="modal" data-bs-target="#warning-order-alert-modal" onclick='cancelling_order("{{route('cancell_order_detail', $products_with_anime[0]->id)}}")' data-url="">{{translate('Cancel')}}</button>
                                                             @break
                                                             @case(\App\Constants::ORDER_DETAIL_CANCELLED)
                                                             <button type="button" class="btn btn-success delete-datas btn-sm waves-effect" data-bs-toggle="modal" data-bs-target="#success-alert-modal" data-url=""
@@ -884,7 +884,7 @@
                                                                         "{{isset($images[0])?$images[0]:''}}",
                                                                         "{{isset($images[1])?$images[1]:''}}",
                                                                         "{{route('perform_order_detail', $products_with_anime[0]->id)}}")'>
-                                                                {{__('Perform')}}
+                                                                {{translate('Perform')}}
                                                             </button>
                                                             @break
                                                         @endswitch
@@ -924,53 +924,53 @@
                                                 </div>
                                                 <div class="col-1"></div>
                                                 <div class="col-4 order_content">
-                                                    <h4>{{__('Order')}}</h4>
+                                                    <h4>{{translate('Order')}}</h4>
                                                     @if(!empty($products[0]->warehouse) && $products[0]->warehouse->name)
                                                         <span><b>{{$products[0]->warehouse->name}}</b></span>
                                                     @elseif(!empty($products[0]->warehouse->product) && $products[0]->warehouse->product->name)
                                                         <span><b>{{$products[0]->warehouse->product->name}}</b></span>
                                                     @endif
                                                     @if($products[0]->price)
-                                                        <span>{{__('Price')}}: <b>{{$products[0]->price}}</b> {!! !empty($products[0]->quantity)?__('Quantity').': '."<b>".$products[0]->quantity."</b>":'' !!}</span>
+                                                        <span>{{translate('Price')}}: <b>{{$products[0]->price}}</b> {!! !empty($products[0]->quantity)?translate('Quantity').': '."<b>".$products[0]->quantity."</b>":'' !!}</span>
                                                     @endif
                                                     @if($products[1])
-                                                        <span>{{__('Sum')}}: <b>{{$products[1]}}</b></span>
+                                                        <span>{{translate('Sum')}}: <b>{{$products[1]}}</b></span>
                                                     @endif
                                                     @if($discount_withouth_expire != 0)
-                                                        <span>{{__('Discount')}}: <b style="color: red">{{(int)$discount_withouth_expire}} %</b></span>
+                                                        <span>{{translate('Discount')}}: <b style="color: red">{{(int)$discount_withouth_expire}} %</b></span>
                                                     @elseif($product_discount_withouth_expire != 0)
-                                                        <span>{{__('Discount')}}: <b style="color: red">{{(int)$product_discount_withouth_expire}} %</b></span>
+                                                        <span>{{translate('Discount')}}: <b style="color: red">{{(int)$product_discount_withouth_expire}} %</b></span>
                                                     @endif
                                                     @if(!empty($products[0]->size))
-                                                        <span>{{__('Size')}}: <b>{{$products[0]->size->name}}</b> {{__('Color')}}: <b>{{$products[0]->color->name}}</b></span>
+                                                        <span>{{translate('Size')}}: <b>{{$products[0]->size->name}}</b> {{translate('Color')}}: <b>{{$products[0]->color->name}}</b></span>
                                                     @endif
-                                                    <span>{{__('Ordered')}}: <b>{{$products[0]->updated_at}}</b></span>
+                                                    <span>{{translate('Ordered')}}: <b>{{$products[0]->updated_at}}</b></span>
                                                 </div>
                                                 <div class="col-1 d-flex justify-content-around align-items-center">
                                                     @switch($products[0]->status)
                                                         @case(\App\Constants::ORDER_DETAIL_ORDERED):
                                                         <div>
-                                                            <span class="badge bg-danger">{{__('New')}}</span>
+                                                            <span class="badge bg-danger">{{translate('New')}}</span>
                                                         </div>
                                                         @break
                                                         @case(\App\Constants::ORDER_DETAIL_PERFORMED)
                                                         <div>
-                                                            <span class="badge bg-success">{{__('Performed')}}</span>
+                                                            <span class="badge bg-success">{{translate('Performed')}}</span>
                                                         </div>
                                                         @break
                                                         @case(\App\Constants::ORDER_DETAIL_CANCELLED)
                                                         <div>
-                                                            <span class="badge bg-danger">{{__('Cancelled')}}</span>
+                                                            <span class="badge bg-danger">{{translate('Cancelled')}}</span>
                                                         </div>
                                                         @break
                                                         @case(\App\Constants::ORDER_DETAIL_PERFORMED_BY_SUPERADMIN)
                                                         <div>
-                                                            <span class="badge bg-danger">{{__('Performed by superadmin')}}</span>
+                                                            <span class="badge bg-danger">{{translate('Performed by superadmin')}}</span>
                                                         </div>
                                                         @break
                                                         @case(\App\Constants::ORDER_DETAIL_ACCEPTED_BY_RECIPIENT)
                                                         <div>
-                                                            <span class="badge bg-info">{{__('Finished')}}</span>
+                                                            <span class="badge bg-info">{{translate('Finished')}}</span>
                                                         </div>
                                                         @break
                                                     @endswitch
@@ -986,7 +986,7 @@
                                                         @endphp
                                                         @switch($products[0]->status)
                                                             @case(\App\Constants::ORDER_DETAIL_PERFORMED)
-                                                            <button type="button" class="btn btn-danger delete-datas btn-sm waves-effect" data-bs-toggle="modal" data-bs-target="#warning-order-alert-modal" onclick='cancelling_order("{{route('cancell_order_detail', $products[0]->id)}}")' data-url="">{{__('Cancel')}}</button>
+                                                            <button type="button" class="btn btn-danger delete-datas btn-sm waves-effect" data-bs-toggle="modal" data-bs-target="#warning-order-alert-modal" onclick='cancelling_order("{{route('cancell_order_detail', $products[0]->id)}}")' data-url="">{{translate('Cancel')}}</button>
                                                             @break
                                                             @case(\App\Constants::ORDER_DETAIL_CANCELLED)
                                                             <button type="button" class="btn btn-success delete-datas btn-sm waves-effect" data-bs-toggle="modal" data-bs-target="#success-alert-modal" data-url=""
@@ -1000,7 +1000,7 @@
                                                                         "{{isset($images[1])?$images[1]:''}}",
                                                                         "{{route('perform_order_detail', $products[0]->id)}}"
                                                                         )'>
-                                                                {{__('Perform')}}
+                                                                {{translate('Perform')}}
                                                             </button>
                                                             @break
                                                         @endswitch
@@ -1015,7 +1015,7 @@
                         @endforeach
                     </div>
                     <div class="tab-pane" id="cancelled">
-                        <h4 class="mt-0 header-title">{{__('Cancelled orders list')}}</h4>
+                        <h4 class="mt-0 header-title">{{translate('Cancelled orders list')}}</h4>
                         @php
                             $i=0
                         @endphp
@@ -1040,12 +1040,12 @@
                                         <div class="col-8 d-flex flex-column justify-content-center">
                                             @if((int)$order['product_types'] < count($order['order']->orderDetail))
                                                 <h4 style="line-height: 2; font-size: 16px">
-                                                    {{__('There are ')}}
+                                                    {{translate('There are ')}}
                                                     <b>{{count($order['order']->orderDetail)}}</b>
-                                                    {{__('items in order. these are selling for')}}
+                                                    {{translate('items in order. these are selling for')}}
                                                     <b>{{$order['order']->all_price}}</b>
                                                     @if($order['order']->coupon_price)
-                                                        {{__('all coupon costed')}}
+                                                        {{translate('all coupon costed')}}
                                                         <b style="color: #10C469">{{$order['order']->coupon_price}}</b>
                                                     @endif
                                                 </h4>
@@ -1053,47 +1053,47 @@
                                             @endif
                                             <h4 style="line-height: 2; font-size: 16px">
                                                 @if($user_name){{$user_name}}@endif
-                                                <span style="color: orange">{{__('Ordered')}}</span>
+                                                <span style="color: orange">{{translate('Ordered')}}</span>
                                                 @if($order['product_types'] != 0)
                                                     <b>{{ $order['product_types'] }}</b>
-                                                    {{__('products are yours. you will sell for')}}
+                                                    {{translate('products are yours. you will sell for')}}
                                                     <b style="color: #10C469">{{$order['company_product_price']}}</b>
                                                     @if($order['order_coupon_price'] != 0)
-                                                        {{__('Your coupon is costed')}}
+                                                        {{translate('Your coupon is costed')}}
                                                         <b style="color: red">{{$order['order_coupon_price']}}</b>
                                                     @endif
                                                     @if($order['company_discount_price'] != 0)
-                                                        {{__('your discount is costed')}}
+                                                        {{translate('your discount is costed')}}
                                                         <b style="color: red">{{$order['company_discount_price']}}</b>
                                                     @endif
                                                 @endif
                                                 @if($order['order']->payment_method == \App\Constants::CASH_ON_DELIVERY)
-                                                    <span class="badge bg-info">{{__('cash on delivery')}}</span>
+                                                    <span class="badge bg-info">{{translate('cash on delivery')}}</span>
                                                 @elseif($order['order']->payment_method == \App\Constants::BANK_CARD)
-                                                    <span class="badge bg-info">{{__('bank card')}}</span>
+                                                    <span class="badge bg-info">{{translate('bank card')}}</span>
                                                 @endif
                                             </h4>
                                             @if($order['performed_company_product_price'] != 0)
                                                 <hr style="margin:4px">
                                                 <h4 style="line-height: 2; font-size: 16px">
-                                                    <span style="color: #10C469">{{__('Performed')}}</span>
+                                                    <span style="color: #10C469">{{translate('Performed')}}</span>
                                                     @if($order['performed_product_types'] != 0)
                                                         <b>{{ $order['performed_product_types'] }}</b>
-                                                        {{__('you are selling for')}}
+                                                        {{translate('you are selling for')}}
                                                         <b style="color: #10C469">{{$order['performed_company_product_price']}}</b>
                                                         @if($order['performed_order_coupon_price'] != 0)
-                                                            {{__('your coupon is costed')}}
+                                                            {{translate('your coupon is costed')}}
                                                             <b style="color: red">{{$order['performed_order_coupon_price']}}</b>
                                                         @endif
                                                         @if($order['performed_company_discount_price'] != 0)
-                                                            {{__('your discount is costed')}}
+                                                            {{translate('your discount is costed')}}
                                                             <b style="color: red">{{$order['performed_company_discount_price']}}</b>
                                                         @endif
                                                     @endif
                                                 </h4>
                                             @elseif($order['order']->status == \App\Constants::CANCELLED)
                                                 <hr style="margin:4px">
-                                                <b style="line-height: 2; font-size: 16px; color: red">{{__('You cancelled all products !')}}</b>
+                                                <b style="line-height: 2; font-size: 16px; color: red">{{translate('You cancelled all products !')}}</b>
                                             @endif
                                         </div>
                                         <div class="col-4 d-flex justify-content-between">
@@ -1101,40 +1101,40 @@
                                                 @switch($order['order']->status)
                                                     @case(\App\Constants::ORDERED)
                                                     <span style="line-height: 1; font-size: 16px">
-                                                                <b>{{__('ORDERED')}}</b>
+                                                                <b>{{translate('ORDERED')}}</b>
                                                             </span>
                                                     <span class="badge bg-danger">
-                                                                {{__('New')}}
+                                                                {{translate('New')}}
                                                             </span>
                                                     @break
                                                     @case(\App\Constants::PERFORMED)
                                                     <span style="line-height: 1; font-size: 16px">
-                                                                <b>{{__('PERFORMED')}}</b>
+                                                                <b>{{translate('PERFORMED')}}</b>
                                                             </span>
                                                     <span class="badge bg-success">
-                                                                {{__('In progress')}}
+                                                                {{translate('In progress')}}
                                                             </span>
                                                     @break
                                                     @case(\App\Constants::CANCELLED)
                                                     <span style="line-height: 1; font-size: 16px">
-                                                                <b>{{__('CANCELLED')}}</b>
+                                                                <b>{{translate('CANCELLED')}}</b>
                                                             </span>
                                                     <span class="badge bg-danger">
-                                                                {{__('Cancelled')}}
+                                                                {{translate('Cancelled')}}
                                                             </span>
                                                     @break
                                                     @case(\App\Constants::ACCEPTED_BY_RECIPIENT)
                                                     <span style="line-height: 1; font-size: 16px">
-                                                                <b>{{__('ACCEPTED BY RECIPIENT')}}</b>
+                                                                <b>{{translate('ACCEPTED BY RECIPIENT')}}</b>
                                                             </span>
                                                     <span class="badge bg-info">>
-                                                                {{__('Delivered')}}
+                                                                {{translate('Delivered')}}
                                                             </span>
                                                     @break
                                                 @endswitch
                                             @endif
                                             {{--                                            @if($order['order_detail_is_ordered'] == true)--}}
-                                            {{--                                                <span class="badge bg-danger">{{__('new')}}</span>--}}
+                                            {{--                                                <span class="badge bg-danger">{{translate('new')}}</span>--}}
                                             {{--                                            @endif--}}
                                             <span>
                                                 <i class="mdi mdi-chevron-down accordion-arrow"></i>
@@ -1188,52 +1188,52 @@
                                                     <img src="{{$products_with_anime[2][0]}}" alt="" height="144px">
                                                 </div>
                                                 <div class="col-4 order_content">
-                                                    <h4>{{__('Animated order')}}</h4>
+                                                    <h4>{{translate('Animated order')}}</h4>
                                                     <span>{{!empty($products_with_anime[0]->product)?$products_with_anime[0]->product->name:''}}</span>
                                                     @if($product_discount_withouth_expire != 0)
-                                                        <span>{{__('Discount')}}: <b style="color:red">{{$product_discount_withouth_expire}} %</b></span>
+                                                        <span>{{translate('Discount')}}: <b style="color:red">{{$product_discount_withouth_expire}} %</b></span>
                                                     @endif
                                                     @if($products_with_anime[1])
-                                                        <span>{{__('Price')}}: <b>{{$products_with_anime[0]->price}}</b> {!! !empty($products_with_anime[0]->quantity)?__('Quantity').": <b>". $products_with_anime[0]->quantity."</b>":'' !!}</span>
+                                                        <span>{{translate('Price')}}: <b>{{$products_with_anime[0]->price}}</b> {!! !empty($products_with_anime[0]->quantity)?translate('Quantity').": <b>". $products_with_anime[0]->quantity."</b>":'' !!}</span>
                                                     @endif
                                                     @if($products_with_anime[1])
-                                                        <span>{{__('Sum')}}: <b>{{$products_with_anime[1]}}</b></span>
+                                                        <span>{{translate('Sum')}}: <b>{{$products_with_anime[1]}}</b></span>
                                                     @endif
                                                     @if(!empty($products_with_anime[0]->size))
-                                                        <span>{{__('Size')}}: <b>{{$products_with_anime[0]->size->name}}</b></span>
+                                                        <span>{{translate('Size')}}: <b>{{$products_with_anime[0]->size->name}}</b></span>
                                                     @endif
                                                     @if(!empty($products_with_anime[0]->color))
-                                                        <span>{{__('Color')}}: <b>{{$products_with_anime[0]->color->name}}</b></span>
+                                                        <span>{{translate('Color')}}: <b>{{$products_with_anime[0]->color->name}}</b></span>
                                                     @endif
                                                     @if(!empty($products_with_anime[0]->updated_at))
-                                                        <span>{{__('Ordered')}}: <b>{{$products_with_anime[0]->updated_at}}</b></span>
+                                                        <span>{{translate('Ordered')}}: <b>{{$products_with_anime[0]->updated_at}}</b></span>
                                                     @endif
                                                 </div>
                                                 <div class="col-1 d-flex justify-content-around align-items-center">
                                                     @switch($products_with_anime[0]->status)
                                                         @case(\App\Constants::ORDER_DETAIL_ORDERED)
                                                         <div>
-                                                            <span class="badge bg-danger">{{__('New')}}</span>
+                                                            <span class="badge bg-danger">{{translate('New')}}</span>
                                                         </div>
                                                         @break
                                                         @case(\App\Constants::ORDER_DETAIL_PERFORMED)
                                                         <div>
-                                                            <span class="badge bg-success">{{__('Performed')}}</span>
+                                                            <span class="badge bg-success">{{translate('Performed')}}</span>
                                                         </div>
                                                         @break
                                                         @case(\App\Constants::ORDER_DETAIL_CANCELLED)
                                                         <div>
-                                                            <span class="badge bg-danger">{{__('Cancelled')}}</span>
+                                                            <span class="badge bg-danger">{{translate('Cancelled')}}</span>
                                                         </div>
                                                         @break
                                                         @case(\App\Constants::ORDER_DETAIL_PERFORMED_BY_SUPERADMIN):
                                                         <div>
-                                                            <span class="badge bg-danger">{{__('Performed by superadmin')}}</span>
+                                                            <span class="badge bg-danger">{{translate('Performed by superadmin')}}</span>
                                                         </div>
                                                         @break
                                                         @case(\App\Constants::ORDER_DETAIL_ACCEPTED_BY_RECIPIENT)
                                                         <div>
-                                                            <span class="badge bg-info">{{__('Finished')}}</span>
+                                                            <span class="badge bg-info">{{translate('Finished')}}</span>
                                                         </div>
                                                         @break
                                                     @endswitch
@@ -1249,7 +1249,7 @@
                                                                     "{{isset($images[0])?$images[0]:''}}",
                                                                     "{{isset($images[1])?$images[1]:''}}",
                                                                     "{{route('perform_order_detail', $products_with_anime[0]->id)}}")' >
-                                                            {{__('Perform')}}
+                                                            {{translate('Perform')}}
                                                         </button>
                                                     </div>
                                                 </div>
@@ -1287,53 +1287,53 @@
                                                 </div>
                                                 <div class="col-1"></div>
                                                 <div class="col-4 order_content">
-                                                    <h4>{{__('Order')}}</h4>
+                                                    <h4>{{translate('Order')}}</h4>
                                                     @if(!empty($products[0]->warehouse) && $products[0]->warehouse->name)
                                                         <span><b>{{$products[0]->warehouse->name}}</b></span>
                                                     @elseif(!empty($products[0]->warehouse->product) && $products[0]->warehouse->product->name)
                                                         <span><b>{{$products[0]->warehouse->product->name}}</b></span>
                                                     @endif
                                                     @if($products[0]->price)
-                                                        <span>{{__('Price')}}: <b>{{$products[0]->price}}</b> {!! !empty($products[0]->quantity)?__('Quantity').': '."<b>".$products[0]->quantity."</b>":'' !!}</span>
+                                                        <span>{{translate('Price')}}: <b>{{$products[0]->price}}</b> {!! !empty($products[0]->quantity)?translate('Quantity').': '."<b>".$products[0]->quantity."</b>":'' !!}</span>
                                                     @endif
                                                     @if($products[1])
-                                                        <span>{{__('Sum')}}: <b>{{$products[1]}}</b></span>
+                                                        <span>{{translate('Sum')}}: <b>{{$products[1]}}</b></span>
                                                     @endif
                                                     @if($discount_withouth_expire != 0)
-                                                        <span>{{__('Discount')}}: <b style="color: red">{{(int)$discount_withouth_expire}} %</b></span>
+                                                        <span>{{translate('Discount')}}: <b style="color: red">{{(int)$discount_withouth_expire}} %</b></span>
                                                     @elseif($product_discount_withouth_expire != 0)
-                                                        <span>{{__('Discount')}}: <b style="color: red">{{(int)$product_discount_withouth_expire}} %</b></span>
+                                                        <span>{{translate('Discount')}}: <b style="color: red">{{(int)$product_discount_withouth_expire}} %</b></span>
                                                     @endif
                                                     @if(!empty($products[0]->size))
-                                                        <span>{{__('Size')}}: <b>{{$products[0]->size->name}}</b> {{__('Color')}}: <b>{{$products[0]->color->name}}</b></span>
+                                                        <span>{{translate('Size')}}: <b>{{$products[0]->size->name}}</b> {{translate('Color')}}: <b>{{$products[0]->color->name}}</b></span>
                                                     @endif
-                                                    <span>{{__('Ordered')}}: <b>{{$products[0]->updated_at}}</b></span>
+                                                    <span>{{translate('Ordered')}}: <b>{{$products[0]->updated_at}}</b></span>
                                                 </div>
                                                 <div class="col-1 d-flex justify-content-around align-items-center">
                                                     @switch($products[0]->status)
                                                         @case(\App\Constants::ORDER_DETAIL_ORDERED):
                                                         <div>
-                                                            <span class="badge bg-danger">{{__('New')}}</span>
+                                                            <span class="badge bg-danger">{{translate('New')}}</span>
                                                         </div>
                                                         @break
                                                         @case(\App\Constants::ORDER_DETAIL_PERFORMED)
                                                         <div>
-                                                            <span class="badge bg-success">{{__('Performed')}}</span>
+                                                            <span class="badge bg-success">{{translate('Performed')}}</span>
                                                         </div>
                                                         @break
                                                         @case(\App\Constants::ORDER_DETAIL_CANCELLED)
                                                         <div>
-                                                            <span class="badge bg-danger">{{__('Cancelled')}}</span>
+                                                            <span class="badge bg-danger">{{translate('Cancelled')}}</span>
                                                         </div>
                                                         @break
                                                         @case(\App\Constants::ORDER_DETAIL_PERFORMED_BY_SUPERADMIN)
                                                         <div>
-                                                            <span class="badge bg-danger">{{__('Performed by superadmin')}}</span>
+                                                            <span class="badge bg-danger">{{translate('Performed by superadmin')}}</span>
                                                         </div>
                                                         @break
                                                         @case(\App\Constants::ORDER_DETAIL_ACCEPTED_BY_RECIPIENT)
                                                         <div>
-                                                            <span class="badge bg-info">{{__('Finished')}}</span>
+                                                            <span class="badge bg-info">{{translate('Finished')}}</span>
                                                         </div>
                                                         @break
                                                     @endswitch
@@ -1358,7 +1358,7 @@
                                                                     "{{isset($images[1])?$images[1]:''}}",
                                                                     "{{route('perform_order_detail', $products[0]->id)}}"
                                                                     )'>
-                                                            {{__('Perform')}}
+                                                            {{translate('Perform')}}
                                                         </button>
                                                     </div>
                                                 </div>
@@ -1371,7 +1371,7 @@
                         @endforeach
                     </div>
                     <div class="tab-pane" id="accepted_by_recepient">
-                        <h4 class="mt-0 header-title">{{__('Accepted by recipient orders list')}}</h4>
+                        <h4 class="mt-0 header-title">{{translate('Accepted by recipient orders list')}}</h4>
                         @php
                             $i=0
                         @endphp
@@ -1396,12 +1396,12 @@
                                         <div class="col-8 d-flex flex-column justify-content-center">
                                             @if((int)$order['product_types'] < count($order['order']->orderDetail))
                                                 <h4 style="line-height: 2; font-size: 16px">
-                                                    {{__('There are ')}}
+                                                    {{translate('There are ')}}
                                                     <b>{{count($order['order']->orderDetail)}}</b>
-                                                    {{__('items in order. these are selling for')}}
+                                                    {{translate('items in order. these are selling for')}}
                                                     <b>{{$order['order']->all_price}}</b>
                                                     @if($order['order']->coupon_price)
-                                                        {{__('all coupon costed')}}
+                                                        {{translate('all coupon costed')}}
                                                         <b style="color: #10C469">{{$order['order']->coupon_price}}</b>
                                                     @endif
                                                 </h4>
@@ -1409,47 +1409,47 @@
                                             @endif
                                             <h4 style="line-height: 2; font-size: 16px">
                                                 @if($user_name){{$user_name}}@endif
-                                                <span style="color: orange">{{__('Ordered')}}</span>
+                                                <span style="color: orange">{{translate('Ordered')}}</span>
                                                 @if($order['product_types'] != 0)
                                                     <b>{{ $order['product_types'] }}</b>
-                                                    {{__('products are yours. you will sell for')}}
+                                                    {{translate('products are yours. you will sell for')}}
                                                     <b style="color: #10C469">{{$order['company_product_price']}}</b>
                                                     @if($order['order_coupon_price'] != 0)
-                                                        {{__('Your coupon is costed')}}
+                                                        {{translate('Your coupon is costed')}}
                                                         <b style="color: red">{{$order['order_coupon_price']}}</b>
                                                     @endif
                                                     @if($order['company_discount_price'] != 0)
-                                                        {{__('your discount is costed')}}
+                                                        {{translate('your discount is costed')}}
                                                         <b style="color: red">{{$order['company_discount_price']}}</b>
                                                     @endif
                                                 @endif
                                                 @if($order['order']->payment_method == \App\Constants::CASH_ON_DELIVERY)
-                                                    <span class="badge bg-info">{{__('cash on delivery')}}</span>
+                                                    <span class="badge bg-info">{{translate('cash on delivery')}}</span>
                                                 @elseif($order['order']->payment_method == \App\Constants::BANK_CARD)
-                                                    <span class="badge bg-info">{{__('bank card')}}</span>
+                                                    <span class="badge bg-info">{{translate('bank card')}}</span>
                                                 @endif
                                             </h4>
                                             @if($order['performed_company_product_price'] != 0)
                                                 <hr style="margin:4px">
                                                 <h4 style="line-height: 2; font-size: 16px">
-                                                    <span style="color: #10C469">{{__('Performed')}}</span>
+                                                    <span style="color: #10C469">{{translate('Performed')}}</span>
                                                     @if($order['performed_product_types'] != 0)
                                                         <b>{{ $order['performed_product_types'] }}</b>
-                                                        {{__('you are selling for')}}
+                                                        {{translate('you are selling for')}}
                                                         <b style="color: #10C469">{{$order['performed_company_product_price']}}</b>
                                                         @if($order['performed_order_coupon_price'] != 0)
-                                                            {{__('your coupon is costed')}}
+                                                            {{translate('your coupon is costed')}}
                                                             <b style="color: red">{{$order['performed_order_coupon_price']}}</b>
                                                         @endif
                                                         @if($order['performed_company_discount_price'] != 0)
-                                                            {{__('your discount is costed')}}
+                                                            {{translate('your discount is costed')}}
                                                             <b style="color: red">{{$order['performed_company_discount_price']}}</b>
                                                         @endif
                                                     @endif
                                                 </h4>
                                             @elseif($order['order']->status == \App\Constants::CANCELLED)
                                                 <hr style="margin:4px">
-                                                <b style="line-height: 2; font-size: 16px; color: red">{{__('You cancelled all products !')}}</b>
+                                                <b style="line-height: 2; font-size: 16px; color: red">{{translate('You cancelled all products !')}}</b>
                                             @endif
                                         </div>
                                         <div class="col-4 d-flex justify-content-between">
@@ -1457,40 +1457,40 @@
                                                 @switch($order['order']->status)
                                                     @case(\App\Constants::ORDERED)
                                                     <span style="line-height: 1; font-size: 16px">
-                                                                <b>{{__('ORDERED')}}</b>
+                                                                <b>{{translate('ORDERED')}}</b>
                                                             </span>
                                                     <span class="badge bg-danger">
-                                                                {{__('New')}}
+                                                                {{translate('New')}}
                                                             </span>
                                                     @break
                                                     @case(\App\Constants::PERFORMED)
                                                     <span style="line-height: 1; font-size: 16px">
-                                                                <b>{{__('PERFORMED')}}</b>
+                                                                <b>{{translate('PERFORMED')}}</b>
                                                             </span>
                                                     <span class="badge bg-success">
-                                                                {{__('In progress')}}
+                                                                {{translate('In progress')}}
                                                             </span>
                                                     @break
                                                     @case(\App\Constants::CANCELLED)
                                                     <span style="line-height: 1; font-size: 16px">
-                                                                <b>{{__('CANCELLED')}}</b>
+                                                                <b>{{translate('CANCELLED')}}</b>
                                                             </span>
                                                     <span class="badge bg-danger">
-                                                                {{__('Cancelled')}}
+                                                                {{translate('Cancelled')}}
                                                             </span>
                                                     @break
                                                     @case(\App\Constants::ACCEPTED_BY_RECIPIENT)
                                                     <span style="line-height: 1; font-size: 16px">
-                                                                <b>{{__('ACCEPTED BY RECIPIENT')}}</b>
+                                                                <b>{{translate('ACCEPTED BY RECIPIENT')}}</b>
                                                             </span>
                                                     <span class="badge bg-info">>
-                                                                {{__('Delivered')}}
+                                                                {{translate('Delivered')}}
                                                             </span>
                                                     @break
                                                 @endswitch
                                             @endif
                                             {{--                                            @if($order['order_detail_is_ordered'] == true)--}}
-                                            {{--                                                <span class="badge bg-danger">{{__('new')}}</span>--}}
+                                            {{--                                                <span class="badge bg-danger">{{translate('new')}}</span>--}}
                                             {{--                                            @endif--}}
                                             <span>
                                                 <i class="mdi mdi-chevron-down accordion-arrow"></i>
@@ -1544,52 +1544,52 @@
                                                     <img src="{{$products_with_anime[2][0]}}" alt="" height="144px">
                                                 </div>
                                                 <div class="col-4 order_content">
-                                                    <h4>{{__('Animated order')}}</h4>
+                                                    <h4>{{translate('Animated order')}}</h4>
                                                     <span>{{!empty($products_with_anime[0]->product)?$products_with_anime[0]->product->name:''}}</span>
                                                     @if($product_discount_withouth_expire != 0)
-                                                        <span>{{__('Discount')}}: <b style="color:red">{{$product_discount_withouth_expire}} %</b></span>
+                                                        <span>{{translate('Discount')}}: <b style="color:red">{{$product_discount_withouth_expire}} %</b></span>
                                                     @endif
                                                     @if($products_with_anime[1])
-                                                        <span>{{__('Price')}}: <b>{{$products_with_anime[0]->price}}</b> {!! !empty($products_with_anime[0]->quantity)?__('Quantity').": <b>". $products_with_anime[0]->quantity."</b>":'' !!}</span>
+                                                        <span>{{translate('Price')}}: <b>{{$products_with_anime[0]->price}}</b> {!! !empty($products_with_anime[0]->quantity)?translate('Quantity').": <b>". $products_with_anime[0]->quantity."</b>":'' !!}</span>
                                                     @endif
                                                     @if($products_with_anime[1])
-                                                        <span>{{__('Sum')}}: <b>{{$products_with_anime[1]}}</b></span>
+                                                        <span>{{translate('Sum')}}: <b>{{$products_with_anime[1]}}</b></span>
                                                     @endif
                                                     @if(!empty($products_with_anime[0]->size))
-                                                        <span>{{__('Size')}}: <b>{{$products_with_anime[0]->size->name}}</b></span>
+                                                        <span>{{translate('Size')}}: <b>{{$products_with_anime[0]->size->name}}</b></span>
                                                     @endif
                                                     @if(!empty($products_with_anime[0]->color))
-                                                        <span>{{__('Color')}}: <b>{{$products_with_anime[0]->color->name}}</b></span>
+                                                        <span>{{translate('Color')}}: <b>{{$products_with_anime[0]->color->name}}</b></span>
                                                     @endif
                                                     @if(!empty($products_with_anime[0]->updated_at))
-                                                        <span>{{__('Ordered')}}: <b>{{$products_with_anime[0]->updated_at}}</b></span>
+                                                        <span>{{translate('Ordered')}}: <b>{{$products_with_anime[0]->updated_at}}</b></span>
                                                     @endif
                                                 </div>
                                                 <div class="col-1 d-flex justify-content-around align-items-center">
                                                     @switch($products_with_anime[0]->status)
                                                         @case(\App\Constants::ORDER_DETAIL_ORDERED)
                                                         <div>
-                                                            <span class="badge bg-danger">{{__('New')}}</span>
+                                                            <span class="badge bg-danger">{{translate('New')}}</span>
                                                         </div>
                                                         @break
                                                         @case(\App\Constants::ORDER_DETAIL_PERFORMED)
                                                         <div>
-                                                            <span class="badge bg-success">{{__('Performed')}}</span>
+                                                            <span class="badge bg-success">{{translate('Performed')}}</span>
                                                         </div>
                                                         @break
                                                         @case(\App\Constants::ORDER_DETAIL_CANCELLED)
                                                         <div>
-                                                            <span class="badge bg-danger">{{__('Cancelled')}}</span>
+                                                            <span class="badge bg-danger">{{translate('Cancelled')}}</span>
                                                         </div>
                                                         @break
                                                         @case(\App\Constants::ORDER_DETAIL_PERFORMED_BY_SUPERADMIN):
                                                         <div>
-                                                            <span class="badge bg-danger">{{__('Performed by superadmin')}}</span>
+                                                            <span class="badge bg-danger">{{translate('Performed by superadmin')}}</span>
                                                         </div>
                                                         @break
                                                         @case(\App\Constants::ORDER_DETAIL_ACCEPTED_BY_RECIPIENT)
                                                         <div>
-                                                            <span class="badge bg-info">{{__('Finished')}}</span>
+                                                            <span class="badge bg-info">{{translate('Finished')}}</span>
                                                         </div>
                                                         @break
                                                     @endswitch
@@ -1633,53 +1633,53 @@
                                                 </div>
                                                 <div class="col-1"></div>
                                                 <div class="col-4 order_content">
-                                                    <h4>{{__('Order')}}</h4>
+                                                    <h4>{{translate('Order')}}</h4>
                                                     @if(!empty($products[0]->warehouse) && $products[0]->warehouse->name)
                                                         <span><b>{{$products[0]->warehouse->name}}</b></span>
                                                     @elseif(!empty($products[0]->warehouse->product) && $products[0]->warehouse->product->name)
                                                         <span><b>{{$products[0]->warehouse->product->name}}</b></span>
                                                     @endif
                                                     @if($products[0]->price)
-                                                        <span>{{__('Price')}}: <b>{{$products[0]->price}}</b> {!! !empty($products[0]->quantity)?__('Quantity').': '."<b>".$products[0]->quantity."</b>":'' !!}</span>
+                                                        <span>{{translate('Price')}}: <b>{{$products[0]->price}}</b> {!! !empty($products[0]->quantity)?translate('Quantity').': '."<b>".$products[0]->quantity."</b>":'' !!}</span>
                                                     @endif
                                                     @if($products[1])
-                                                        <span>{{__('Sum')}}: <b>{{$products[1]}}</b></span>
+                                                        <span>{{translate('Sum')}}: <b>{{$products[1]}}</b></span>
                                                     @endif
                                                     @if($discount_withouth_expire != 0)
-                                                        <span>{{__('Discount')}}: <b style="color: red">{{(int)$discount_withouth_expire}} %</b></span>
+                                                        <span>{{translate('Discount')}}: <b style="color: red">{{(int)$discount_withouth_expire}} %</b></span>
                                                     @elseif($product_discount_withouth_expire != 0)
-                                                        <span>{{__('Discount')}}: <b style="color: red">{{(int)$product_discount_withouth_expire}} %</b></span>
+                                                        <span>{{translate('Discount')}}: <b style="color: red">{{(int)$product_discount_withouth_expire}} %</b></span>
                                                     @endif
                                                     @if(!empty($products[0]->size))
-                                                        <span>{{__('Size')}}: <b>{{$products[0]->size->name}}</b> {{__('Color')}}: <b>{{$products[0]->color->name}}</b></span>
+                                                        <span>{{translate('Size')}}: <b>{{$products[0]->size->name}}</b> {{translate('Color')}}: <b>{{$products[0]->color->name}}</b></span>
                                                     @endif
-                                                    <span>{{__('Ordered')}}: <b>{{$products[0]->updated_at}}</b></span>
+                                                    <span>{{translate('Ordered')}}: <b>{{$products[0]->updated_at}}</b></span>
                                                 </div>
                                                 <div class="col-1 d-flex justify-content-around align-items-center">
                                                     @switch($products[0]->status)
                                                         @case(\App\Constants::ORDER_DETAIL_ORDERED):
                                                         <div>
-                                                            <span class="badge bg-danger">{{__('New')}}</span>
+                                                            <span class="badge bg-danger">{{translate('New')}}</span>
                                                         </div>
                                                         @break
                                                         @case(\App\Constants::ORDER_DETAIL_PERFORMED)
                                                         <div>
-                                                            <span class="badge bg-success">{{__('Performed')}}</span>
+                                                            <span class="badge bg-success">{{translate('Performed')}}</span>
                                                         </div>
                                                         @break
                                                         @case(\App\Constants::ORDER_DETAIL_CANCELLED)
                                                         <div>
-                                                            <span class="badge bg-danger">{{__('Cancelled')}}</span>
+                                                            <span class="badge bg-danger">{{translate('Cancelled')}}</span>
                                                         </div>
                                                         @break
                                                         @case(\App\Constants::ORDER_DETAIL_PERFORMED_BY_SUPERADMIN)
                                                         <div>
-                                                            <span class="badge bg-danger">{{__('Performed by superadmin')}}</span>
+                                                            <span class="badge bg-danger">{{translate('Performed by superadmin')}}</span>
                                                         </div>
                                                         @break
                                                         @case(\App\Constants::ORDER_DETAIL_ACCEPTED_BY_RECIPIENT)
                                                         <div>
-                                                            <span class="badge bg-info">{{__('Finished')}}</span>
+                                                            <span class="badge bg-info">{{translate('Finished')}}</span>
                                                         </div>
                                                         @break
                                                     @endswitch
@@ -1702,7 +1702,7 @@
         </div>
     @else
         <span class="badge bg-warning">
-            <h2>{{__('No orders')}}</h2>
+            <h2>{{translate('No orders')}}</h2>
         </span>
     @endif
     <script>
@@ -1725,19 +1725,19 @@
             order_quantity.innerHTML = ""
             product_image.innerHTML = ""
             if(product_name_ != ""){
-                product_name.innerHTML = "<h5>{{__('Product name')}} "+product_name_+"</h5>"
+                product_name.innerHTML = "<h5>{{translate('Product name')}} "+product_name_+"</h5>"
             }
             if(size_name != ""){
-                order_size.innerHTML = "<span>{{__('size')}} <b>"+size_name+"</b></span>"
+                order_size.innerHTML = "<span>{{translate('size')}} <b>"+size_name+"</b></span>"
             }
             if(color_name != ""){
-                order_color.innerHTML = "<span>{{__('Order color')}} <b>"+color_name+"</b></span>"
+                order_color.innerHTML = "<span>{{translate('Order color')}} <b>"+color_name+"</b></span>"
             }
             if(remaining_quantity_ != ""){
-                remaining_quantity.innerHTML = "<span>{{__('Remaining in warehouse')}} <b>"+remaining_quantity_+"</b></span>"
+                remaining_quantity.innerHTML = "<span>{{translate('Remaining in warehouse')}} <b>"+remaining_quantity_+"</b></span>"
             }
             if(quantity != ""){
-                order_quantity.innerHTML = "<span>{{__('Order quantity')}} <b>"+quantity+"</b></span>"
+                order_quantity.innerHTML = "<span>{{translate('Order quantity')}} <b>"+quantity+"</b></span>"
             }
             if(image != "" && image_1 != ""){
                 product_image.innerHTML = "<img height='64px' src='"+image+"'>" +
@@ -1754,16 +1754,16 @@
             order_quantity.innerHTML = ""
             product_image.innerHTML = ""
             if(product_name_ != ""){
-                product_name.innerHTML = "<h5>{{__('Product name')}} "+product_name_+"</h5>"
+                product_name.innerHTML = "<h5>{{translate('Product name')}} "+product_name_+"</h5>"
             }
             if(size_name != ""){
-                order_size.innerHTML = "<span>{{__('size')}} <b>"+size_name+"</b></span>"
+                order_size.innerHTML = "<span>{{translate('size')}} <b>"+size_name+"</b></span>"
             }
             if(color_name != ""){
-                order_color.innerHTML = "<span>{{__('Order color')}} <b>"+color_name+"</b></span>"
+                order_color.innerHTML = "<span>{{translate('Order color')}} <b>"+color_name+"</b></span>"
             }
             if(quantity != ""){
-                order_quantity.innerHTML = "<span>{{__('Order quantity')}} <b>"+quantity+"</b></span>"
+                order_quantity.innerHTML = "<span>{{translate('Order quantity')}} <b>"+quantity+"</b></span>"
             }
             if(images_0 != "" && images_1 != ""){
                 product_image.innerHTML = "<img height='64px' src='"+images_0+"'>" +

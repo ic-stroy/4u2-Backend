@@ -45,24 +45,24 @@
                 </div>
             @endif
             <p class="text-muted font-14">
-                {{__('Products list edit')}}
+                {{translate('Products list edit')}}
             </p>
             <form action="{{route('product.update', $product->id)}}" class="parsley-examples" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method("PUT")
                 <div class="row">
                     <div class="mb-3 col-6">
-                        <label class="form-label">{{__('Name')}}</label>
+                        <label class="form-label">{{translate('Name')}}</label>
                         <input type="text" name="name" class="form-control" required value="{{$product->name}}"/>
                     </div>
                     <div class="mb-3 col-6">
-                        <label class="form-label">{{__('Company')}}</label>
+                        <label class="form-label">{{translate('Company')}}</label>
                         <input type="text" name="company" class="form-control" value="{{$product->company}}"/>
                     </div>
                 </div>
                 <div class="row">
                     <div class="mb-3 col-6">
-                        <label class="form-label">{{__('Category')}}</label>
+                        <label class="form-label">{{translate('Category')}}</label>
                         <select name="category_id" class="form-control" id="category_id">
                             @foreach($categories as $category)
                                 <option value="{{$category->id}}"
@@ -76,13 +76,13 @@
                         </select>
                     </div>
                     <div class="mb-3 col-6">
-                        <label class="form-label">{{__('Sum')}}</label>
+                        <label class="form-label">{{translate('Sum')}}</label>
                         <input type="number" class="form-control" name="sum" value="{{$product->sum??''}}">
                     </div>
                 </div>
                 <div class="row">
                     <div class="mb-3 col-6 display-none" id="subcategory_exists">
-                        <label class="form-label">{{__('Sub category')}}</label>
+                        <label class="form-label">{{translate('Sub category')}}</label>
                         <select name="subcategory_id" class="form-control" id="subcategory_id">
                             @if(isset($current_category->subcategory))
                                 @foreach($current_category->subcategory as $subcategory)
@@ -92,7 +92,7 @@
                         </select>
                     </div>
                     <div class="mb-3 col-6 display-none" id="subsubcategory_exists">
-                        <label class="form-label">{{__('Sub Sub category')}}</label>
+                        <label class="form-label">{{translate('Sub Sub category')}}</label>
                         <select name="subsubcategory_id" class="form-control" id="subsubcategory_id">
                             @if(isset($category_product->sub_category->subsubcategory))
                                 @foreach($category_product->sub_category->subsubcategory as $subsubcategory)
@@ -121,26 +121,26 @@
                 </div>
                 <div class="row">
                     <div class="mb-3 col-6">
-                        <label class="form-label">{{__('Status')}}</label>
+                        <label class="form-label">{{translate('Status')}}</label>
                         <select name="status" class="form-control" id="status_id">
-                            <option value="0" {{$product->status == 0?'selected':''}}>{{__('No active')}}</option>
-                            <option value="1" {{$product->status == 1?'selected':''}}>{{__('Active')}}</option>
+                            <option value="0" {{$product->status == 0?'selected':''}}>{{translate('No active')}}</option>
+                            <option value="1" {{$product->status == 1?'selected':''}}>{{translate('Active')}}</option>
                         </select>
                     </div>
                     <div class="mb-3 col-6">
-                        <label class="form-label">{{__('Images')}}</label>
+                        <label class="form-label">{{translate('Images')}}</label>
                         <input type="file" name="images[]" class="form-control" value="{{old('images')}}" multiple/>
                     </div>
                 </div>
                 <div class="mb-3">
-                    <label class="form-label">{{__('Description')}}</label>
+                    <label class="form-label">{{translate('Description')}}</label>
                     <textarea class="form-control" name="description" id="description" cols="20" rows="10">
                         {{$product->description??''}}
                     </textarea>
                 </div>
                 <div>
-                    <button type="submit" class="btn btn-primary waves-effect waves-light">{{__('Update')}}</button>
-                    <button type="reset" class="btn btn-secondary waves-effect">{{__('Cancel')}}</button>
+                    <button type="submit" class="btn btn-primary waves-effect waves-light">{{translate('Update')}}</button>
+                    <button type="reset" class="btn btn-secondary waves-effect">{{translate('Cancel')}}</button>
                 </div>
             </form>
         </div>
@@ -157,7 +157,7 @@
     <script>
         let product_image = document.getElementsByClassName('product_image')
         let delete_product_func = document.getElementsByClassName('delete_product_func')
-        let deleted_text = "{{__('Product image was deleted')}}"
+        let deleted_text = "{{translate('Product image was deleted')}}"
         let product_images = []
         @if(is_array($images))
         @foreach($images as $image)
@@ -249,7 +249,7 @@
                             }
                         }
                         let disabled_option = document.createElement('option')
-                        disabled_option.text = "{{__('Select sub category')}}"
+                        disabled_option.text = "{{translate('Select sub category')}}"
                         disabled_option.selected = true
                         disabled_option.disabled = true
                         subcategory_id.add(disabled_option)
@@ -281,7 +281,7 @@
                             }
                         }
                         let disabled_sub_option = document.createElement('option')
-                        disabled_sub_option.text = "{{__('Select sub sub category')}}"
+                        disabled_sub_option.text = "{{translate('Select sub sub category')}}"
                         disabled_sub_option.selected = true
                         disabled_sub_option.disabled = true
                         subsubcategory_id.add(disabled_sub_option)

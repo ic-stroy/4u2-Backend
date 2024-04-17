@@ -6,41 +6,41 @@
 @section('content')
     <div class="card">
         <div class="card-body">
-            <h4 class="mt-0 header-title">{{__('Products lists')}}</h4>
+            <h4 class="mt-0 header-title">{{translate('Products lists')}}</h4>
             <table id="datatable-buttons" class="table dt-responsive nowrap table_show">
                 <thead>
                 <tr>
-                    <th>{{__('Attributes')}}</th>
-                    <th>{{__('Informations')}}</th>
+                    <th>{{translate('Attributes')}}</th>
+                    <th>{{translate('Informations')}}</th>
                 </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <th>{{__('Product')}}</th>
+                        <th>{{translate('Product')}}</th>
                         <td>{{$model->product?$model->product->name:''}}</td>
                     </tr>
                     <tr>
-                        <th>{{__('Size')}}</th>
+                        <th>{{translate('Size')}}</th>
                         <td>
                             @if(isset($model->size->name)){{ $model->size->name }}@endif
                         </td>
                     </tr>
                     <tr>
-                        <th>{{__('Colors')}}</th>
+                        <th>{{translate('Colors')}}</th>
                         <td class="d-flex justify-content-between">
                             @if(isset($model->color->name))
                                 <div class="color_content" style=" background-color: {{$model->color->code??''}};">{{$model->color->name}}</div>
                             @else
-                                <div>{{__('No color')}}</div>
+                                <div>{{translate('No color')}}</div>
                             @endif
                         </td>
                     </tr>
                     <tr>
-                        <th>{{__('Count')}}</th>
+                        <th>{{translate('Count')}}</th>
                         <td>{{$model->count??''}}</td>
                     </tr>
                     <tr>
-                        <th>{{__('image')}}</th>
+                        <th>{{translate('image')}}</th>
                         <td>
                             @if(isset($model->product->images))
                                 @php
@@ -73,7 +73,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <th>{{__('Updated at')}}</th>
+                        <th>{{translate('Updated at')}}</th>
                         <td>{{$model->updated_at??''}}</td>
                     </tr>
                 </tbody>

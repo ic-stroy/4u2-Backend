@@ -6,18 +6,18 @@
 @section('content')
     <div class="card">
         <div class="card-body">
-            <h4 class="mt-0 header-title">{{__('Size lists')}}</h4>
+            <h4 class="mt-0 header-title">{{translate('Size lists')}}</h4>
             <div class="dropdown float-end">
-                <a class="form_functions btn btn-success" href="{{route('size.create')}}">{{__('Create')}}</a>
+                <a class="form_functions btn btn-success" href="{{route('size.create')}}">{{translate('Create')}}</a>
             </div>
             <table id="datatable-buttons" class="table table-striped table-bordered dt-responsive nowrap">
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>{{__('Name')}}</th>
-                        <th>{{__('type')}}</th>
-                        <th>{{__('Updated_at')}}</th>
-                        <th class="text-center">{{__('Functions')}}</th>
+                        <th>{{translate('Name')}}</th>
+                        <th>{{translate('type')}}</th>
+                        <th>{{translate('Updated_at')}}</th>
+                        <th class="text-center">{{translate('Functions')}}</th>
                     </tr>
                 </thead>
                 <tbody class="table_body">

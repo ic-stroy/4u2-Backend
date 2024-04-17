@@ -6,20 +6,20 @@
 @section('content')
     <div class="card">
         <div class="card-body">
-            <h4 class="mt-0 header-title">{{__('Discount lists')}}</h4>
+            <h4 class="mt-0 header-title">{{translate('Discount lists')}}</h4>
             <div class="dropdown float-end mb-2">
-                <a class="form_functions btn btn-success" href="{{route('discount.create')}}">{{__('Create')}}</a>
+                <a class="form_functions btn btn-success" href="{{route('discount.create')}}">{{translate('Create')}}</a>
             </div>
             {{--            <table id="datatable-buttons" class="table table-striped table-bordered dt-responsive nowrap">--}}
             <table class="table table-striped table-bordered dt-responsive nowrap">
                 <thead>
                 <tr>
                     <th>#</th>
-                    <th>{{__('Discount percent')}}</th>
-                    <th>{{__('Category')}}</th>
-                    <th>{{__('Product')}}</th>
-                    <th>{{__('Number of products')}}</th>
-                    <th class="text-center">{{__('Functions')}}</th>
+                    <th>{{translate('Discount percent')}}</th>
+                    <th>{{translate('Category')}}</th>
+                    <th>{{translate('Product')}}</th>
+                    <th>{{translate('Number of products')}}</th>
+                    <th class="text-center">{{translate('Functions')}}</th>
                 </tr>
                 </thead>
                 <tbody class="table_body">
@@ -59,7 +59,7 @@
                                 @if(count($discount_data['discount']) == 1)
                                     {{$discount_data['discount'][0]->product->name}}
                                 @elseif(count($discount_data['discount']) > 1)
-                                    {{__('All products')}}
+                                    {{translate('All products')}}
                                 @else
                                     <div class="no_text"></div>
                                 @endif

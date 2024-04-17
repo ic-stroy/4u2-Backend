@@ -50,7 +50,7 @@ class ApiOrderController extends Controller
                 }
             }
             if($all_sum < $coupon->min_price){
-                $message=__("this order sum isn't enough for coupon. Coupon min price $coupon->min_price");
+                $message=translate("this order sum isn't enough for coupon. Coupon min price $coupon->min_price");
                 return $this->error($message, 400);
             }
 
@@ -58,14 +58,14 @@ class ApiOrderController extends Controller
                 if($coupon->order_quantity > 0){
                     $order_coupon_price = (int)$this->setOrderCoupon($coupon, $all_sum);
                 }else{
-                    $message=__("Coupon left 0 quantity");
+                    $message=translate("Coupon left 0 quantity");
                     return $this->error($message, 400);
                 }
             }elseif($coupon->order_number) {
                 if($order_count+1 == $coupon->order_number){
                     $order_coupon_price = (int)$this->setOrderCoupon($coupon, $all_sum);
                 }else{
-                    $message=__("Coupon for your $coupon->order_number - order this is your $order_count - order");
+                    $message=translate("Coupon for your $coupon->order_number - order this is your $order_count - order");
                     return $this->error($message, 400);
                 }
             }else{
@@ -83,7 +83,7 @@ class ApiOrderController extends Controller
             ];
             return $this->success('Success', 200, $good);
         }else{
-            $message = __('coupon not found or expired or not active');
+            $message = translate('coupon not found or expired or not active');
             return $this->error($message, 400);
         }
     }
@@ -194,7 +194,7 @@ class ApiOrderController extends Controller
 
             return $this->success('Success', 200, $data);
         }else{
-            $message = __('There is no product');
+            $message = translate('There is no product');
             return $this->error($message, 400);
         }
     }

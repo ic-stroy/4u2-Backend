@@ -6,22 +6,22 @@
 @section('content')
     <div class="card">
         <div class="card-body">
-            <h4 class="mt-0 header-title">{{__('Discount lists')}}</h4>
+            <h4 class="mt-0 header-title">{{translate('Discount lists')}}</h4>
             <div class="dropdown float-end">
-                <a class="form_functions btn btn-success" href="{{route('discount.create')}}">{{__('Create')}}</a>
+                <a class="form_functions btn btn-success" href="{{route('discount.create')}}">{{translate('Create')}}</a>
             </div>
 {{--            <table id="datatable-buttons" class="table dt-responsive nowrap table_show">--}}
             @if(isset($discount_data['discount'][0]))
                 <table class="table dt-responsive nowrap table_show">
                     <thead>
                         <tr>
-                            <th>{{__('Attributes')}}</th>
-                            <th>{{__('Informations')}}</th>
+                            <th>{{translate('Attributes')}}</th>
+                            <th>{{translate('Informations')}}</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <th>{{__('Category')}}</th>
+                            <th>{{translate('Category')}}</th>
                             <td>
                                 @if(!empty($discount_data['category'][0]) || !empty($discount_data['subcategory'][0]) || !empty($discount_data['subsubcategory'][0]))
                                     {{implode(', ', [$discount_data['category'][0], $discount_data['subcategory'][0], $discount_data['subsubcategory'][0]])}}
@@ -29,15 +29,15 @@
                             </td>
                         </tr>
                         <tr>
-                            <th>{{__('Discount percent')}}</th>
+                            <th>{{translate('Discount percent')}}</th>
                             <td>
                                 @if($discount_data['discount'][0]->percent != null)
-                                    {{$discount_data['discount'][0]->percent}} {{__(' %')}}
+                                    {{$discount_data['discount'][0]->percent}} {{translate(' %')}}
                                 @endif
                             </td>
                         </tr>
                         <tr>
-                            <th>{{__('Number of warehouses')}}</th>
+                            <th>{{translate('Number of warehouses')}}</th>
                             <td>
                                 @if($discount_data['number'] != null)
                                     {{$discount_data['number']}}
@@ -46,7 +46,7 @@
                         </tr>
                         @if(isset($discount_data['discount'][0]->product))
                             <tr>
-                                <th>{{__('Product')}}</th>
+                                <th>{{translate('Product')}}</th>
                                 <td>
                                     @foreach($discount_data['discount'] as $discount)
                                         {{$discount->product->name??''}}. <br>
@@ -55,7 +55,7 @@
                             </tr>
                         @endif
                         <tr>
-                            <th>{{__('Updated at')}}</th>
+                            <th>{{translate('Updated at')}}</th>
                             <td>{{$discount_data['discount'][0]->updated_at??''}}</td>
                         </tr>
                     </tbody>

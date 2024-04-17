@@ -6,20 +6,20 @@
 @section('content')
     <div class="card">
         <div class="card-body">
-            <h4 class="mt-0 header-title">{{__('Coupon lists')}}</h4>
+            <h4 class="mt-0 header-title">{{translate('Coupon lists')}}</h4>
             <div class="dropdown float-end">
-                <a class="form_functions btn btn-success mb-2" href="{{route('coupons.create')}}">{{__('Create')}}</a>
+                <a class="form_functions btn btn-success mb-2" href="{{route('coupons.create')}}">{{translate('Create')}}</a>
             </div>
 {{--            <table id="datatable-buttons" class="table table-striped table-bordered dt-responsive nowrap">--}}
             <table class="table table-striped table-bordered dt-responsive nowrap">
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>{{__('Name')}}</th>
-                        <th>{{__('Coupon quantity')}}</th>
-                        <th>{{__('Minimum price')}}</th>
-                        <th>{{__('Orders\' quantity or number')}}</th>
-                        <th class="text-center">{{__('Functions')}}</th>
+                        <th>{{translate('Name')}}</th>
+                        <th>{{translate('Coupon quantity')}}</th>
+                        <th>{{translate('Minimum price')}}</th>
+                        <th>{{translate('Orders\' quantity or number')}}</th>
+                        <th class="text-center">{{translate('Functions')}}</th>
                     </tr>
                 </thead>
                 <tbody class="table_body">
@@ -48,9 +48,9 @@
                             <td>
                                 <a class="show_page" href="{{route('coupons.show', $coupon->id)}}">
                                     @if ($coupon->price != null)
-                                       {{$coupon->price}} {{__(' sum')}}
+                                       {{$coupon->price}} {{translate(' sum')}}
                                     @elseif($coupon->percent != null)
-                                       {{$coupon->percent}} {{__(' %')}}
+                                       {{$coupon->percent}} {{translate(' %')}}
                                     @else
                                         <div class="no_text"></div>
                                     @endif
@@ -68,13 +68,13 @@
                             @if($coupon->order_quantity)
                                 <td>
                                     <a class="show_page" href="{{route('coupons.show', $coupon->id)}}">
-                                        {{$coupon->order_quantity}} {{__('quantity')}}
+                                        {{$coupon->order_quantity}} {{translate('quantity')}}
                                     </a>
                                 </td>
                             @elseif($coupon->order_number)
                                 <td>
                                     <a class="show_page" href="{{route('coupons.show', $coupon->id)}}">
-                                        {{$coupon->order_number}} {{__('number')}}
+                                        {{$coupon->order_number}} {{translate('number')}}
                                     </a>
                                 </td>
                             @else

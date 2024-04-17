@@ -6,21 +6,21 @@
 @section('content')
     <div class="card">
         <div class="card-body">
-            <h4 class="mt-0 header-title">{{__($product->name??'')}}{{__(' product lists')}}</h4>
+            <h4 class="mt-0 header-title">{{translate($product->name??'')}}{{translate(' product lists')}}</h4>
             <div class="dropdown float-end">
-                <a class="form_functions btn btn-success" href="{{route('characterizedProducts.category.create_characterized_product', $product->id)}}">{{__('Create')}}</a>
+                <a class="form_functions btn btn-success" href="{{route('characterizedProducts.category.create_characterized_product', $product->id)}}">{{translate('Create')}}</a>
             </div>
             <table id="datatable-buttons" class="table table-striped table-bordered dt-responsive nowrap">
                 <thead>
                 <tr>
                     <th>#</th>
-                    <th>{{__('Product')}}</th>
-                    <th>{{__('Size')}}</th>
-                    <th>{{__('Sum')}}</th>
-                    <th>{{__('Color')}}</th>
-                    <th>{{__('Count')}}</th>
-                    <th>{{__('Updated_at')}}</th>
-                    <th class="text-center">{{__('Functions')}}</th>
+                    <th>{{translate('Product')}}</th>
+                    <th>{{translate('Size')}}</th>
+                    <th>{{translate('Sum')}}</th>
+                    <th>{{translate('Color')}}</th>
+                    <th>{{translate('Count')}}</th>
+                    <th>{{translate('Updated_at')}}</th>
+                    <th class="text-center">{{translate('Functions')}}</th>
                 </tr>
                 </thead>
                 <tbody class="table_body">

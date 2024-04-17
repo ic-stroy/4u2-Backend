@@ -21,35 +21,35 @@
                 </div>
             @endif
             <p class="text-muted font-14">
-                {{__('Sub Sub category list create')}}
+                {{translate('Sub Sub category list create')}}
             </p>
             <form action="{{route('subsubcategory.store')}}" class="parsley-examples" method="POST">
                 @csrf
                 @method("POST")
                 <div class="row">
                     <div class="mb-3 col-6">
-                        <label class="form-label">{{__('Category')}}</label>
+                        <label class="form-label">{{translate('Category')}}</label>
                         <select id="category_id" class="form-control" required>
-                            <option value="" selected disabled>{{__('Select category')}}</option>
+                            <option value="" selected disabled>{{translate('Select category')}}</option>
                             @foreach($categories as $category)
                                 <option value="{{$category->id}}">{{$category->name}}</option>
                             @endforeach
                         </select>
                     </div>
                     <div class="mb-3 col-6 display-none" id="subcategory_exists">
-                        <label class="form-label">{{__('Sub category')}}</label>
+                        <label class="form-label">{{translate('Sub category')}}</label>
                         <select id="subcategory_id" name="subcategory_id" class="form-control" required>
 
                         </select>
                     </div>
                 </div>
                 <div class="mb-3">
-                    <label class="form-label">{{__('Name')}}</label>
+                    <label class="form-label">{{translate('Name')}}</label>
                     <input type="text" class="form-control" name="name" value="{{old('name')}}">
                 </div>
                 <div>
-                    <button type="submit" class="btn btn-primary waves-effect waves-light">{{__('Create')}}</button>
-                    <button type="reset" class="btn btn-secondary waves-effect">{{__('Cancel')}}</button>
+                    <button type="submit" class="btn btn-primary waves-effect waves-light">{{translate('Create')}}</button>
+                    <button type="reset" class="btn btn-secondary waves-effect">{{translate('Cancel')}}</button>
                 </div>
             </form>
         </div>

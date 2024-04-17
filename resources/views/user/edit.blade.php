@@ -7,7 +7,7 @@
     <div class="card">
         <div class="card-body">
             <p class="text-muted font-14">
-                {{__('User edit')}}
+                {{translate('User edit')}}
             </p>
             @if ($errors->any())
                 <div class="alert alert-danger">
@@ -23,21 +23,21 @@
                 @method('PUT')
                 <div class="row">
                     <div class="mb-3 col-6">
-                        <label class="form-label">{{__('First name')}}</label>
+                        <label class="form-label">{{translate('First name')}}</label>
                         <input type="text" class="form-control" name="first_name" required value="{{$user->first_name??''}}"/>
                     </div>
                     <div class="mb-3 col-6">
-                        <label class="form-label">{{__('Last name')}}</label>
+                        <label class="form-label">{{translate('Last name')}}</label>
                         <input type="text" class="form-control" name="last_name" value="{{$user->last_name??''}}"/>
                     </div>
                 </div>
                 <div class="row">
                     <div class="mb-3 col-6">
-                        <label class="form-label">{{__('Middle name')}}</label>
+                        <label class="form-label">{{translate('Middle name')}}</label>
                         <input type="text" class="form-control" name="middle_name" value="{{$user->middle_name??''}}"/>
                     </div>
                     <div class="mb-3 col-6">
-                        <label class="form-label">{{__('Phone number')}}</label>
+                        <label class="form-label">{{translate('Phone number')}}</label>
                         <input type="text" class="form-control" name="phone_number" value="{{$user->phone_number??''}}"/>
                     </div>
                 </div>
@@ -57,27 +57,27 @@
                                 <img src="{{asset('storage/user/'.$user->avatar)}}" alt="" height="94px">
                             @endif
                         </div>
-                        <label class="form-label">{{__('Avatar')}}</label>
+                        <label class="form-label">{{translate('Avatar')}}</label>
                         <input type="file" class="form-control" name="avatar" value=""/>
                     </div>
                     <div class="mb-3 col-6">
-                        <label for="gender" class="form-label">{{__('Gender')}}</label>
+                        <label for="gender" class="form-label">{{translate('Gender')}}</label>
                         <select id="gender" class="form-select" name="gender">
-                            <option value="">{{__('Choose..')}}</option>
-                            <option value="1" @if(isset($user)){{$user->gender==1?'selected':''}}@endif>{{__('Man')}}</option>
-                            <option value="2" @if(isset($user)){{$user->gender==2?'selected':''}}@endif>{{__('Woman')}}</option>
+                            <option value="">{{translate('Choose..')}}</option>
+                            <option value="1" @if(isset($user)){{$user->gender==1?'selected':''}}@endif>{{translate('Man')}}</option>
+                            <option value="2" @if(isset($user)){{$user->gender==2?'selected':''}}@endif>{{translate('Woman')}}</option>
                         </select>
                     </div>
                 </div>
                 <div class="row">
                     <div class="mb-3 col-6">
                         <div class="mb-3 col-6">
-                            <label for="role" class="form-label">{{__('Is admin')}}</label><br>
+                            <label for="role" class="form-label">{{translate('Is admin')}}</label><br>
                             <input type="checkbox" value="1" name="is_admin" {{$user->is_admin == 1 ? 'checked':''}}>
                         </div>
                     </div>
                     <div class="mb-3 col-6">
-                        <label class="form-label">{{__('Birth date')}}</label>
+                        <label class="form-label">{{translate('Birth date')}}</label>
                         @php
                             $birth_date = explode(' ', $user->birth_date??'');
                         @endphp
@@ -85,24 +85,24 @@
                     </div>
                 </div>
                 <div class="mb-3">
-                    <label class="form-label">{{__('Login')}}</label>
+                    <label class="form-label">{{translate('Login')}}</label>
                     <input type="email" class="form-control" name="email" required value="{{$user->email??''}}"/>
                 </div>
                 <div class="mb-3">
-                    <label class="form-label">{{__('Current password')}}</label>
+                    <label class="form-label">{{translate('Current password')}}</label>
                     <input type="password" class="form-control" name="password" value=""/>
                 </div>
                 <div class="mb-3">
-                    <label class="form-label">{{__('New password')}}</label>
+                    <label class="form-label">{{translate('New password')}}</label>
                     <input type="password" class="form-control" name="new_password" value=""/>
                 </div>
                 <div class="mb-3">
-                    <label class="form-label">{{__('Password confirmation')}}</label>
+                    <label class="form-label">{{translate('Password confirmation')}}</label>
                     <input type="password" class="form-control" name="password_confirmation" value=""/>
                 </div>
                 <div>
-                    <button type="submit" class="btn btn-primary waves-effect waves-light">{{__('Update')}}</button>
-                    <button type="reset" class="btn btn-secondary waves-effect">{{__('Cancel')}}</button>
+                    <button type="submit" class="btn btn-primary waves-effect waves-light">{{translate('Update')}}</button>
+                    <button type="reset" class="btn btn-secondary waves-effect">{{translate('Cancel')}}</button>
                 </div>
             </form>
         </div>
