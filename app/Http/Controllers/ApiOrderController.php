@@ -98,7 +98,7 @@ class ApiOrderController extends Controller
     }
 
     public function confirmOrder(Request $request){
-        if($request->selected_products){
+        if($request->selected_products && $request->payment && $request->address_id){
             $order = new Order();
             $order_detail = new OrderDetail();
             $user = Auth::user();
@@ -149,33 +149,40 @@ class ApiOrderController extends Controller
             }
 
             $all_sum = $categorizedProductAllPrice - $all_discount_price;
-            $coupon = Coupon::where('name', $request->coupon)->first();
-            if($coupon) {
-                if ($all_sum > $coupon->min_price) {
-                    if ($coupon->order_quantity) {
-                        if ($coupon->order_quantity > 0) {
+            if($request->coupon){
+                $coupon = Coupon::where('name', $request->coupon)->first();
+                if($coupon) {
+                    if ($all_sum > $coupon->min_price) {
+                        if ($coupon->order_quantity) {
+                            if ($coupon->order_quantity > 0) {
+                                $order_coupon_price = (int)$this->setOrderCoupon($coupon, $all_sum);
+                            }
+                        } elseif ($coupon->order_number) {
+                            if ($order_count + 1 == $coupon->order_number) {
+                                $order_coupon_price = (int)$this->setOrderCoupon($coupon, $all_sum);
+                            }
+                        } else {
                             $order_coupon_price = (int)$this->setOrderCoupon($coupon, $all_sum);
                         }
-                    } elseif ($coupon->order_number) {
-                        if ($order_count + 1 == $coupon->order_number) {
-                            $order_coupon_price = (int)$this->setOrderCoupon($coupon, $all_sum);
-                        }
-                    } else {
-                        $order_coupon_price = (int)$this->setOrderCoupon($coupon, $all_sum);
                     }
+                    $order->coupon_id = $coupon->id;
                 }
-                $order->coupon_id = $coupon->id;
             }
-
+            $all_sum = $all_sum - $order_coupon_price;
             $order->price = $categorizedProductAllPrice;
             $order->user_id = $user->id;
             $order->all_price = $all_sum;
             $order->status = Constants::ORDER_DETAIL_ORDERED;
             $order->coupon_price = $order_coupon_price;
+            if($request->payment == 'Cash'){
+                $order->payment_method = Constants::CASH;
+            }elseif($request->payment == 'Online'){
+                $order->payment_method = Constants::ONLINE;
+            }
             if($all_discount_price > 0){
                 $order->discount_price = $all_discount_price;
             }
-
+            $order->address_id = $request->address_id;
             $order->save();
             $order_detail->order_id = $order->id;
             $order_detail->save();

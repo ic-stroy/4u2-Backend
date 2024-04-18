@@ -544,94 +544,101 @@ class ProductsController extends Controller
         $order_coupon_price = 0;
         $good = [];
         $selected_products = $request->selected_products;
-        foreach($selected_products as $selected_product){
-            $product = CharacterizedProducts::find($selected_product['id']);
-            if($product){
-                $images = null;
-                $company_name = null;
-                $category_name = null;
-                $product_ = Products::find($product->product_id);
-                if($product_){
-                    $discount = $product_->discount;
-                    if($product->sum){
-                        if(!empty($discount)){
-                            $categorizedProductSum = $discount->percent?$product->sum - (int)$product->sum*(int)$discount->percent/100:$product->sum;
-                            $categorizedAllProductSum = $discount->percent?$product->sum*(int)$selected_product['count'] - (int)$product->sum*$selected_product['count']*(int)$discount->percent/100:$product->sum*(int)$selected_product['count'];
+        if(is_array($selected_products)){
+            foreach($selected_products as $selected_product){
+                $product = CharacterizedProducts::find($selected_product['id']);
+                if($product){
+                    $images = null;
+                    $company_name = null;
+                    $category_name = null;
+                    $product_ = Products::find($product->product_id);
+                    if($product_){
+                        $discount = $product_->discount;
+                        if($product->sum){
+                            if(!empty($discount)){
+                                $categorizedProductSum = $discount->percent?$product->sum - (int)$product->sum*(int)$discount->percent/100:$product->sum;
+                                $categorizedAllProductSum = $discount->percent?$product->sum*(int)$selected_product['count'] - (int)$product->sum*$selected_product['count']*(int)$discount->percent/100:$product->sum*(int)$selected_product['count'];
+                            }else{
+                                $categorizedProductSum = $product->sum;
+                                $categorizedAllProductSum = $product->sum*(int)$selected_product['count'];
+                            }
                         }else{
-                            $categorizedProductSum = $product->sum;
-                            $categorizedAllProductSum = $product->sum*(int)$selected_product['count'];
+                            if(!empty($discount)){
+                                $categorizedProductSum = $discount->percent?$product_->sum - $product_->sum*(int)$discount->percent/100:$product_->sum;
+                                $categorizedAllProductSum = $discount->percent?$product_->sum*(int)$selected_product['count'] - $product_->sum*(int)$selected_product['count']*(int)$discount->percent/100:$product_->sum;
+                            }else{
+                                $categorizedAllProductSum = $product_->sum*(int)$selected_product['count'];
+                                $categorizedProductSum = $product_->sum;
+                            }
                         }
-                    }else{
-                        if(!empty($discount)){
-                            $categorizedProductSum = $discount->percent?$product_->sum - $product_->sum*(int)$discount->percent/100:$product_->sum;
-                            $categorizedAllProductSum = $discount->percent?$product_->sum*(int)$selected_product['count'] - $product_->sum*(int)$selected_product['count']*(int)$discount->percent/100:$product_->sum;
+                        $images_ = json_decode($product_->images);
+                        if(count($images_)>0){
+                            $images = asset('storage/products/'.$images_[0]);
                         }else{
-                            $categorizedAllProductSum = $product_->sum*(int)$selected_product['count'];
-                            $categorizedProductSum = $product_->sum;
+                            $images = '';
                         }
+                        $company_name = $product_->company??null;
+                        $category_name = !empty($product_->category)?$product_->category->name:null;
                     }
-                    $images_ = json_decode($product_->images);
-                    if(count($images_)>0){
-                        $images = asset('storage/products/'.$images_[0]);
-                    }else{
-                        $images = '';
-                    }
-                    $company_name = $product_->company??null;
-                    $category_name = !empty($product_->category)?$product_->category->name:null;
+                    $all_sum = $all_sum + $categorizedAllProductSum??$product->sum*(int)$selected_product['count'];
+                    $good[] = [
+                        'id'=>$product->id,
+                        'product_id'=>$product_->id,
+                        'name'=>$product_->name,
+                        'images'=>$images,
+                        'company'=>$company_name,
+                        'category'=>$category_name,
+                        'size_id'=>$product->size_id,
+                        'color'=>$product->color,
+                        'count'=>$product->count,
+                        'discount' => !empty($product->discount)?$product->discount->percent:null,
+                        'sum'=>$categorizedProductSum??$product->sum,
+                        'price'=>$product->sum??$product_->sum,
+                    ];
                 }
-                $all_sum = $all_sum + $categorizedAllProductSum??$product->sum*(int)$selected_product['count'];
-                $good[] = [
-                    'id'=>$product->id,
-                    'product_id'=>$product_->id,
-                    'name'=>$product_->name,
-                    'images'=>$images,
-                    'company'=>$company_name,
-                    'category'=>$category_name,
-                    'size_id'=>$product->size_id,
-                    'color'=>$product->color,
-                    'count'=>$product->count,
-                    'discount' => !empty($product->discount)?$product->discount->percent:null,
-                    'sum'=>$categorizedProductSum??$product->sum,
-                    'price'=>$product->sum??$product_->sum,
-                ];
             }
-        }
-        if($request->coupon){
-            $coupon = Coupon::where('name', $request->coupon)->where('status', 1)
-                ->where('start_date', '<=', date('Y-m-d H:i:s'))
-                ->where('end_date', '>=', date('Y-m-d H:i:s'))->first();
-            $user = Auth::user();
-            $order_count = Order::where('user_id', $user->id)->where('status', '!=', Constants::BASKED)->count();
-            if($coupon) {
-                if($all_sum > $coupon->min_price){
-                    if($coupon->order_quantity) {
-                        if($coupon->order_quantity > 0){
-                            $order_coupon_price = (int)$this->setOrderCoupon($coupon, $all_sum);
-                        }else{
-                            $message = translate("Coupon left 0 quantity");
-                            return $this->error($message, 400);
-                        }
-                    }elseif($coupon->order_number) {
-                        if($order_count+1 == $coupon->order_number){
-                            $order_coupon_price = (int)$this->setOrderCoupon($coupon, $all_sum);
-                        }
+            if($request->coupon){
+                $coupon = Coupon::where('name', $request->coupon)->where('status', 1)
+                    ->where('start_date', '<=', date('Y-m-d H:i:s'))
+                    ->where('end_date', '>=', date('Y-m-d H:i:s'))->first();
+                $user = Auth::user();
+                $order_count = Order::where('user_id', $user->id)->where('status', '!=', Constants::BASKED)->count();
+                if($coupon) {
+                    if($all_sum > $coupon->min_price){
+                        if($coupon->order_quantity) {
+                            if($coupon->order_quantity > 0){
+                                $order_coupon_price = (int)$this->setOrderCoupon($coupon, $all_sum);
+                            }else{
+                                $message = translate("Coupon left 0 quantity");
+                                return $this->error($message, 400);
+                            }
+                        }elseif($coupon->order_number) {
+                            if($order_count+1 == $coupon->order_number){
+                                $order_coupon_price = (int)$this->setOrderCoupon($coupon, $all_sum);
+                            }
 //                        else{
 //                            $message = translate("Coupon for your $coupon->order_number - order this is your $order_count - order");
 //                            return $this->error($message, 400);
 //                        }
-                    }else{
-                        $order_coupon_price = (int)$this->setOrderCoupon($coupon, $all_sum);
+                        }else{
+                            $order_coupon_price = (int)$this->setOrderCoupon($coupon, $all_sum);
+                        }
                     }
                 }
             }
+            $response = [
+                'status'=>true,
+                'coupon_price'=>$order_coupon_price,
+                'data'=>$good
+            ];
+            return response()->json($response, 200);
+        }else{
+            $response = [
+                'status'=>false,
+                'data'=>[]
+            ];
+            return response()->json($response, 200);
         }
-        $response = [
-            'status'=>true,
-            'coupon_price'=>$order_coupon_price,
-            'data'=>$good
-        ];
-        return response()->json($response, 200);
-
     }
 
     public function setOrderCoupon($coupon, $price){
