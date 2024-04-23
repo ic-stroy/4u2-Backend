@@ -8,9 +8,12 @@ use App\Models\Coupon;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\Products;
+use App\Models\User;
+use App\Notifications\OrderNotification;
 use App\Providers\AuthServiceProvider;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Notification;
 
 class ApiOrderController extends Controller
 {
@@ -123,7 +126,6 @@ class ApiOrderController extends Controller
                         $order_detail->discount = (int)$product_data['discount'];
                         $order_detail->price = (int)$product->price;
                         $order_detail->status = Constants::ACTIVE;
-
                         if($product->sum){
                             $categorizedProductPrice = $product->sum*(int)$product_data['count'];
                             if(!empty($discount)){
@@ -187,6 +189,18 @@ class ApiOrderController extends Controller
             $order_detail->order_id = $order->id;
             $order_detail->save();
 
+            $users = User::where('is_admin', Constants::ADMIN)->get();
+            $list_images = $this->getImages($product_);
+            $data = [
+                'order_id'=>$order->id,
+                'order_all_price'=>$all_sum,
+                'product'=>[
+                    'name'=>$product_->name,
+                    'images'=>$list_images
+                ],
+                'receiver_name'=>$order->receiver_name,
+            ];
+            Notification::send($users, new OrderNotification($data));
 //                $good = [
 //                    'coupon_price'=>$order_coupon_price,
 //                    'coupon'=>[
@@ -204,5 +218,18 @@ class ApiOrderController extends Controller
             $message = translate('There is no product');
             return $this->error($message, 400);
         }
+    }
+
+    public function getImages($model){
+        if($model->images){
+            $images_ = json_decode($model->images);
+            $images = [];
+            foreach ($images_ as $image_){
+                 $images[] = asset('storage/warehouse/'.$image_);
+            }
+        }else{
+            $images = [];
+        }
+        return $images;
     }
 }

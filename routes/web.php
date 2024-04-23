@@ -58,10 +58,10 @@ Route::group(['middleware'=>['isAdmin', 'language']], function(){
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
     Route::get('/set-cities', [HomeController::class, 'setCities']);
 
-    Route::get('/index', [OrderController::class, 'index'])->name('order.index');
+    Route::get('/order', [OrderController::class, 'index'])->name('order.index');
     Route::get('/order-category', [OrderController::class, 'category'])->name('order.category');
-    Route::get('/show/{id}', [OrderController::class, 'show'])->name('order.show');
-    Route::get('/destroy/{id}', [OrderController::class, 'destroy'])->name('order.destroy');
+    Route::get('/order/show/{id}', [OrderController::class, 'show'])->name('order.show');
+    Route::get('/order/destroy/{id}', [OrderController::class, 'destroy'])->name('order.destroy');
     Route::group(['prefix' => 'language'], function () {
         Route::get('/', [LanguageController::class, 'index'])->name('language.index');
         Route::get('/language/show/{id}', [LanguageController::class, 'show'])->name('language.show');

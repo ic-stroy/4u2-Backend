@@ -199,7 +199,9 @@
                         <a class="nav-link dropdown-toggle waves-effect waves-light" data-bs-toggle="dropdown"
                            href="#" role="button" aria-haspopup="false" aria-expanded="false">
                             <i class="fe-bell noti-icon"></i>
-                            <span class="badge bg-danger rounded-circle noti-icon-badge">9</span>
+                            @if(count($current_user->unreadnotifications)>0)
+                                <span class="badge bg-danger rounded-circle noti-icon-badge">{{count($current_user->unreadnotifications)}}</span>
+                            @endif
                         </a>
                         <div class="dropdown-menu dropdown-menu-end dropdown-lg">
 
@@ -215,45 +217,35 @@
                             </div>
 
                             <div class="noti-scroll" data-simplebar>
-
-                                <!-- item-->
-                                <a href="javascript:void(0);" class="dropdown-item notify-item active">
-                                    <div class="notify-icon">
-                                        <img src="{{ asset('assets/images/user/user-1.jpg') }}" class="img-fluid rounded-circle"
-                                             alt="" />
-                                    </div>
-                                    <p class="notify-details">Cristina Pride</p>
-                                    <p class="text-muted mb-0 user-msg">
-                                        <small>{{translate('Hi, How are you? What about our next meeting')}}</small>
-                                    </p>
-                                </a>
-
-                                <!-- item-->
-                                <a href="javascript:void(0);" class="dropdown-item notify-item">
-                                    <div class="notify-icon bg-primary">
-                                        <i class="mdi mdi-comment-account-outline"></i>
-                                    </div>
-                                    <p class="notify-details">{{translate('Caleb Flakelar commented on Admin')}}
-                                        <small class="text-muted">{{translate('1 min ago')}}</small>
-                                    </p>
-                                </a>
-
-                                <!-- item-->
-                                <a href="javascript:void(0);" class="dropdown-item notify-item">
-                                    <div class="notify-icon">
-                                        <img src="{{ asset('assets/images/user/user-4.jpg') }}" class="img-fluid rounded-circle"
-                                             alt="" />
-                                    </div>
-                                    <p class="notify-details">Karen Robinson</p>
-                                    <p class="text-muted mb-0 user-msg">
-                                        <small>{{ translate('Wow ! this admin looks good and awesome design')}}</small>
-                                    </p>
-                                </a>
-
-                                <!-- item-->
-
+                                @forelse($current_user->unreadnotifications as $notification)
+                                    @if($notification->type == "App\Notifications\OrderNotification")
+                                        @if(!empty($notification->data))
+                                            <a href="{{route('order.index', 2)}}" class="dropdown-item notify-item">
+                                                <div class="notify-icon">
+                                                    <img src="{{isset($notification->data['product_images'])?$notification->data['product_images']:''}}" class="img-fluid" alt="" />
+                                                </div>
+                                                <p class="notify-details">
+                                                    @if(isset($notification->data['product_name']))
+                                                        {{strlen($notification->data['product_name'])>24?substr($notification->data['product_name'], 0, 24):$notification->data['product_name']}}...  <b>{{$notification->data['order_all_price']}}</b>
+                                                    @endif
+                                                </p>
+                                                <p class="text-muted mb-0 user-msg">
+                                                    @if(isset($notification->data['user']))
+                                                        <small>{{$notification->data['user']?$notification->data['user']:''}}</small>
+                                                    @endif
+                                                </p>
+                                            </a>
+                                            <hr style="margin: 0px">
+                                        @endif
+                                    @endif
+                                @empty
+                                    <a href="javascript:void(0);"
+                                       class="dropdown-item text-center text-primary notify-item notify-all">
+                                        {{ translate('No notifications')}}
+                                        <i class="fe-arrow-right"></i>
+                                    </a>
+                                @endforelse
                             </div>
-
                             <!-- All-->
                             <a href="javascript:void(0);"
                                class="dropdown-item text-center text-primary notify-item notify-all">

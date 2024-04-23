@@ -50,7 +50,6 @@
                                 <th>{{translate('Status')}}</th>
                                 <th>{{translate('Images')}}</th>
                                 <th>{{translate('Updated_at')}}</th>
-                                <th class="text-center">{{translate('Functions')}}</th>
                             </tr>
                             </thead>
                             <tbody class="table_body">
@@ -123,12 +122,6 @@
                                             <a class="show_page" href="{{route('characterizedProducts.category.characterized_product', $product['product']->id)}}">
                                                 @if(isset($product['product']->updated_at)){{ $product['product']->updated_at }}@else <div class="no_text"></div> @endif
                                             </a>
-                                        </td>
-                                        <td class="function_column">
-                                            <div class="d-flex justify-content-center">
-                                                <a class="form_functions btn btn-info" href="{{route('product.edit', $product['product']->id)}}"><i class="fe-edit-2"></i></a>
-                                                <button type="button" class="btn btn-danger delete-datas btn-sm waves-effect" data-bs-toggle="modal" data-bs-target="#warning-alert-modal" data-url="{{route('product.destroy', $product['product']->id)}}"><i class="fe-trash-2"></i></button>
-                                            </div>
                                         </td>
                                     </tr>
                                 @endforeach

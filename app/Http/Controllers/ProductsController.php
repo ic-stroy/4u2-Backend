@@ -754,7 +754,7 @@ class ProductsController extends Controller
             $goods[$key]['company'] = $product->company??null;
             $goods[$key]['characters'] = $categorizedByColor??[];
             $goods[$key]['images'] = $images??[];
-            $goods[$key]['best_basket_button'] = false;
+            $goods[$key]['basket_button'] = false;
             $goods[$key]['created_at'] = $product->created_at??null;
             $goods[$key]['updated_at'] = $product->updated_at??null;
         }
