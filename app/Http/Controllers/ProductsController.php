@@ -33,17 +33,7 @@ class ProductsController extends Controller
             array_push($categories_id, $category->id);
             $products = Products::orderBy('created_at', 'desc')->whereIn('category_id', $categories_id)->get();
 
-            $category_ = '';
-            $sub_category_ = '';
-            foreach($products as $product){
-                if(!empty($product->category)){
-                    $category_ = $product->category->name;
-                }elseif(!empty($product->subCategory)){
-                    $category_ = !empty($product->subCategory->category)?$product->subCategory->category->name:'';
-                    $sub_category_ = $product->subCategory->name;
-                }
-            }
-            $all_products[$category->id] = ['products'=>$products, 'sub_category_'=>$sub_category_, 'category_'=>$category_];
+            $all_products[$category->id] = $products;
         }
         return view('products.index', ['all_products'=> $all_products, 'categories'=> $categories]);
     }
@@ -87,10 +77,37 @@ class ProductsController extends Controller
     public function show(string $id)
     {
         $model = Products::find($id);
-        $subcategories = Category::where('parent_id', 1)->get();
-        $categories = Category::where('parent_id', 0)->orderBy('id', 'asc')->get();
-        $firstcategory = Category::where('parent_id', 0)->orderBy('id', 'asc')->first();
-        return view('products.show', ['model'=>$model, 'subcategories'=> $subcategories, 'categories'=> $categories, 'firstcategory'=> $firstcategory]);
+        $category_array = [];
+        if(!empty($model->category)){
+            $category_ = $model->category->name;
+            $category_array = [$category_];
+        }elseif(!empty($model->subCategory)){
+            $category_ = !empty($model->subCategory->category)?$model->subCategory->category->name:'';
+            $sub_category_ = $model->subCategory->name;
+            if($category_ != ''){
+                $category_array = [$category_, $sub_category_];
+            }else{
+                $category_array = [$sub_category_];
+            }
+        }elseif(!empty($model->subSubCategory)){
+            $sub_sub_category_ = $model->subSubCategory->name;
+            if(!empty($model->subSubCategory->sub_category)){
+                $category_ = !empty($model->subSubCategory->sub_category->category)?$model->subSubCategory->sub_category->category->name:'';
+                $sub_category_ = $model->subSubCategory->sub_category->name;
+                if($category_ != ''){
+                    $category_array = [$category_, $sub_category_, $sub_sub_category_];
+                }else{
+                    $category_array = [$sub_category_, $sub_sub_category_];
+                }
+            }else{
+                $category_array = [$sub_sub_category_];
+            }
+        }
+
+        return view('products.show', [
+            'model'=>$model,
+            'category_array'=> $category_array
+        ]);
     }
 
     /**

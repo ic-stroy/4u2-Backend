@@ -17,6 +17,10 @@ body {
     font-family: Rubik;
 }
 
+#datatable-buttons{
+    width: 100% !important;
+}
+
 .delete-datas{
     border-radius: 8px;
 }

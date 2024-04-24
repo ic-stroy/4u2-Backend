@@ -9,15 +9,19 @@
             <h4 class="mt-0 header-title">{{translate('Products lists')}}</h4>
             <table id="datatable-buttons" class="table dt-responsive nowrap table_show">
                 <thead>
-                <tr>
-                    <th>{{translate('Attributes')}}</th>
-                    <th>{{translate('Informations')}}</th>
-                </tr>
+                    <tr>
+                        <th>{{translate('Attributes')}}</th>
+                        <th>{{translate('Informations')}}</th>
+                    </tr>
                 </thead>
                 <tbody>
                     <tr>
                         <th>{{translate('Product')}}</th>
                         <td>{{$model->product?$model->product->name:''}}</td>
+                    </tr>
+                    <tr>
+                        <th>{{translate('Current category')}}</th>
+                        <td>@if(!empty($category_array)){{ implode(', ', $category_array)}}@endif</td>
                     </tr>
                     <tr>
                         <th>{{translate('Size')}}</th>

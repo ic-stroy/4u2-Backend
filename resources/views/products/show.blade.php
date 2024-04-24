@@ -4,15 +4,6 @@
     {{-- Your page title --}}
 @endsection
 @section('content')
-    @php
-        if(isset($model->subSubCategory->id)){
-            $current_category = $model->subSubCategory->name;
-        }elseif(isset($model->subCategory->id)){
-            $current_category = $model->subCategory->name;
-        }elseif(isset($model->category->id)){
-            $current_category = $model->category->name;
-        }
-    @endphp
     <div class="card">
         <div class="card-body">
             <h4 class="mt-0 header-title">{{translate('Products lists')}}</h4>
@@ -37,7 +28,7 @@
                     </tr>
                     <tr>
                         <th>{{translate('Current category')}}</th>
-                        <td>@if(isset($current_category)){{ $current_category }}@endif</td>
+                        <td>@if(!empty($category_array)){{ implode(', ', $category_array)}}@endif</td>
                     </tr>
                     <tr>
                         <th>{{translate('Status')}}</th>

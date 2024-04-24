@@ -20,7 +20,7 @@ class IsAdminMiddleware
         if(isset($user->id) && $user->is_admin == 1){
             return $next($request);
         }else{
-            return redirect()->route('welcome');
+            return redirect()->route('login');
         }
     }
 }

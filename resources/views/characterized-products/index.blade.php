@@ -46,7 +46,7 @@
                             <tr>
                                 <th>#</th>
                                 <th>{{translate('Name')}}</th>
-                                <th>{{translate('Current category')}}</th>
+{{--                                <th>{{translate('Current category')}}</th>--}}
                                 <th>{{translate('Status')}}</th>
                                 <th>{{translate('Images')}}</th>
                                 <th>{{translate('Updated_at')}}</th>
@@ -56,48 +56,47 @@
                             @php
                                 $i = 0
                             @endphp
-                            @if(isset($all_products[$category->id]))
                                 @foreach($all_products[$category->id] as $product)
                                     @php
                                         $i++;
                                     @endphp
                                     <tr>
                                         <th scope="row">
-                                            <a class="show_page" href="{{route('characterizedProducts.category.characterized_product', $product['product']->id)}}">{{$i}}</a>
+                                            <a class="show_page" href="{{route('characterizedProducts.category.characterized_product', $product->id)}}">{{$i}}</a>
                                         </th>
                                         <td>
-                                            <a class="show_page" href="{{route('characterizedProducts.category.characterized_product', $product['product']->id)}}">
-                                                @if(isset($product['product']->name))
-                                                    @if(strlen($product['product']->name)>34)
-                                                        {{ substr($product['product']->name, 0, 34) }}...
+                                            <a class="show_page" href="{{route('characterizedProducts.category.characterized_product', $product->id)}}">
+                                                @if(isset($product->name))
+                                                    @if(strlen($product->name)>34)
+                                                        {{ substr($product->name, 0, 34) }}...
                                                     @else
-                                                        {{$product['product']->name}}
+                                                        {{$product->name}}
                                                     @endif
                                                 @else
                                                     <div class="no_text"></div>
                                                 @endif
                                             </a>
                                         </td>
+{{--                                        <td>--}}
+{{--                                            <a class="show_page" href="{{route('characterizedProducts.category.characterized_product', $product->id)}}">--}}
+{{--                                                @if($all_products[$category->id]['sub_sub_category_'] != '' || $all_products[$category->id]['sub_category_'] != '' || $all_products[$category->id]['category_'] != '')--}}
+{{--                                                    {{ implode(', ', [$all_products[$category->id]['category_'], $all_products[$category->id]['sub_category_'], $all_products[$category->id]['sub_sub_category_']])}}--}}
+{{--                                                @else--}}
+{{--                                                    <div class="no_text"></div>--}}
+{{--                                                @endif--}}
+{{--                                            </a>--}}
+{{--                                        </td>--}}
                                         <td>
-                                            <a class="show_page" href="{{route('characterizedProducts.category.characterized_product', $product['product']->id)}}">
-                                                @if($product['sub_sub_category_'] != '' || $product['sub_category_'] != '' || $product['category_'] != '')
-                                                    {{ implode(', ', [$product['category_'], $product['sub_category_'], $product['sub_sub_category_']])}}
-                                                @else
-                                                    <div class="no_text"></div>
-                                                @endif
+                                            <a class="show_page" href="{{route('characterizedProducts.category.characterized_product', $product->id)}}">
+                                                {{$product->status == 1?translate('Active'):translate('No active') }}
                                             </a>
                                         </td>
                                         <td>
-                                            <a class="show_page" href="{{route('characterizedProducts.category.characterized_product', $product['product']->id)}}">
-                                                {{$product['product']->status == 1?translate('Active'):translate('No active') }}
-                                            </a>
-                                        </td>
-                                        <td>
-                                            <a class="show_page_color" href="{{route('characterizedProducts.category.characterized_product', $product['product']->id)}}">
+                                            <a class="show_page_color" href="{{route('characterizedProducts.category.characterized_product', $product->id)}}">
                                                 <div class="d-flex">
-                                                    @if(isset($product['product']->images))
+                                                    @if(isset($product->images))
                                                         @php
-                                                            $images = json_decode($product['product']->images);
+                                                            $images = json_decode($product->images);
                                                             $is_image = 0;
                                                         @endphp
                                                         @foreach($images as $image)
@@ -119,13 +118,12 @@
                                             </a>
                                         </td>
                                         <td>
-                                            <a class="show_page" href="{{route('characterizedProducts.category.characterized_product', $product['product']->id)}}">
-                                                @if(isset($product['product']->updated_at)){{ $product['product']->updated_at }}@else <div class="no_text"></div> @endif
+                                            <a class="show_page" href="{{route('characterizedProducts.category.characterized_product', $product->id)}}">
+                                                @if(isset($product->updated_at)){{ $product->updated_at }}@else <div class="no_text"></div> @endif
                                             </a>
                                         </td>
                                     </tr>
                                 @endforeach
-                            @endif
                             </tbody>
                         </table>
                     </div>
