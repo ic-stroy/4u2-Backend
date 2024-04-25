@@ -109,6 +109,7 @@ class AuthController extends Controller
             'verify_code'=>'required',
         ]);
         $model = UserVerify::withTrashed()->where('phone_number', (int)$fields['phone_number'])->first();
+
         if(isset($model->id)){
             if(strtotime('-7 minutes') > strtotime($model->updated_at)){
                 $model->verify_code = rand(100000, 999999);

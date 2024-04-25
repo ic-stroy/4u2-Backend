@@ -10,7 +10,7 @@
             <div class="dropdown float-end">
                 <a class="form_functions btn btn-success" href="{{route('category.create')}}">{{translate('Create')}}</a>
             </div>
-            <table id="datatable-buttons" class="table dt-responsive nowrap table_show">
+            <table class="table dt-responsive nowrap table_show">
                 <thead>
                 <tr>
                     <th>{{translate('Attributes')}}</th>

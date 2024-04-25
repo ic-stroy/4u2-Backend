@@ -31,7 +31,7 @@ class Products extends Model
     }
     public function discount()
     {
-        return $this->hasOne(Discount::class, 'product_id','id')->where('start_date', '<=', date('Y-m-d H:i:s'))->where('end_date', '>=', date('Y-m-d H:i:s'));
+        return $this->hasOne(Discount::class, 'id','product_id')->where('start_date', '<=', date('Y-m-d H:i:s'))->where('end_date', '>=', date('Y-m-d H:i:s'));
     }
     public function category_(){
         return $this->hasOne(Category::class, 'parent_id','category_id');

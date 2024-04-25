@@ -1,6 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PhpIncludePathManager">
+  <component name="ChangeListManager">
+    <list default="true" id="baeeb12c-03b2-4eb7-b2be-dc7d3697fa3c" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/Eccommerce.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/AuthController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/AuthController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/Products.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Products.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/seeders/SizeSeeder.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/seeders/SizeSeeder.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/seeders/UserSeeder.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/seeders/UserSeeder.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/category/show.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/category/show.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/characterized-products/characterizedproduct.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/characterized-products/characterizedproduct.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/characterized-products/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/characterized-products/index.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/characterized-products/show.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/characterized-products/show.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/color/show.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/color/show.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/language/show.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/language/show.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/products/show.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/products/show.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/sizes/show.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/sizes/show.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/sub-category/show.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/sub-category/show.blade.php" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ComposerSettings" doNotAsk="true" synchronizationState="SYNCHRONIZE">
+    <pharConfigPath>$PROJECT_DIR$/composer.json</pharConfigPath>
+    <execution />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="PhpWorkspaceProjectConfiguration">
     <include_path>
       <path value="$PROJECT_DIR$/vendor/nette/schema" />
       <path value="$PROJECT_DIR$/vendor/nette/utils" />
@@ -117,10 +152,43 @@
       <path value="$PROJECT_DIR$/vendor/psy/psysh" />
     </include_path>
   </component>
-  <component name="PhpProjectSharedConfiguration" php_language_level="8.1" />
-  <component name="PhpUnit">
-    <phpunit_settings>
-      <PhpUnitSettings configuration_file_path="$PROJECT_DIR$/phpunit.xml" custom_loader_path="$PROJECT_DIR$/vendor/autoload.php" use_configuration_file="true" />
-    </phpunit_settings>
+  <component name="ProjectId" id="2fUUVZRcPQDmWSmhYdIypA0ImTL" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../LaravelEasyPrint" />
+    <property name="nodejs_package_manager_path" value="npm" />
+    <property name="vue.rearranger.settings.migration" value="true" />
+  </component>
+  <component name="RunManager">
+    <configuration name="phpunit.xml" type="PHPUnitRunConfigurationType" factoryName="PHPUnit">
+      <TestRunner scope="XML" />
+      <method v="2" />
+    </configuration>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="baeeb12c-03b2-4eb7-b2be-dc7d3697fa3c" name="Changes" comment="" />
+      <created>1713855178235</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1713855178235</updated>
+      <workItem from="1713855182567" duration="1387000" />
+      <workItem from="1713857809330" duration="35000" />
+      <workItem from="1713857886065" duration="8545000" />
+      <workItem from="1713934681099" duration="1702000" />
+      <workItem from="1713945251885" duration="16515000" />
+      <workItem from="1714022540896" duration="9490000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
   </component>
 </project>

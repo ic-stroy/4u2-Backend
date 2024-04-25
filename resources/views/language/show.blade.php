@@ -9,7 +9,7 @@
     <input type="hidden" id="language_code" value="{{ $language->code??'' }}">
     <input type="hidden" name="id" value="{{ $language->id??'' }}">
     <h5 class="mb-md-0 h6">{{ $language->name??'' }}</h5>
-    <table id="datatable-buttons" class="table table-striped table-bordered dt-responsive nowrap">
+    <table class="table table-striped table-bordered dt-responsive nowrap">
         <thead>
             <tr>
                 <th>#</th>

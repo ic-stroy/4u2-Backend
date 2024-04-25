@@ -7,7 +7,7 @@
     <div class="card">
         <div class="card-body">
             <h4 class="mt-0 header-title">{{translate('Products lists')}}</h4>
-            <table id="datatable-buttons" class="table dt-responsive nowrap table_show">
+            <table class="table dt-responsive nowrap table_show">
                 <thead>
                     <tr>
                         <th>{{translate('Attributes')}}</th>

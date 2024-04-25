@@ -22,14 +22,11 @@ class SizeSeeder extends Seeder
         $categories = Category::withTrashed()->where('step', 0)->select('id', 'name')->get();
         $sizes = Sizes::withTrashed()->select('id', 'deleted_at')->orderBy('id', 'desc')->first();
         if(!$sizes){
-            $last_size_id = isset($sizes->id)?$sizes->id:0;
             $size_array = [];
             foreach ($categories as $category){
                 if($category->name == 'Clothes'){
                     foreach ($this->all_clothes_sizes as $all_cloth_size){
-                        $last_size_id++;
                         $size_array[] = [
-                            'id'=>(int)$last_size_id,
                             'name'=>$all_cloth_size,
                             'category_id'=>$category->id,
                         ];
@@ -37,9 +34,7 @@ class SizeSeeder extends Seeder
                 }
                 if($category->name == 'Shoes'){
                     foreach ($this->all_shoes_sizes as $all_shoes_size){
-                        $last_size_id++;
                         $size_array[] = [
-                            'id'=>(int)$last_size_id,
                             'name'=>$all_shoes_size,
                             'category_id'=>$category->id,
                         ];

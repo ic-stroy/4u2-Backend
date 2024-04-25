@@ -43,14 +43,14 @@
                     <div class="tab-pane{{$j == 1?' show active':''}}" id="category_{{$category->id}}">
                         <table class="table table-striped table-bordered dt-responsive nowrap">
                             <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>{{translate('Name')}}</th>
-{{--                                <th>{{translate('Current category')}}</th>--}}
-                                <th>{{translate('Status')}}</th>
-                                <th>{{translate('Images')}}</th>
-                                <th>{{translate('Updated_at')}}</th>
-                            </tr>
+                                <tr>
+                                    <th>#</th>
+                                    <th>{{translate('Name')}}</th>
+    {{--                                <th>{{translate('Current category')}}</th>--}}
+                                    <th>{{translate('Status')}}</th>
+                                    <th>{{translate('Images')}}</th>
+                                    <th>{{translate('Updated_at')}}</th>
+                                </tr>
                             </thead>
                             <tbody class="table_body">
                             @php
