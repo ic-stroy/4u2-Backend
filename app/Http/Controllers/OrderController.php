@@ -22,10 +22,10 @@ class OrderController extends Controller
         $performedOrders_ = Order::where('status', Constants::PERFORMED)->get();
         $cancelledOrders_ = Order::where('status', Constants::CANCELLED)->get();
         $acceptedByRecipientOrders_ = Order::where('status', Constants::ACCEPTED_BY_RECIPIENT)->get();
-        $orderedOrders = $this->getOrders($orderedOrders_, $user);
-        $performedOrders = $this->getOrders($performedOrders_, $user);
-        $cancelledOrders = $this->getOrders($cancelledOrders_, $user);
-        $acceptedByRecipientOrders = $this->getOrders($acceptedByRecipientOrders_, $user);
+        $orderedOrders = $this->getOrders($orderedOrders_);
+        $performedOrders = $this->getOrders($performedOrders_);
+        $cancelledOrders = $this->getOrders($cancelledOrders_);
+        $acceptedByRecipientOrders = $this->getOrders($acceptedByRecipientOrders_);
         return view('order.index', [
             'orderedOrders'=>$orderedOrders,
             'performedOrders'=>$performedOrders,
@@ -35,13 +35,12 @@ class OrderController extends Controller
         ]);
     }
 
-    public function getOrders($orders, $user){
+    public function getOrders($orders){
         $order_data = [];
         foreach($orders as $order){
 //        $not_read_order_quantity = OrderDetail::where('order_id', $id)->where('is_read', 0)->count();
             $products_with_anime = [];
             $products = [];
-            $product_types = 0;
             $performed_product_types = 0;
             $product_quantity = 0;
             $company_product_price = 0;
@@ -50,53 +49,62 @@ class OrderController extends Controller
             $performed_company_discount_price = 0;
             $order_has = false;
             $order_detail_is_ordered = false;
-            $products_with_anime_uploads = [];
+            $user_name = '';
+            if(!empty($order->user)){
+                $first_name = isset($order->user->first_name)?$order->user->first_name.' ':'';
+                $last_name = isset($order->user->last_name)?$order->user->last_name.' ':'';
+                $middle_name = isset($order->user->middle_name)?$order->user->middle_name:'';
+                $user_name = $first_name.''.$last_name.''.$middle_name;
+            }
             foreach($order->orderDetail as $order_detail){
                 if($order_detail->status == Constants::ORDER_DETAIL_ORDERED){
                     $order_detail_is_ordered = true;
                 }
                 $product_quantity = $product_quantity + $order_detail->quantity;
-                $order_has = true;
 
-                if($order_detail->warehouse_id && $order_detail->product_id == NULL &&
-                    !empty($order_detail->warehouse) && $order_detail->warehouse->company_id == $user->company_id){
-                    $product_types = $product_types + 1;
+                $discount_withouth_expire = 0;
+                $product_discount_withouth_expire = 0;
+                $images = [];
 
-                    if($order_detail->status == Constants::ORDER_DETAIL_PERFORMED) {
-                        $performed_product_types = $performed_product_types + 1;
-                        $performed_company_product_price = $performed_company_product_price + $order_detail->price * $order_detail->quantity - $order_detail->discount_price;
-                        $performed_company_discount_price = $performed_company_discount_price + (int)$order_detail->discount_price;
-                    }
-
-                    $company_product_price = $company_product_price + $order_detail->price * $order_detail->quantity - $order_detail->discount_price;
-                    $order_detail_all_price = (int)$order_detail->price * (int)$order_detail->quantity - (int)$order_detail->discount_price;
-                    $company_discount_price = $company_discount_price + (int)$order_detail->discount_price;
-
-                    $products[] = [$order_detail, $order_detail_all_price];
-                }elseif(!$order_detail->warehouse_id && $order_detail->product_id){
-                    $product_types = $product_types + 1;
-                    $uploads=Uploads::where('relation_type', Constants::PRODUCT)->where('relation_id', $order_detail->product_id)->get();
+                if($order_detail->warehouse_id){
+                    $order_has = true;
 
                     if($order_detail->status == Constants::ORDER_DETAIL_PERFORMED) {
                         $performed_product_types = $performed_product_types + 1;
-                        $performed_company_product_price = $performed_company_product_price + $order_detail->price * $order_detail->quantity - $order_detail->discount_price;
+                        $performed_company_product_price = $performed_company_product_price + $order_detail->price * $order_detail->quantity - (int)$order_detail->discount_price;
                         $performed_company_discount_price = $performed_company_discount_price + (int)$order_detail->discount_price;
                     }
 
-                    $company_product_price = $company_product_price + $order_detail->price * $order_detail->quantity - $order_detail->discount_price;
+                    $company_product_price = $company_product_price + $order_detail->price * $order_detail->quantity - (int)$order_detail->discount_price;
                     $order_detail_all_price = (int)$order_detail->price * (int)$order_detail->quantity - (int)$order_detail->discount_price;
                     $company_discount_price = $company_discount_price + (int)$order_detail->discount_price;
 
-                    foreach ($uploads as $upload){
-                        if (!$upload->image) {
-                            $upload->image = 'no';
-                        }
-                        $order_detail_upload = storage_path('app/public/print/'.$upload->image);
-                        if(file_exists($order_detail_upload)){
-                            $products_with_anime_uploads[] = asset('storage/print/'.$upload->image);
-                        }
+                    if(!empty($order_detail->warehouse_product)){
+                        $discount_withouth_expire = !empty($order_detail->warehouse_product->discount_withouth_expire)?$order_detail->warehouse_product->discount_withouth_expire->percent:0;
+                    }else{
+                        $discount_withouth_expire = 0;
                     }
-                    $products_with_anime[] = [$order_detail, $order_detail_all_price, $products_with_anime_uploads];
+
+                    if(!empty($order_detail->warehouse_product)) {
+                        if (!empty($order_detail->warehouse_product->product)) {
+                            if ($order_detail->warehouse_product->product->images) {
+                                $images_ = json_decode($order_detail->warehouse_product->product->images);
+                            } else {
+                                $images_ = [];
+                            }
+                            $images = [];
+                            foreach ($images_ as $image_) {
+                                $images[] = asset('storage/products/' . $image_);
+                            }
+                        } else {
+                            $images = [];
+                        }
+                    }else{
+                        $images = [];
+                    }
+                    $products[] = [$order_detail, $order_detail_all_price, 'images'=>$images,
+                        'discount_withouth_expire'=>$discount_withouth_expire
+                    ];
                 }
             }
             if((int)$order->coupon_price>0){
@@ -114,8 +122,8 @@ class OrderController extends Controller
             if($order_has == true){
                 $order_data[] = [
                     'order'=>$order,
+                    'user_name'=>$user_name,
                     'order_detail_is_ordered'=>$order_detail_is_ordered,
-                    'product_types'=>$product_types,
                     'performed_product_types'=>$performed_product_types,
                     'product_quantity'=>$product_quantity,
                     'products'=>$products,

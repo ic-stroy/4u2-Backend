@@ -103,10 +103,12 @@ class ApiOrderController extends Controller
     public function confirmOrder(Request $request){
         if($request->selected_products && $request->payment && $request->address_id){
             $order = new Order();
+            $order->save();
             $order_detail = new OrderDetail();
             $user = Auth::user();
             $data = [];
             $products = $request->selected_products;
+//            return response()->json($products);
             $order_coupon_price = 0;
             $all_discount_price = 0;
             $categorizedProductAllPrice = 0;
@@ -123,7 +125,7 @@ class ApiOrderController extends Controller
                         $order_detail->quantity = (int)$product_data['count'];
                         $order_detail->size_id = $product->size_id;
                         $order_detail->color_id = (int)$product_data['color']['id'];
-                        $order_detail->discount = (int)$product_data['discount'];
+                        $order_detail->discount = isset($product_data['discount'])?(int)$product_data['discount']:null;
                         $order_detail->price = (int)$product->price;
                         $order_detail->status = Constants::ACTIVE;
                         if($product->sum){
@@ -148,6 +150,9 @@ class ApiOrderController extends Controller
                     }
                 }
                 $categorizedProductAllPrice = $categorizedProductAllPrice + $categorizedProductPrice;
+
+                $order_detail->order_id = $order->id;
+                $order_detail->save();
             }
 
             $all_sum = $categorizedProductAllPrice - $all_discount_price;
@@ -185,12 +190,12 @@ class ApiOrderController extends Controller
                 $order->discount_price = $all_discount_price;
             }
             $order->address_id = $request->address_id;
+            $order->receiver_name = $request->first_name;
+            $order->phone_number = $request->phone_number;
             $order->save();
-            $order_detail->order_id = $order->id;
-            $order_detail->save();
 
             $users = User::where('is_admin', Constants::ADMIN)->get();
-            $list_images = $this->getImages($product_);
+            $list_images = !empty($this->getImages($product_))?$this->getImages($product_)[0]:'no';
             $data = [
                 'order_id'=>$order->id,
                 'order_all_price'=>$all_sum,
@@ -225,7 +230,7 @@ class ApiOrderController extends Controller
             $images_ = json_decode($model->images);
             $images = [];
             foreach ($images_ as $image_){
-                 $images[] = asset('storage/warehouse/'.$image_);
+                 $images[] = asset('storage/products/'.$image_);
             }
         }else{
             $images = [];

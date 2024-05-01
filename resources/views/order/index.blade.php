@@ -65,6 +65,13 @@
         .color_reddish{
             color:#ff8000;
         }
+        .color_text{
+            width:24px;
+            height: 24px;
+            border-radius:50%;
+            border:solid 1px green
+        }
+
     </style>
     @if(!empty($orderedOrders) || !empty($performedOrders) || !empty($cancelledOrders) || !empty($acceptedByRecipientOrders))
         <div id="success-alert-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
@@ -93,6 +100,44 @@
                                 <button type="submit" class="btn btn-success my-2"> {{ translate('Yes')}} </button>
                             </form>
                         </div>
+                    </div>
+                </div>
+
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+        <div id="accepted-by-recipient-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <div class="text-center">
+                            <i class="dripicons-warning h1 text-success"></i>
+                            <h4 class="mt-2">{{ translate('This order accepted by user ?')}}</h4>
+                        </div>
+                        <form class="d-flex justify-content-center" action="" method="POST" id="accepted_by_recipient_order">
+                            @csrf
+                            @method('POST')
+                            <button type="button" class="btn btn-danger my-2" data-bs-dismiss="modal" style="margin-right:4px"> {{ translate('No')}}</button>
+                            <button type="submit" class="btn btn-success my-2"> {{ translate('Yes')}} </button>
+                        </form>
+                    </div>
+                </div>
+
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+        <div id="cancell-accepted-by-recipient-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <div class="text-center">
+                            <i class="dripicons-warning h1 text-success"></i>
+                            <h4 class="mt-2">{{ translate('This order not accepted by user ?')}}</h4>
+                        </div>
+                        <form class="d-flex justify-content-center" action="" method="POST" id="cancell_accepted_by_recipient_order">
+                            @csrf
+                            @method('POST')
+                            <button type="button" class="btn btn-danger my-2" data-bs-dismiss="modal" style="margin-right:4px"> {{ translate('No')}}</button>
+                            <button type="submit" class="btn btn-success my-2"> {{ translate('Yes')}} </button>
+                        </form>
                     </div>
                 </div>
 
@@ -132,6 +177,11 @@
                             <span class="visually-hidden">Next</span>
                         </a>
                     </div>
+                    <div class="d-none" id="carousel-upload-modal-order">
+                    <span class="badge bg-warning">
+                        <h2>{{translate('No orders')}}</h2>
+                    </span>
+                    </div>
                 </div><!-- /.modal-content -->
             </div><!-- /.modal-dialog -->
         </div><!-- /.modal -->
@@ -142,13 +192,13 @@
                         <div class="text-center">
                             <i class="dripicons-warning h1 text-warning"></i>
                             <h4 class="mt-2">{{ translate('Are you sure to cancel this order')}}</h4>
-                            <form style="display: inline-block;" action="" method="POST" id="cancell_order">
-                                @csrf
-                                @method('DELETE')
-                                <button type="button" class="btn btn-danger my-2" data-bs-dismiss="modal"> {{ translate('No')}}</button>
-                                <button type="submit" class="btn btn-warning my-2"> {{ translate('Yes')}} </button>
-                            </form>
                         </div>
+                        <form class="d-flex justify-content-center" action="" method="POST" id="cancell_order">
+                            @csrf
+                            @method('DELETE')
+                            <button type="button" class="btn btn-danger my-2" data-bs-dismiss="modal" style="margin-right:4px"> {{ translate('No')}}</button>
+                            <button type="submit" class="btn btn-warning my-2"> {{ translate('Yes')}} </button>
+                        </form>
                     </div>
                 </div><!-- /.modal-content -->
             </div><!-- /.modal-dialog -->
@@ -236,12 +286,6 @@
                         @foreach($orderedOrders as $order)
                             @php
                                 $i++;
-                                if(!empty($order['order']->user->personalInfo)){
-                                    $first_name = isset($order['order']->user->personalInfo->first_name)?$order['order']->user->personalInfo->first_name.' ':'';
-                                    $last_name = isset($order['order']->user->personalInfo->last_name)?$order['order']->user->personalInfo->last_name.' ':'';
-                                    $middle_name = isset($order['order']->user->personalInfo->middle_name)?$order['order']->user->personalInfo->middle_name:'';
-                                    $user_name = $first_name.''.$last_name.''.$middle_name;
-                                }
                             @endphp
                             <div class="accordion custom-accordion" id="custom-accordion-one">
                                 <div class="card mb-0">
@@ -252,41 +296,33 @@
                                            aria-expanded="true" aria-controls="collapseNine">
                                             <div class="row align-items-center">
                                                 <div class="col-8 d-flex flex-column justify-content-center">
-                                                    @if((int)$order['product_types'] < count($order['order']->orderDetail))
+                                                    @dd($order['company_product_price'])
+                                                    @if(count($order['order']->orderDetail)>0)
                                                         <h4 style="line-height: 2; font-size: 16px">
                                                             {{translate('There are ')}}
                                                             <b>{{count($order['order']->orderDetail)}}</b>
-                                                            {{translate('items in order. these are selling for')}}
-                                                            <b>{{$order['order']->all_price}}</b>
-                                                            @if($order['order']->coupon_price)
-                                                                {{translate('all coupon costed')}}
-                                                                <b style="color: #10C469">{{$order['order']->coupon_price}}</b>
-                                                            @endif
+                                                            {{translate('items in order.')}}
                                                         </h4>
                                                         <hr style="margin:4px">
-                                                    @endif
-                                                    <h4 style="line-height: 2; font-size: 16px">
-                                                        @if($user_name){{$user_name}}@endif
-                                                        <span style="color: orange">{{translate('Ordered')}}</span>
-                                                        @if($order['product_types'] != 0)
-                                                            <b>{{ $order['product_types'] }}</b>
-                                                            {{translate('products are yours. you will sell for')}}
+                                                        <h4 style="line-height: 2; font-size: 16px">
+                                                        @if($order['user_name']){{$order['user_name']}}@endif
+                                                            <span style="color: orange">{{translate('Ordered')}}</span>
                                                             <b style="color: #10C469">{{$order['company_product_price']}}</b>
-                                                            @if($order['order_coupon_price'] != 0)
-                                                                {{translate('Your coupon is costed')}}
-                                                                <b style="color: red">{{$order['order_coupon_price']}}</b>
-                                                            @endif
-                                                            @if($order['company_discount_price'] != 0)
-                                                                {{translate('your discount is costed')}}
-                                                                <b style="color: red">{{$order['company_discount_price']}}</b>
-                                                            @endif
+                                                        @if($order['order_coupon_price'] != 0)
+                                                            {{translate('Your coupon is costed')}}
+                                                            <b style="color: red">{{$order['order_coupon_price']}}</b>
                                                         @endif
-                                                        @if($order['order']->payment_method == \App\Constants::CASH_ON_DELIVERY)
+                                                        @if($order['company_discount_price'] != 0)
+                                                            {{translate('your discount is costed')}}
+                                                            <b style="color: red">{{$order['company_discount_price']}}</b>
+                                                        @endif
+                                                        @if($order['order']->payment_method == \App\Constants::CASH)
                                                             <span class="badge bg-info">{{translate('cash on delivery')}}</span>
-                                                        @elseif($order['order']->payment_method == \App\Constants::BANK_CARD)
+                                                        @elseif($order['order']->payment_method == \App\Constants::ONLINE)
                                                             <span class="badge bg-info">{{translate('bank card')}}</span>
                                                         @endif
-                                                    </h4>
+                                                        </h4>
+                                                    @endif
                                                     @if($order['performed_company_product_price'] != 0)
                                                         <hr style="margin:4px">
                                                         <h4 style="line-height: 2; font-size: 16px">
@@ -311,7 +347,7 @@
                                                     @endif
                                                 </div>
                                                 <div class="col-4 d-flex justify-content-between">
-                                                        @if($order['order']->status)
+                                                    @if($order['order']->status)
                                                         @switch($order['order']->status)
                                                             @case(\App\Constants::ORDERED)
                                                             <span style="line-height: 1; font-size: 16px">
@@ -338,10 +374,7 @@
                                                                 </span>
                                                             @break
                                                             @case(\App\Constants::ACCEPTED_BY_RECIPIENT)
-                                                            <span style="line-height: 1; font-size: 16px">
-                                                                    <b>{{translate('ACCEPTED BY RECIPIENT')}}</b>
-                                                                </span>
-                                                            <span class="badge bg-info">>
+                                                            <span style="line-height: 1; font-size: 16px" class="badge bg-info">
                                                                     {{translate('Delivered')}}
                                                                 </span>
                                                             @break
@@ -361,173 +394,11 @@
                                     <div id="collapseNine{{$i}}" class="collapse fade"
                                          aria-labelledby="headingFour"
                                          data-bs-parent="#custom-accordion-one">
-                                        @foreach($order['products_with_anime'] as $products_with_anime)
-                                            @php
-                                                $order_detail_image_front_exists = storage_path('app/public/warehouse/'.$products_with_anime[0]->image_front);
-                                                if(file_exists($order_detail_image_front_exists)){
-                                                    $order_detail_image_front = asset('storage/warehouse/'.$products_with_anime[0]->image_front);
-                                                }else{
-                                                    $order_detail_image_front = null;
-                                                }
-                                                $order_detail_image_back_exists = storage_path('app/public/warehouse/'.$products_with_anime[0]->image_back);
-                                                if(file_exists($order_detail_image_back_exists)){
-                                                    $order_detail_image_back = asset('storage/warehouse/'.$products_with_anime[0]->image_back);
-                                                }else{
-                                                    $order_detail_image_back = null;
-                                                }
-                                                if(!$order_detail_image_front && !$order_detail_image_back){
-                                                    if($products_with_anime[0]->product->images){
-                                                        $images_ = json_decode($products_with_anime[0]->product->images);
-                                                        $images = [];
-                                                        foreach ($images_ as $key => $image_){
-                                                            if($key < 2){
-                                                                $images[] = asset('storage/products/'.$image_);
-                                                            }
-                                                        }
-                                                    }else{
-                                                        $images = [];
-                                                    }
-
-                                                }else{
-                                                    $images = [$order_detail_image_front??'no', $order_detail_image_back??'no'];
-                                                }
-                                                $product_discount_withouth_expire = !empty($products_with_anime[0]->product->discount_whithout_expire)?$products_with_anime[0]->product->discount_whithout_expire->percent:0;
-                                            @endphp
-                                            <hr>
-                                            <div class="row">
-                                                <div class="col-2 order_product_images" onclick='getImages("{{implode(" ", $images)}}")' data-bs-toggle="modal" data-bs-target="#carousel-modal">
-                                                    <img src="{{$images[0]}}" alt="" height="144px">
-                                                </div>
-                                                <div class="col-2 order_product_images" onclick='getUploads("{{implode(" ", $products_with_anime[2])}}")' data-bs-toggle="modal" data-bs-target="#carousel-upload-modal">
-                                                    <img src="{{$products_with_anime[2][0]}}" alt="" height="144px">
-                                                </div>
-                                                <div class="col-4 order_content">
-                                                    <h4>{{translate('Animated order')}}</h4>
-                                                    <span>{{!empty($products_with_anime[0]->product)?$products_with_anime[0]->product->name:''}}</span>
-                                                    @if($product_discount_withouth_expire != 0)
-                                                        <span>{{translate('Discount')}}: <b style="color:red">{{$product_discount_withouth_expire}} %</b></span>
-                                                    @endif
-                                                    @if($products_with_anime[1])
-                                                        <span>{{translate('Price')}}: <b>{{$products_with_anime[0]->price}}</b> {!! !empty($products_with_anime[0]->quantity)?translate('Quantity').": <b>". $products_with_anime[0]->quantity."</b>":'' !!}</span>
-                                                    @endif
-                                                    @if($products_with_anime[1])
-                                                        <span>{{translate('Sum')}}: <b>{{$products_with_anime[1]}}</b></span>
-                                                    @endif
-                                                    @if(!empty($products_with_anime[0]->size))
-                                                        <span>{{translate('Size')}}: <b>{{$products_with_anime[0]->size->name}}</b></span>
-                                                    @endif
-                                                    @if(!empty($products_with_anime[0]->color))
-                                                        <span>{{translate('Color')}}: <b>{{$products_with_anime[0]->color->name}}</b></span>
-                                                    @endif
-                                                    @if(!empty($products_with_anime[0]->updated_at))
-                                                        <span>{{translate('Ordered')}}: <b>{{$products_with_anime[0]->updated_at}}</b></span>
-                                                    @endif
-                                                </div>
-                                                <div class="col-1 d-flex justify-content-around align-items-center">
-                                                    @switch($products_with_anime[0]->status)
-                                                        @case(\App\Constants::ORDER_DETAIL_ORDERED)
-                                                        <div>
-                                                            <span class="badge bg-danger">{{translate('New')}}</span>
-                                                        </div>
-                                                        @break
-                                                        @case(\App\Constants::ORDER_DETAIL_PERFORMED)
-                                                        <div>
-                                                            <span class="badge bg-success">{{translate('Performed')}}</span>
-                                                        </div>
-                                                        @break
-                                                        @case(\App\Constants::ORDER_DETAIL_CANCELLED)
-                                                        <div>
-                                                            <span class="badge bg-danger">{{translate('Cancelled')}}</span>
-                                                        </div>
-                                                        @break
-                                                        @case(\App\Constants::ORDER_DETAIL_PERFORMED_BY_SUPERADMIN):
-                                                        <div>
-                                                            <span class="badge bg-danger">{{translate('Performed by superadmin')}}</span>
-                                                        </div>
-                                                        @break
-                                                        @case(\App\Constants::ORDER_DETAIL_ACCEPTED_BY_RECIPIENT)
-                                                        <div>
-                                                            <span class="badge bg-info">{{translate('Finished')}}</span>
-                                                        </div>
-                                                        @break
-                                                    @endswitch
-                                                </div>
-                                                <div class="function-column col-3">
-                                                    <div class="d-flex justify-content-around">
-                                                        @switch($products_with_anime[0]->status)
-                                                            @case(\App\Constants::ORDER_DETAIL_ORDERED)
-                                                            <button type="button" class="btn btn-success delete-datas btn-sm waves-effect" data-bs-toggle="modal" data-bs-target="#success-alert-modal"
-                                                                    onclick='accepting_anime_order(
-                                                                        "{{$products_with_anime[0]->quantity??''}}",
-                                                                        "{{!empty($products_with_anime[0]->product)?$products_with_anime[0]->product->name:''}}",
-                                                                        "{{!empty($products_with_anime[0]->size)?$products_with_anime[0]->size->name:''}}",
-                                                                        "{{!empty($products_with_anime[0]->color)?$products_with_anime[0]->color->name:''}}",
-                                                                        "{{isset($images[0])?$images[0]:''}}",
-                                                                        "{{isset($images[1])?$images[1]:''}}",
-                                                                        "{{route('perform_order_detail', $products_with_anime[0]->id)}}"
-                                                                        )' data-url="">
-                                                                <i class="fa fa-check"></i>
-                                                            </button>
-                                                            <button type="button" class="btn btn-danger delete-datas btn-sm waves-effect" data-bs-toggle="modal" data-bs-target="#warning-order-alert-modal" onclick='cancelling_order("{{route('cancell_order_detail', $products_with_anime[0]->id)}}")' data-url=""><i class="fa fa-times"></i></button>
-                                                            @break
-                                                            @case(\App\Constants::ORDER_DETAIL_PERFORMED)
-                                                            {{--                                                    <button type="button" class="btn btn-warning delete-datas btn-sm waves-effect" data-bs-toggle="modal" data-bs-target="#waiting-to-perform-alert-modal" title="{{translate('Waiting for superadmin performing')}}"><i class="fa fa-question"></i></button>--}}
-                                                            <button type="button" class="btn btn-danger delete-datas btn-sm waves-effect" data-bs-toggle="modal" data-bs-target="#warning-order-alert-modal" onclick='cancelling_order("{{route('cancell_order_detail', $products_with_anime[0]->id)}}")' data-url=""><i class="fa fa-times"></i></button>
-                                                            @break
-                                                            @case(\App\Constants::ORDER_DETAIL_CANCELLED)
-                                                            <button type="button" class="btn btn-success delete-datas btn-sm waves-effect" data-bs-toggle="modal" data-bs-target="#success-alert-modal"
-                                                                    onclick='accepting_anime_order(
-                                                                        "{{$products_with_anime[0]->quantity??''}}",
-                                                                        "{{!empty($products_with_anime[0]->product)?$products_with_anime[0]->product->name:''}}",
-                                                                        "{{!empty($products_with_anime[0]->size)?$products_with_anime[0]->size->name:''}}",
-                                                                        "{{!empty($products_with_anime[0]->color)?$products_with_anime[0]->color->name:''}}",
-                                                                        "{{isset($images[0])?$images[0]:''}}",
-                                                                        "{{isset($images[1])?$images[1]:''}}",
-                                                                        "{{route('perform_order_detail', $products_with_anime[0]->id)}}"
-                                                                        )' data-url="">
-                                                                <i class="fa fa-check"></i>
-                                                            </button>
-                                                            @break
-                                                            @case(\App\Constants::ORDER_DETAIL_PERFORMED_BY_SUPERADMIN)
-                                                            <button type="button" class="btn btn-success delete-datas btn-sm waves-effect" data-bs-toggle="modal" data-bs-target="#accepted-success-modal" title="{{translate('Performed by admin')}}"><i class="fa fa-ellipsis-h"></i></button>
-                                                            @break
-                                                            @case(\App\Constants::ORDER_DETAIL_ACCEPTED_BY_RECIPIENT)
-                                                            <button type="button" class="btn btn-success delete-datas btn-sm waves-effect" data-bs-toggle="modal" data-bs-target="#accepted-by-recepient-success-modal" title="{{translate('Order accepted by recipient')}}"><i class="fa fa-ellipsis-h"></i></button>
-                                                            @break
-                                                        @endswitch
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        @endforeach
                                         @foreach($order['products'] as $products)
-                                            @php
-                                                if(!empty($products[0]->warehouse)){
-                                                    $discount_withouth_expire = !empty($products[0]->warehouse->discount_withouth_expire)?$products[0]->warehouse->discount_withouth_expire->percent:0;
-                                                    $product_discount_withouth_expire = !empty($products[0]->warehouse->product_discount_withouth_expire)?$products[0]->warehouse->product_discount_withouth_expire->percent:0;
-                                                }else{
-                                                    $discount_withouth_expire = 0;
-                                                    $product_discount_withouth_expire = 0;
-                                                }
-                                                if(!empty($products[0]->warehouse) && $products[0]->warehouse->images){
-                                                    $images_ = json_decode($products[0]->warehouse->images);
-                                                    $images = [];
-                                                    foreach ($images_ as $key => $image_){
-                                                        $images[] = asset('storage/warehouses/'.$image_);
-                                                    }
-                                                }elseif(!empty($products[0]->warehouse->product) && $products[0]->warehouse->product->images){
-                                                    $images_ = json_decode($products[0]->warehouse->product->images);
-                                                    $images = [];
-                                                    foreach ($images_ as $key => $image_){
-                                                        $images[] = asset('storage/products/'.$image_);
-                                                    }
-                                                }else{
-                                                    $images = [];
-                                                }
-                                            @endphp
                                             <hr>
                                             <div class="row">
-                                                <div class="col-3 order_product_images" onclick='getImages("{{implode(" ", $images)}}")'  data-bs-toggle="modal" data-bs-target="#carousel-modal">
-                                                    <img src="{{$images[0]}}" alt="" height="144px">
+                                                <div class="col-3 order_product_images" onclick='getImages("{{implode(" ", $products['images'])}}")'  data-bs-toggle="modal" data-bs-target="#carousel-modal">
+                                                    <img src="{{!empty($products['images'])?$products['images'][0]:asset('icon/no_photo.jpg')}}" alt="" height="144px">
                                                 </div>
                                                 <div class="col-1"></div>
                                                 <div class="col-4 order_content">
@@ -543,10 +414,8 @@
                                                     @if($products[1])
                                                         <span>{{translate('Sum')}}: <b>{{$products[1]}}</b></span>
                                                     @endif
-                                                    @if($discount_withouth_expire != 0)
-                                                        <span>{{translate('Discount')}}: <b style="color: red">{{(int)$discount_withouth_expire}} %</b></span>
-                                                    @elseif($product_discount_withouth_expire != 0)
-                                                        <span>{{translate('Discount')}}: <b style="color: red">{{(int)$product_discount_withouth_expire}} %</b></span>
+                                                    @if($products['discount_withouth_expire'] != 0)
+                                                        <span>{{translate('Discount')}}: <b style="color: red">{{(int)$products['discount_withouth_expire']}} %</b></span>
                                                     @endif
                                                     @if(!empty($products[0]->size))
                                                         <span>{{translate('Size')}}: <b>{{$products[0]->size->name}}</b> {{translate('Color')}}: <b>{{$products[0]->color->name}}</b></span>
@@ -555,7 +424,7 @@
                                                 </div>
                                                 <div class="col-1 d-flex justify-content-around align-items-center">
                                                     @switch($products[0]->status)
-                                                        @case(\App\Constants::ORDER_DETAIL_ORDERED):
+                                                        @case(\App\Constants::ORDER_DETAIL_ORDERED)
                                                         <div>
                                                             <span class="badge bg-danger">{{translate('New')}}</span>
                                                         </div>
@@ -600,8 +469,8 @@
                                                                         "{{!empty($products[0]->color)?$products[0]->color->name:''}}",
                                                                         "{{!empty($products[0]->size)?$products[0]->size->name:''}}",
                                                                         "{{$product_name}}",
-                                                                        "{{isset($images[0])?$images[0]:''}}",
-                                                                        "{{isset($images[1])?$images[1]:''}}",
+                                                                        "{{isset($products['images'][0])?$products['images'][0]:''}}",
+                                                                        "{{isset($products['images'][1])?$products['images'][1]:''}}",
                                                                         "{{route('perform_order_detail', $products[0]->id)}}"
                                                                         )'>
                                                                 <i class="fa fa-check"></i>
@@ -614,16 +483,16 @@
                                                             @break
                                                             @case(\App\Constants::ORDER_DETAIL_CANCELLED)
                                                             <button type="button" class="btn btn-success delete-datas btn-sm waves-effect" data-bs-toggle="modal" data-bs-target="#success-alert-modal" data-url=""
-                                                                    onclick='accepting_order(
-                                                                        "{{$products[0]->quantity}}",
-                                                                        "{{$products[0]->warehouse->quantity - $products[0]->quantity }}",
-                                                                        "{{!empty($products[0]->color)?$products[0]->color->name:''}}",
-                                                                        "{{!empty($products[0]->size)?$products[0]->size->name:''}}",
-                                                                        "{{$product_name}}",
-                                                                        "{{isset($images[0])?$images[0]:''}}",
-                                                                        "{{isset($images[1])?$images[1]:''}}",
-                                                                        "{{route('perform_order_detail', $products[0]->id)}}"
-                                                                        )'>
+                                                                onclick='accepting_order(
+                                                                    "{{$products[0]->quantity}}",
+                                                                    "{{$products[0]->warehouse->quantity - $products[0]->quantity }}",
+                                                                    "{{!empty($products[0]->color)?$products[0]->color->name:''}}",
+                                                                    "{{!empty($products[0]->size)?$products[0]->size->name:''}}",
+                                                                    "{{$product_name}}",
+                                                                    "{{isset($products['images'][0])?$products['images'][0]:''}}",
+                                                                    "{{isset($products['images'][1])?$products['images'][1]:''}}",
+                                                                    "{{route('perform_order_detail', $products[0]->id)}}"
+                                                                    )'>
                                                                 <i class="fa fa-check"></i>
                                                             </button>
                                                             @break
@@ -652,12 +521,6 @@
                         @foreach($performedOrders as $order)
                             @php
                                 $i++;
-                                if(!empty($order['order']->user->personalInfo)){
-                                    $first_name = isset($order['order']->user->personalInfo->first_name)?$order['order']->user->personalInfo->first_name.' ':'';
-                                    $last_name = isset($order['order']->user->personalInfo->last_name)?$order['order']->user->personalInfo->last_name.' ':'';
-                                    $middle_name = isset($order['order']->user->personalInfo->middle_name)?$order['order']->user->personalInfo->middle_name:'';
-                                    $user_name = $first_name.''.$last_name.''.$middle_name;
-                                }
                             @endphp
                             <div class="accordion custom-accordion" id="custom-accordion-one">
                                 <div class="card mb-0">
@@ -672,17 +535,12 @@
                                                         <h4 style="line-height: 2; font-size: 16px">
                                                             {{translate('There are ')}}
                                                             <b>{{count($order['order']->orderDetail)}}</b>
-                                                            {{translate('items in order. these are selling for')}}
-                                                            <b>{{$order['order']->all_price}}</b>
-                                                            @if($order['order']->coupon_price)
-                                                                {{translate('all coupon costed')}}
-                                                                <b style="color: #10C469">{{$order['order']->coupon_price}}</b>
-                                                            @endif
+                                                            {{translate('items in order')}}
                                                         </h4>
                                                         <hr style="margin:4px">
                                                     @endif
                                                     <h4 style="line-height: 2; font-size: 16px">
-                                                        @if($user_name){{$user_name}}@endif
+                                                        @if($order['user_name']){{$order['user_name']}}@endif
                                                         <span style="color: orange">{{translate('Ordered')}}</span>
                                                         @if($order['product_types'] != 0)
                                                             <b>{{ $order['product_types'] }}</b>
@@ -697,9 +555,9 @@
                                                                 <b style="color: red">{{$order['company_discount_price']}}</b>
                                                             @endif
                                                         @endif
-                                                        @if($order['order']->payment_method == \App\Constants::CASH_ON_DELIVERY)
+                                                        @if($order['order']->payment_method == \App\Constants::CASH)
                                                             <span class="badge bg-info">{{translate('cash on delivery')}}</span>
-                                                        @elseif($order['order']->payment_method == \App\Constants::BANK_CARD)
+                                                        @elseif($order['order']->payment_method == \App\Constants::ONLINE)
                                                             <span class="badge bg-info">{{translate('bank card')}}</span>
                                                         @endif
                                                     </h4>
@@ -754,12 +612,9 @@
                                                                     </span>
                                                             @break
                                                             @case(\App\Constants::ACCEPTED_BY_RECIPIENT)
-                                                            <span style="line-height: 1; font-size: 16px">
-                                                                        <b>{{translate('ACCEPTED BY RECIPIENT')}}</b>
-                                                                    </span>
-                                                            <span class="badge bg-info">>
-                                                                        {{translate('Delivered')}}
-                                                                    </span>
+                                                            <span style="line-height: 1; font-size: 16px" class="badge bg-info">
+                                                                    {{translate('Delivered')}}
+                                                                </span>
                                                             @break
                                                         @endswitch
                                                     @endif
@@ -777,150 +632,11 @@
                                     <div id="collapseNine{{$i}}" class="collapse fade"
                                          aria-labelledby="headingFour"
                                          data-bs-parent="#custom-accordion-one">
-                                        @foreach($order['products_with_anime'] as $products_with_anime)
-                                            @php
-                                                $order_detail_image_front_exists = storage_path('app/public/warehouse/'.$products_with_anime[0]->image_front);
-                                                if(file_exists($order_detail_image_front_exists)){
-                                                    $order_detail_image_front = asset('storage/warehouse/'.$products_with_anime[0]->image_front);
-                                                }else{
-                                                    $order_detail_image_front = null;
-                                                }
-                                                $order_detail_image_back_exists = storage_path('app/public/warehouse/'.$products_with_anime[0]->image_back);
-                                                if(file_exists($order_detail_image_back_exists)){
-                                                    $order_detail_image_back = asset('storage/warehouse/'.$products_with_anime[0]->image_back);
-                                                }else{
-                                                    $order_detail_image_back = null;
-                                                }
-                                                if(!$order_detail_image_front && !$order_detail_image_back){
-                                                    if($products_with_anime[0]->product->images){
-                                                        $images_ = json_decode($products_with_anime[0]->product->images);
-                                                        $images = [];
-                                                        foreach ($images_ as $key => $image_){
-                                                            if($key < 2){
-                                                                $images[] = asset('storage/products/'.$image_);
-                                                            }
-                                                        }
-                                                    }else{
-                                                        $images = [];
-                                                    }
-
-                                                }else{
-                                                    $images = [$order_detail_image_front??'no', $order_detail_image_back??'no'];
-                                                }
-                                                $product_discount_withouth_expire = !empty($products_with_anime[0]->product->discount_whithout_expire)?$products_with_anime[0]->product->discount_whithout_expire->percent:0;
-                                            @endphp
-                                            <hr>
-                                            <div class="row">
-                                                <div class="col-2 order_product_images" onclick='getImages("{{implode(" ", $images)}}")' data-bs-toggle="modal" data-bs-target="#carousel-modal">
-                                                    <img src="{{$images[0]}}" alt="" height="144px">
-                                                </div>
-                                                <div class="col-2 order_product_images" onclick='getUploads("{{implode(" ", $products_with_anime[2])}}")' data-bs-toggle="modal" data-bs-target="#carousel-upload-modal">
-                                                    <img src="{{$products_with_anime[2][0]}}" alt="" height="144px">
-                                                </div>
-                                                <div class="col-4 order_content">
-                                                    <h4>{{translate('Animated order')}}</h4>
-                                                    <span>{{!empty($products_with_anime[0]->product)?$products_with_anime[0]->product->name:''}}</span>
-                                                    @if($product_discount_withouth_expire != 0)
-                                                        <span>{{translate('Discount')}}: <b style="color:red">{{$product_discount_withouth_expire}} %</b></span>
-                                                    @endif
-                                                    @if($products_with_anime[1])
-                                                        <span>{{translate('Price')}}: <b>{{$products_with_anime[0]->price}}</b> {!! !empty($products_with_anime[0]->quantity)?translate('Quantity').": <b>". $products_with_anime[0]->quantity."</b>":'' !!}</span>
-                                                    @endif
-                                                    @if($products_with_anime[1])
-                                                        <span>{{translate('Sum')}}: <b>{{$products_with_anime[1]}}</b></span>
-                                                    @endif
-                                                    @if(!empty($products_with_anime[0]->size))
-                                                        <span>{{translate('Size')}}: <b>{{$products_with_anime[0]->size->name}}</b></span>
-                                                    @endif
-                                                    @if(!empty($products_with_anime[0]->color))
-                                                        <span>{{translate('Color')}}: <b>{{$products_with_anime[0]->color->name}}</b></span>
-                                                    @endif
-                                                    @if(!empty($products_with_anime[0]->updated_at))
-                                                        <span>{{translate('Ordered')}}: <b>{{$products_with_anime[0]->updated_at}}</b></span>
-                                                    @endif
-                                                </div>
-                                                <div class="col-1 d-flex justify-content-around align-items-center">
-                                                    @switch($products_with_anime[0]->status)
-                                                        @case(\App\Constants::ORDER_DETAIL_ORDERED)
-                                                        <div>
-                                                            <span class="badge bg-danger">{{translate('New')}}</span>
-                                                        </div>
-                                                        @break
-                                                        @case(\App\Constants::ORDER_DETAIL_PERFORMED)
-                                                        <div>
-                                                            <span class="badge bg-success">{{translate('Performed')}}</span>
-                                                        </div>
-                                                        @break
-                                                        @case(\App\Constants::ORDER_DETAIL_CANCELLED)
-                                                        <div>
-                                                            <span class="badge bg-danger">{{translate('Cancelled')}}</span>
-                                                        </div>
-                                                        @break
-                                                        @case(\App\Constants::ORDER_DETAIL_PERFORMED_BY_SUPERADMIN):
-                                                        <div>
-                                                            <span class="badge bg-danger">{{translate('Performed by superadmin')}}</span>
-                                                        </div>
-                                                        @break
-                                                        @case(\App\Constants::ORDER_DETAIL_ACCEPTED_BY_RECIPIENT)
-                                                        <div>
-                                                            <span class="badge bg-info">{{translate('Finished')}}</span>
-                                                        </div>
-                                                        @break
-                                                    @endswitch
-                                                </div>
-                                                <div class="function-column col-3">
-                                                    <div class="d-flex justify-content-around">
-                                                        @switch($products_with_anime[0]->status)
-                                                            @case(\App\Constants::ORDER_DETAIL_PERFORMED)
-                                                            <button type="button" class="btn btn-danger delete-datas btn-sm waves-effect" data-bs-toggle="modal" data-bs-target="#warning-order-alert-modal" onclick='cancelling_order("{{route('cancell_order_detail', $products_with_anime[0]->id)}}")' data-url="">{{translate('Cancel')}}</button>
-                                                            @break
-                                                            @case(\App\Constants::ORDER_DETAIL_CANCELLED)
-                                                            <button type="button" class="btn btn-success delete-datas btn-sm waves-effect" data-bs-toggle="modal" data-bs-target="#success-alert-modal" data-url=""
-                                                                    onclick='accepting_anime_order(
-                                                                        "{{$products_with_anime[0]->quantity??''}}",
-                                                                        "{{!empty($products_with_anime[0]->product)?$products_with_anime[0]->product->name:''}}",
-                                                                        "{{!empty($products_with_anime[0]->size)?$products_with_anime[0]->size->name:''}}",
-                                                                        "{{!empty($products_with_anime[0]->color)?$products_with_anime[0]->color->name:''}}",
-                                                                        "{{isset($images[0])?$images[0]:''}}",
-                                                                        "{{isset($images[1])?$images[1]:''}}",
-                                                                        "{{route('perform_order_detail', $products_with_anime[0]->id)}}")'>
-                                                                {{translate('Perform')}}
-                                                            </button>
-                                                            @break
-                                                        @endswitch
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        @endforeach
                                         @foreach($order['products'] as $products)
-                                            @php
-                                                if(!empty($products[0]->warehouse)){
-                                                    $discount_withouth_expire = !empty($products[0]->warehouse->discount_withouth_expire)?$products[0]->warehouse->discount_withouth_expire->percent:0;
-                                                    $product_discount_withouth_expire = !empty($products[0]->warehouse->product_discount_withouth_expire)?$products[0]->warehouse->product_discount_withouth_expire->percent:0;
-                                                }else{
-                                                    $discount_withouth_expire = 0;
-                                                    $product_discount_withouth_expire = 0;
-                                                }
-                                                if(!empty($products[0]->warehouse) && $products[0]->warehouse->images){
-                                                    $images_ = json_decode($products[0]->warehouse->images);
-                                                    $images = [];
-                                                    foreach ($images_ as $key => $image_){
-                                                        $images[] = asset('storage/warehouses/'.$image_);
-                                                    }
-                                                }elseif(!empty($products[0]->warehouse->product) && $products[0]->warehouse->product->images){
-                                                    $images_ = json_decode($products[0]->warehouse->product->images);
-                                                    $images = [];
-                                                    foreach ($images_ as $key => $image_){
-                                                        $images[] = asset('storage/products/'.$image_);
-                                                    }
-                                                }else{
-                                                    $images = [];
-                                                }
-                                            @endphp
                                             <hr>
                                             <div class="row">
-                                                <div class="col-3 order_product_images" onclick='getImages("{{implode(" ", $images)}}")'  data-bs-toggle="modal" data-bs-target="#carousel-modal">
-                                                    <img src="{{$images[0]}}" alt="" height="144px">
+                                                <div class="col-3 order_product_images" onclick='getImages("{{implode(" ", $products['images'])}}")'  data-bs-toggle="modal" data-bs-target="#carousel-modal">
+                                                    <img src="{{!empty($products['images'])?$products['images'][0]:asset('icon/no_photo.jpg')}}" alt="" height="144px">
                                                 </div>
                                                 <div class="col-1"></div>
                                                 <div class="col-4 order_content">
@@ -936,10 +652,8 @@
                                                     @if($products[1])
                                                         <span>{{translate('Sum')}}: <b>{{$products[1]}}</b></span>
                                                     @endif
-                                                    @if($discount_withouth_expire != 0)
-                                                        <span>{{translate('Discount')}}: <b style="color: red">{{(int)$discount_withouth_expire}} %</b></span>
-                                                    @elseif($product_discount_withouth_expire != 0)
-                                                        <span>{{translate('Discount')}}: <b style="color: red">{{(int)$product_discount_withouth_expire}} %</b></span>
+                                                    @if($products['discount_withouth_expire'] != 0)
+                                                        <span>{{translate('Discount')}}: <b style="color: red">{{(int)$products['discount_withouth_expire']}} %</b></span>
                                                     @endif
                                                     @if(!empty($products[0]->size))
                                                         <span>{{translate('Size')}}: <b>{{$products[0]->size->name}}</b> {{translate('Color')}}: <b>{{$products[0]->color->name}}</b></span>
@@ -948,7 +662,7 @@
                                                 </div>
                                                 <div class="col-1 d-flex justify-content-around align-items-center">
                                                     @switch($products[0]->status)
-                                                        @case(\App\Constants::ORDER_DETAIL_ORDERED):
+                                                        @case(\App\Constants::ORDER_DETAIL_ORDERED)
                                                         <div>
                                                             <span class="badge bg-danger">{{translate('New')}}</span>
                                                         </div>
@@ -986,6 +700,7 @@
                                                         @endphp
                                                         @switch($products[0]->status)
                                                             @case(\App\Constants::ORDER_DETAIL_PERFORMED)
+                                                            <button type="button" class="btn btn-info btn-sm waves-effect" data-bs-toggle="modal" data-bs-target="#accepted-by-recipient-modal" onclick='accepted_by_recipient("{{route('accepted_by_recipient', $order['order']->id)}}")' data-url=""><i class="fa fa-check"></i></button>
                                                             <button type="button" class="btn btn-danger delete-datas btn-sm waves-effect" data-bs-toggle="modal" data-bs-target="#warning-order-alert-modal" onclick='cancelling_order("{{route('cancell_order_detail', $products[0]->id)}}")' data-url="">{{translate('Cancel')}}</button>
                                                             @break
                                                             @case(\App\Constants::ORDER_DETAIL_CANCELLED)
@@ -996,8 +711,8 @@
                                                                         "{{!empty($products[0]->color)?$products[0]->color->name:''}}",
                                                                         "{{!empty($products[0]->size)?$products[0]->size->name:''}}",
                                                                         "{{$product_name}}",
-                                                                        "{{isset($images[0])?$images[0]:''}}",
-                                                                        "{{isset($images[1])?$images[1]:''}}",
+                                                                        "{{isset($products['images'][0])?$products['images'][0]:''}}",
+                                                                        "{{isset($products['images'][1])?$products['images'][1]:''}}",
                                                                         "{{route('perform_order_detail', $products[0]->id)}}"
                                                                         )'>
                                                                 {{translate('Perform')}}
@@ -1022,12 +737,6 @@
                         @foreach($cancelledOrders as $order)
                             @php
                                 $i++;
-                                if(!empty($order['order']->user->personalInfo)){
-                                    $first_name = isset($order['order']->user->personalInfo->first_name)?$order['order']->user->personalInfo->first_name.' ':'';
-                                    $last_name = isset($order['order']->user->personalInfo->last_name)?$order['order']->user->personalInfo->last_name.' ':'';
-                                    $middle_name = isset($order['order']->user->personalInfo->middle_name)?$order['order']->user->personalInfo->middle_name:'';
-                                    $user_name = $first_name.''.$last_name.''.$middle_name;
-                                }
                             @endphp
                             <div class="accordion custom-accordion" id="custom-accordion-one">
                                 <div class="card mb-0">
@@ -1042,17 +751,12 @@
                                                 <h4 style="line-height: 2; font-size: 16px">
                                                     {{translate('There are ')}}
                                                     <b>{{count($order['order']->orderDetail)}}</b>
-                                                    {{translate('items in order. these are selling for')}}
-                                                    <b>{{$order['order']->all_price}}</b>
-                                                    @if($order['order']->coupon_price)
-                                                        {{translate('all coupon costed')}}
-                                                        <b style="color: #10C469">{{$order['order']->coupon_price}}</b>
-                                                    @endif
+                                                    {{translate('items in order.')}}
                                                 </h4>
                                                 <hr style="margin:4px">
                                             @endif
                                             <h4 style="line-height: 2; font-size: 16px">
-                                                @if($user_name){{$user_name}}@endif
+                                                @if($order['user_name']){{$order['user_name']}}@endif
                                                 <span style="color: orange">{{translate('Ordered')}}</span>
                                                 @if($order['product_types'] != 0)
                                                     <b>{{ $order['product_types'] }}</b>
@@ -1067,9 +771,9 @@
                                                         <b style="color: red">{{$order['company_discount_price']}}</b>
                                                     @endif
                                                 @endif
-                                                @if($order['order']->payment_method == \App\Constants::CASH_ON_DELIVERY)
+                                                @if($order['order']->payment_method == \App\Constants::CASH)
                                                     <span class="badge bg-info">{{translate('cash on delivery')}}</span>
-                                                @elseif($order['order']->payment_method == \App\Constants::BANK_CARD)
+                                                @elseif($order['order']->payment_method == \App\Constants::ONLINE)
                                                     <span class="badge bg-info">{{translate('bank card')}}</span>
                                                 @endif
                                             </h4>
@@ -1117,19 +821,16 @@
                                                     @break
                                                     @case(\App\Constants::CANCELLED)
                                                     <span style="line-height: 1; font-size: 16px">
-                                                                <b>{{translate('CANCELLED')}}</b>
-                                                            </span>
+                                                            <b>{{translate('CANCELLED')}}</b>
+                                                        </span>
                                                     <span class="badge bg-danger">
-                                                                {{translate('Cancelled')}}
-                                                            </span>
+                                                            {{translate('Cancelled')}}
+                                                        </span>
                                                     @break
                                                     @case(\App\Constants::ACCEPTED_BY_RECIPIENT)
-                                                    <span style="line-height: 1; font-size: 16px">
-                                                                <b>{{translate('ACCEPTED BY RECIPIENT')}}</b>
-                                                            </span>
-                                                    <span class="badge bg-info">>
-                                                                {{translate('Delivered')}}
-                                                            </span>
+                                                    <span style="line-height: 1; font-size: 16px" class="badge bg-info">
+                                                            {{translate('Delivered')}}
+                                                        </span>
                                                     @break
                                                 @endswitch
                                             @endif
@@ -1147,143 +848,11 @@
                                     <div id="collapseNine{{$i}}" class="collapse fade"
                                          aria-labelledby="headingFour"
                                          data-bs-parent="#custom-accordion-one">
-                                        @foreach($order['products_with_anime'] as $products_with_anime)
-                                            @php
-                                                $order_detail_image_front_exists = storage_path('app/public/warehouse/'.$products_with_anime[0]->image_front);
-                                                if(file_exists($order_detail_image_front_exists)){
-                                                    $order_detail_image_front = asset('storage/warehouse/'.$products_with_anime[0]->image_front);
-                                                }else{
-                                                    $order_detail_image_front = null;
-                                                }
-                                                $order_detail_image_back_exists = storage_path('app/public/warehouse/'.$products_with_anime[0]->image_back);
-                                                if(file_exists($order_detail_image_back_exists)){
-                                                    $order_detail_image_back = asset('storage/warehouse/'.$products_with_anime[0]->image_back);
-                                                }else{
-                                                    $order_detail_image_back = null;
-                                                }
-                                                if(!$order_detail_image_front && !$order_detail_image_back){
-                                                    if($products_with_anime[0]->product->images){
-                                                        $images_ = json_decode($products_with_anime[0]->product->images);
-                                                        $images = [];
-                                                        foreach ($images_ as $key => $image_){
-                                                            if($key < 2){
-                                                                $images[] = asset('storage/products/'.$image_);
-                                                            }
-                                                        }
-                                                    }else{
-                                                        $images = [];
-                                                    }
-
-                                                }else{
-                                                    $images = [$order_detail_image_front??'no', $order_detail_image_back??'no'];
-                                                }
-                                                $product_discount_withouth_expire = !empty($products_with_anime[0]->product->discount_whithout_expire)?$products_with_anime[0]->product->discount_whithout_expire->percent:0;
-                                            @endphp
-                                            <hr>
-                                            <div class="row">
-                                                <div class="col-2 order_product_images" onclick='getImages("{{implode(" ", $images)}}")' data-bs-toggle="modal" data-bs-target="#carousel-modal">
-                                                    <img src="{{$images[0]}}" alt="" height="144px">
-                                                </div>
-                                                <div class="col-2 order_product_images" onclick='getUploads("{{implode(" ", $products_with_anime[2])}}")' data-bs-toggle="modal" data-bs-target="#carousel-upload-modal">
-                                                    <img src="{{$products_with_anime[2][0]}}" alt="" height="144px">
-                                                </div>
-                                                <div class="col-4 order_content">
-                                                    <h4>{{translate('Animated order')}}</h4>
-                                                    <span>{{!empty($products_with_anime[0]->product)?$products_with_anime[0]->product->name:''}}</span>
-                                                    @if($product_discount_withouth_expire != 0)
-                                                        <span>{{translate('Discount')}}: <b style="color:red">{{$product_discount_withouth_expire}} %</b></span>
-                                                    @endif
-                                                    @if($products_with_anime[1])
-                                                        <span>{{translate('Price')}}: <b>{{$products_with_anime[0]->price}}</b> {!! !empty($products_with_anime[0]->quantity)?translate('Quantity').": <b>". $products_with_anime[0]->quantity."</b>":'' !!}</span>
-                                                    @endif
-                                                    @if($products_with_anime[1])
-                                                        <span>{{translate('Sum')}}: <b>{{$products_with_anime[1]}}</b></span>
-                                                    @endif
-                                                    @if(!empty($products_with_anime[0]->size))
-                                                        <span>{{translate('Size')}}: <b>{{$products_with_anime[0]->size->name}}</b></span>
-                                                    @endif
-                                                    @if(!empty($products_with_anime[0]->color))
-                                                        <span>{{translate('Color')}}: <b>{{$products_with_anime[0]->color->name}}</b></span>
-                                                    @endif
-                                                    @if(!empty($products_with_anime[0]->updated_at))
-                                                        <span>{{translate('Ordered')}}: <b>{{$products_with_anime[0]->updated_at}}</b></span>
-                                                    @endif
-                                                </div>
-                                                <div class="col-1 d-flex justify-content-around align-items-center">
-                                                    @switch($products_with_anime[0]->status)
-                                                        @case(\App\Constants::ORDER_DETAIL_ORDERED)
-                                                        <div>
-                                                            <span class="badge bg-danger">{{translate('New')}}</span>
-                                                        </div>
-                                                        @break
-                                                        @case(\App\Constants::ORDER_DETAIL_PERFORMED)
-                                                        <div>
-                                                            <span class="badge bg-success">{{translate('Performed')}}</span>
-                                                        </div>
-                                                        @break
-                                                        @case(\App\Constants::ORDER_DETAIL_CANCELLED)
-                                                        <div>
-                                                            <span class="badge bg-danger">{{translate('Cancelled')}}</span>
-                                                        </div>
-                                                        @break
-                                                        @case(\App\Constants::ORDER_DETAIL_PERFORMED_BY_SUPERADMIN):
-                                                        <div>
-                                                            <span class="badge bg-danger">{{translate('Performed by superadmin')}}</span>
-                                                        </div>
-                                                        @break
-                                                        @case(\App\Constants::ORDER_DETAIL_ACCEPTED_BY_RECIPIENT)
-                                                        <div>
-                                                            <span class="badge bg-info">{{translate('Finished')}}</span>
-                                                        </div>
-                                                        @break
-                                                    @endswitch
-                                                </div>
-                                                <div class="function-column col-3">
-                                                    <div class="d-flex justify-content-around">
-                                                        <button type="button" class="btn btn-success delete-datas btn-sm waves-effect" data-bs-toggle="modal" data-bs-target="#success-alert-modal" data-url=""
-                                                                onclick='accepting_anime_order(
-                                                                    "{{$products_with_anime[0]->quantity??''}}",
-                                                                    "{{!empty($products_with_anime[0]->product)?$products_with_anime[0]->product->name:''}}",
-                                                                    "{{!empty($products_with_anime[0]->size)?$products_with_anime[0]->size->name:''}}",
-                                                                    "{{!empty($products_with_anime[0]->color)?$products_with_anime[0]->color->name:''}}",
-                                                                    "{{isset($images[0])?$images[0]:''}}",
-                                                                    "{{isset($images[1])?$images[1]:''}}",
-                                                                    "{{route('perform_order_detail', $products_with_anime[0]->id)}}")' >
-                                                            {{translate('Perform')}}
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        @endforeach
                                         @foreach($order['products'] as $products)
-                                            @php
-                                                if(!empty($products[0]->warehouse)){
-                                                    $discount_withouth_expire = !empty($products[0]->warehouse->discount_withouth_expire)?$products[0]->warehouse->discount_withouth_expire->percent:0;
-                                                    $product_discount_withouth_expire = !empty($products[0]->warehouse->product_discount_withouth_expire)?$products[0]->warehouse->product_discount_withouth_expire->percent:0;
-                                                }else{
-                                                    $discount_withouth_expire = 0;
-                                                    $product_discount_withouth_expire = 0;
-                                                }
-                                                if(!empty($products[0]->warehouse) && $products[0]->warehouse->images){
-                                                    $images_ = json_decode($products[0]->warehouse->images);
-                                                    $images = [];
-                                                    foreach ($images_ as $key => $image_){
-                                                        $images[] = asset('storage/warehouses/'.$image_);
-                                                    }
-                                                }elseif(!empty($products[0]->warehouse->product) && $products[0]->warehouse->product->images){
-                                                    $images_ = json_decode($products[0]->warehouse->product->images);
-                                                    $images = [];
-                                                    foreach ($images_ as $key => $image_){
-                                                        $images[] = asset('storage/products/'.$image_);
-                                                    }
-                                                }else{
-                                                    $images = [];
-                                                }
-                                            @endphp
                                             <hr>
                                             <div class="row">
-                                                <div class="col-3 order_product_images" onclick='getImages("{{implode(" ", $images)}}")'  data-bs-toggle="modal" data-bs-target="#carousel-modal">
-                                                    <img src="{{$images[0]}}" alt="" height="144px">
+                                                <div class="col-3 order_product_images" onclick='getImages("{{implode(" ", $products['images'])}}")'  data-bs-toggle="modal" data-bs-target="#carousel-modal">
+                                                    <img src="{{!empty($products['images'])?$products['images'][0]:asset('icon/no_photo.jpg')}}" alt="" height="144px">
                                                 </div>
                                                 <div class="col-1"></div>
                                                 <div class="col-4 order_content">
@@ -1299,10 +868,8 @@
                                                     @if($products[1])
                                                         <span>{{translate('Sum')}}: <b>{{$products[1]}}</b></span>
                                                     @endif
-                                                    @if($discount_withouth_expire != 0)
-                                                        <span>{{translate('Discount')}}: <b style="color: red">{{(int)$discount_withouth_expire}} %</b></span>
-                                                    @elseif($product_discount_withouth_expire != 0)
-                                                        <span>{{translate('Discount')}}: <b style="color: red">{{(int)$product_discount_withouth_expire}} %</b></span>
+                                                    @if($products['discount_withouth_expire'] != 0)
+                                                        <span>{{translate('Discount')}}: <b style="color: red">{{(int)$products['discount_withouth_expire']}} %</b></span>
                                                     @endif
                                                     @if(!empty($products[0]->size))
                                                         <span>{{translate('Size')}}: <b>{{$products[0]->size->name}}</b> {{translate('Color')}}: <b>{{$products[0]->color->name}}</b></span>
@@ -1311,7 +878,7 @@
                                                 </div>
                                                 <div class="col-1 d-flex justify-content-around align-items-center">
                                                     @switch($products[0]->status)
-                                                        @case(\App\Constants::ORDER_DETAIL_ORDERED):
+                                                        @case(\App\Constants::ORDER_DETAIL_ORDERED)
                                                         <div>
                                                             <span class="badge bg-danger">{{translate('New')}}</span>
                                                         </div>
@@ -1354,8 +921,8 @@
                                                                     "{{!empty($products[0]->color)?$products[0]->color->name:''}}",
                                                                     "{{!empty($products[0]->size)?$products[0]->size->name:''}}",
                                                                     "{{$product_name}}",
-                                                                    "{{isset($images[0])?$images[0]:''}}",
-                                                                    "{{isset($images[1])?$images[1]:''}}",
+                                                                    "{{isset($products['images'][0])?$products['images'][0]:''}}",
+                                                                    "{{isset($products['images'][1])?$products['images'][1]:''}}",
                                                                     "{{route('perform_order_detail', $products[0]->id)}}"
                                                                     )'>
                                                             {{translate('Perform')}}
@@ -1378,12 +945,6 @@
                         @foreach($acceptedByRecipientOrders as $order)
                             @php
                                 $i++;
-                                if(!empty($order['order']->user->personalInfo)){
-                                    $first_name = isset($order['order']->user->personalInfo->first_name)?$order['order']->user->personalInfo->first_name.' ':'';
-                                    $last_name = isset($order['order']->user->personalInfo->last_name)?$order['order']->user->personalInfo->last_name.' ':'';
-                                    $middle_name = isset($order['order']->user->personalInfo->middle_name)?$order['order']->user->personalInfo->middle_name:'';
-                                    $user_name = $first_name.''.$last_name.''.$middle_name;
-                                }
                             @endphp
                             <div class="accordion custom-accordion" id="custom-accordion-one">
                                 <div class="card mb-0">
@@ -1398,17 +959,12 @@
                                                 <h4 style="line-height: 2; font-size: 16px">
                                                     {{translate('There are ')}}
                                                     <b>{{count($order['order']->orderDetail)}}</b>
-                                                    {{translate('items in order. these are selling for')}}
-                                                    <b>{{$order['order']->all_price}}</b>
-                                                    @if($order['order']->coupon_price)
-                                                        {{translate('all coupon costed')}}
-                                                        <b style="color: #10C469">{{$order['order']->coupon_price}}</b>
-                                                    @endif
+                                                    {{translate('items in order.')}}
                                                 </h4>
                                                 <hr style="margin:4px">
                                             @endif
                                             <h4 style="line-height: 2; font-size: 16px">
-                                                @if($user_name){{$user_name}}@endif
+                                                @if($order['user_name']){{$order['user_name']}}@endif
                                                 <span style="color: orange">{{translate('Ordered')}}</span>
                                                 @if($order['product_types'] != 0)
                                                     <b>{{ $order['product_types'] }}</b>
@@ -1423,9 +979,9 @@
                                                         <b style="color: red">{{$order['company_discount_price']}}</b>
                                                     @endif
                                                 @endif
-                                                @if($order['order']->payment_method == \App\Constants::CASH_ON_DELIVERY)
+                                                @if($order['order']->payment_method == \App\Constants::CASH)
                                                     <span class="badge bg-info">{{translate('cash on delivery')}}</span>
-                                                @elseif($order['order']->payment_method == \App\Constants::BANK_CARD)
+                                                @elseif($order['order']->payment_method == \App\Constants::ONLINE)
                                                     <span class="badge bg-info">{{translate('bank card')}}</span>
                                                 @endif
                                             </h4>
@@ -1453,7 +1009,7 @@
                                             @endif
                                         </div>
                                         <div class="col-4 d-flex justify-content-between">
-                                                @if($order['order']->status)
+                                            @if($order['order']->status)
                                                 @switch($order['order']->status)
                                                     @case(\App\Constants::ORDERED)
                                                     <span style="line-height: 1; font-size: 16px">
@@ -1481,11 +1037,11 @@
                                                     @break
                                                     @case(\App\Constants::ACCEPTED_BY_RECIPIENT)
                                                     <span style="line-height: 1; font-size: 16px">
-                                                                <b>{{translate('ACCEPTED BY RECIPIENT')}}</b>
-                                                            </span>
-                                                    <span class="badge bg-info">>
-                                                                {{translate('Delivered')}}
-                                                            </span>
+                                                            <b>{{translate('ACCEPTED')}}</b>
+                                                        </span>
+                                                    <span style="line-height: 1; font-size: 16px" class="badge bg-info">
+                                                            {{translate('Delivered')}}
+                                                        </span>
                                                     @break
                                                 @endswitch
                                             @endif
@@ -1503,133 +1059,11 @@
                                     <div id="collapseNine{{$i}}" class="collapse fade"
                                          aria-labelledby="headingFour"
                                          data-bs-parent="#custom-accordion-one">
-                                        @foreach($order['products_with_anime'] as $products_with_anime)
-                                            @php
-                                                $order_detail_image_front_exists = storage_path('app/public/warehouse/'.$products_with_anime[0]->image_front);
-                                                if(file_exists($order_detail_image_front_exists)){
-                                                    $order_detail_image_front = asset('storage/warehouse/'.$products_with_anime[0]->image_front);
-                                                }else{
-                                                    $order_detail_image_front = null;
-                                                }
-                                                $order_detail_image_back_exists = storage_path('app/public/warehouse/'.$products_with_anime[0]->image_back);
-                                                if(file_exists($order_detail_image_back_exists)){
-                                                    $order_detail_image_back = asset('storage/warehouse/'.$products_with_anime[0]->image_back);
-                                                }else{
-                                                    $order_detail_image_back = null;
-                                                }
-                                                if(!$order_detail_image_front && !$order_detail_image_back){
-                                                    if($products_with_anime[0]->product->images){
-                                                        $images_ = json_decode($products_with_anime[0]->product->images);
-                                                        $images = [];
-                                                        foreach ($images_ as $key => $image_){
-                                                            if($key < 2){
-                                                                $images[] = asset('storage/products/'.$image_);
-                                                            }
-                                                        }
-                                                    }else{
-                                                        $images = [];
-                                                    }
-
-                                                }else{
-                                                    $images = [$order_detail_image_front??'no', $order_detail_image_back??'no'];
-                                                }
-                                                $product_discount_withouth_expire = !empty($products_with_anime[0]->product->discount_whithout_expire)?$products_with_anime[0]->product->discount_whithout_expire->percent:0;
-                                            @endphp
-                                            <hr>
-                                            <div class="row">
-                                                <div class="col-2 order_product_images" onclick='getImages("{{implode(" ", $images)}}")' data-bs-toggle="modal" data-bs-target="#carousel-modal">
-                                                    <img src="{{$images[0]}}" alt="" height="144px">
-                                                </div>
-                                                <div class="col-2 order_product_images" onclick='getUploads("{{implode(" ", $products_with_anime[2])}}")' data-bs-toggle="modal" data-bs-target="#carousel-upload-modal">
-                                                    <img src="{{$products_with_anime[2][0]}}" alt="" height="144px">
-                                                </div>
-                                                <div class="col-4 order_content">
-                                                    <h4>{{translate('Animated order')}}</h4>
-                                                    <span>{{!empty($products_with_anime[0]->product)?$products_with_anime[0]->product->name:''}}</span>
-                                                    @if($product_discount_withouth_expire != 0)
-                                                        <span>{{translate('Discount')}}: <b style="color:red">{{$product_discount_withouth_expire}} %</b></span>
-                                                    @endif
-                                                    @if($products_with_anime[1])
-                                                        <span>{{translate('Price')}}: <b>{{$products_with_anime[0]->price}}</b> {!! !empty($products_with_anime[0]->quantity)?translate('Quantity').": <b>". $products_with_anime[0]->quantity."</b>":'' !!}</span>
-                                                    @endif
-                                                    @if($products_with_anime[1])
-                                                        <span>{{translate('Sum')}}: <b>{{$products_with_anime[1]}}</b></span>
-                                                    @endif
-                                                    @if(!empty($products_with_anime[0]->size))
-                                                        <span>{{translate('Size')}}: <b>{{$products_with_anime[0]->size->name}}</b></span>
-                                                    @endif
-                                                    @if(!empty($products_with_anime[0]->color))
-                                                        <span>{{translate('Color')}}: <b>{{$products_with_anime[0]->color->name}}</b></span>
-                                                    @endif
-                                                    @if(!empty($products_with_anime[0]->updated_at))
-                                                        <span>{{translate('Ordered')}}: <b>{{$products_with_anime[0]->updated_at}}</b></span>
-                                                    @endif
-                                                </div>
-                                                <div class="col-1 d-flex justify-content-around align-items-center">
-                                                    @switch($products_with_anime[0]->status)
-                                                        @case(\App\Constants::ORDER_DETAIL_ORDERED)
-                                                        <div>
-                                                            <span class="badge bg-danger">{{translate('New')}}</span>
-                                                        </div>
-                                                        @break
-                                                        @case(\App\Constants::ORDER_DETAIL_PERFORMED)
-                                                        <div>
-                                                            <span class="badge bg-success">{{translate('Performed')}}</span>
-                                                        </div>
-                                                        @break
-                                                        @case(\App\Constants::ORDER_DETAIL_CANCELLED)
-                                                        <div>
-                                                            <span class="badge bg-danger">{{translate('Cancelled')}}</span>
-                                                        </div>
-                                                        @break
-                                                        @case(\App\Constants::ORDER_DETAIL_PERFORMED_BY_SUPERADMIN):
-                                                        <div>
-                                                            <span class="badge bg-danger">{{translate('Performed by superadmin')}}</span>
-                                                        </div>
-                                                        @break
-                                                        @case(\App\Constants::ORDER_DETAIL_ACCEPTED_BY_RECIPIENT)
-                                                        <div>
-                                                            <span class="badge bg-info">{{translate('Finished')}}</span>
-                                                        </div>
-                                                        @break
-                                                    @endswitch
-                                                </div>
-                                                <div class="function-column col-3">
-                                                    <div class="d-flex justify-content-around">
-
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        @endforeach
                                         @foreach($order['products'] as $products)
-                                            @php
-                                                if(!empty($products[0]->warehouse)){
-                                                    $discount_withouth_expire = !empty($products[0]->warehouse->discount_withouth_expire)?$products[0]->warehouse->discount_withouth_expire->percent:0;
-                                                    $product_discount_withouth_expire = !empty($products[0]->warehouse->product_discount_withouth_expire)?$products[0]->warehouse->product_discount_withouth_expire->percent:0;
-                                                }else{
-                                                    $discount_withouth_expire = 0;
-                                                    $product_discount_withouth_expire = 0;
-                                                }
-                                                if(!empty($products[0]->warehouse) && $products[0]->warehouse->images){
-                                                    $images_ = json_decode($products[0]->warehouse->images);
-                                                    $images = [];
-                                                    foreach ($images_ as $key => $image_){
-                                                        $images[] = asset('storage/warehouses/'.$image_);
-                                                    }
-                                                }elseif(!empty($products[0]->warehouse->product) && $products[0]->warehouse->product->images){
-                                                    $images_ = json_decode($products[0]->warehouse->product->images);
-                                                    $images = [];
-                                                    foreach ($images_ as $key => $image_){
-                                                        $images[] = asset('storage/products/'.$image_);
-                                                    }
-                                                }else{
-                                                    $images = [];
-                                                }
-                                            @endphp
                                             <hr>
                                             <div class="row">
-                                                <div class="col-3 order_product_images" onclick='getImages("{{implode(" ", $images)}}")'  data-bs-toggle="modal" data-bs-target="#carousel-modal">
-                                                    <img src="{{$images[0]}}" alt="" height="144px">
+                                                <div class="col-3 order_product_images" onclick='getImages("{{implode(" ", $products['images'])}}")'  data-bs-toggle="modal" data-bs-target="#carousel-modal">
+                                                    <img src="{{!empty($products['images'])?$products['images'][0]:asset('icon/no_photo.jpg')}}" alt="" height="144px">
                                                 </div>
                                                 <div class="col-1"></div>
                                                 <div class="col-4 order_content">
@@ -1645,10 +1079,8 @@
                                                     @if($products[1])
                                                         <span>{{translate('Sum')}}: <b>{{$products[1]}}</b></span>
                                                     @endif
-                                                    @if($discount_withouth_expire != 0)
-                                                        <span>{{translate('Discount')}}: <b style="color: red">{{(int)$discount_withouth_expire}} %</b></span>
-                                                    @elseif($product_discount_withouth_expire != 0)
-                                                        <span>{{translate('Discount')}}: <b style="color: red">{{(int)$product_discount_withouth_expire}} %</b></span>
+                                                    @if($products['discount_withouth_expire'] != 0)
+                                                        <span>{{translate('Discount')}}: <b style="color: red">{{(int)$products['discount_withouth_expire']}} %</b></span>
                                                     @endif
                                                     @if(!empty($products[0]->size))
                                                         <span>{{translate('Size')}}: <b>{{$products[0]->size->name}}</b> {{translate('Color')}}: <b>{{$products[0]->color->name}}</b></span>
@@ -1657,7 +1089,7 @@
                                                 </div>
                                                 <div class="col-1 d-flex justify-content-around align-items-center">
                                                     @switch($products[0]->status)
-                                                        @case(\App\Constants::ORDER_DETAIL_ORDERED):
+                                                        @case(\App\Constants::ORDER_DETAIL_ORDERED)
                                                         <div>
                                                             <span class="badge bg-danger">{{translate('New')}}</span>
                                                         </div>
@@ -1686,7 +1118,7 @@
                                                 </div>
                                                 <div class="function-column col-3">
                                                     <div class="d-flex justify-content-around">
-
+                                                        <button type="button" class="btn btn-info btn-sm waves-effect" data-bs-toggle="modal" data-bs-target="#cancell-accepted-by-recipient-modal" onclick='cancell_accepted_by_recipient("{{route('cancell_accepted_by_recipient', $order['order']->id)}}")' data-url=""><i class="fa fa-arrow-left"></i></button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -1705,111 +1137,26 @@
             <h2>{{translate('No orders')}}</h2>
         </span>
     @endif
+    <script src="{{asset('assets/js/jquery-3.7.1.min.js')}}"></script>
+    <script src="{{asset('assets/js/companyOrder.js')}}"></script>
     <script>
-        let product_name = document.getElementById('product_name')
-        let order_size = document.getElementById('order_size')
-        let order_color = document.getElementById('order_color')
-        let remaining_quantity = document.getElementById('remaining_quantity')
-        let order_quantity = document.getElementById('order_quantity')
-        let products_images = document.getElementById('products_images')
-        let carousel_product_images = document.getElementById('carousel_product_images')
-        let carousel_product_upload_images = document.getElementById('carousel_product_upload_images')
-        let product_image = document.getElementById('product_image')
-        let cancell_order = document.getElementById('cancell_order')
-        let perform_order = document.getElementById('perform_order')
-        function accepting_order(quantity, remaining_quantity_, color_name, size_name, product_name_, image, image_1, url){
-            product_name.innerHTML = ""
-            order_size.innerHTML = ""
-            order_color.innerHTML = ""
-            remaining_quantity.innerHTML = ""
-            order_quantity.innerHTML = ""
-            product_image.innerHTML = ""
-            if(product_name_ != ""){
-                product_name.innerHTML = "<h5>{{translate('Product name')}} "+product_name_+"</h5>"
-            }
-            if(size_name != ""){
-                order_size.innerHTML = "<span>{{translate('size')}} <b>"+size_name+"</b></span>"
-            }
-            if(color_name != ""){
-                order_color.innerHTML = "<span>{{translate('Order color')}} <b>"+color_name+"</b></span>"
-            }
-            if(remaining_quantity_ != ""){
-                remaining_quantity.innerHTML = "<span>{{translate('Remaining in warehouse')}} <b>"+remaining_quantity_+"</b></span>"
-            }
-            if(quantity != ""){
-                order_quantity.innerHTML = "<span>{{translate('Order quantity')}} <b>"+quantity+"</b></span>"
-            }
-            if(image != "" && image_1 != ""){
-                product_image.innerHTML = "<img height='64px' src='"+image+"'>" +
-                    "<img height='64px' src='"+image_1+"'>"
-            }
+        let product_name_text = "{{translate('Product name')}}"
+        let size_text = "{{translate('size')}}"
+        let order_color_text = "{{translate('Order color')}}"
+        let order_quantity_text = "{{translate('Order quantity')}}"
+        let remaining_in_warehouse_text = "{{translate('Remaining in warehouse')}}"
 
-            perform_order.setAttribute("action", url)
+        let error_status = "{{session('error')}}"
+        let performed_status = "{{session('performed')}}"
+        if(error_status != "" && error_status != null && error_status != undefined){
+            $(document).ready(function(){
+                toastr.warning(error_status)
+            });
         }
-        function accepting_anime_order(quantity, product_name_, size_name, color_name, images_0, images_1, url){
-            product_name.innerHTML = ""
-            order_size.innerHTML = ""
-            order_color.innerHTML = ""
-            remaining_quantity.innerHTML = ""
-            order_quantity.innerHTML = ""
-            product_image.innerHTML = ""
-            if(product_name_ != ""){
-                product_name.innerHTML = "<h5>{{translate('Product name')}} "+product_name_+"</h5>"
-            }
-            if(size_name != ""){
-                order_size.innerHTML = "<span>{{translate('size')}} <b>"+size_name+"</b></span>"
-            }
-            if(color_name != ""){
-                order_color.innerHTML = "<span>{{translate('Order color')}} <b>"+color_name+"</b></span>"
-            }
-            if(quantity != ""){
-                order_quantity.innerHTML = "<span>{{translate('Order quantity')}} <b>"+quantity+"</b></span>"
-            }
-            if(images_0 != "" && images_1 != ""){
-                product_image.innerHTML = "<img height='64px' src='"+images_0+"'>" +
-                    "<img height='64px' src='"+images_1+"'>"
-            }
-
-            perform_order.setAttribute("action", url)
-        }
-        function cancelling_order(order_detail_id){
-            cancell_order.setAttribute("action", order_detail_id)
-        }
-        function getImages(images) {
-            let all_images = images.split(' ')
-            let images_content = ''
-            for(let i=0; i<all_images.length; i++){
-                if(i == 0){
-                    images_content = images_content +
-                        `<div class="carousel-item active">
-                        <img class="d-block img-fluid" src="${all_images[i]}" alt="First slide">
-                    </div>`
-                }else{
-                    images_content = images_content +
-                        `<div class="carousel-item">
-                        <img class="d-block img-fluid" src="${all_images[i]}" alt="First slide">
-                    </div>`
-                }
-            }
-            carousel_product_images.innerHTML = images_content
-        }
-        function getUploads(images) {
-            let all_uploads = images.split(' ')
-            let uploads_content = ''
-            for(let i=0; i<all_uploads.length; i++){
-                if(i == 0){
-                    uploads_content = uploads_content +
-                        `<div class="carousel-item active">
-                        <img class="d-block img-fluid" src="${all_uploads[i]}" alt="First slide">
-                    </div>`
-                }else{
-                    uploads_content = uploads_content +
-                        `<div class="carousel-item">
-                        <img class="d-block img-fluid" src="${all_uploads[i]}" alt="First slide">
-                    </div>`
-                }
-            }
-            carousel_product_upload_images.innerHTML = uploads_content
+        if(performed_status != "" && performed_status != null && performed_status != undefined){
+            $(document).ready(function(){
+                toastr.success(performed_status)
+            });
         }
     </script>
 @endsection

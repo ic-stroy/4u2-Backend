@@ -35,7 +35,6 @@ class OrderNotification extends Notification
     {
         return [
             'order_id'=>$this->data['order_id'],
-            'order_detail_id'=>$this->data['order_detail_id'],
             'order_all_price'=>$this->data['order_all_price'],
             'user'=>$this->data['receiver_name'],
             'product_name'=>$this->data['product']['name'],

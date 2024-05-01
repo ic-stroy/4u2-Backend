@@ -77,7 +77,7 @@
                     </div>
                     <div class="mb-3 col-6">
                         <label class="form-label">{{translate('Sum')}}</label>
-                        <input type="number" class="form-control" name="sum" value="{{$product->sum??''}}">
+                        <input type="number" class="form-control" name="sum" required value="{{$product->sum??''}}">
                     </div>
                 </div>
                 <div class="row">

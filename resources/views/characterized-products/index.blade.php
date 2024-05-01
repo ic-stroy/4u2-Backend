@@ -7,9 +7,6 @@
     <div class="card">
         <div class="card-header">
             <h4 class="mt-0 header-title">{{translate('Products lists')}}</h4>
-            <div class="dropdown float-end">
-                <a class="form_functions btn btn-success" href="{{route('product.create')}}">{{translate('Create')}}</a>
-            </div>
         </div>
         <div class="card-body">
             <ul class="nav nav-pills navtab-bg nav-justified">
