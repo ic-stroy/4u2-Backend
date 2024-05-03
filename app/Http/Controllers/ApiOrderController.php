@@ -104,7 +104,6 @@ class ApiOrderController extends Controller
         if($request->selected_products && $request->payment && $request->address_id){
             $order = new Order();
             $order->save();
-            $order_detail = new OrderDetail();
             $user = Auth::user();
             $data = [];
             $products = $request->selected_products;
@@ -114,6 +113,7 @@ class ApiOrderController extends Controller
             $categorizedProductAllPrice = 0;
             $order_count = Order::where('user_id', $user->id)->count();
             foreach($products as $product_data){
+                $order_detail = new OrderDetail();
                 $categorizedProductPrice = 0;
                 $discount_price = 0;
                 $product = CharacterizedProducts::find($product_data['id']);
@@ -126,8 +126,8 @@ class ApiOrderController extends Controller
                         $order_detail->size_id = $product->size_id;
                         $order_detail->color_id = (int)$product_data['color']['id'];
                         $order_detail->discount = isset($product_data['discount'])?(int)$product_data['discount']:null;
-                        $order_detail->price = (int)$product->price;
-                        $order_detail->status = Constants::ACTIVE;
+                        $order_detail->price = (int)$product->sum;
+                        $order_detail->status = Constants::ORDER_DETAIL_ORDERED;
                         if($product->sum){
                             $categorizedProductPrice = $product->sum*(int)$product_data['count'];
                             if(!empty($discount)){

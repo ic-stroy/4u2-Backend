@@ -5,14 +5,10 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/ApiOrderController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/ApiOrderController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/OrderController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/OrderController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/CharacterizedProducts.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/CharacterizedProducts.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/OrderDetail.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/OrderDetail.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Notifications/OrderNotification.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Notifications/OrderNotification.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/characterized-products/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/characterized-products/index.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/color/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/color/index.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/ProductsController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/ProductsController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/database.php" beforeDir="false" afterPath="$PROJECT_DIR$/config/database.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/views/order/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/order/index.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/products/create.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/products/create.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/products/edit.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/products/edit.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/web.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -155,7 +151,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../Ecommerces" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../LaravelEasyPrint" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
@@ -186,7 +182,9 @@
       <workItem from="1714022540896" duration="9490000" />
       <workItem from="1714106922584" duration="5603000" />
       <workItem from="1714372934800" duration="15604000" />
-      <workItem from="1714568804466" duration="1119000" />
+      <workItem from="1714568804466" duration="1721000" />
+      <workItem from="1714633300906" duration="4031000" />
+      <workItem from="1714711639708" duration="13845000" />
     </task>
     <servers />
   </component>

@@ -855,7 +855,8 @@ class ProductsController extends Controller
                   'category_id'=>$product->category_id,
                   'images'=>$images,
                   'sum'=>$product->sum,
-                  'description'=>$product->description
+                  'description'=>$product->description,
+                  'basket_button'=>false
                 ];
             }
             $data[] = [

@@ -62,6 +62,11 @@ Route::group(['middleware'=>['isAdmin', 'language']], function(){
     Route::get('/order-category', [OrderController::class, 'category'])->name('order.category');
     Route::get('/order/show/{id}', [OrderController::class, 'show'])->name('order.show');
     Route::get('/order/destroy/{id}', [OrderController::class, 'destroy'])->name('order.destroy');
+    Route::post('/accepted-by-recipient/{id}', [OrderController::class, 'acceptedByRecipient'])->name('accepted_by_recipient');
+    Route::post('/cancell-accepted-by-recipient/{id}', [OrderController::class, 'cancellAcceptedByRecipient'])->name('cancell_accepted_by_recipient');
+    Route::delete('/order-detail/cancell/{id}', [OrderController::class, 'cancellOrderDetail'])->name('cancell_order_detail');
+    Route::post('/order-detail/perform/{id}', [OrderController::class, 'performOrderDetail'])->name('perform_order_detail');
+
     Route::group(['prefix' => 'language'], function () {
         Route::get('/', [LanguageController::class, 'index'])->name('language.index');
         Route::get('/language/show/{id}', [LanguageController::class, 'show'])->name('language.show');

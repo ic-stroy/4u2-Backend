@@ -26,11 +26,14 @@ class OrderController extends Controller
         $performedOrders = $this->getOrders($performedOrders_);
         $cancelledOrders = $this->getOrders($cancelledOrders_);
         $acceptedByRecipientOrders = $this->getOrders($acceptedByRecipientOrders_);
-        return view('order.index', [
+        $all_orders = [
             'orderedOrders'=>$orderedOrders,
             'performedOrders'=>$performedOrders,
             'cancelledOrders'=>$cancelledOrders,
             'acceptedByRecipientOrders'=>$acceptedByRecipientOrders,
+        ];
+        return view('order.index', [
+            'all_orders'=>$all_orders,
             'user'=>$user
         ]);
     }
@@ -39,7 +42,6 @@ class OrderController extends Controller
         $order_data = [];
         foreach($orders as $order){
 //        $not_read_order_quantity = OrderDetail::where('order_id', $id)->where('is_read', 0)->count();
-            $products_with_anime = [];
             $products = [];
             $performed_product_types = 0;
             $product_quantity = 0;
@@ -63,7 +65,6 @@ class OrderController extends Controller
                 $product_quantity = $product_quantity + $order_detail->quantity;
 
                 $discount_withouth_expire = 0;
-                $product_discount_withouth_expire = 0;
                 $images = [];
 
                 if($order_detail->warehouse_id){
@@ -127,7 +128,6 @@ class OrderController extends Controller
                     'performed_product_types'=>$performed_product_types,
                     'product_quantity'=>$product_quantity,
                     'products'=>$products,
-                    'products_with_anime'=>$products_with_anime,
                     'company_product_price'=>$company_product_price - $order_coupon_price,
                     'order_coupon_price'=>$order_coupon_price,
                     'company_discount_price'=>$company_discount_price,
@@ -182,22 +182,22 @@ class OrderController extends Controller
         $cancelled_has = false;
         if($orderDetail){
             $orderDetail->status = Constants::ORDER_DETAIL_CANCELLED;
-            foreach($user->unreadnotifications as $notification){
-                if($notification->type == "App\Notifications\OrderNotification"){
-                    if(!empty($notification->data)){
-                        if($notification->data['order_detail_id'] == $orderDetail->id){
-                            $notification->read_at = date('Y-m-d H:i:s');
-                            $notification->save();
-                        }
-                    }
-                }
-            }
             $orderDetail->save();
             $order = Order::whereIn('status', [Constants::ORDERED, Constants::PERFORMED, Constants::CANCELLED])->find($orderDetail->order_id);
             if($order){
                 sleep(1);
                 $order_details_status = OrderDetail::where('order_id', $orderDetail->order_id)->pluck('status')->all();
                 if(!in_array(Constants::ORDER_DETAIL_BASKET, $order_details_status) && !in_array(Constants::ORDER_DETAIL_ORDERED, $order_details_status)){
+                    foreach($user->unreadnotifications as $notification){
+                        if($notification->type == "App\Notifications\OrderNotification"){
+                            if(!empty($notification->data)){
+                                if($notification->data['order_id'] == $order->id){
+                                    $notification->read_at = date('Y-m-d H:i:s');
+                                    $notification->save();
+                                }
+                            }
+                        }
+                    }
                     foreach($order->orderDetail as $order_detail){
                         if($order_detail->status == Constants::ORDER_DETAIL_PERFORMED){
                             $discount_price = $order_detail->discount_price??0;
@@ -256,16 +256,6 @@ class OrderController extends Controller
         $order_detail_price = 0;
         if($orderDetail){
             $orderDetail->status = Constants::ORDER_DETAIL_PERFORMED;
-            foreach($user->unreadnotifications as $notification){
-                if($notification->type == "App\Notifications\OrderNotification"){
-                    if(!empty($notification->data)){
-                        if($notification->data['order_detail_id'] == $orderDetail->id){
-                            $notification->read_at = date('Y-m-d H:i:s');
-                            $notification->save();
-                        };
-                    }
-                }
-            }
             $orderDetail->save();
             $order = Order::whereIn('status', [Constants::ORDERED, Constants::PERFORMED, Constants::CANCELLED])->find($orderDetail->order_id);
             if($order){
@@ -299,6 +289,16 @@ class OrderController extends Controller
                         $order->all_price = $order->all_price - $coupon_price;
                         $order->status = Constants::PERFORMED;
                         $order->save();
+                        foreach($user->unreadnotifications as $notification){
+                            if($notification->type == "App\Notifications\OrderNotification"){
+                                if(!empty($notification->data)){
+                                    if($notification->data['order_id'] == $order->id){
+                                        $notification->read_at = date('Y-m-d H:i:s');
+                                        $notification->save();
+                                    };
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -319,6 +319,35 @@ class OrderController extends Controller
         }
 
         return redirect()->route('order.index')->with('performed', 'Product is performed');
+    }
+    public function acceptedByRecipient($id){
+        $order = Order::where('status', Constants::PERFORMED)->find($id);
+        if(!$order){
+            return redirect()->route('order.index')->with('error', 'Order not found');
+        }
+        $order->status = Constants::ACCEPTED_BY_RECIPIENT;
+        $order->save();
+//        $order_details = OrderDetail::where(['order_id'=>$order->id, 'status'=>3])->get();
+//        foreach($order_details as $order_detail){
+//            $order_detail->status = Constants::ORDER_DETAIL_ACCEPTED_BY_RECIPIENT;
+//            $order_detail->save();
+//        }
+        return redirect()->route('order.index')->with('performed', 'Order is accepted by recipient');
+    }
+
+    public function cancellAcceptedByRecipient($id){
+        $order = Order::where('status', Constants::ACCEPTED_BY_RECIPIENT)->find($id);
+        if(!$order){
+            return redirect()->route('order.index')->with('error', 'Order not found');
+        }
+        $order->status = Constants::PERFORMED;
+        $order->save();
+//        $order_details = OrderDetail::where(['order_id'=>$order->id, 'status'=>6])->get();
+//        foreach($order_details as $order_detail){
+//            $order_detail->status = Constants::ORDER_DETAIL_PERFORMED;
+//            $order_detail->save();
+//        }
+        return redirect()->route('order.index')->with('performed', 'Order is accepted by recipient');
     }
 
     public function getImages($model, $text){
