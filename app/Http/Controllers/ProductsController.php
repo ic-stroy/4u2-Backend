@@ -458,6 +458,73 @@ class ProductsController extends Controller
         return response()->json($response, 200);
     }
 
+    public function getAllProducts()
+    {
+        $products = Products::all();
+        $goods = [];
+        foreach ($products as $key => $product) {
+            $discount = $product->discount;
+            $colors_array = [];
+            if (isset($product->categorizedProducts)) {
+                foreach ($product->categorizedProducts as $categorizedProduct) {
+                    $colors_array[] = $categorizedProduct->color->id;
+                }
+                foreach (array_unique($colors_array) as $color) {
+                    $productsByColor = [];
+                    foreach ($product->categorizedProducts as $categorizedProduct){
+                        if($color ==  $categorizedProduct->color->id){
+                            $colorModel = $categorizedProduct->color;
+                            if(!empty($discount)){
+                                $categorizedProductSum = $discount->percent?$categorizedProduct->sum - $categorizedProduct->sum*(int)$discount->percent/100:$categorizedProduct->sum;
+                            }else{
+                                $categorizedProductSum = $categorizedProduct->sum;
+                            }
+                            $productsByColor[] = [
+                                'size' => $categorizedProduct->size ? $categorizedProduct->size->name:'',
+                                'sum' => $categorizedProductSum,
+                                'discount' => !empty($product->discount)?$product->discount->percent:null,
+                                'price'=>$categorizedProduct->sum,
+                                'count' => $categorizedProduct->count
+                            ];
+                        }
+                    }
+                    $categorizedByColor[] = [
+                        'color'=>$colorModel,
+                        'products'=>$productsByColor
+                    ];
+                }
+            }
+            $images_ = json_decode($product->images);
+            $images = [];
+            foreach ($images_ as $image_) {
+                $images[] = asset('storage/products/' . $image_);
+            }
+            $goods[$key]['id'] = $product->id;
+            $goods[$key]['name'] = $product->name ?? null;
+            $current_category = $this->getProductCategory($product);
+            $goods[$key]['category'] = $current_category->name??null;
+            $goods[$key]['description'] = $product->description ?? null;
+            if(!empty($discount)){
+                $goods[$key]['sum'] = $discount->percent?$product->sum - $product->sum*(int)$discount->percent/100:$product->sum;
+            }else{
+                $goods[$key]['sum'] = $product->sum ?? null;
+            }
+            $goods[$key]['price'] = $product->sum;
+            $goods[$key]['discount'] = !empty($product->discount)?$product->discount->percent:null;
+            $goods[$key]['company'] = $product->company ?? null;
+            $goods[$key]['characters'] = $categorizedByColor??[];
+            $goods[$key]['images'] = $images ?? [];
+            $goods[$key]['basket_button'] = false;
+            $goods[$key]['created_at'] = $product->created_at ?? null;
+            $goods[$key]['updated_at'] = $product->updated_at ?? null;
+        }
+        $response = [
+            'status'=>true,
+            'data'=>$goods
+        ];
+        return response()->json($response, 200);
+    }
+
     public function getProduct($id)
     {
         $product = Products::find($id);
