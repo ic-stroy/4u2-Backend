@@ -29,6 +29,10 @@ body {
   height: 8px;
 }
 
+.notify-icon{
+    background-size: cover;
+}
+
 ::-webkit-scrollbar-track {
     border-radius: 10px;
 }
