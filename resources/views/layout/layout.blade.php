@@ -34,6 +34,25 @@
     <!-- icons -->
     <link href="{{ asset('assets/css/icons.min.css') }}" rel="stylesheet" type="text/css" />
 
+    <script src="{{ asset('assets/libs/jquery/jquery.min.js') }}"></script>
+{{--    <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>--}}
+{{--    <script>--}}
+{{--        Pusher.logToConsole = true;--}}
+
+{{--        // in blade.php--}}
+{{--        var pusher = new Pusher('4bf904d1d86b8b8ff046', {--}}
+{{--            cluster: 'ap1'--}}
+{{--        });--}}
+
+{{--        var channel = pusher.subscribe('4u2-channel');--}}
+{{--        channel.bind('4u2-event', function(data) {--}}
+{{--            console.log(data)--}}
+{{--            // alert(JSON.stringify(data))--}}
+{{--            alert('Xurshid kurrani kuti')--}}
+{{--            // toastr.success(data)--}}
+{{--        });--}}
+{{--        // Enable pusher logging - don't include this in production--}}
+{{--    </script>--}}
 </head>
 <style>
 #dropdownMenuButton{
@@ -50,16 +69,18 @@
 <body class="loading" data-layout-color="light" data-layout-mode="default" data-layout-size="fluid" id="body_layout"
     data-topbar-color="light" data-leftbar-position="fixed" data-leftbar-color="light" data-leftbar-size='default'
     data-sidebar-user='true'>
-
     <!-- Begin page -->
     <div id="wrapper">
-
-
         <!-- Topbar Start -->
         <div class="navbar-custom">
                 <ul class="list-unstyled topnav-menu float-end mb-0">
-
                     <li class="d-none d-lg-block">
+{{--                        <form action="{{route('test')}}" method="POST">--}}
+{{--                            @csrf--}}
+{{--                            @method('POST')--}}
+{{--                            <button type="submit">submit</button>--}}
+{{--                        </form>--}}
+
                         <form class="app-search">
                             <div class="app-search-box">
                                 <div class="input-group">
@@ -221,9 +242,7 @@
                                     @if($notification->type == "App\Notifications\OrderNotification")
                                         @if(!empty($notification->data))
                                             <a href="{{route('order.index', 2)}}" class="dropdown-item notify-item">
-                                                <div class="notify-icon">
-                                                    <img src="{{isset($notification->data['product_images'])?$notification->data['product_images']:''}}" class="img-fluid" alt="" />
-                                                </div>
+                                                <div class="notify-icon" style="background-image: url({{isset($notification->data['product_images'])?$notification->data['product_images']:''}})"></div>
                                                 <p class="notify-details">
                                                     @if(isset($notification->data['product_name']))
                                                         {{strlen($notification->data['product_name'])>24?substr($notification->data['product_name'], 0, 24):$notification->data['product_name']}}...  <b>{{$notification->data['order_all_price']}}</b>
@@ -777,7 +796,6 @@
     <div class="rightbar-overlay"></div>
 
     <!-- Vendor -->
-    <script src="{{ asset('assets/libs/jquery/jquery.min.js') }}"></script>
     <script src="{{ asset('assets/libs/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('assets/libs/simplebar/simplebar.min.js') }}"></script>
     <script src="{{ asset('assets/libs/node-waves/waves.min.js') }}"></script>
@@ -1032,6 +1050,69 @@
             }
         });
     </script>
+    @if(isset($ordered_orders) && isset($performed_orders) && isset($cancelled_orders) && isset($accepted_orders))
+        <script>
+            "use strict";
+            let orders_ordered = {name:"{{translate('Ordered orders')}}", count:"{{$ordered_orders}}"}
+            let orders_performed = {name:"{{translate('Orders active')}}", count:"{{$performed_orders}}"}
+            let order_cancelled = {name:"{{translate('Cancelled orders')}}", count:"{{$cancelled_orders}}"}
+            let orders_accepted = {name:"{{translate('Completed orders')}}", count:"{{$accepted_orders}}"}
+            {{--let monthly_orders_count = {!! 74??0 !!}--}}
+            {{--let monthly_offers_count = {!! 12??0 !!}--}}
+            {{--let order_created = "{{translate('Order created')}}"--}}
+            {{--let offer_created = "{{translate('Offer created')}}"--}}
+            const month_names = ["","January","February","March","April","May","June","July",
+                "August","September","October","November","December"];
+            !function(e){
+                function a(){
+                    this.$realData=[]
+                }
+                a.prototype.createBarChart=function(e,a,r,t,o,i){
+                    Morris.Bar({
+                        element:e,data:a,xkey:r,ykeys:t,labels:o,hideHover:"auto",resize:!0,gridLineColor:"rgba(173, 181, 189, 0.1)",barSizeRatio:.2,dataLabels:!1,barColors:i
+                    })
+                },
+                    a.prototype.createDonutChart=function(e,a,r)
+                    {
+                        Morris.Donut({element:e,data:a,resize:!0,colors:r,backgroundColor:"transparent"})
+                    },
+                    a.prototype.init=function(){
+                        e("#morris-bar-example").empty(),
+                            e("#morris-line-example").empty(),
+                            e("#morris-donut-example").empty();
+                        this.createDonutChart(
+                            "morris-donut-example",
+                            [
+                                {label: orders_ordered.name, value: orders_ordered.count},
+                                {label: orders_performed.name, value: orders_performed.count},
+                            ],
+                            ["#FF6C37", "#10C469"]
+                        )
+                        this.createDonutChart(
+                            "morris-donut-example-1",
+                            [
+                                {label: orders_ordered.name, value: orders_ordered.count},
+                                {label: orders_performed.name, value: orders_performed.count},
+                                {label: order_cancelled.name, value: order_cancelled.count},
+                                {label: orders_accepted.name, value: orders_accepted.count}
+                            ],
+                            ["#FF6C37", "#10C469", "#00ADD7", "#FF0000"]
+                        )
+                        this.createDonutChart(
+                            "morris-donut-example-2",
+                            [
+                                {label: order_cancelled.name, value: order_cancelled.count},
+                                {label: orders_accepted.name, value: orders_accepted.count}
+                            ],
+                            ["#00ADD7", "#FF0000"]
+                        )
+                    },
+                    e.Dashboard1=new a,
+                    e.Dashboard1.Constructor=a
+            }(window.jQuery),function(a){a.Dashboard1.init(),window.addEventListener("adminto.setBoxed",function(e){a.Dashboard1.init()}),window.addEventListener("adminto.setFluid",function(e){a.Dashboard1.init()})}(window.jQuery);
+
+        </script>
+    @endif
 </body>
 
 </html>
