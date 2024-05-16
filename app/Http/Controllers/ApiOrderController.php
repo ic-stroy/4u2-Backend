@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Constants;
+use App\Events\PostNotification;
 use App\Models\CharacterizedProducts;
 use App\Models\Coupon;
 use App\Models\Order;
@@ -192,6 +193,7 @@ class ApiOrderController extends Controller
             $order->address_id = $request->address_id;
             $order->receiver_name = $request->first_name;
             $order->phone_number = $request->phone_number;
+            $order->created_at = date('Y-m-d h:i:s');
             $order->save();
 
             $users = User::where('is_admin', Constants::ADMIN)->get();
@@ -206,6 +208,7 @@ class ApiOrderController extends Controller
                 'receiver_name'=>$order->receiver_name,
             ];
             Notification::send($users, new OrderNotification($data));
+//            event(new PostNotification(['user'=>$order->receiver_name, 'sum'=>$all_sum]));
 //                $good = [
 //                    'coupon_price'=>$order_coupon_price,
 //                    'coupon'=>[

@@ -83,5 +83,6 @@ Route::group(['middleware'=>['isAdmin', 'language']], function(){
 });
 
 Route::get('/welcome', [App\Http\Controllers\HomeController::class, 'welcome'])->name('welcome');
+Route::post('/test', [App\Http\Controllers\HomeController::class, 'test'])->name('test');
 
 

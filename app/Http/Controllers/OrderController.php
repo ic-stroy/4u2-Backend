@@ -44,7 +44,6 @@ class OrderController extends Controller
 //        $not_read_order_quantity = OrderDetail::where('order_id', $id)->where('is_read', 0)->count();
             $products = [];
             $performed_product_types = 0;
-            $product_quantity = 0;
             $company_product_price = 0;
             $performed_company_product_price = 0;
             $company_discount_price = 0;
@@ -62,7 +61,6 @@ class OrderController extends Controller
                 if($order_detail->status == Constants::ORDER_DETAIL_ORDERED){
                     $order_detail_is_ordered = true;
                 }
-                $product_quantity = $product_quantity + $order_detail->quantity;
 
                 $discount_withouth_expire = 0;
                 $images = [];
@@ -126,7 +124,6 @@ class OrderController extends Controller
                     'user_name'=>$user_name,
                     'order_detail_is_ordered'=>$order_detail_is_ordered,
                     'performed_product_types'=>$performed_product_types,
-                    'product_quantity'=>$product_quantity,
                     'products'=>$products,
                     'company_product_price'=>$company_product_price - $order_coupon_price,
                     'order_coupon_price'=>$order_coupon_price,
