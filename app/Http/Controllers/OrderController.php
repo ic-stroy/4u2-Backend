@@ -3,12 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Constants;
+use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\OrderDetail;
-use App\Models\Uploads;
 use App\Models\User;
-use App\Models\Warehouse;
+use Illuminate\Http\Request;
 use App\Notifications\OrderNotification;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -151,6 +151,20 @@ class OrderController extends Controller
             }
         }
         return $order_data;
+    }
+
+    public function address(Request $request){
+        if($request->latitude){
+            $latitude = $request->latitude;
+        }else{
+            $latitude = '';
+        }
+        if($request->longitude){
+            $longitude = $request->longitude;
+        }else{
+            $longitude = '';
+        }
+        return view('order.address', ['latitude'=>$latitude, 'longitude'=>$longitude]);
     }
 
     public function category(){

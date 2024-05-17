@@ -96,6 +96,17 @@
         .hr_no_margin{
             margin: 0px !important;
         }
+        .address_modal_link{
+            transition:0.4s;
+            border:0px;
+            border-radius: 4px;
+            font-size: 20px;
+            color: red;
+        }
+        .address_modal_link:hover{
+            transform:scale(1.24);
+            background-color:lightblue;
+        }
     </style>
     @if(!empty($all_orders['orderedOrders']) || !empty($all_orders['performedOrders']) || !empty($all_orders['cancelledOrders']) || !empty($all_orders['acceptedByRecipientOrders']))
         <div id="success-alert-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
@@ -333,7 +344,7 @@
                                     <tr>
                                         <th class="d-flex justify-content-between width_auto">
                                             <h4 class="mt-0 header-title">{{translate('Cancelled orders list')}}</h4>
-                                            @if(count($all_orders['cancelledOrders'])>0)
+                                            @if(count($all_orders['cancelledOrders'])>100)
                                                 <a href="{{route('order.finished_all_orders')}}">{{translate('All cancelled orders')}}</a>
                                             @endif
                                         </th>
@@ -397,18 +408,24 @@
                                                                                 <span style="font-size:12px; opacity:0.54">{{$order['order']->created_at}}</span>
                                                                             </span>
                                                                             @if(!empty($order['order']->address))
-                                                                                <span style="font-size:12px; opacity: 0.84">{{translate('Address')}}
-                                                                                    <span style="font-size:12px; opacity: 0.64">
-                                                                                        @if(!empty($order['order']->address->cities))
-                                                                                            @if(!empty($order['order']->address->cities->region))
-                                                                                                {{$order['order']->address->cities->region->name}}
+                                                                                <form action="{{route('order.address')}}" method="POST">
+                                                                                    @csrf
+                                                                                    @method('POST')
+                                                                                    <input type="hidden" name="latitude" value="{{$order['order']->address->latitude}}">
+                                                                                    <input type="hidden" name="longitude" value="{{$order['order']->address->longitude}}">
+                                                                                    <span style="font-size:12px; opacity: 0.84">{{translate('Address')}}
+                                                                                        <span style="font-size:12px; opacity: 0.64">
+                                                                                            @if(!empty($order['order']->address->cities))
+                                                                                                @if(!empty($order['order']->address->cities->region))
+                                                                                                    {{$order['order']->address->cities->region->name}}
+                                                                                                @endif
+                                                                                                {{$order['order']->address->cities->name}}
                                                                                             @endif
-                                                                                            {{$order['order']->address->cities->name}}
-                                                                                        @endif
-                                                                                        {{$order['order']->address->name}}
+                                                                                            {{$order['order']->address->name}}
+                                                                                        </span>
+                                                                                        <button type="submit" class="address_modal_link"><i class="mdi mdi-map-marker-outline"></i></button>
                                                                                     </span>
-                                                                                    <i class="mdi mdi-map-marker-outline"></i>
-                                                                                </span>
+                                                                                </form>
                                                                             @endif
                                                                         @endif
                                                                         @if($order['performed_company_product_price'] != 0)
@@ -706,5 +723,32 @@
                 toastr.success(performed_status)
             });
         }
+    </script>
+    <script src="https://api-maps.yandex.ru/2.1/?apikey=ваш API-ключ&lang=ru_RU"></script>
+    <script>
+        function select_latitude_longitude(latitude, longitude){
+            let center = [latitude, longitude]
+            function init() {
+                let map = new ymaps.Map('map', {
+                    center: center,
+                    zoom: 17
+                });
+
+                let placemark = new ymaps.Placemark(center, {}, {});
+
+                map.controls.remove('geolocationControl'); // удаляем геолокацию
+                map.controls.remove('searchControl'); // удаляем поиск
+                map.controls.remove('trafficControl'); // удаляем контроль трафика
+                // map.controls.remove('typeSelector'); // удаляем тип
+                map.controls.remove('fullscreenControl'); // удаляем кнопку перехода в полноэкранный режим
+                map.controls.remove('zoomControl'); // удаляем контрол зуммирования
+                map.controls.remove('rulerControl'); // удаляем контрол правил
+                // map.behaviors.disable(['scrollZoom']); // отключаем скролл карты (опционально)
+
+                map.geoObjects.add(placemark);
+            }
+            ymaps.ready(init);
+        }
+
     </script>
 @endsection
