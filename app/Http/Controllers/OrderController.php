@@ -18,10 +18,10 @@ class OrderController extends Controller
 {
     public function index(){
         $user = Auth::user();
-        $orderedOrders_ = Order::where('status', Constants::ORDERED)->get();
-        $performedOrders_ = Order::where('status', Constants::PERFORMED)->get();
-        $cancelledOrders_ = Order::where('status', Constants::CANCELLED)->get();
-        $acceptedByRecipientOrders_ = Order::where('status', Constants::ACCEPTED_BY_RECIPIENT)->get();
+        $orderedOrders_ = Order::where('status', Constants::ORDERED)->orderBy('updated_at', 'desc')->get();
+        $performedOrders_ = Order::where('status', Constants::PERFORMED)->orderBy('updated_at', 'desc')->get();
+        $cancelledOrders_ = Order::where('status', Constants::CANCELLED)->orderBy('updated_at', 'desc')->limit(101)->get();
+        $acceptedByRecipientOrders_ = Order::where('status', Constants::ACCEPTED_BY_RECIPIENT)->orderBy('updated_at', 'desc')->limit(101)->get();
         $orderedOrders = $this->getOrders($orderedOrders_);
         $performedOrders = $this->getOrders($performedOrders_);
         $cancelledOrders = $this->getOrders($cancelledOrders_);
@@ -33,6 +33,22 @@ class OrderController extends Controller
             'acceptedByRecipientOrders'=>$acceptedByRecipientOrders,
         ];
         return view('order.index', [
+            'all_orders'=>$all_orders,
+            'user'=>$user
+        ]);
+    }
+
+    public function finishedAllOrders(){
+        $user = Auth::user();
+        $cancelledOrders_ = Order::where('status', Constants::CANCELLED)->orderBy('updated_at', 'desc')->get();
+        $acceptedByRecipientOrders_ = Order::where('status', Constants::ACCEPTED_BY_RECIPIENT)->orderBy('updated_at', 'desc')->get();
+        $acceptedByRecipientOrders = $this->getOrders($acceptedByRecipientOrders_);
+        $cancelledOrders = $this->getOrders($cancelledOrders_);
+        $all_orders = [
+            'cancelledOrders'=>$cancelledOrders,
+            'acceptedByRecipientOrders'=>$acceptedByRecipientOrders,
+        ];
+        return view('order.finished_all_orders', [
             'all_orders'=>$all_orders,
             'user'=>$user
         ]);

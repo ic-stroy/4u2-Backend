@@ -8,9 +8,10 @@ let carousel_product_images = document.getElementById('carousel_product_images')
 let carousel_product_upload_images = document.getElementById('carousel_product_upload_images')
 let product_image = document.getElementById('product_image')
 let cancell_order = document.getElementById('cancell_order')
-let perform_order = document.getElementById('perform_order')
+let perform_order = document.getElementById('perform_order_')
 let accepted_by_recipient_order = document.getElementById('accepted_by_recipient_order')
 let cancell_accepted_by_recipient_order = document.getElementById('cancell_accepted_by_recipient_order')
+let perform_order_button = document.getElementById('perform_order_button')
 
 function accepting_order(quantity, remaining_quantity_, color_name, size_name, product_name_, image, image_1, url){
     product_name.innerHTML = ""
@@ -28,8 +29,12 @@ function accepting_order(quantity, remaining_quantity_, color_name, size_name, p
     if(color_name != ""){
         order_color.innerHTML = "<span>"+order_color_text+" <b>"+color_name+"</b></span>"
     }
-    if(remaining_quantity_ != ""){
+    if(remaining_quantity_ != "" && parseInt(remaining_quantity_) > 0){
         remaining_quantity.innerHTML = "<span>"+remaining_in_warehouse_text+" <b>"+remaining_quantity_+"</b></span>"
+        perform_order_button.disabled = false
+    }else{
+        remaining_quantity.innerHTML = "<span>"+remaining_in_warehouse_text+" <span class='badge badge-outline-warning'>"+out_of_stock_text+"</span>";
+        perform_order_button.disabled = true
     }
     if(quantity != ""){
         order_quantity.innerHTML = "<span>"+order_quantity_text+" <b>"+quantity+"</b></span>"

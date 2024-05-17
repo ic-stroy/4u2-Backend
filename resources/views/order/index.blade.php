@@ -122,7 +122,7 @@
                                 @csrf
                                 @method('POST')
                                 <button type="button" class="btn btn-danger my-2" data-bs-dismiss="modal"> {{ translate('No')}}</button>
-                                <button type="submit" class="btn btn-success my-2"> {{ translate('Yes')}} </button>
+                                <button type="submit" class="btn btn-success my-2" id="perform_order_button"> {{ translate('Yes')}} </button>
                             </form>
                         </div>
                     </div>
@@ -333,8 +333,8 @@
                                     <tr>
                                         <th class="d-flex justify-content-between width_auto">
                                             <h4 class="mt-0 header-title">{{translate('Cancelled orders list')}}</h4>
-                                            @if(count($all_orders['cancelledOrders'])>100)
-                                                <a href="{{route('company_order.finished_all_orders')}}">{{translate('All cancelled orders')}}</a>
+                                            @if(count($all_orders['cancelledOrders'])>0)
+                                                <a href="{{route('order.finished_all_orders')}}">{{translate('All cancelled orders')}}</a>
                                             @endif
                                         </th>
                                     </tr>
@@ -348,7 +348,7 @@
                                         <th class="d-flex justify-content-between width_auto">
                                             <h4 class="mt-0 header-title">{{translate('Accepted recepient orders list')}}</h4>
                                             @if(count($all_orders['acceptedByRecipientOrders'])>100)
-                                                <a href="{{route('company_order.finished_all_orders')}}">{{translate('All cancelled orders')}}</a>
+                                                <a href="{{route('order.finished_all_orders')}}">{{translate('All cancelled orders')}}</a>
                                             @endif
                                         </th>
                                     </tr>
@@ -477,7 +477,7 @@
                                                                         </span>
                                                                     </div>
                                                                 </div>
-                                                            </a>
+                                                            </span>
                                                         </span>
                                                     </div>
                                                     <div id="collapseNine{{$i}}" class="collapse fade"
@@ -692,6 +692,7 @@
         let order_color_text = "{{translate('Order color')}}"
         let order_quantity_text = "{{translate('Order quantity')}}"
         let remaining_in_warehouse_text = "{{translate('Remaining in warehouse')}}"
+        let out_of_stock_text = "{{translate('Out of stock')}}"
 
         let error_status = "{{session('error')}}"
         let performed_status = "{{session('performed')}}"
