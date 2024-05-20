@@ -112,6 +112,13 @@ class ApiOrderController extends Controller
             $all_discount_price = 0;
             $categorizedProductAllPrice = 0;
             $order_count = Order::where('user_id', $user->id)->count();
+            if (OrderDetail::hasColumn('discount')) {
+                // The column exists in the table
+                return response()->json("Column exists!");
+            } else {
+                // The column does not exist in the table
+                return response()->json("Column does not exist.");
+            }
             foreach($products as $product_data){
                 $order_detail = new OrderDetail();
                 $categorizedProductPrice = 0;
