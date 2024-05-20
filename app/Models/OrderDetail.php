@@ -38,4 +38,14 @@ class OrderDetail extends Model
         return $this->hasOne(CharacterizedProducts::class, 'id', 'warehouse_id');
     }
 
+    public function product(){
+        return $this->hasOne(Products::class, 'id', 'product_id');
+    }
+    public function size(){
+        return $this->hasOne(Sizes::class, 'id', 'size_id');
+    }
+    public function color(){
+        return $this->hasOne(Color::class, 'id', 'color_id');
+    }
+
 }
