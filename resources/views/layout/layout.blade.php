@@ -266,7 +266,7 @@
                                 @endforelse
                             </div>
                             <!-- All-->
-                            <a href="javascript:void(0);"
+                            <a href="{{route('order.index', 2)}}" 
                                class="dropdown-item text-center text-primary notify-item notify-all">
                                 {{ translate('View all')}}
                                 <i class="fe-arrow-right"></i>

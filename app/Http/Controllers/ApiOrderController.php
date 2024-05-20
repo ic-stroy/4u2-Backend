@@ -108,7 +108,6 @@ class ApiOrderController extends Controller
             $user = Auth::user();
             $data = [];
             $products = $request->selected_products;
-//            return response()->json($products);
             $order_coupon_price = 0;
             $all_discount_price = 0;
             $categorizedProductAllPrice = 0;

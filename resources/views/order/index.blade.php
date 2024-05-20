@@ -28,6 +28,7 @@
         .order_content{
             display: flex;
             flex-direction: column;
+            text-align: start;
         }
         .white_text{
             color:white
