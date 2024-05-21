@@ -24,10 +24,10 @@
                         <div>
                             <h1>{{$ordered_orders}}</h1>
                         </div>
-                        <div>
-                            <span>{{translate('Active')}}: 14</span> <br>
-                            <span>{{translate('Not active')}}: 24</span>
-                        </div>
+{{--                        <div>--}}
+{{--                            <span>{{translate('Active')}}: 14</span> <br>--}}
+{{--                            <span>{{translate('Not active')}}: 24</span>--}}
+{{--                        </div>--}}
                     </div>
                 </div>
             </div><!-- end col -->
@@ -39,10 +39,10 @@
                         <div>
                             <h1>{{$performed_orders}}</h1>
                         </div>
-                        <div>
-                            <span>{{translate('Active')}}: 14</span> <br>
-                            <span>{{translate('Not active')}}: 24</span>
-                        </div>
+{{--                        <div>--}}
+{{--                            <span>{{translate('Active')}}: 14</span> <br>--}}
+{{--                            <span>{{translate('Not active')}}: 24</span>--}}
+{{--                        </div>--}}
                     </div>
                 </div>
             </div><!-- end col -->
@@ -55,10 +55,10 @@
                         <div>
                             <h1>{{$cancelled_orders}}</h1>
                         </div>
-                        <div>
-                            <span>{{translate('Active')}}: 14</span> <br>
-                            <span>{{translate('Not active')}}: 24</span>
-                        </div>
+{{--                        <div>--}}
+{{--                            <span>{{translate('Active')}}: 14</span> <br>--}}
+{{--                            <span>{{translate('Not active')}}: 24</span>--}}
+{{--                        </div>--}}
                     </div>
                 </div>
             </div><!-- end col -->
@@ -70,10 +70,10 @@
                         <div>
                             <h1>{{$accepted_orders}}</h1>
                         </div>
-                        <div>
-                            <span>{{translate('Active')}}: 14</span> <br>
-                            <span>{{translate('Not active')}}: 24</span>
-                        </div>
+{{--                        <div>--}}
+{{--                            <span>{{translate('Active')}}: 14</span> <br>--}}
+{{--                            <span>{{translate('Not active')}}: 24</span>--}}
+{{--                        </div>--}}
                     </div>
                 </div>
 

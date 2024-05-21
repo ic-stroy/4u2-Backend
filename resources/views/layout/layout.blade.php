@@ -1096,7 +1096,7 @@
                                 {label: order_cancelled.name, value: order_cancelled.count},
                                 {label: orders_accepted.name, value: orders_accepted.count}
                             ],
-                            ["#FF6C37", "#10C469", "#00ADD7", "#FF0000"]
+                            ["#FF6C37", "#10C469", "#FF0000", "#00ADD7"]
                         )
                         this.createDonutChart(
                             "morris-donut-example-2",
@@ -1104,7 +1104,7 @@
                                 {label: order_cancelled.name, value: order_cancelled.count},
                                 {label: orders_accepted.name, value: orders_accepted.count}
                             ],
-                            ["#00ADD7", "#FF0000"]
+                            ["#FF0000", "#00ADD7"]
                         )
                     },
                     e.Dashboard1=new a,
