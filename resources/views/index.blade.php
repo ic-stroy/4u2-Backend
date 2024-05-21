@@ -14,6 +14,9 @@
         .stuffs_menu{
             height: 150px;
         }
+        .col-xl-4 .card{
+            height: 100%;
+        }
     </style>
     <div class="container-fluid">
         <div class="row" style="margin-bottom: 26px">
@@ -95,15 +98,15 @@
                                 <li class="list-inline-item">
                                     <h5 style="color: #10C469;"><i class="fa fa-circle me-1"></i>{{translate('Orders active')}}</h5>
                                 </li>
-                            </ul>
-                            <ul class="list-inline chart-detail-list mb-0">
-                                <li class="list-inline-item">
-                                    <h5 style="color: #00ADD7;"><i class="fa fa-circle me-1"></i>{{translate('Completed orders')}}</h5>
-                                </li>
-                                <li class="list-inline-item">
-                                    <h5 style="color: #FF0000;"><i class="fa fa-circle me-1"></i>{{translate('Cancelled orders')}}</h5>
-                                </li>
-                            </ul>
+{{--                            </ul>--}}
+{{--                            <ul class="list-inline chart-detail-list mb-0">--}}
+{{--                                <li class="list-inline-item">--}}
+{{--                                    <h5 style="color: #00ADD7;"><i class="fa fa-circle me-1"></i>{{translate('Completed orders')}}</h5>--}}
+{{--                                </li>--}}
+{{--                                <li class="list-inline-item">--}}
+{{--                                    <h5 style="color: #FF0000;"><i class="fa fa-circle me-1"></i>{{translate('Cancelled orders')}}</h5>--}}
+{{--                                </li>--}}
+{{--                            </ul>--}}
                         </div>
                     </div>
                 </div>
@@ -142,14 +145,14 @@
                         <h4 class="header-title mt-0">{{translate('Orders by status')}}</h4>
                         <div class="widget-chart text-center">
                             <div id="morris-donut-example-2" dir="ltr" style="height: 245px;" class="morris-chart"></div>
-                            <ul class="list-inline chart-detail-list mb-0">
-                                <li class="list-inline-item">
-                                    <h5 style="color: #FF6C37;"><i class="fa fa-circle me-1"></i>{{translate('Offers on hold')}}</h5>
-                                </li>
-                                <li class="list-inline-item">
-                                    <h5 style="color: #10C469;"><i class="fa fa-circle me-1"></i>{{translate('Orders active')}}</h5>
-                                </li>
-                            </ul>
+{{--                            <ul class="list-inline chart-detail-list mb-0">--}}
+{{--                                <li class="list-inline-item">--}}
+{{--                                    <h5 style="color: #FF6C37;"><i class="fa fa-circle me-1"></i>{{translate('Offers on hold')}}</h5>--}}
+{{--                                </li>--}}
+{{--                                <li class="list-inline-item">--}}
+{{--                                    <h5 style="color: #10C469;"><i class="fa fa-circle me-1"></i>{{translate('Orders active')}}</h5>--}}
+{{--                                </li>--}}
+{{--                            </ul>--}}
                             <ul class="list-inline chart-detail-list mb-0">
                                 <li class="list-inline-item">
                                     <h5 style="color: #00ADD7;"><i class="fa fa-circle me-1"></i>{{translate('Completed orders')}}</h5>
