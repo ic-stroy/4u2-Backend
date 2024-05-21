@@ -29,6 +29,10 @@
             display: flex;
             flex-direction: column;
             text-align: start;
+            color:#98A6AD;
+        }
+        .color_order{
+            color:#98A6AD;
         }
         .white_text{
             color:white
@@ -398,7 +402,7 @@
                                                                 <b style="line-height: 2; font-size: 16px; color: red">{{translate('You cancelled all products !')}}</b>
                                                             @endif
                                                         </div>
-                                                        <div class="col-4 d-flex justify-content-between">
+                                                        <div class="col-4 d-flex justify-content-between color_order">
                                                             @if($order['order']->status)
                                                                 @switch($order['order']->status)
                                                                     @case(\App\Constants::ORDERED)
