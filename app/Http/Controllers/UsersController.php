@@ -279,4 +279,17 @@ class UsersController extends Controller
         $user->avatar = $image_name;
         return $user;
     }
+
+    public function deleteUserImage(){
+        $user = Auth::user();
+        if(isset($user->avatar)){
+            $sms_avatar = storage_path('app/public/user/' . $user->avatar);
+        }else{
+            $sms_avatar = storage_path('app/public/user/' . 'no');
+        }
+        if (file_exists($sms_avatar)) {
+            unlink($sms_avatar);
+        }
+        return $this->success('Success', 200, []);
+    }
 }

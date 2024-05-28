@@ -393,7 +393,7 @@ class ProductsController extends Controller
 
     public function getProducts()
     {
-        $products = Products::take(10)->get();
+        $products = Products::all();
         $goods = [];
         foreach ($products as $key => $product) {
             $discount = $product->discount;
@@ -451,6 +451,9 @@ class ProductsController extends Controller
             $goods[$key]['created_at'] = $product->created_at ?? null;
             $goods[$key]['updated_at'] = $product->updated_at ?? null;
         }
+
+//        $goods = array_merge($goods,$goods,$goods,$goods,$goods,$goods,$goods,$goods,$goods,$goods);
+
         $response = [
             'status'=>true,
             'data'=>$goods
@@ -615,6 +618,7 @@ class ProductsController extends Controller
             $good['created_at'] = $product->created_at ?? null;
             $good['updated_at'] = $product->updated_at ?? null;
         }
+
         $response = [
             'status'=>true,
             'data'=>$good
@@ -710,6 +714,7 @@ class ProductsController extends Controller
                     }
                 }
             }
+
             $response = [
                 'status'=>true,
                 'coupon_price'=>$order_coupon_price,

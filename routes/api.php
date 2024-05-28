@@ -42,7 +42,6 @@ Route::get('product/{id}', [\App\Http\Controllers\ProductsController::class, 'ge
 Route::get('best-seller', [\App\Http\Controllers\ProductsController::class, 'BestSeller']);
 Route::post('get-favourite-products', [\App\Http\Controllers\ProductsController::class, 'getFavouriteProducts']);
 Route::group(['middleware'=>['auth:sanctum', 'is_auth']], function (){
-
     Route::post('store-card', [CardController::class, 'storeCard']);
     Route::post('set-address', [AddressController::class, 'setAddress']);
     Route::post('edit-address', [AddressController::class, 'editAddress']);
@@ -61,6 +60,7 @@ Route::group(['middleware'=>['auth:sanctum', 'is_auth']], function (){
     Route::get('get-user', [AuthController::class, 'getUser']);
     Route::post('personal-information', [UsersController::class, 'setPersonalInformation']);
     Route::get('personal-information', [UsersController::class, 'getPersonalInformation']);
+    Route::get('delete-user-image', [UsersController::class, 'deleteUserImage']);
 });
 Route::post('delete-product', [\App\Http\Controllers\ProductsController::class, 'deleteProductImage']);
 Route::post('delete-warehouse', [\App\Http\Controllers\CharacterizedProductsController::class, 'deleteWarehouseImage']);
