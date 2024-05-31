@@ -911,6 +911,7 @@ class ProductsController extends Controller
             $category_ids = $this->getCategoriesId($category);
             $products = Products::select('id', 'name', 'category_id', 'images', 'sum', 'description')->whereIn('category_id', $category_ids)->get();
             foreach ($products as $product){
+                $discount = $product->discount;
                 $images = [];
                 if(is_array($product->images)){
                     foreach ($product->images as $image){
@@ -921,12 +922,18 @@ class ProductsController extends Controller
                         $images[] = asset('storage/products/'.$image);
                     }
                 }
+                if(!empty($discount)){
+                    $product_price = $discount->percent?$product->sum - $product->sum*(int)$discount->percent/100:$product->sum;
+                }else{
+                    $product_price = $product->sum ?? null;
+                }
                 $all_products[] = [
                   'id'=>$product->id,
                   'name'=>$product->name,
                   'category_id'=>$product->category_id,
                   'images'=>$images,
-                  'sum'=>$product->sum,
+                  'sum'=>$product_price,
+                  'price'=>$product->sum,
                   'description'=>$product->description,
                   'basket_button'=>false
                 ];
