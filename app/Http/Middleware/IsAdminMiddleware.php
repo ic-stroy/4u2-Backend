@@ -17,9 +17,15 @@ class IsAdminMiddleware
     public function handle(Request $request, Closure $next): Response
     {
         $user = Auth::user();
-        if(isset($user->id) && $user->is_admin == 1){
-            return $next($request);
+        if(isset($user)){
+            if($user->is_admin == 1){
+                return $next($request);
+            }else{
+                auth()->logout();
+                return redirect()->route('login');
+            }
         }else{
+            auth()->logout();
             return redirect()->route('login');
         }
     }

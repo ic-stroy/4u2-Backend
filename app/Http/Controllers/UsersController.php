@@ -233,10 +233,9 @@ class UsersController extends Controller
     public function getUser(){
         $model = Auth::user();
         $year_old = 0;
-        if(isset($model->personalInfo->birth_date)){
-            $birth_date_array = explode(' ', $model->personalInfo->birth_date);
+        if(isset($model->birth_date)){
             $now_time = strtotime('now');
-            $birth_time = strtotime($birth_date_array[0]);
+            $birth_time = strtotime($model->birth_date);
             $month = date('m', ($now_time));
             $day = date('d', ($now_time));
             $birth_month = date('m', ($birth_time));

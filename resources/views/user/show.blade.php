@@ -16,31 +16,14 @@
                         <div>
                             @if(isset($model))
                                 @php
-                                    $sms_avatar = storage_path('app/public/user/'.$model->avatar??'no');
+                                if($model->avatar){
+                                    $sms_avatar = storage_path('app/public/user/'.$model->avatar);
+                                }else{
+                                    $sms_avatar = storage_path('app/public/user/no');
+                                }
                                 @endphp
                                 @php
-                                if(isset($model->birth_date)){
-                                    $birth_date_array = explode(' ', $model->birth_date);
-                                    $now_time = strtotime('now');
-                                    $birth_time = strtotime($model->birth_date);
-                                    $month = date('m', ($now_time));
-                                    $day = date('d', ($now_time));
-                                    $birth_month = date('m', ($birth_time));
-                                    $birth_date = date('d', ($birth_time));
-                                    $year = date('Y', ($now_time));
-                                    $birth_year = date('Y', ($birth_time));
-                                    $year_old = 0;
-                                    if($year > $birth_year){
-                                        $year_old = $year - $birth_year - 1;
-                                        if($month > $birth_month){
-                                            $year_old = $year_old +1;
-                                        }elseif($month == $birth_month){
-                                            if($day >= $birth_date){
-                                                $year_old = $year_old +1;
-                                            }
-                                        }
-                                    }
-                                }
+
                                 @endphp
                                 @if(file_exists($sms_avatar))
                                     <img class="user_photo_2" src="{{asset('storage/user/'.$model->avatar)}}" alt="">
@@ -53,7 +36,11 @@
                             <h3 >@if(isset($model)){{$model->first_name.' '.$model->last_name.' '.$model->middle_name}}@endif</h3>
                             <p>{{translate('Role').': '}}<b>{{$model->is_admin == 1?'Admin':'User' }}</b></p>
                             <p>{{translate('Phone').': '}}<b>@if(isset($model)){{$model->phone_number??''}}@endif</b></p>
+                            @if($year_old>0)
                             <p>{{translate('Age').': '}}<b>{{$year_old??''}}</b></p>
+                            @else
+                                <div class="mt-4"></div>
+                            @endif
                         </div>
                     </div>
 
