@@ -478,7 +478,7 @@
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="{{ route('subcategory.category') }}">
+                                        <a href="{{ route('subcategory.index') }}">
                                             <i class="mdi mdi-format-list-bulleted"></i>
                                             <span> {{ translate('Sub Category') }} </span>
                                         </a>
@@ -996,6 +996,10 @@
             if(sessionSuccess){
                 toastr.success(sessionSuccess)
             }
+            let sessionError ="{{session('error')}}";
+            if(sessionError){
+                toastr.warning(sessionError)
+            }
             let uz = `{{ asset('/assets/images/language/region.png') }}`
             let ru = `{{ asset('/assets/images/language/RU.png') }}`
             let en = `{{ asset('/assets/images/language/GB.png') }}`
@@ -1053,8 +1057,8 @@
     @if(isset($ordered_orders) && isset($performed_orders) && isset($cancelled_orders) && isset($accepted_orders))
         <script>
             "use strict";
-            let orders_ordered = {name:"{{translate('Ordered orders')}}", count:"{{$ordered_orders}}"}
-            let orders_performed = {name:"{{translate('Orders active')}}", count:"{{$performed_orders}}"}
+            let orders_ordered = {name:"{{translate('Orders active')}}", count:"{{$ordered_orders}}"}
+            let orders_performed = {name:"{{translate('Orders performed')}}", count:"{{$performed_orders}}"}
             let order_cancelled = {name:"{{translate('Cancelled orders')}}", count:"{{$cancelled_orders}}"}
             let orders_accepted = {name:"{{translate('Completed orders')}}", count:"{{$accepted_orders}}"}
             {{--let monthly_orders_count = {!! 74??0 !!}--}}

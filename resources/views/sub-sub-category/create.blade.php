@@ -29,7 +29,7 @@
                 <div class="row">
                     <div class="mb-3 col-6">
                         <label class="form-label">{{translate('Category')}}</label>
-                        <select id="category_id" class="form-control" required>
+                        <select id="category_id" name="category_id" class="form-control" required>
                             <option value="" selected disabled>{{translate('Select category')}}</option>
                             @foreach($categories as $category)
                                 <option value="{{$category->id}}">{{$category->name}}</option>

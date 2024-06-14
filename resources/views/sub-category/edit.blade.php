@@ -24,11 +24,7 @@
                 <div class="row">
                     <div class="mb-3 col-6">
                         <label class="form-label">{{translate('Name')}}</label>
-                        <select name="name" class="form-control" required>
-                            @foreach($types_sex as $type_sex)
-                                <option value="{{$type_sex}}" {{$type_sex == $subcategory->name?'selected':''}}>{{$type_sex}}</option>
-                            @endforeach
-                        </select>
+                        <input type="text" name="name" class="form-control" value="{{$subcategory->name}}" required>
                     </div>
                     <div class="mb-3 col-6">
                         <label class="form-label">{{translate('Category')}}</label>

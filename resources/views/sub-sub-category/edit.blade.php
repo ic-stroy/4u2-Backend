@@ -28,8 +28,8 @@
                 @method("PUT")
                 <div class="row">
                     <div class="mb-3 col-6">
-                        <label class="form-label">{{translate('Sub Category')}}</label>
-                        <select id="category_id" class="form-control" required>
+                        <label class="form-label">{{translate('Category')}}</label>
+                        <select id="category_id" name="category_id" class="form-control" required>
                             <option value="" selected disabled>{{translate('Select category')}}</option>
                             @foreach($categories as $category)
                                 <option @if(isset($subsubcategory->sub_category->category)){{$subsubcategory->sub_category->category->id == $category->id?'selected':''}}@endif value="{{$category->id}}">{{$category->name}}</option>
@@ -76,7 +76,6 @@
                     url:`/../api/subcategory/${category_id.value}`,
                     type:'GET',
                     success: function (data) {
-                        console.log(data)
                         if(data.status == true){
                             if(subcategory_exists.classList.contains('display-none')){
                                 subcategory_exists.classList.remove('display-none')

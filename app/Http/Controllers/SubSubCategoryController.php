@@ -44,7 +44,7 @@ class SubSubCategoryController extends Controller
         $model->step = 2;
         $model->save();
 
-        return redirect()->route('subsubcategory.subsubcategory', $request->subcategory_id)->with('status', translate('Successfully created'));
+        return redirect()->route('subsubcategory.subcategory', $request->category_id)->with('status', translate('Successfully created'));
     }
 
     /**
@@ -80,7 +80,7 @@ class SubSubCategoryController extends Controller
         $model->parent_id = $request->subcategory_id;
         $model->step = 2;
         $model->save();
-        return redirect()->route('subsubcategory.subsubcategory', $request->subcategory_id)->with('status', translate('Successfully updated'));
+        return redirect()->route('subsubcategory.subcategory', $request->category_id)->with('status', translate('Successfully updated'));
     }
 
     /**
@@ -90,7 +90,7 @@ class SubSubCategoryController extends Controller
     {
         $model = Category::where('step', 2)->find($id);
         $model->delete();
-        return redirect()->route('subsubcategory.subsubcategory', $id)->with('status', translate('Successfully deleted'));
+        return redirect()->route('subsubcategory.subcategory', $id)->with('status', translate('Successfully deleted'));
     }
 
     public function category()
@@ -101,8 +101,23 @@ class SubSubCategoryController extends Controller
 
     public function subcategory($id)
     {
-        $SubCategory = Category::where('parent_id', $id)->orderBy('created_at', 'desc')->get();
-        return view('sub-sub-category.subcategory', ['subcategories'=>$SubCategory]);
+        $subcategories = Category::where('parent_id', $id)->orderBy('created_at', 'desc')->get();
+
+
+//        $categories = Category::where('step', 0)->get();
+        $all_sub_sub_categories = [];
+        foreach($subcategories as $subcategory){
+            $sub_sub_categories = $subcategory->subsubcategory_;
+            if(!empty($sub_sub_categories)){
+                $all_sub_sub_categories[$subcategory->id] = $sub_sub_categories;
+            }else{
+                $all_sub_sub_categories[$subcategory->id] = [];
+
+            }
+        }
+
+
+        return view('sub-sub-category.subcategory', ['subcategories'=>$subcategories, 'all_sub_sub_categories'=>$all_sub_sub_categories]);
     }
 
     public function subsubcategory($id)

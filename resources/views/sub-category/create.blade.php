@@ -23,15 +23,11 @@
                 @method("POST")
                 <div class="row">
                     <div class="mb-3 col-6">
-                        <label class="form-label">{{translate('Select sex type')}}</label>
-                        <select name="name" class="form-control" required>
-                            @foreach($types_sex as $type_sex)
-                                <option value="{{$type_sex}}">{{$type_sex}}</option>
-                            @endforeach
-                        </select>
+                        <label class="form-label">{{translate('Name')}}</label>
+                        <input type="text" name="name" class="form-control" required>
                     </div>
                     <div class="mb-3 col-6">
-                        <label class="form-label">{{translate('category')}}</label>
+                        <label class="form-label">{{translate('Category')}}</label>
                         <select name="category_id" class="form-control" required>
                             @foreach($categories as $category)
                                 <option value="{{$category->id}}">{{$category->name}}</option>

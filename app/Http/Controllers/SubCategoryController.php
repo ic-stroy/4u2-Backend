@@ -8,16 +8,23 @@ use Illuminate\Http\Request;
 
 class SubCategoryController extends Controller
 {
-    public $types_sex = [
-        'No sex type', 'Unisex', 'Men', 'Women', 'Boys and girls', 'Boys', 'Girls'
-    ];
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $SubCategory = Category::where('step', 1)->orderBy('created_at', 'desc')->get();
-        return view('sub-category.index', ['subcategories'=> $SubCategory]);
+        $categories = Category::where('step', 0)->get();
+        $all_categories = [];
+        foreach($categories as $category){
+            $sub_categories = $category->subcategory;
+            if(!empty($sub_categories)){
+                $all_categories[$category->id] = $sub_categories;
+            }else{
+                $all_categories[$category->id] = [];
+
+            }
+        }
+        return view('sub-category.index', ['all_categories'=> $all_categories, 'categories'=>$categories]);
     }
 
     /**
@@ -26,7 +33,7 @@ class SubCategoryController extends Controller
     public function create()
     {
         $categories = Category::where('step', 0)->get();
-        return view('sub-category.create', ['categories'=>$categories, 'types_sex'=>$this->types_sex]);
+        return view('sub-category.create', ['categories'=>$categories]);
     }
 
     /**
@@ -39,7 +46,7 @@ class SubCategoryController extends Controller
         $model->parent_id = $request->category_id;
         $model->step = 1;
         $model->save();
-        return redirect()->route('subcategory.subcategory', $request->category_id)->with('status', translate('Successfully created'));
+        return redirect()->route('subcategory.index', $request->category_id)->with('status', translate('Successfully created'));
     }
 
     /**
@@ -58,7 +65,7 @@ class SubCategoryController extends Controller
     {
         $SubCategory = Category::where('step', 1)->find($id);
         $categories = Category::where('step', 0)->get();
-        return view('sub-category.edit', ['subcategory'=>$SubCategory, 'types_sex'=>$this->types_sex, 'categories'=>$categories]);
+        return view('sub-category.edit', ['subcategory'=>$SubCategory, 'categories'=>$categories]);
     }
 
     /**
@@ -71,7 +78,7 @@ class SubCategoryController extends Controller
         $model->parent_id = $request->category_id;
         $model->step = 1;
         $model->save();
-        return redirect()->route('subcategory.subcategory', $request->category_id)->with('status', translate('Successfully updated'));
+        return redirect()->route('subcategory.index', $request->category_id)->with('status', translate('Successfully updated'));
     }
 
     /**
@@ -81,7 +88,7 @@ class SubCategoryController extends Controller
     {
         $model = Category::where('step', 1)->find($id);
         $model->delete();
-        return redirect()->route('subcategory.subcategory', $id)->with('status', translate('Successfully deleted'));
+        return redirect()->route('subcategory.index', $id)->with('status', translate('Successfully deleted'));
     }
 
     /**

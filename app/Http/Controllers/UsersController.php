@@ -111,13 +111,19 @@ class UsersController extends Controller
         $model->birth_date = $request->birth_date;
 
         $model->email = $request->email;
-        if (isset($request->new_password)) {
-            if ($request->new_password == $request->password_confirmation) {
+        if ($request->password && $request->new_password && $request->password_confirmation) {
+            if (Hash::check($request->password, $model->password) && $request->new_password == $request->password_confirmation) {
                 $model->password = Hash::make($request->new_password);
+            }else{
+                if(Hash::check($request->password, $model->password)){
+                    return redirect()->back()->with('error', translate('It is not your password'));
+                }elseif($request->new_password != $request->password_confirmation){
+                    return redirect()->back()->with('error', translate('New password confirmation is not the same'));
+                }
             }
         }
 
-        if (isset($request->is_admin) && $request->is_admin =! 0) {
+        if ($request->is_admin && $request->is_admin =! 0) {
             $model->is_admin = (int)$request->is_admin;
         }
         $model->save();

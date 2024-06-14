@@ -99,10 +99,10 @@
                             <div id="morris-donut-example" dir="ltr" style="height: 245px;" class="morris-chart"></div>
                             <ul class="list-inline chart-detail-list mb-0">
                                 <li class="list-inline-item">
-                                    <h5 style="color: #FF6C37;"><i class="fa fa-circle me-1"></i>{{translate('Offers on hold')}}</h5>
+                                    <h5 style="color: #FF6C37;"><i class="fa fa-circle me-1"></i>{{translate('Orders active')}}</h5>
                                 </li>
                                 <li class="list-inline-item">
-                                    <h5 style="color: #10C469;"><i class="fa fa-circle me-1"></i>{{translate('Orders active')}}</h5>
+                                    <h5 style="color: #10C469;"><i class="fa fa-circle me-1"></i>{{translate('Orders performed')}}</h5>
                                 </li>
 {{--                            </ul>--}}
 {{--                            <ul class="list-inline chart-detail-list mb-0">--}}
@@ -127,10 +127,10 @@
                             <div id="morris-donut-example-1" dir="ltr" style="height: 245px;" class="morris-chart"></div>
                             <ul class="list-inline chart-detail-list mb-0">
                                 <li class="list-inline-item">
-                                    <h5 style="color: #FF6C37;"><i class="fa fa-circle me-1"></i>{{translate('Offers on hold')}}</h5>
+                                    <h5 style="color: #FF6C37;"><i class="fa fa-circle me-1"></i>{{translate('Orders active')}}</h5>
                                 </li>
                                 <li class="list-inline-item">
-                                    <h5 style="color: #10C469;"><i class="fa fa-circle me-1"></i>{{translate('Orders active')}}</h5>
+                                    <h5 style="color: #10C469;"><i class="fa fa-circle me-1"></i>{{translate('Orders performed')}}</h5>
                                 </li>
                             </ul>
                             <ul class="list-inline chart-detail-list mb-0">
@@ -153,10 +153,10 @@
                             <div id="morris-donut-example-2" dir="ltr" style="height: 245px;" class="morris-chart"></div>
 {{--                            <ul class="list-inline chart-detail-list mb-0">--}}
 {{--                                <li class="list-inline-item">--}}
-{{--                                    <h5 style="color: #FF6C37;"><i class="fa fa-circle me-1"></i>{{translate('Offers on hold')}}</h5>--}}
+{{--                                    <h5 style="color: #FF6C37;"><i class="fa fa-circle me-1"></i>{{translate('Orders active')}}</h5>--}}
 {{--                                </li>--}}
 {{--                                <li class="list-inline-item">--}}
-{{--                                    <h5 style="color: #10C469;"><i class="fa fa-circle me-1"></i>{{translate('Orders active')}}</h5>--}}
+{{--                                    <h5 style="color: #10C469;"><i class="fa fa-circle me-1"></i>{{translate('Orders performed')}}</h5>--}}
 {{--                                </li>--}}
 {{--                            </ul>--}}
                             <ul class="list-inline chart-detail-list mb-0">

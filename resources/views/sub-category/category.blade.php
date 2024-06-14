@@ -12,9 +12,9 @@
             </div>
             <table class="table table-striped table-bordered dt-responsive nowrap">
                 <thead>
-                <tr>
-                    <th></th>
-                </tr>
+                    <tr>
+                        <th></th>
+                    </tr>
                 </thead>
                 <tbody class="table_body">
                 @php
