@@ -33,6 +33,10 @@ class CategoryController extends Controller
     public function store(Request $request)
     {
         $model = new Category();
+        $last_category = Category::withTrashed()->select('id')->orderBy('id', 'desc')->first();
+        if($last_category){
+            $model->id = (int)$last_category->id + 1;
+        }
         $model->name = $request->name;
         $model->parent_id = 0;
         $model->step = 0;

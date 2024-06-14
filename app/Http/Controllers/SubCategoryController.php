@@ -42,6 +42,10 @@ class SubCategoryController extends Controller
     public function store(Request $request)
     {
         $model = new Category();
+        $last_category = Category::withTrashed()->select('id')->orderBy('id', 'desc')->first();
+        if($last_category){
+            $model->id = (int)$last_category->id + 1;
+        }
         $model->name = $request->name;
         $model->parent_id = $request->category_id;
         $model->step = 1;
