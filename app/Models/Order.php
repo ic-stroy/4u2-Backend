@@ -41,7 +41,12 @@ class Order extends Model
     public function user(){
         return $this->hasOne(User::class, 'id', 'user_id');
     }
+
     public function address(){
         return $this->hasOne(Address::class, 'id', 'address_id');
+    }
+
+    public function card(){
+        return $this->hasOne(UserCard::class, 'id', 'user_card_id');
     }
 }

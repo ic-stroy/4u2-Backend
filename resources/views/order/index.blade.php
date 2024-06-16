@@ -409,6 +409,11 @@
                                                                             @endif
                                                                             </h4>
                                                                         @if($order['order'])
+                                                                            @if($order['order']->payment_method == \App\Constants::ONLINE && $order['order']->card)
+                                                                                <span style="font-size:12px; line-height: 3; opacity: 0.84">{{translate('Card number')}}
+                                                                                    <span style="font-size:12px; opacity:0.54">{{$order['order']->card->name.' '.$order['order']->card->card_number}}</span>
+                                                                                </span>
+                                                                            @endif
                                                                             <span style="font-size:12px; opacity: 0.84">{{translate('Created at')}}
                                                                                 <span style="font-size:12px; opacity:0.54">{{$order['order']->created_at}}</span>
                                                                             </span>

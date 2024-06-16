@@ -174,6 +174,9 @@ class AddressController extends Controller
     public function destroy(Request $request){
         $user = Auth::user();
         $address = Address::where('user_id', $user->id)->find($request->id);
+        if($address->order){
+            return $this->success(translate('prohibited'), 200);
+        }
         if(isset($address->id)){
             $address->delete();
             return $this->success('Success', 200);

@@ -24,4 +24,8 @@ class Address extends Model
     public function cities(){
         return $this->hasOne(Cities::class, 'id', 'city_id');
     }
+
+    public function order(){
+        return $this->hasOne(Order::class, 'address_id', 'id')->whereIn('status', [1, 2, 3]);
+    }
 }

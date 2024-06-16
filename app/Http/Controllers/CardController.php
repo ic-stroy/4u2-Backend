@@ -97,6 +97,9 @@ class CardController extends Controller
     {
         $user = Auth::user();
         $user_card = UserCard::where('user_id', $user->id)->find($request->id);
+        if($user_card->order){
+            return $this->success(translate('prohibited'), 200);
+        }
         $user_card->delete();
         return $this->success("Success", 200, $user_card);
     }

@@ -185,6 +185,7 @@ class ApiOrderController extends Controller
                 $order->payment_method = Constants::CASH;
             }elseif($request->payment == 'Online'){
                 $order->payment_method = Constants::ONLINE;
+                $order->user_card_id = $request->card_id;
             }
             if($all_discount_price > 0){
                 $order->discount_price = $all_discount_price;

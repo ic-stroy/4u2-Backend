@@ -20,4 +20,8 @@ class UserCard extends Model
     ];
 
     protected $table = 'user_cards';
+
+    public function order(){
+        return $this->hasOne(Order::class, 'user_card_id', 'id')->whereIn('status', [1, 2, 3]);
+    }
 }
