@@ -91,6 +91,14 @@ class SubCategoryController extends Controller
     public function destroy(string $id)
     {
         $model = Category::where('step', 1)->find($id);
+        if(!empty($model->subsubcategory)){
+            if(!$model->subsubcategory->isEmpty()){
+                return redirect()->back()->with('error', translate('You cannot delete this category because it has subsubcategories'));
+            }
+        }
+        if($model->product) {
+            return redirect()->back()->with('error', translate('You cannot delete this category because here is product associated with this size.'));
+        }
         $model->delete();
         return redirect()->route('subcategory.index', $id)->with('status', translate('Successfully deleted'));
     }

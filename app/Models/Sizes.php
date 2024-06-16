@@ -20,4 +20,8 @@ class Sizes extends Model
     public function category(){
         return $this->hasOne(Category::class, 'id', 'category_id');
     }
+
+    public function CharacterizedProducts(){
+        return $this->hasOne(CharacterizedProducts::class, 'size_id', 'id');
+    }
 }

@@ -190,6 +190,11 @@ class ProductsController extends Controller
     public function destroy(string $id)
     {
         $model = Products::find($id);
+        if(!empty($model->categorizedProducts)){
+            if(!$model->categorizedProducts->isEmpty()){
+                return redirect()->back()->with('error', translate('You cannot delete this product because here is some products in warehouse'));
+            }
+        }
         if(isset($model->images)){
             $images = json_decode($model->images);
             foreach ($images as $image){
@@ -400,25 +405,29 @@ class ProductsController extends Controller
             $colors_array = [];
             if (isset($product->categorizedProducts)) {
                 foreach ($product->categorizedProducts as $categorizedProduct) {
-                    $colors_array[] = $categorizedProduct->color->id;
+                    if(!empty($categorizedProduct->color)) {
+                        $colors_array[] = $categorizedProduct->color->id;
+                    }
                 }
                 foreach (array_unique($colors_array) as $color) {
                     $productsByColor = [];
                     foreach ($product->categorizedProducts as $categorizedProduct){
-                        if($color ==  $categorizedProduct->color->id){
-                            $colorModel = $categorizedProduct->color;
-                            if(!empty($discount)){
-                                $categorizedProductSum = $discount->percent?$categorizedProduct->sum - $categorizedProduct->sum*(int)$discount->percent/100:$categorizedProduct->sum;
-                            }else{
-                                $categorizedProductSum = $categorizedProduct->sum;
+                        if(!empty($categorizedProduct->color)) {
+                            if ($color == $categorizedProduct->color->id) {
+                                $colorModel = $categorizedProduct->color;
+                                if (!empty($discount)) {
+                                    $categorizedProductSum = $discount->percent ? $categorizedProduct->sum - $categorizedProduct->sum * (int)$discount->percent / 100 : $categorizedProduct->sum;
+                                } else {
+                                    $categorizedProductSum = $categorizedProduct->sum;
+                                }
+                                $productsByColor[] = [
+                                    'size' => $categorizedProduct->size ? $categorizedProduct->size->name : '',
+                                    'sum' => $categorizedProductSum,
+                                    'discount' => !empty($product->discount) ? $product->discount->percent : null,
+                                    'price' => $categorizedProduct->sum,
+                                    'count' => $categorizedProduct->count
+                                ];
                             }
-                            $productsByColor[] = [
-                                'size' => $categorizedProduct->size ? $categorizedProduct->size->name:'',
-                                'sum' => $categorizedProductSum,
-                                'discount' => !empty($product->discount)?$product->discount->percent:null,
-                                'price'=>$categorizedProduct->sum,
-                                'count' => $categorizedProduct->count
-                            ];
                         }
                     }
                     $categorizedByColor[] = [
@@ -470,25 +479,29 @@ class ProductsController extends Controller
             $colors_array = [];
             if (isset($product->categorizedProducts)) {
                 foreach ($product->categorizedProducts as $categorizedProduct) {
-                    $colors_array[] = $categorizedProduct->color->id;
+                    if(!empty($categorizedProduct->color)){
+                        $colors_array[] = $categorizedProduct->color->id;
+                    }
                 }
                 foreach (array_unique($colors_array) as $color) {
                     $productsByColor = [];
                     foreach ($product->categorizedProducts as $categorizedProduct){
-                        if($color ==  $categorizedProduct->color->id){
-                            $colorModel = $categorizedProduct->color;
-                            if(!empty($discount)){
-                                $categorizedProductSum = $discount->percent?$categorizedProduct->sum - $categorizedProduct->sum*(int)$discount->percent/100:$categorizedProduct->sum;
-                            }else{
-                                $categorizedProductSum = $categorizedProduct->sum;
+                        if(!empty($categorizedProduct->color)){
+                            if($color ==  $categorizedProduct->color->id){
+                                $colorModel = $categorizedProduct->color;
+                                if(!empty($discount)){
+                                    $categorizedProductSum = $discount->percent?$categorizedProduct->sum - $categorizedProduct->sum*(int)$discount->percent/100:$categorizedProduct->sum;
+                                }else{
+                                    $categorizedProductSum = $categorizedProduct->sum;
+                                }
+                                $productsByColor[] = [
+                                    'size' => $categorizedProduct->size ? $categorizedProduct->size->name:'',
+                                    'sum' => $categorizedProductSum,
+                                    'discount' => !empty($product->discount)?$product->discount->percent:null,
+                                    'price'=>$categorizedProduct->sum,
+                                    'count' => $categorizedProduct->count
+                                ];
                             }
-                            $productsByColor[] = [
-                                'size' => $categorizedProduct->size ? $categorizedProduct->size->name:'',
-                                'sum' => $categorizedProductSum,
-                                'discount' => !empty($product->discount)?$product->discount->percent:null,
-                                'price'=>$categorizedProduct->sum,
-                                'count' => $categorizedProduct->count
-                            ];
                         }
                     }
                     $categorizedByColor[] = [

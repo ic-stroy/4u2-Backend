@@ -11,4 +11,8 @@ class Color extends Model
     use HasFactory, SoftDeletes;
 
     protected $table = 'color';
+
+    public function CharacterizedProducts(){
+        return $this->hasOne(CharacterizedProducts::class, 'color_id', 'id');
+    }
 }

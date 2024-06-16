@@ -41,4 +41,7 @@ class Category extends Model
     public function sizes(){
         return $this->hasMany(Sizes::class, 'category_id', 'id');
     }
+    public function product(){
+        return $this->hasOne(Products::class, 'category_id','id');
+    }
 }

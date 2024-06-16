@@ -87,6 +87,9 @@ class ColorController extends Controller
     public function destroy(string $id)
     {
         $model = Color::find($id);
+        if($model->CharacterizedProducts){
+            return redirect()->back()->with('error', translate('You cannot delete this color because here is product associated with this color.'));
+        }
         $model->delete();
         return redirect()->route('color.index')->with('status', translate('Successfully deleted'));
     }

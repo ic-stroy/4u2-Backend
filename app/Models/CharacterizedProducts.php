@@ -43,4 +43,8 @@ class CharacterizedProducts extends Model
         $maxValue = Discount::max('end_date');
         return $this->hasOne(Discount::class, 'product_id','product_id')->where('end_date', $maxValue);
     }
+
+    public function order_detail(){
+        return $this->hasOne(OrderDetail::class, 'warehouse_id', 'id')->where('status', 6);
+    }
 }

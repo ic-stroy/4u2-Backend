@@ -89,6 +89,9 @@ class SubSubCategoryController extends Controller
     public function destroy(string $id)
     {
         $model = Category::where('step', 2)->find($id);
+        if($model->product) {
+            return redirect()->back()->with('error', translate('You cannot delete this category because here is product associated with this size.'));
+        }
         $model->delete();
         return redirect()->route('subsubcategory.subcategory', $id)->with('status', translate('Successfully deleted'));
     }

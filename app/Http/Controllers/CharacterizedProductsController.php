@@ -145,6 +145,9 @@ class CharacterizedProductsController extends Controller
     public function destroy(string $id)
     {
         $model = CharacterizedProducts::find($id);
+        if($model->order_detail){
+            return redirect()->back()->with('error', translate('You cannot delete this product because here is product associated with an order.'));
+        }
         $model->delete();
         return redirect()->route('characterizedProducts.index')->with('status', translate('Successfully deleted'));
     }

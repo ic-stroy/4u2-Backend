@@ -5,11 +5,11 @@
 @endsection
 @section('content')
     <style>
-        .nav-link{
+        .navtab-bg .nav-link{
             height: 100%;
             width: 194px !important;
         }
-        .nav-item{
+        .navtab-bg .nav-item{
             margin-bottom: 1rem !important;
         }
     </style>
@@ -17,7 +17,7 @@
         <div class="card-body">
             <h4 class="mt-0 header-title">{{translate('Sub category lists')}}</h4>
             <div class="dropdown float-end mb-2">
-                <a class="form_functions btn btn-success" href="{{route('subcategory.create')}}">{{translate('Create')}}</a>
+                <a class="form_functions btn btn-success" href="{{route('subsubcategory.create')}}">{{translate('Create')}}</a>
             </div>
             <ul class="nav nav-pills navtab-bg nav-justified">
                 @php
@@ -66,15 +66,15 @@
                                 @endphp
                                 <tr>
                                     <th scope="row">
-                                        <a class="show_page" href="{{route('subcategory.show', $subsubcategory->id)}}">{{$i}}</a>
+                                        <a class="show_page" href="{{route('subsubcategory.show', $subsubcategory->id)}}">{{$i}}</a>
                                     </th>
                                     <td>
-                                        <a class="show_page" href="{{route('subcategory.show', $subsubcategory->id)}}">
+                                        <a class="show_page" href="{{route('subsubcategory.show', $subsubcategory->id)}}">
                                             @if(isset($subsubcategory->name)){{ $subsubcategory->name }}@else <div class="no_text"></div> @endif
                                         </a>
                                     </td>
                                     <td>
-                                        <a class="show_page" href="{{route('subcategory.show', $subsubcategory->id)}}">
+                                        <a class="show_page" href="{{route('subsubcategory.show', $subsubcategory->id)}}">
                                             @if(isset($subsubcategory->updated_at)){{ $subsubcategory->updated_at }}@else <div class="no_text"></div> @endif
                                         </a>
                                     </td>
