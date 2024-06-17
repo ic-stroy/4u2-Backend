@@ -86,7 +86,11 @@
                 </div>
                 <div class="mb-3">
                     <label class="form-label">{{translate('Login')}}</label>
-                    <input type="email" class="form-control" name="email" required value="{{$user->email??''}}"/>
+                    @if($user->is_admin == 1)
+                        <input type="email" class="form-control" name="email" required value="{{$user->email??''}}"/>
+                    @else
+                        <input type="text" class="form-control" name="email" required value="{{$user->email??''}}"/>
+                    @endif
                 </div>
                 <div class="mb-3">
                     <label class="form-label">{{translate('Current password')}}</label>
