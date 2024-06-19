@@ -172,11 +172,11 @@ class AddressController extends Controller
         }
     }
     public function getPickUpAddress(){
-        $user = User::where('is_admin', 1)->first();
         $address = [];
         $city = [];
         $region = [];
-        $addresses = Address::where('user_id', $user->id)->get();
+        $super_admins_id = User::where('is_admin', 1)->pluck('id')->all();
+        $addresses = Address::whereIn('user_id', $super_admins_id)->get();
         foreach ($addresses as $address_) {
             $region_city = [];
             if(!empty($address_->cities)){
