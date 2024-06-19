@@ -26,7 +26,7 @@ $(document).ready(function () {
         type:'GET',
         success: function (data) {
             data.data.forEach(addOption)
-            if(localStorage.getItem('region_id') != undefined && localStorage.getItem('region_id') != null &&
+            if(page == false && localStorage.getItem('region_id') != undefined && localStorage.getItem('region_id') != null &&
                 localStorage.getItem('district_id') != undefined && localStorage.getItem('district_id') != null) {
                 districts_ = data.data[localStorage.getItem('region_id')].cities
                 Object.keys(districts_).forEach(function (key) {

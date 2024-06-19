@@ -59,5 +59,19 @@
             </table>
         </div>
     </div>
+    <script>
+        if(localStorage.getItem('region_id') != undefined && localStorage.getItem('region_id') != null){
+            localStorage.removeItem('region_id')
+        }
+        if(localStorage.getItem('district_id') != undefined && localStorage.getItem('district_id') != null){
+            localStorage.removeItem('district_id')
+        }
+        if(localStorage.getItem('region') != undefined && localStorage.getItem('region') != null){
+            localStorage.removeItem('region')
+        }
+        if(localStorage.getItem('district') != undefined && localStorage.getItem('district') != null){
+            localStorage.removeItem('district')
+        }
+    </script>
 
 @endsection

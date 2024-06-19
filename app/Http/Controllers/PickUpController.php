@@ -65,9 +65,9 @@ class PickUpController extends Controller
         $address = new Address();
         $address->name = $request->name;
         if($request->district){
-            $address->city_id = $request->district_id;
+            $address->city_id = $request->district;
         }elseif($request->region){
-            $address->city_id = $request->region_id;
+            $address->city_id = $request->region;
         }
         $super_admin_id = User::select('id')->where('is_admin', 1)->orderBy('created_at', 'asc')->first();
         $address->postcode = $request->postcode;
