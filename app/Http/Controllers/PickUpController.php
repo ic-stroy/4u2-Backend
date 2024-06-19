@@ -14,10 +14,12 @@ class PickUpController extends Controller
      */
     public function index()
     {
-        $user = Auth::user();
-        $addresses_ = Address::where('user_id', $user->id)->get();
+        $super_admins_id = User::where('is_admin', 1)->pluck('id')->all();
+        $addresses_ = Address::whereIn('user_id', $super_admins_id)->get();
+
         $addresses = [];
         foreach ($addresses_ as $model){
+
             $city = '';
             $region = '';
             if($model->cities){
@@ -67,7 +69,7 @@ class PickUpController extends Controller
         }elseif($request->region){
             $address->city_id = $request->region_id;
         }
-        $super_admin_id = User::select('id')->where('is_admin', 1)->first();
+        $super_admin_id = User::select('id')->where('is_admin', 1)->orderBy('created_at', 'asc')->first();
         $address->postcode = $request->postcode;
         if($super_admin_id){
             $address->user_id = $super_admin_id->id;
@@ -122,7 +124,7 @@ class PickUpController extends Controller
         }elseif($request->region_id){
             $address->city_id = $request->region;
         }
-        $super_admin_id = User::select('id')->where('is_admin', 1)->first();
+        $super_admin_id = User::select('id')->where('is_admin', 1)->orderBy('created_at', 'asc')->first();
         $address->postcode = $request->postcode;
         if($super_admin_id){
             $address->user_id = $super_admin_id->id;
