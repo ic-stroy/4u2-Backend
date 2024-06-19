@@ -50,4 +50,20 @@ class User extends Authenticatable
     public function addresses(){
         return $this->hasMany(Address::class, 'user_id', 'id');
     }
+
+    public function ordersOrdered(){
+        return $this->hasMany(Order::class, 'user_id', 'id')->where('status', 2);
+    }
+
+    public function ordersPerformed(){
+        return $this->hasMany(Order::class, 'user_id', 'id')->where('status', 3);
+    }
+
+    public function ordersCancelled(){
+        return $this->hasMany(Order::class, 'user_id', 'id')->where('status', 4);
+    }
+
+    public function ordersAccepted(){
+        return $this->hasMany(Order::class, 'user_id', 'id')->where('status', 5);
+    }
 }

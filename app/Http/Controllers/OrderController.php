@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Notification;
 
 class OrderController extends Controller
 {
+
     public function index(){
         $user = Auth::user();
         $orderedOrders_ = Order::where('status', Constants::ORDERED)->orderBy('updated_at', 'desc')->get();

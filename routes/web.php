@@ -14,6 +14,7 @@ use \App\Http\Controllers\CategoryController;
 use \App\Http\Controllers\DiscountController;
 use \App\Http\Controllers\UsersController;
 use \App\Http\Controllers\LanguageController;
+use \App\Http\Controllers\PickUpController;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,6 +33,7 @@ Route::group(['middleware'=>['isAdmin', 'language']], function(){
     Route::get('/', [HomeController::class, 'index'])->name('dashboard');
     Route::resource('color', ColorController::class);
     Route::resource('size', SizesController::class);
+    Route::resource('pick_up', PickUpController::class);
 //    Route::resource('order', OrderController::class);
     Route::resource('product', ProductsController::class);
 //    Route::get('products-category', [ProductsController::class, 'category'])->name('product.category');

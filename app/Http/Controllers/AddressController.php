@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\Address;
 use App\Models\Cities;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
@@ -81,7 +82,7 @@ class AddressController extends Controller
         return $this->success('Success', 200);
     }
 
-    public function getAddress(Request $request){
+    public function getAddress(){
 //        $response = Http::get(asset("assets/json/cities.json"));
 //        $cities = json_decode($response);
 //        foreach ($cities as $city){
@@ -116,6 +117,67 @@ class AddressController extends Controller
         $city = [];
         $region = [];
         foreach ($user->addresses as $address_) {
+            $region_city = [];
+            if(!empty($address_->cities)){
+                if($address_->cities->type == 'district'){
+                    $city = [
+                        'id' => $address_->cities->id,
+                        'name' => $address_->cities->name??'',
+                        'lat' => $address_->cities->lat??'',
+                        'long' => $address_->cities->lng??'',
+                    ];
+                    if(!empty($address_->cities->region)){
+                        $region = [
+                            'id' => $address_->cities->region->id,
+                            'name' => $address_->cities->region->name??'',
+                            'lat' => $address_->cities->region->lat??'',
+                            'long' => $address_->cities->region->lng??'',
+                        ];
+                        if(!empty($address_->cities->region->getDistricts)){
+                            foreach($address_->cities->region->getDistricts as $regionCity){
+                                $region_city[] = [
+                                    'id' => $regionCity->id,
+                                    'name' => $regionCity->name??'',
+                                    'lat' => $regionCity->lat??'',
+                                    'long' => $regionCity->lng??'',
+                                ];
+                            }
+                        }
+                    }
+                }else{
+                    $region = [
+                        'id' => $address_->cities->id,
+                        'name' => $address_->cities->name??'',
+                        'lat' => $address_->cities->lat??'',
+                        'long' => $address_->cities->lng??'',
+                    ];
+                }
+            }
+
+            $address[] = [
+                'id'=>$address_->id,
+                'name'=>$address_->name??null,
+                'region'=>$region,
+                'city'=>$city,
+                'region_cities'=>$region_city,
+                'latitude'=>$address_->latitude??null,
+                'longitude'=>$address_->longitude??null,
+                'postcode'=>$address_->postcode??null,
+            ];
+        }
+        if(count($address)>0){
+            return $this->success('Success', 200, $address);
+        }else{
+            return $this->error('No address', 400);
+        }
+    }
+    public function getPickUpAddress(){
+        $user = User::where('is_admin', 1)->first();
+        $address = [];
+        $city = [];
+        $region = [];
+        $addresses = Address::where('user_id', $user->id)->get();
+        foreach ($addresses as $address_) {
             $region_city = [];
             if(!empty($address_->cities)){
                 if($address_->cities->type == 'district'){

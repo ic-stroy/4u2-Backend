@@ -434,6 +434,12 @@
                             </a>
                         </li>
                         <li>
+                            <a href="{{ route('pick_up.index') }}">
+                                <i class="mdi mdi-map-marker-outline"></i>
+                                <span> {{ translate('Pick up point') }} </span>
+                            </a>
+                        </li>
+                        <li>
                             <a href="{{ route('size.index') }}">
                                 <i class="mdi mdi-account-outline"></i>
                                 <span> {{ translate('Sizes') }} </span>

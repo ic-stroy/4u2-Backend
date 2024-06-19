@@ -29,6 +29,7 @@ Route::post('login', [AuthController::class, 'login']);
 Route::post('google-login-or-register', [AuthController::class, 'googleLoginOrRegister']);
 
 Route::get('get-products-by-category', [\App\Http\Controllers\CategoryController::class, 'getProductsByCategory']);
+Route::get('get-districts', [AddressController::class, 'getCities']);
 Route::get('categories', [\App\Http\Controllers\CategoryController::class, 'getCategories'])->name('get_categories');
 Route::get('subcategory/{id}', [\App\Http\Controllers\SubCategoryController::class, 'getSubcategory'])->name('get_subcategory');
 Route::get('sizes-types/{id}', [\App\Http\Controllers\ProductsController::class, 'getSizes'])->name('get_sizes');
@@ -46,6 +47,7 @@ Route::group(['middleware'=>['auth:sanctum', 'is_auth']], function (){
     Route::post('set-address', [AddressController::class, 'setAddress']);
     Route::post('edit-address', [AddressController::class, 'editAddress']);
     Route::get('get-address', [AddressController::class, 'getAddress']);
+    Route::get('get-pick-up-address', [AddressController::class, 'getPickUpAddress']);
     Route::post('destroy-address', [AddressController::class, 'destroy']);
     Route::get('get-cards', [CardController::class, 'getCards']);
     Route::post('store-card', [CardController::class, 'storeCard']);
@@ -61,6 +63,7 @@ Route::group(['middleware'=>['auth:sanctum', 'is_auth']], function (){
     Route::post('personal-information', [UsersController::class, 'setPersonalInformation']);
     Route::get('personal-information', [UsersController::class, 'getPersonalInformation']);
     Route::get('delete-user-image', [UsersController::class, 'deleteUserImage']);
+    Route::get('my-orders', [\App\Http\Controllers\ApiOrderController::class, 'getMyOrders']);
 });
 Route::post('delete-product', [\App\Http\Controllers\ProductsController::class, 'deleteProductImage']);
 Route::post('delete-warehouse', [\App\Http\Controllers\CharacterizedProductsController::class, 'deleteWarehouseImage']);

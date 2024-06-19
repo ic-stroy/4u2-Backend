@@ -92,6 +92,149 @@ class ApiOrderController extends Controller
         }
     }
 
+
+    public function getMyOrders(){
+        $user = Auth::user();
+        $ordersOrdered = $this->getOrders($user->ordersOrdered);
+        $ordersPerformed = $this->getOrders($user->ordersPerformed);
+        $ordersCancelled = $this->getOrders($user->ordersCancelled);
+        $ordersAccepted = $this->getOrders($user->ordersAccepted);
+        $orders = [
+            "ordersOrdered" => $ordersOrdered,
+            "ordersPerformed" => $ordersPerformed,
+            "ordersCancelled" => $ordersCancelled,
+            "ordersAccepted" => $ordersAccepted,
+        ];
+        return $this->success('Success', 200, $orders);
+    }
+
+    public function getOrders($orders){
+        $order_data = [];
+        foreach($orders as $order){
+//        $not_read_order_quantity = OrderDetail::where('order_id', $id)->where('is_read', 0)->count();
+            $products = [];
+            $performed_product_types = 0;
+            $company_product_price = 0;
+            $performed_company_product_price = 0;
+            $company_discount_price = 0;
+            $performed_company_discount_price = 0;
+            $order_has = false;
+            $order_detail_is_ordered = false;
+            $delivery_type = '';
+            foreach($order->orderDetail as $order_detail){
+                if($order_detail->status == Constants::ORDER_DETAIL_ORDERED){
+                    $order_detail_is_ordered = true;
+                }
+
+                $discount_withouth_expire = 0;
+                $images = [];
+
+                if($order_detail->warehouse_id){
+                    $order_has = true;
+
+                    if($order_detail->status == Constants::ORDER_DETAIL_PERFORMED) {
+                        $performed_product_types = $performed_product_types + 1;
+                        $performed_company_product_price = $performed_company_product_price + $order_detail->price * $order_detail->quantity - (int)$order_detail->discount_price;
+                        $performed_company_discount_price = $performed_company_discount_price + (int)$order_detail->discount_price;
+                    }
+
+                    $company_product_price = $company_product_price + $order_detail->price * $order_detail->quantity - (int)$order_detail->discount_price;
+                    $order_detail_all_price = (int)$order_detail->price * (int)$order_detail->quantity - (int)$order_detail->discount_price;
+                    $company_discount_price = $company_discount_price + (int)$order_detail->discount_price;
+
+                    if(!empty($order_detail->warehouse_product)){
+                        $discount_withouth_expire = !empty($order_detail->warehouse_product->discount_withouth_expire)?$order_detail->warehouse_product->discount_withouth_expire->percent:0;
+                    }else{
+                        $discount_withouth_expire = 0;
+                    }
+
+                    if(!empty($order_detail->warehouse_product)) {
+                        if (!empty($order_detail->warehouse_product->product)) {
+                            if ($order_detail->warehouse_product->product->images) {
+                                $images_ = json_decode($order_detail->warehouse_product->product->images);
+                            } else {
+                                $images_ = [];
+                            }
+                            $images = [];
+                            foreach ($images_ as $image_) {
+                                $images[] = asset('storage/products/' . $image_);
+                            }
+                        } else {
+                            $images = [];
+                        }
+                    }else{
+                        $images = [];
+                    }
+                    $product_name = '';
+                    if($order_detail->warehouse_product){
+                        if($order_detail->warehouse_product->product){
+                            $product_name = $order_detail->warehouse_product->product->name;
+                        }
+                    }
+
+                    $products[] = [$order_detail, $order_detail_all_price, 'images'=>$images,
+                        'discount_withouth_expire'=>$discount_withouth_expire, 'size'=>$order_detail->size,
+                        'color'=>$order_detail->color, 'name'=>$product_name
+                    ];
+                }
+            }
+            if((int)$order->coupon_price>0){
+                if($order->coupon){
+                    $order_coupon_price = $this->setOrderCoupon($order->coupon, $company_product_price);
+                    $performed_order_coupon_price = $this->setOrderCoupon($order->coupon, $performed_company_product_price);
+                }else{
+                    $order_coupon_price = $order->coupon_price??0;
+                    $performed_order_coupon_price = $order->coupon_price??0;
+                }
+            }else{
+                $order_coupon_price = $order->coupon_price??0;
+                $performed_order_coupon_price = $order->coupon_price??0;
+            }
+            if($order->address){
+                if($order->address->user){
+                    if($order->address->user->is_admin == 1){
+                        $delivery_type = "Pick-up";
+                    }else{
+                        $delivery_type = "Delivery";
+                    }
+                }
+                $address = $order->address->name;
+                if(!empty($order->address->cities)){
+                    $city = $order->address->cities->name;
+                    if(!empty($order->address->cities->region)){
+                        $region = $order->address->cities->region->name;
+                        $address_name = $address.' '.$city.' '.$region;
+                    }else{
+                        $address_name = $address.' '.$city;
+                    }
+                }else{
+                    $address_name = $address;
+                }
+            }else{
+                $address_name = '';
+            }
+            if($order_has == true){
+                $order_data[] = [
+                    'order'=>$order,
+                    'order_created'=>date('Y-m-d H:i:s', strtotime($order->created_at)),
+                    'address'=>$address_name,
+                    'delivery_type'=>$delivery_type,
+                    'status'=>$order->status??'',
+                    'order_detail_is_ordered'=>$order_detail_is_ordered,
+                    'performed_product_types'=>$performed_product_types,
+                    'products'=>$products,
+                    'product_price'=>$company_product_price - $order_coupon_price,
+                    'order_coupon_price'=>$order_coupon_price,
+                    'discount_price'=>$company_discount_price,
+                    'performed_product_price'=>$performed_company_product_price - $performed_order_coupon_price,
+                    'performed_order_coupon_price'=>$performed_order_coupon_price,
+                    'performed_discount_price'=>$performed_company_discount_price
+                ];
+            }
+        }
+        return $order_data;
+    }
+
     public function setOrderCoupon($coupon, $price){
         if ($coupon->percent) {
             $order_coupon_price = ($price/100)*($coupon->percent);
@@ -194,6 +337,12 @@ class ApiOrderController extends Controller
             $order->receiver_name = $request->first_name;
             $order->phone_number = $request->phone_number;
             $order->created_at = date('Y-m-d h:i:s');
+            if(!$order->code){
+                $length = 8;
+                $order_id = (string)$order->id;
+                $order_code = (string)str_pad($order_id, $length, '0', STR_PAD_LEFT);
+                $order->code = $order_code;
+            }
             $order->save();
 
             $users = User::where('is_admin', Constants::ADMIN)->get();
@@ -220,12 +369,66 @@ class ApiOrderController extends Controller
 //                ];
 //                return $this->success('Success', 200, $good);
 //            }
+            $pick_up_info = $this->getPickUpInfo($order);
+            $pick_up_info['order']->save();
+            $info = [
+                'code'=>$pick_up_info['order']->code,
+                'address'=>$pick_up_info['address'],
+                'pick_up_time'=>$pick_up_info['pick_up_time']
+            ];
 
-            return $this->success('Success', 200, $data);
+            return $this->success('Success', 200, $info);
         }else{
             $message = translate('There is no product');
             return $this->error($message, 400);
         }
+    }
+
+    public function getPickUpInfo($order){
+        if((int)date('H') < 17){
+            $deliver_date = strtotime('+2 days');
+            $delivering_time = 'The day after tomorrow';
+        }elseif((int)date('H') == 17 && (int)date('i') == 0){
+            $deliver_date = strtotime('+2 days');
+            $delivering_time = 'The day after tomorrow';
+        }else{
+            $deliver_date = strtotime('+3 days');
+            $delivering_time = 'After three days';
+        }
+        if(!empty($order->address)){
+            $address = $order->address->name;
+            if(!empty($order->address->cities)){
+                $city = $order->address->cities->name;
+                if(!empty($order->address->cities->region)){
+                    if($order->address->cities->region->name == 'Toshkent shahri'){
+                        if((int)date('H') < 17){
+                            $deliver_date = strtotime('+1 day');
+                            $delivering_time = 'Tomorrow';
+                        }elseif((int)date('H') == 17 && (int)date('i') == 0){
+                            $deliver_date = strtotime('+1 day');
+                            $delivering_time = 'Tomorrow';
+                        }else{
+                            $deliver_date = strtotime('+2 days');
+                            $delivering_time = 'The day after tomorrow';
+                        }
+                    }
+                    $region = $order->address->cities->region->name;
+                    $address_name = $address.' '.$city.' '.$region;
+                }else{
+                    $address_name = $address.' '.$city;
+                }
+            }else{
+                $address_name = $address;
+            }
+        }else{
+            $address_name = '';
+        }
+        $order->delivery_date = date('Y-m-d H:i:s', $deliver_date);
+        return [
+            'order'=>$order,
+            'address'=>$address_name,
+            'pick_up_time'=>$delivering_time
+        ];
     }
 
     public function getImages($model){

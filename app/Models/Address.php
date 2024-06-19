@@ -28,4 +28,8 @@ class Address extends Model
     public function order(){
         return $this->hasOne(Order::class, 'address_id', 'id')->whereIn('status', [1, 2, 3]);
     }
+
+    public function user(){
+        return $this->hasOne(User::class, 'id', 'user_id');
+    }
 }
