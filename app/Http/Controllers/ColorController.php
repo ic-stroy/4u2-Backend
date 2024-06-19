@@ -13,6 +13,16 @@ class ColorController extends Controller
      */
     public function index()
     {
+        translate('Your password is incorrect');
+        translate('Your new password confirmation is incorrect');
+        translate('You cannot delete this category because it has subsubcategories');
+        translate('You cannot delete this category because here is product associated with this size.');
+        translate('You cannot delete this size because here is product associated with this size.');
+        translate('You cannot delete this product because here is some products in warehouse');
+        translate('You cannot delete this color because here is product associated with this color.');
+        translate('You cannot delete this category because it has subcategories');
+        translate('You cannot delete this category because it has products');
+        translate('You cannot delete this product because here is product associated with an order.');
         $color = Color::orderBy('created_at', 'desc')->get();
         return view('color.index', ['colors'=> $color]);
     }

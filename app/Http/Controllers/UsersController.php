@@ -139,9 +139,9 @@ class UsersController extends Controller
                 $model->password = Hash::make($request->new_password);
             }else{
                 if(Hash::check($request->password, $model->password)){
-                    return redirect()->back()->with('error', translate('It is not your password'));
+                    return redirect()->back()->with('error', translate('Your password is incorrect'));
                 }elseif($request->new_password != $request->password_confirmation){
-                    return redirect()->back()->with('error', translate('New password confirmation is not the same'));
+                    return redirect()->back()->with('error', translate('Your new password confirmation is incorrect'));
                 }
             }
         }
