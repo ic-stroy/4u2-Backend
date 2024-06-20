@@ -45,6 +45,7 @@ Route::group(['middleware'=>['isAdmin', 'language']], function(){
     Route::get('create-characterized-product-by-category/{id}', [CharacterizedProductsController::class, 'createCharacterizedProduct'])->name('characterizedProducts.category.create_characterized_product');
 
     Route::get('get-user', [UsersController::class, 'getUser'])->name('getUser');
+    Route::get('edit-user', [UsersController::class, 'editUser'])->name('editUser');
 //    Route::post('change-language', [HomeController::class, 'changeLanguage'])->name('language.change');
     Route::resource('coupons', CouponController::class);
     Route::resource('discount', DiscountController::class);
