@@ -403,10 +403,32 @@ class ProductsController extends Controller
         foreach ($products as $key => $product) {
             $discount = $product->discount;
             $colors_array = [];
+            $firstColorProducts = [];
+            $categorizedByColor = [];
             if (isset($product->categorizedProducts)) {
-                foreach ($product->categorizedProducts as $categorizedProduct) {
-                    if(!empty($categorizedProduct->color)) {
-                        $colors_array[] = $categorizedProduct->color->id;
+                foreach ($product->categorizedProducts as $categorizedProduct_) {
+                    if(!empty($categorizedProduct_->color)) {
+                        $colors_array[] = $categorizedProduct_->color->id;
+                        if($colors_array[0] == $categorizedProduct_->color->id){
+                            if(!empty($discount)){
+                                $categorizedProductSum_ = $discount->percent?$categorizedProduct_->sum - $categorizedProduct_->sum*(int)$discount->percent/100:$categorizedProduct_->sum;
+                            }else{
+                                $categorizedProductSum_ = $categorizedProduct_->sum;
+                            }
+                            $firstColorProducts[] = [
+                                'id'=>$categorizedProduct_->id,
+                                'size'=>$categorizedProduct_->size ? $categorizedProduct_->size->name:'',
+                                'color'=>[
+                                    'id'=>$categorizedProduct_->color->id,
+                                    'name'=>$categorizedProduct_->color->name,
+                                    'code'=>$categorizedProduct_->color->code,
+                                ],
+                                'sum' => $categorizedProductSum_,
+                                'discount' => !empty($product->discount)?$product->discount->percent:null,
+                                'price'=>$categorizedProduct_->sum,
+                                'count' => $categorizedProduct_->count
+                            ];
+                        }
                     }
                 }
                 foreach (array_unique($colors_array) as $color) {
@@ -421,8 +443,14 @@ class ProductsController extends Controller
                                     $categorizedProductSum = $categorizedProduct->sum;
                                 }
                                 $productsByColor[] = [
+                                    'id' => $categorizedProduct->id,
                                     'size' => $categorizedProduct->size ? $categorizedProduct->size->name : '',
                                     'sum' => $categorizedProductSum,
+                                    'color'=>[
+                                        'id'=>$categorizedProduct->color->id,
+                                        'name'=>$categorizedProduct->color->name,
+                                        'code'=>$categorizedProduct->color->code,
+                                    ],
                                     'discount' => !empty($product->discount) ? $product->discount->percent : null,
                                     'price' => $categorizedProduct->sum,
                                     'count' => $categorizedProduct->count
@@ -455,6 +483,7 @@ class ProductsController extends Controller
             $goods[$key]['discount'] = !empty($product->discount)?$product->discount->percent:null;
             $goods[$key]['company'] = $product->company ?? null;
             $goods[$key]['characters'] = $categorizedByColor??[];
+            $goods[$key]['first_color_products'] = $firstColorProducts ?? [];
             $goods[$key]['images'] = $images ?? [];
             $goods[$key]['basket_button'] = false;
             $goods[$key]['created_at'] = $product->created_at ?? null;
