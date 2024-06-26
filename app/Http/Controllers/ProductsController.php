@@ -399,96 +399,7 @@ class ProductsController extends Controller
     public function getProducts()
     {
         $products = Products::all();
-        $goods = [];
-        foreach ($products as $key => $product) {
-            $discount = $product->discount;
-            $colors_array = [];
-            $firstColorProducts = [];
-            $categorizedByColor = [];
-            if (!empty($product->categorizedProducts)) {
-                foreach ($product->categorizedProducts as $categorizedProduct_) {
-                    if($categorizedProduct_->color) {
-                        $colors_array[] = $categorizedProduct_->color->id;
-                        if($colors_array[0] == $categorizedProduct_->color->id){
-                            if($discount){
-                                $categorizedProductSum_ = $discount->percent?$categorizedProduct_->sum - $categorizedProduct_->sum*(int)$discount->percent/100:$categorizedProduct_->sum;
-                            }else{
-                                $categorizedProductSum_ = $categorizedProduct_->sum;
-                            }
-                            $firstColorProducts[] = [
-                                'id'=>$categorizedProduct_->id,
-                                'size'=>$categorizedProduct_->size ? $categorizedProduct_->size->name:'',
-                                'color'=>[
-                                    'id'=>$categorizedProduct_->color->id,
-                                    'name'=>$categorizedProduct_->color->name,
-                                    'code'=>$categorizedProduct_->color->code,
-                                ],
-                                'sum' => $categorizedProductSum_,
-                                'discount' => $product->discount?$product->discount->percent:null,
-                                'price'=>$categorizedProduct_->sum,
-                                'count' => $categorizedProduct_->count
-                            ];
-                        }
-                    }
-                }
-                foreach (array_unique($colors_array) as $color) {
-                    $productsByColor = [];
-                    foreach ($product->categorizedProducts as $categorizedProduct){
-                        if($categorizedProduct->color) {
-                            if ($color == $categorizedProduct->color->id) {
-                                $colorModel = $categorizedProduct->color;
-                                if ($discount) {
-                                    $categorizedProductSum = $discount->percent ? $categorizedProduct->sum - $categorizedProduct->sum * (int)$discount->percent / 100 : $categorizedProduct->sum;
-                                } else {
-                                    $categorizedProductSum = $categorizedProduct->sum;
-                                }
-                                $productsByColor[] = [
-                                    'id' => $categorizedProduct->id,
-                                    'size' => $categorizedProduct->size ? $categorizedProduct->size->name : '',
-                                    'sum' => $categorizedProductSum,
-                                    'color'=>[
-                                        'id'=>$categorizedProduct->color->id,
-                                        'name'=>$categorizedProduct->color->name,
-                                        'code'=>$categorizedProduct->color->code,
-                                    ],
-                                    'discount' => $product->discount ? $product->discount->percent : null,
-                                    'price' => $categorizedProduct->sum,
-                                    'count' => $categorizedProduct->count
-                                ];
-                            }
-                        }
-                    }
-                    $categorizedByColor[] = [
-                        'color'=>$colorModel,
-                        'products'=>$productsByColor
-                    ];
-                }
-            }
-            $images_ = json_decode($product->images);
-            $images = [];
-            foreach ($images_ as $image_) {
-                $images[] = asset('storage/products/' . $image_);
-            }
-            $goods[$key]['id'] = $product->id;
-            $goods[$key]['name'] = $product->name ?? null;
-            $current_category = $this->getProductCategory($product);
-            $goods[$key]['category'] = $current_category->name??null;
-            $goods[$key]['description'] = $product->description ?? null;
-            if($discount){
-                $goods[$key]['sum'] = $discount->percent?$product->sum - $product->sum*(int)$discount->percent/100:$product->sum;
-            }else{
-                $goods[$key]['sum'] = $product->sum ?? null;
-            }
-            $goods[$key]['price'] = $product->sum;
-            $goods[$key]['discount'] = $product->discount?$product->discount->percent:null;
-            $goods[$key]['company'] = $product->company ?? null;
-            $goods[$key]['characters'] = $categorizedByColor??[];
-            $goods[$key]['first_color_products'] = $firstColorProducts ?? [];
-            $goods[$key]['images'] = $images ?? [];
-            $goods[$key]['basket_button'] = false;
-            $goods[$key]['created_at'] = $product->created_at ?? null;
-            $goods[$key]['updated_at'] = $product->updated_at ?? null;
-        }
+        $goods = $this->getGoods($products);
 
 //        $goods = array_merge($goods,$goods,$goods,$goods,$goods,$goods,$goods,$goods,$goods,$goods);
 
@@ -502,96 +413,7 @@ class ProductsController extends Controller
     public function getAllProducts()
     {
         $products = Products::all();
-        $goods = [];
-        foreach ($products as $key => $product) {
-            $discount = $product->discount;
-            $colors_array = [];
-            $firstColorProducts = [];
-            $categorizedByColor = [];
-            if (!empty($product->categorizedProducts)) {
-                foreach ($product->categorizedProducts as $categorizedProduct_) {
-                    if($categorizedProduct_->color) {
-                        $colors_array[] = $categorizedProduct_->color->id;
-                        if($colors_array[0] == $categorizedProduct_->color->id){
-                            if($discount){
-                                $categorizedProductSum_ = $discount->percent?$categorizedProduct_->sum - $categorizedProduct_->sum*(int)$discount->percent/100:$categorizedProduct_->sum;
-                            }else{
-                                $categorizedProductSum_ = $categorizedProduct_->sum;
-                            }
-                            $firstColorProducts[] = [
-                                'id'=>$categorizedProduct_->id,
-                                'size'=>$categorizedProduct_->size ? $categorizedProduct_->size->name:'',
-                                'color'=>[
-                                    'id'=>$categorizedProduct_->color->id,
-                                    'name'=>$categorizedProduct_->color->name,
-                                    'code'=>$categorizedProduct_->color->code,
-                                ],
-                                'sum' => $categorizedProductSum_,
-                                'discount' => $product->discount?$product->discount->percent:null,
-                                'price'=>$categorizedProduct_->sum,
-                                'count' => $categorizedProduct_->count
-                            ];
-                        }
-                    }
-                }
-                foreach (array_unique($colors_array) as $color) {
-                    $productsByColor = [];
-                    foreach ($product->categorizedProducts as $categorizedProduct){
-                        if($categorizedProduct->color) {
-                            if ($color == $categorizedProduct->color->id) {
-                                $colorModel = $categorizedProduct->color;
-                                if ($discount) {
-                                    $categorizedProductSum = $discount->percent ? $categorizedProduct->sum - $categorizedProduct->sum * (int)$discount->percent / 100 : $categorizedProduct->sum;
-                                } else {
-                                    $categorizedProductSum = $categorizedProduct->sum;
-                                }
-                                $productsByColor[] = [
-                                    'id' => $categorizedProduct->id,
-                                    'size' => $categorizedProduct->size ? $categorizedProduct->size->name : '',
-                                    'sum' => $categorizedProductSum,
-                                    'color'=>[
-                                        'id'=>$categorizedProduct->color->id,
-                                        'name'=>$categorizedProduct->color->name,
-                                        'code'=>$categorizedProduct->color->code,
-                                    ],
-                                    'discount' => $product->discount ? $product->discount->percent : null,
-                                    'price' => $categorizedProduct->sum,
-                                    'count' => $categorizedProduct->count
-                                ];
-                            }
-                        }
-                    }
-                    $categorizedByColor[] = [
-                        'color'=>$colorModel,
-                        'products'=>$productsByColor
-                    ];
-                }
-            }
-            $images_ = json_decode($product->images);
-            $images = [];
-            foreach ($images_ as $image_) {
-                $images[] = asset('storage/products/' . $image_);
-            }
-            $goods[$key]['id'] = $product->id;
-            $goods[$key]['name'] = $product->name ?? null;
-            $current_category = $this->getProductCategory($product);
-            $goods[$key]['category'] = $current_category->name??null;
-            $goods[$key]['description'] = $product->description ?? null;
-            if($discount){
-                $goods[$key]['sum'] = $discount->percent?$product->sum - $product->sum*(int)$discount->percent/100:$product->sum;
-            }else{
-                $goods[$key]['sum'] = $product->sum ?? null;
-            }
-            $goods[$key]['price'] = $product->sum;
-            $goods[$key]['discount'] = $product->discount?$product->discount->percent:null;
-            $goods[$key]['company'] = $product->company ?? null;
-            $goods[$key]['characters'] = $categorizedByColor??[];
-            $goods[$key]['first_color_products'] = $firstColorProducts ?? [];
-            $goods[$key]['images'] = $images ?? [];
-            $goods[$key]['basket_button'] = false;
-            $goods[$key]['created_at'] = $product->created_at ?? null;
-            $goods[$key]['updated_at'] = $product->updated_at ?? null;
-        }
+        $goods = $this->getGoods($products);
         $response = [
             'status'=>true,
             'data'=>$goods
@@ -861,6 +683,74 @@ class ProductsController extends Controller
     public function BestSeller()
     {
         $products = Products::orderBy('id', 'DESC')->get();
+        $goods = $this->getGoods($products);
+        $response = [
+            'status'=>true,
+            'data'=>$goods
+        ];
+        return response()->json($response, 200);
+    }
+
+    public function getSizes($id){
+        $sizes = Sizes::select('id', 'name', 'category_id')->where('category_id', $id)->get();
+        $respone = [
+            'status'=>true,
+            'data'=>$sizes
+        ];
+        return response()->json($respone, 200);
+    }
+
+    public function getCategoriesByProduct($id){
+        $product = Products::find($id);
+        $current_category = $this->getProductCategory($product);
+        $respone = [
+            'status'=>true,
+            'data'=>$current_category->sizes??[],
+            'category'=>$current_category->name??"",
+            'sum'=>$product->sum
+        ];
+        return response()->json($respone, 200);
+    }
+
+    public function getProductsByCategories(){
+        $categories = Category::where('step', 0)->get();
+        $data = $this->getProductsByAllCategories($categories);
+        return response()->json([
+            'status'=>true,
+            'message'=>'Success',
+            'data'=>$data
+        ]);
+    }
+
+    public function getProductsBySubCategories($id){
+        $categories = Category::where('id', $id)->get();
+        $data = $this->getProductsByAllCategories($categories);
+        return response()->json([
+            'status'=>true,
+            'message'=>'Success',
+            'data'=>$data
+        ]);
+    }
+
+    public function getProductsByAllCategories($categories){
+        $data = [];
+        foreach ($categories as $category){
+            $all_products = [];
+            $category_ids = $this->getCategoriesId($category);
+            $products = Products::whereIn('category_id', $category_ids)->get();
+            $goods = $this->getGoods($products);
+            $data[] = [
+                'category'=>[
+                    'id'=>$category->id,
+                    'name'=>$category->name,
+                ],
+                'products'=>$goods
+            ];
+        }
+        return $data;
+    }
+
+    public function getGoods($products){
         $goods = [];
         foreach ($products as $key => $product) {
             $discount = $product->discount;
@@ -951,159 +841,7 @@ class ProductsController extends Controller
             $goods[$key]['created_at'] = $product->created_at ?? null;
             $goods[$key]['updated_at'] = $product->updated_at ?? null;
         }
-        $response = [
-            'status'=>true,
-            'data'=>$goods
-        ];
-        return response()->json($response, 200);
-    }
-
-    public function getSizes($id){
-        $sizes = Sizes::select('id', 'name', 'category_id')->where('category_id', $id)->get();
-        $respone = [
-            'status'=>true,
-            'data'=>$sizes
-        ];
-        return response()->json($respone, 200);
-    }
-
-    public function getCategoriesByProduct($id){
-        $product = Products::find($id);
-        $current_category = $this->getProductCategory($product);
-        $respone = [
-            'status'=>true,
-            'data'=>$current_category->sizes??[],
-            'category'=>$current_category->name??"",
-            'sum'=>$product->sum
-        ];
-        return response()->json($respone, 200);
-    }
-
-    public function getProductsByCategories(){
-        $categories = Category::where('step', 0)->get();
-        $data = $this->getProductsByAllCategories($categories);
-        return response()->json([
-            'status'=>true,
-            'message'=>'Success',
-            'data'=>$data
-        ]);
-    }
-
-    public function getProductsBySubCategories($id){
-        $categories = Category::where('id', $id)->get();
-        $data = $this->getProductsByAllCategories($categories);
-        return response()->json([
-            'status'=>true,
-            'message'=>'Success',
-            'data'=>$data
-        ]);
-    }
-
-    public function getProductsByAllCategories($categories){
-        $data = [];
-        foreach ($categories as $category){
-            $all_products = [];
-            $category_ids = $this->getCategoriesId($category);
-            $products = Products::whereIn('category_id', $category_ids)->get();
-            $goods = [];
-            foreach ($products as $key => $product) {
-                $discount = $product->discount;
-                $colors_array = [];
-                $firstColorProducts = [];
-                $categorizedByColor = [];
-                if (!empty($product->categorizedProducts)) {
-                    foreach ($product->categorizedProducts as $categorizedProduct_) {
-                        if($categorizedProduct_->color) {
-                            $colors_array[] = $categorizedProduct_->color->id;
-                            if($colors_array[0] == $categorizedProduct_->color->id){
-                                if($discount){
-                                    $categorizedProductSum_ = $discount->percent?$categorizedProduct_->sum - $categorizedProduct_->sum*(int)$discount->percent/100:$categorizedProduct_->sum;
-                                }else{
-                                    $categorizedProductSum_ = $categorizedProduct_->sum;
-                                }
-                                $firstColorProducts[] = [
-                                    'id'=>$categorizedProduct_->id,
-                                    'size'=>$categorizedProduct_->size ? $categorizedProduct_->size->name:'',
-                                    'color'=>[
-                                        'id'=>$categorizedProduct_->color->id,
-                                        'name'=>$categorizedProduct_->color->name,
-                                        'code'=>$categorizedProduct_->color->code,
-                                    ],
-                                    'sum' => $categorizedProductSum_,
-                                    'discount' => $product->discount?$product->discount->percent:null,
-                                    'price'=>$categorizedProduct_->sum,
-                                    'count' => $categorizedProduct_->count
-                                ];
-                            }
-                        }
-                    }
-                    foreach (array_unique($colors_array) as $color) {
-                        $productsByColor = [];
-                        foreach ($product->categorizedProducts as $categorizedProduct){
-                            if($categorizedProduct->color) {
-                                if ($color == $categorizedProduct->color->id) {
-                                    $colorModel = $categorizedProduct->color;
-                                    if ($discount) {
-                                        $categorizedProductSum = $discount->percent ? $categorizedProduct->sum - $categorizedProduct->sum * (int)$discount->percent / 100 : $categorizedProduct->sum;
-                                    } else {
-                                        $categorizedProductSum = $categorizedProduct->sum;
-                                    }
-                                    $productsByColor[] = [
-                                        'id' => $categorizedProduct->id,
-                                        'size' => $categorizedProduct->size ? $categorizedProduct->size->name : '',
-                                        'sum' => $categorizedProductSum,
-                                        'color'=>[
-                                            'id'=>$categorizedProduct->color->id,
-                                            'name'=>$categorizedProduct->color->name,
-                                            'code'=>$categorizedProduct->color->code,
-                                        ],
-                                        'discount' => $product->discount ? $product->discount->percent : null,
-                                        'price' => $categorizedProduct->sum,
-                                        'count' => $categorizedProduct->count
-                                    ];
-                                }
-                            }
-                        }
-                        $categorizedByColor[] = [
-                            'color'=>$colorModel,
-                            'products'=>$productsByColor
-                        ];
-                    }
-                }
-                $images_ = json_decode($product->images);
-                $images = [];
-                foreach ($images_ as $image_) {
-                    $images[] = asset('storage/products/' . $image_);
-                }
-                $goods[$key]['id'] = $product->id;
-                $goods[$key]['name'] = $product->name ?? null;
-                $current_category = $this->getProductCategory($product);
-                $goods[$key]['category'] = $current_category->name??null;
-                $goods[$key]['description'] = $product->description ?? null;
-                if($discount){
-                    $goods[$key]['sum'] = $discount->percent?$product->sum - $product->sum*(int)$discount->percent/100:$product->sum;
-                }else{
-                    $goods[$key]['sum'] = $product->sum ?? null;
-                }
-                $goods[$key]['price'] = $product->sum;
-                $goods[$key]['discount'] = $product->discount?$product->discount->percent:null;
-                $goods[$key]['company'] = $product->company ?? null;
-                $goods[$key]['characters'] = $categorizedByColor??[];
-                $goods[$key]['first_color_products'] = $firstColorProducts ?? [];
-                $goods[$key]['images'] = $images ?? [];
-                $goods[$key]['basket_button'] = false;
-                $goods[$key]['created_at'] = $product->created_at ?? null;
-                $goods[$key]['updated_at'] = $product->updated_at ?? null;
-            }
-            $data[] = [
-                'category'=>[
-                    'id'=>$category->id,
-                    'name'=>$category->name,
-                ],
-                'products'=>$goods
-            ];
-        }
-        return $data;
+        return $goods;
     }
 
     public function getCategoriesId($category){
