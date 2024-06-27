@@ -29,7 +29,7 @@
                     <div class="mb-3 col-6">
                         <label class="form-label">{{translate('Category')}}</label>
                         <select name="category_id" class="form-control" required>
-                            @if(isset($subcategory->category->id))
+                            @if($subcategory->category)
                                 @foreach($categories as $category)
                                     <option {{$subcategory->category->id == $category->id?'selected':''}} value="{{$category->id}}">{{$category->name}}</option>
                                 @endforeach

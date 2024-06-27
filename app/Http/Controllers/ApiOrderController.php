@@ -37,13 +37,13 @@ class ApiOrderController extends Controller
                     if($product_){
                         $discount = $product_->discount;
                         if($product->sum){
-                            if(!empty($discount)){
+                            if($discount){
                                 $categorizedProductSum = $discount->percent?$product->sum*(int)$product_data['count'] - $product->sum*(int)$product_data['count']*(int)$discount->percent/100:$product->sum*(int)$product_data['count'];
                             }else{
                                 $categorizedProductSum = $product->sum*(int)$product_data['count'];
                             }
                         }else{
-                            if(!empty($discount)){
+                            if($discount){
                                 $categorizedProductSum = $discount->percent?$product_->sum*(int)$product_data['count'] - $product_->sum*(int)$product_data['count']*(int)$discount->percent/100:$product_->sum*(int)$product_data['count'];
                             }else{
                                 $categorizedProductSum = $product_->sum*(int)$product_data['count'];
@@ -142,14 +142,14 @@ class ApiOrderController extends Controller
                     $order_detail_all_price = (int)$order_detail->price * (int)$order_detail->quantity - (int)$order_detail->discount_price;
                     $company_discount_price = $company_discount_price + (int)$order_detail->discount_price;
 
-                    if(!empty($order_detail->warehouse_product)){
-                        $discount_withouth_expire = !empty($order_detail->warehouse_product->discount_withouth_expire)?$order_detail->warehouse_product->discount_withouth_expire->percent:0;
+                    if($order_detail->warehouse_product){
+                        $discount_withouth_expire = $order_detail->warehouse_product->discount_withouth_expire?$order_detail->warehouse_product->discount_withouth_expire->percent:0;
                     }else{
                         $discount_withouth_expire = 0;
                     }
 
-                    if(!empty($order_detail->warehouse_product)) {
-                        if (!empty($order_detail->warehouse_product->product)) {
+                    if($order_detail->warehouse_product) {
+                        if ($order_detail->warehouse_product->product) {
                             if ($order_detail->warehouse_product->product->images) {
                                 $images_ = json_decode($order_detail->warehouse_product->product->images);
                             } else {
@@ -199,9 +199,9 @@ class ApiOrderController extends Controller
                     }
                 }
                 $address = $order->address->name;
-                if(!empty($order->address->cities)){
+                if($order->address->cities){
                     $city = $order->address->cities->name;
-                    if(!empty($order->address->cities->region)){
+                    if($order->address->cities->region){
                         $region = $order->address->cities->region->name;
                         $address_name = $address.' '.$city.' '.$region;
                     }else{
@@ -273,14 +273,14 @@ class ApiOrderController extends Controller
                         $order_detail->status = Constants::ORDER_DETAIL_ORDERED;
                         if($product->sum){
                             $categorizedProductPrice = $product->sum*(int)$product_data['count'];
-                            if(!empty($discount)){
+                            if($discount){
                                 if((int)$discount->percent != 0){
                                     $discount_price = $product->sum*(int)$product_data['count']*(int)$discount->percent/100;
                                 }
                             }
                         }else{
                             $categorizedProductPrice = $product_->sum*(int)$product_data['count'];
-                            if(!empty($discount)){
+                            if($discount){
                                 if((int)$discount->percent != 0){
                                     $discount_price = $product_->sum*(int)$product_data['count']*(int)$discount->percent/100;
                                 }
@@ -395,11 +395,11 @@ class ApiOrderController extends Controller
             $deliver_date = strtotime('+3 days');
             $delivering_time = 'After three days';
         }
-        if(!empty($order->address)){
+        if($order->address){
             $address = $order->address->name;
-            if(!empty($order->address->cities)){
+            if($order->address->cities){
                 $city = $order->address->cities->name;
-                if(!empty($order->address->cities->region)){
+                if($order->address->cities->region){
                     if($order->address->cities->region->name == 'Toshkent shahri'){
                         if((int)date('H') < 17){
                             $deliver_date = strtotime('+1 day');

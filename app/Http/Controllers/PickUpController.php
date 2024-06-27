@@ -16,10 +16,8 @@ class PickUpController extends Controller
     {
         $super_admins_id = User::where('is_admin', 1)->pluck('id')->all();
         $addresses_ = Address::whereIn('user_id', $super_admins_id)->get();
-
         $addresses = [];
         foreach ($addresses_ as $model){
-
             $city = '';
             $region = '';
             if($model->cities){

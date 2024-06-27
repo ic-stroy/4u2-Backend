@@ -14,30 +14,25 @@
                 <div class="profile_box">
                     <div class="d-flex align-items-start">
                         <div>
-                            @if(isset($model))
-                                @php
+                            @php
                                 if($model->avatar){
                                     $sms_avatar = storage_path('app/public/user/'.$model->avatar);
                                 }else{
                                     $sms_avatar = storage_path('app/public/user/no');
                                 }
-                                @endphp
-                                @php
-
-                                @endphp
-                                @if(file_exists($sms_avatar))
-                                    <img class="user_photo_2" src="{{asset('storage/user/'.$model->avatar)}}" alt="">
-                                @else
-                                    <img class="user_photo_2" src="{{asset('assets/images/man.jpg')}}" alt="">
-                                @endif
+                            @endphp
+                            @if(file_exists($sms_avatar))
+                                <img class="user_photo_2" src="{{asset('storage/user/'.$model->avatar)}}" alt="">
+                            @else
+                                <img class="user_photo_2" src="{{asset('assets/images/man.jpg')}}" alt="">
                             @endif
                         </div>
                         <div id="color_black" style="margin-left: 30px;">
-                            <h3 >@if(isset($model)){{$model->first_name.' '.$model->last_name.' '.$model->middle_name}}@endif</h3>
+                            <h3>{{$model->first_name.' '.$model->last_name.' '.$model->middle_name}}</h3>
                             <p>{{translate('Role').': '}}<b>{{$model->is_admin == 1?'Admin':'User' }}</b></p>
-                            <p>{{translate('Phone').': '}}<b>@if(isset($model)){{$model->phone_number??''}}@endif</b></p>
+                            <p>{{translate('Phone').': '}}<b>{{$model->phone_number??''}}</b></p>
                             @if($year_old>0)
-                            <p>{{translate('Age').': '}}<b>{{$year_old??''}}</b></p>
+                                <p>{{translate('Age').': '}}<b>{{$year_old??''}}</b></p>
                             @else
                                 <div class="mt-4"></div>
                             @endif
@@ -63,9 +58,7 @@
                             <div class="d-flex justify-content-between" style="margin-top: 20px; align-items: center">
                                 <h3 class="text_name">{{translate('Gender')}}:</h3>
                                 <div class="text_value">
-                                    @if(isset($model))
-                                        {{$model->gender==2?translate('female'):translate('male')}}
-                                    @endif
+                                    {{$model->gender==2?translate('female'):translate('male')}}
                                 </div>
                             </div>
                         </div>
@@ -74,16 +67,14 @@
                             <div class="d-flex justify-content-between" style="align-items: center">
                                 <h3 class="text_name">{{translate('Full Name')}}:</h3>
                                 <div class="text_value">
-                                    @if(isset($model))
-                                        {{$model->first_name.' '.$model->last_name.' '.$model->middle_name}}
-                                    @endif
+                                    {{$model->first_name.' '.$model->last_name.' '.$model->middle_name}}
                                 </div>
                             </div>
                             <div class="d-flex justify-content-between" style="margin-top: 20px; align-items: center">
                                 <h3 class="text_name">{{translate('Birth date')}}:</h3>
                                 @php
-                                    if(isset($model) && isset($model->birth_date)){
-                                            $birth_date_arr = explode(' ', $model->birth_date);
+                                    if($model->birth_date){
+                                        $birth_date_arr = explode(' ', $model->birth_date);
                                     }else{
                                         $birth_date_arr = [];
                                     }
@@ -121,33 +112,24 @@
             </tr>
             <tr>
                 <th>{{translate('Full name')}}</th>
-                <td>
-                    @if(isset($model))
-                        {{$model->first_name.' '.$model->last_name.' '.$model->middle_name}}</td>
-                    @endif
+                <td>{{$model->first_name.' '.$model->last_name.' '.$model->middle_name}}</td>
             </tr>
             <tr>
                 <th>{{translate('Phone number')}}</th>
                 <td>
-                    @if(isset($model))
-                        {{$model->phone_number}}
-                    @endif
+                    {{$model->phone_number}}
                 </td>
             </tr>
             <tr>
                 <th>{{translate('Gender')}}</th>
                 <td>
-                    @if(isset($model))
-                        {{$model->gender??''}}
-                    @endif
+                    {{$model->gender??''}}
                 </td>
             </tr>
             <tr>
                 <th>{{translate('Birth date')}}</th>
                 <td>
-                    @if(isset($model))
-                        {{$model->birth_date??''}}
-                    @endif
+                    {{$model->birth_date??''}}
                 </td>
             </tr>
             <tr>

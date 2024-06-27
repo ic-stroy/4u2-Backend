@@ -38,7 +38,7 @@
                             </td>
                             <td>
                                 <a class="show_page" href="{{route('coupons.show', $coupon->id)}}">
-                                    @if(isset($coupon->name))
+                                    @if($coupon->name)
                                         {{$coupon->name}}
                                     @else
                                         <div class="no_text"></div>
@@ -58,7 +58,7 @@
                             </td>
                             <td>
                                 <a class="show_page" href="{{route('coupons.show', $coupon->id)}}">
-                                    @if(isset($coupon->min_price))
+                                    @if($coupon->min_price)
                                         {{$coupon->min_price}}
                                     @else
                                         <div class="no_text"></div>

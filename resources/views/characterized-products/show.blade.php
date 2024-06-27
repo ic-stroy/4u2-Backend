@@ -26,14 +26,14 @@
                     <tr>
                         <th>{{translate('Size')}}</th>
                         <td>
-                            @if(isset($model->size->name)){{ $model->size->name }}@endif
+                            @if($model->size){{ $model->size->name?$model->size->name:'' }}@endif
                         </td>
                     </tr>
                     <tr>
                         <th>{{translate('Colors')}}</th>
                         <td class="d-flex justify-content-between">
-                            @if(isset($model->color->name))
-                                <div class="color_content" style=" background-color: {{$model->color->code??''}};">{{$model->color->name}}</div>
+                            @if($model->color)
+                                <div class="color_content" style=" background-color: {{$model->color->code??''}};">{{$model->color->name?$model->color->name:''}}</div>
                             @else
                                 <div>{{translate('No color')}}</div>
                             @endif
@@ -46,25 +46,31 @@
                     <tr>
                         <th>{{translate('image')}}</th>
                         <td>
-                            @if(isset($model->product->images))
-                                @php
-                                    $images = json_decode($model->product->images);
-                                    $is_image = 0;
-                                @endphp
-                                <div class="row">
-                                    @foreach($images as $image)
-                                        @php
-                                            $avatar_main = storage_path('app/public/products/'.$image);
-                                        @endphp
-                                        @if(file_exists($avatar_main))
-                                            @php($is_image = 1)
-                                            <div class="col-4 mb-3">
-                                                <img src="{{asset('storage/products/'.$image)}}" alt="">
-                                            </div>
-                                        @endif
-                                    @endforeach
-                                </div>
-                                @if($is_image == 0)
+                            @if($model->product)
+                                @if($model->product->images)
+                                    @php
+                                        $images = json_decode($model->product->images);
+                                        $is_image = 0;
+                                    @endphp
+                                    <div class="row">
+                                        @foreach($images as $image)
+                                            @php
+                                                $avatar_main = storage_path('app/public/products/'.$image);
+                                            @endphp
+                                            @if(file_exists($avatar_main))
+                                                @php($is_image = 1)
+                                                <div class="col-4 mb-3">
+                                                    <img src="{{asset('storage/products/'.$image)}}" alt="">
+                                                </div>
+                                            @endif
+                                        @endforeach
+                                    </div>
+                                    @if($is_image == 0)
+                                        <div>
+                                            <img src="{{asset('icon/no_photo.jpg')}}" alt=""  height="100px">
+                                        </div>
+                                    @endif
+                                @else
                                     <div>
                                         <img src="{{asset('icon/no_photo.jpg')}}" alt=""  height="100px">
                                     </div>

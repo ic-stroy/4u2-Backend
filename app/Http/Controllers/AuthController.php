@@ -23,13 +23,14 @@ class AuthController extends Controller
         $eskiz_token = EskizToken::first();
         $user_verify = UserVerify::withTrashed()->where('phone_number', (int)$fields['phone'])->first();
         $random = rand(100000, 999999);
-        if(!isset($user_verify->id)){
+        if($user_verify){
             $user_verify = new UserVerify();
             $user_verify->phone_number = (int)$request->phone;
             $user_verify->status_id = 1;
-        }elseif(isset($user_verify->deleted_at)){
-            $user_verify->status_id = 1;
-            $user_verify->deleted_at = NULL;
+            if($user_verify->deleted_at){
+                $user_verify->status_id = 1;
+                $user_verify->deleted_at = NULL;
+            }
         }
         $token_options = [
             'multipart' => [
@@ -48,7 +49,7 @@ class AuthController extends Controller
                 return $this->error("Fail message not sent. You must wait 1 minute to resend sms", 400);
             }
         }
-        if(!isset($eskiz_token->expire_date)){
+        if($eskiz_token->expire_date){
             $guzzle_request = new GuzzleRequest('POST', 'https://notify.eskiz.uz/api/auth/login');
             $res = $client->sendAsync($guzzle_request, $token_options)->wait();
             $res_array = json_decode($res->getBody());
@@ -91,7 +92,7 @@ class AuthController extends Controller
         $res = $client->sendAsync($guzzle_request, $options)->wait();
         $result = $res->getBody();
         $result = json_decode($result);
-        if(isset($result)){
+        if($result){
             $user_verify->verify_code = $random;
             $user_verify->save();
             return response()->json([
@@ -115,7 +116,7 @@ class AuthController extends Controller
         ]);
         $model = UserVerify::withTrashed()->where('phone_number', (int)$fields['phone_number'])->first();
 
-        if(isset($model->id)){
+        if($model){
             if(strtotime('-7 minutes') > strtotime($model->updated_at)){
                 $model->verify_code = rand(100000, 999999);
                 $model->save();
@@ -124,13 +125,13 @@ class AuthController extends Controller
                     'message'=>'Your sms code expired. Resend sms code',
                 ], 400);
             }
-            if(isset($model->deleted_at)){
+            if($model->deleted_at){
                 $model->deleted_at = NULL;
             }
             if($model->verify_code == $fields['verify_code']){
                 $is_registred = false;
                 $user = User::withTrashed()->find($model->user_id);
-                if(!isset($user->id)){
+                if($user){
                     $new_user = new User();
                     $new_user->phone_number = (int)$fields['phone_number'];
                     $new_user->save();
@@ -149,7 +150,7 @@ class AuthController extends Controller
                     ], 201);
                 }else{
                     $is_registred = true;
-                    if(isset($user->deleted_at)){
+                    if($user->deleted_at){
                         $user->deleted_at = NULL;
                     }
                     $user->email = $model->phone_number;
@@ -239,7 +240,7 @@ class AuthController extends Controller
         ]);
         $user = User::where('email', $fields['email'])->first();
         $is_registered = 0;
-        if(!isset($user->id)) {
+        if($user) {
             $is_registered = 1;
             $user = new User();
         }
@@ -273,7 +274,7 @@ class AuthController extends Controller
     public function getUser(){
         $user = Auth::user();
         $user_image = null;
-        if(isset($user->avatar)){
+        if($user->avatar){
             $sms_avatar = storage_path('app/public/user/' . $user->avatar);
         }else{
             $sms_avatar = storage_path('app/public/user/' . 'no');

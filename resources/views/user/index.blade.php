@@ -42,9 +42,9 @@
                         </th>
                         <td class="text-center">
                             <a class="show_page_color" href="{{ route('user.show', $user->id) }}">
-                                @if(isset($user->id))
+                                @if($user)
                                     @php
-                                        if(isset($user)){
+                                        if($user->avatar){
                                             $sms_avatar = storage_path('app/public/user/'.$user->avatar);
                                         }else{
                                             $sms_avatar = 'no';
@@ -60,12 +60,12 @@
                         </td>
                         <td>
                             <a class="show_page" href="{{ route('user.show', $user->id) }}">
-                                @if(isset($user->first_name)){{ $user->first_name }}@else <div class="no_text"></div> @endif
+                                @if($user->first_name){{ $user->first_name }}@else <div class="no_text"></div> @endif
                             </a>
                         </td>
                         <td>
                             <a class="show_page" href="{{ route('user.show', $user->id) }}">
-                                @if(isset($user->last_name)){{ $user->last_name }}@else <div class="no_text"></div> @endif
+                                @if($user->last_name){{ $user->last_name }}@else <div class="no_text"></div> @endif
                             </a>
                         </td>
                         <td>
@@ -75,7 +75,7 @@
                         </td>
                         <td>
                             <a class="show_page" href="{{ route('user.show', $user->id) }}">
-                                @if(isset($user->phone_number)){{ $user->phone_number }}@else <div class="no_text"></div> @endif
+                                @if($user->phone_number){{ $user->phone_number }}@else <div class="no_text"></div> @endif
                             </a>
                         </td>
                         <td class="function_column">

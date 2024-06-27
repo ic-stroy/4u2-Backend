@@ -535,11 +535,11 @@ class CategorySeeder extends Seeder
             ]
         ];
         $category_id = Category::withTrashed()->select('id')->orderBy('id', 'desc')->first();
-        if(!isset($category_id->id)){
+        if($category_id){
             $all_categories = [];
             $all_sub_categories = [];
             $all_sub_sub_categories = [];
-            $category_id_ = isset($category_id->id)?$category_id->id:0;
+            $category_id_ = $category_id?$category_id->id:0;
             $sub_category_id_ = 0;
             $sub_sub_category_id_ = 0;
             $last_category_id = -1;
@@ -584,7 +584,7 @@ class CategorySeeder extends Seeder
             }
         }else{
             $category_deleted_at = Category::withTrashed()->select('deleted_at')->find($category_id->id);
-            if(!isset($category_deleted_at->deleted_at)){
+            if($category_deleted_at->deleted_at){
                 echo "Category is exist status deleted";
             }else{
                 echo "Category is exist status active";

@@ -402,13 +402,13 @@
                                                 <div class="col-1"></div>
                                                 <div class="col-4 order_content">
                                                     <h4>{{translate('Order')}}</h4>
-                                                    @if(!empty($products[0]->warehouse) && $products[0]->warehouse->name)
+                                                    @if($products[0]->warehouse && $products[0]->warehouse->name)
                                                         <span><b>{{$products[0]->warehouse->name}}</b></span>
-                                                    @elseif(!empty($products[0]->warehouse->product) && $products[0]->warehouse->product->name)
+                                                    @elseif($products[0]->warehouse->product && $products[0]->warehouse->product->name)
                                                         <span><b>{{$products[0]->warehouse->product->name}}</b></span>
                                                     @endif
                                                     @if($products[0]->price)
-                                                        <span>{{translate('Price')}}: <b>{{$products[0]->price}}</b> {!! !empty($products[0]->quantity)?translate('Quantity').': '."<b>".$products[0]->quantity."</b>":'' !!}</span>
+                                                        <span>{{translate('Price')}}: <b>{{$products[0]->price}}</b> {!! $products[0]->quantity?translate('Quantity').': '."<b>".$products[0]->quantity."</b>":'' !!}</span>
                                                     @endif
                                                     @if($products[1])
                                                         <span>{{translate('Sum')}}: <b>{{$products[1]}}</b></span>
@@ -416,7 +416,7 @@
                                                     @if($products['discount_withouth_expire'] != 0)
                                                         <span>{{translate('Discount')}}: <b style="color: red">{{(int)$products['discount_withouth_expire']}} %</b></span>
                                                     @endif
-                                                    @if(!empty($products[0]->size))
+                                                    @if($products[0]->size)
                                                         <span>{{translate('Size')}}: <b>{{$products[0]->size->name}}</b> {{translate('Color')}}: <b>{{$products[0]->color->name}}</b></span>
                                                     @endif
                                                     <span>{{translate('Ordered')}}: <b>{{$products[0]->updated_at}}</b></span>
@@ -453,9 +453,9 @@
                                                 <div class="function-column col-3">
                                                     <div class="d-flex justify-content-around">
                                                         @php
-                                                            if(!empty($products[0]->warehouse) && $products[0]->warehouse->name){
+                                                            if($products[0]->warehouse && $products[0]->warehouse->name){
                                                                 $product_name = $products[0]->warehouse->name??'';
-                                                            }else if(!empty($products[0]->warehouse->product) && $products[0]->warehouse->product->name){
+                                                            }else if($products[0]->warehouse->product && $products[0]->warehouse->product->name){
                                                                 $product_name = $products[0]->warehouse->product->name??'';
                                                             }
                                                         @endphp
@@ -465,8 +465,8 @@
                                                                     onclick='accepting_order(
                                                                         "{{$products[0]->quantity}}",
                                                                         "{{$products[0]->warehouse->quantity - $products[0]->quantity }}",
-                                                                        "{{!empty($products[0]->color)?$products[0]->color->name:''}}",
-                                                                        "{{!empty($products[0]->size)?$products[0]->size->name:''}}",
+                                                                        "{{$products[0]->color?$products[0]->color->name:''}}",
+                                                                        "{{$products[0]->size?$products[0]->size->name:''}}",
                                                                         "{{$product_name}}",
                                                                         "{{isset($products['images'][0])?$products['images'][0]:''}}",
                                                                         "{{isset($products['images'][1])?$products['images'][1]:''}}",
@@ -485,8 +485,8 @@
                                                                     onclick='accepting_order(
                                                                         "{{$products[0]->quantity}}",
                                                                         "{{$products[0]->warehouse->quantity - $products[0]->quantity }}",
-                                                                        "{{!empty($products[0]->color)?$products[0]->color->name:''}}",
-                                                                        "{{!empty($products[0]->size)?$products[0]->size->name:''}}",
+                                                                        "{{$products[0]->color?$products[0]->color->name:''}}",
+                                                                        "{{$products[0]->size?$products[0]->size->name:''}}",
                                                                         "{{$product_name}}",
                                                                         "{{isset($products['images'][0])?$products['images'][0]:''}}",
                                                                         "{{isset($products['images'][1])?$products['images'][1]:''}}",
@@ -640,13 +640,13 @@
                                                 <div class="col-1"></div>
                                                 <div class="col-4 order_content">
                                                     <h4>{{translate('Order')}}</h4>
-                                                    @if(!empty($products[0]->warehouse) && $products[0]->warehouse->name)
+                                                    @if($products[0]->warehouse && $products[0]->warehouse->name)
                                                         <span><b>{{$products[0]->warehouse->name}}</b></span>
-                                                    @elseif(!empty($products[0]->warehouse->product) && $products[0]->warehouse->product->name)
+                                                    @elseif($products[0]->warehouse->product && $products[0]->warehouse->product->name)
                                                         <span><b>{{$products[0]->warehouse->product->name}}</b></span>
                                                     @endif
                                                     @if($products[0]->price)
-                                                        <span>{{translate('Price')}}: <b>{{$products[0]->price}}</b> {!! !empty($products[0]->quantity)?translate('Quantity').': '."<b>".$products[0]->quantity."</b>":'' !!}</span>
+                                                        <span>{{translate('Price')}}: <b>{{$products[0]->price}}</b> {!! $products[0]->quantity?translate('Quantity').': '."<b>".$products[0]->quantity."</b>":'' !!}</span>
                                                     @endif
                                                     @if($products[1])
                                                         <span>{{translate('Sum')}}: <b>{{$products[1]}}</b></span>
@@ -654,7 +654,7 @@
                                                     @if($products['discount_withouth_expire'] != 0)
                                                         <span>{{translate('Discount')}}: <b style="color: red">{{(int)$products['discount_withouth_expire']}} %</b></span>
                                                     @endif
-                                                    @if(!empty($products[0]->size))
+                                                    @if($products[0]->size)
                                                         <span>{{translate('Size')}}: <b>{{$products[0]->size->name}}</b> {{translate('Color')}}: <b>{{$products[0]->color->name}}</b></span>
                                                     @endif
                                                     <span>{{translate('Ordered')}}: <b>{{$products[0]->updated_at}}</b></span>
@@ -691,9 +691,9 @@
                                                 <div class="function-column col-3">
                                                     <div class="d-flex justify-content-around">
                                                         @php
-                                                            if(!empty($products[0]->warehouse) && $products[0]->warehouse->name){
+                                                            if($products[0]->warehouse && $products[0]->warehouse->name){
                                                                 $product_name = $products[0]->warehouse->name??'';
-                                                            }else if(!empty($products[0]->warehouse->product) && $products[0]->warehouse->product->name){
+                                                            }else if($products[0]->warehouse->product && $products[0]->warehouse->product->name){
                                                                 $product_name = $products[0]->warehouse->product->name??'';
                                                             }
                                                         @endphp
@@ -917,8 +917,8 @@
                                                                 onclick='accepting_order(
                                                                     "{{$products[0]->quantity}}",
                                                                     "{{$products[0]->warehouse->quantity - $products[0]->quantity }}",
-                                                                    "{{!empty($products[0]->color)?$products[0]->color->name:''}}",
-                                                                    "{{!empty($products[0]->size)?$products[0]->size->name:''}}",
+                                                                    "{{$products[0]->color?$products[0]->color->name:''}}",
+                                                                    "{{$products[0]->size?$products[0]->size->name:''}}",
                                                                     "{{$product_name}}",
                                                                     "{{isset($products['images'][0])?$products['images'][0]:''}}",
                                                                     "{{isset($products['images'][1])?$products['images'][1]:''}}",
@@ -1067,13 +1067,13 @@
                                                 <div class="col-1"></div>
                                                 <div class="col-4 order_content">
                                                     <h4>{{translate('Order')}}</h4>
-                                                    @if(!empty($products[0]->warehouse) && $products[0]->warehouse->name)
+                                                    @if($products[0]->warehouse && $products[0]->warehouse->name)
                                                         <span><b>{{$products[0]->warehouse->name}}</b></span>
-                                                    @elseif(!empty($products[0]->warehouse->product) && $products[0]->warehouse->product->name)
+                                                    @elseif($products[0]->warehouse->product && $products[0]->warehouse->product->name)
                                                         <span><b>{{$products[0]->warehouse->product->name}}</b></span>
                                                     @endif
                                                     @if($products[0]->price)
-                                                        <span>{{translate('Price')}}: <b>{{$products[0]->price}}</b> {!! !empty($products[0]->quantity)?translate('Quantity').': '."<b>".$products[0]->quantity."</b>":'' !!}</span>
+                                                        <span>{{translate('Price')}}: <b>{{$products[0]->price}}</b> {!! $products[0]->quantity?translate('Quantity').': '."<b>".$products[0]->quantity."</b>":'' !!}</span>
                                                     @endif
                                                     @if($products[1])
                                                         <span>{{translate('Sum')}}: <b>{{$products[1]}}</b></span>
@@ -1081,7 +1081,7 @@
                                                     @if($products['discount_withouth_expire'] != 0)
                                                         <span>{{translate('Discount')}}: <b style="color: red">{{(int)$products['discount_withouth_expire']}} %</b></span>
                                                     @endif
-                                                    @if(!empty($products[0]->size))
+                                                    @if($products[0]->size)
                                                         <span>{{translate('Size')}}: <b>{{$products[0]->size->name}}</b> {{translate('Color')}}: <b>{{$products[0]->color->name}}</b></span>
                                                     @endif
                                                     <span>{{translate('Ordered')}}: <b>{{$products[0]->updated_at}}</b></span>

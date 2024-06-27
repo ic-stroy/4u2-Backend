@@ -27,7 +27,7 @@
                     <tr>
                         <td>
                             <a class="show_page" href="{{route('subsubcategory.subsubcategory', $subcategory->id)}}">
-                                @if(isset($subcategory->name)){{ $subcategory->name }}@else <div class="no_text"></div> @endif
+                                @if($subcategory->name){{ $subcategory->name }}@else <div class="no_text"></div> @endif
                             </a>
                         </td>
                     </tr>

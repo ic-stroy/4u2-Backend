@@ -12,13 +12,13 @@
             </div>
             <table id="datatable-buttons" class="table table-striped table-bordered dt-responsive nowrap">
                 <thead>
-                <tr>
-                    <th>#</th>
-                    <th>{{translate('Name')}}</th>
-                    <th>{{translate('Category')}}</th>
-                    <th>{{translate('Updated_at')}}</th>
-                    <th class="text-center">{{translate('Functions')}}</th>
-                </tr>
+                    <tr>
+                        <th>#</th>
+                        <th>{{translate('Name')}}</th>
+                        <th>{{translate('Category')}}</th>
+                        <th>{{translate('Updated_at')}}</th>
+                        <th class="text-center">{{translate('Functions')}}</th>
+                    </tr>
                 </thead>
                 <tbody class="table_body">
                 @php
@@ -34,17 +34,17 @@
                         </th>
                         <td>
                             <a class="show_page" href="{{route('subcategory.show', $subcategory->id)}}">
-                                @if(isset($subcategory->name)){{ $subcategory->name }}@else <div class="no_text"></div> @endif
+                                @if($subcategory->name){{ $subcategory->name }}@else <div class="no_text"></div> @endif
                             </a>
                         </td>
                         <td>
                             <a class="show_page" href="{{route('subcategory.show', $subcategory->id)}}">
-                                @if(isset($subcategory->category->name)){{ $subcategory->category->name }}@else <div class="no_text"></div> @endif
+                                @if($subcategory->category){{ $subcategory->category->name??'' }}@else <div class="no_text"></div> @endif
                             </a>
                         </td>
                         <td>
                             <a class="show_page" href="{{route('subcategory.show', $subcategory->id)}}">
-                                @if(isset($subcategory->updated_at)){{ $subcategory->updated_at }}@else <div class="no_text"></div> @endif
+                                @if($subcategory->updated_at){{ $subcategory->updated_at }}@else <div class="no_text"></div> @endif
                             </a>
                         </td>
                         <td class="function_column">

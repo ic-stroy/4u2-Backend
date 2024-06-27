@@ -80,7 +80,7 @@ class CategoryController extends Controller
     public function destroy(string $id)
     {
         $model = Category::where('step', 0)->find($id);
-        if(!empty($model->subcategory)){
+        if(!$model->subcategory->isEmpty()){
             if(!$model->subcategory->isEmpty()){
                 return redirect()->back()->with('error', translate('You cannot delete this category because it has subcategories'));
             }
@@ -194,8 +194,8 @@ class CategoryController extends Controller
                 'images' => $images_array,
                 'description' => $product->description,
                 'price' => $product->sum,
-                'discount' => (isset($product->discount)) > 0 ? $product->discount->percent : NULL,
-                'price_discount' => (isset($product->discount)) > 0 ? $product->price - ($product->price / 100 * $product->discount->percent) : NULL,
+                'discount' => $product->discount ? $product->discount->percent : NULL,
+                'price_discount' => $product->discount? $product->price - ($product->price / 100 * $product->discount->percent) : NULL,
             ];
         }
 

@@ -14,7 +14,7 @@ class LanguageSeeder extends Seeder
     public function run(): void
     {
         $language = Language::first();
-        if(!isset($language->id)){
+        if($language->id){
             $datas = [
                 [
                     'id'=>1,

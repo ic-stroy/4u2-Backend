@@ -41,7 +41,7 @@
                     <tr>
                         <th>{{translate('image')}}</th>
                         <td>
-                            @if(isset($model->images))
+                            @if($model->images)
                                 @php
                                     $images = json_decode($model->images);
                                     $is_image = 0;

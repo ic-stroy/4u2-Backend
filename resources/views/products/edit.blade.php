@@ -84,7 +84,7 @@
                     <div class="mb-3 col-6 display-none" id="subcategory_exists">
                         <label class="form-label">{{translate('Sub category')}}</label>
                         <select name="subcategory_id" class="form-control" id="subcategory_id">
-                            @if(isset($current_category->subcategory))
+                            @if(!$current_category->subcategory->isEmpty())
                                 @foreach($current_category->subcategory as $subcategory)
                                     <option value="{{$subcategory->id}}" {{$subcategory->id == $current_sub_category_id?'selected':''}}>{{$subcategory->name}}</option>
                                 @endforeach
@@ -94,10 +94,12 @@
                     <div class="mb-3 col-6 display-none" id="subsubcategory_exists">
                         <label class="form-label">{{translate('Sub Sub category')}}</label>
                         <select name="subsubcategory_id" class="form-control" id="subsubcategory_id">
-                            @if(isset($category_product->sub_category->subsubcategory))
-                                @foreach($category_product->sub_category->subsubcategory as $subsubcategory)
-                                    <option value="{{$subsubcategory->id}}" {{$subsubcategory->id == $current_sub_sub_category_id?'selected':''}}>{{$subsubcategory->name}}</option>
-                                @endforeach
+                            @if($category_product->sub_category)
+                                @if(!$category_product->sub_category->subsubcategory->isEmpty())
+                                    @foreach($category_product->sub_category->subsubcategory as $subsubcategory)
+                                        <option value="{{$subsubcategory->id}}" {{$subsubcategory->id == $current_sub_sub_category_id?'selected':''}}>{{$subsubcategory->name}}</option>
+                                    @endforeach
+                                @endif
                             @endif
                         </select>
                     </div>

@@ -33,12 +33,12 @@
                             </th>
                             <td>
                                 <a class="show_page" href="{{route('category.show', $category->id)}}">
-                                    @if(isset($category->name)){{ $category->name }}@else <div class="no_text"></div> @endif
+                                    @if($category->name){{ $category->name }}@else <div class="no_text"></div> @endif
                                 </a>
                             </td>
                             <td>
                                 <a class="show_page" href="{{route('category.show', $category->id)}}">
-                                    @if(isset($category->updated_at)){{ $category->updated_at }}@else <div class="no_text"></div> @endif
+                                    @if($category->updated_at){{ $category->updated_at }}@else <div class="no_text"></div> @endif
                                 </a>
                             </td>
                             <td class="function_column">

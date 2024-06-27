@@ -15,7 +15,7 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         $is_exist_user = User::withTrashed()->where('email', 'admin@example.com')->first();
-        if(!isset($is_exist_user->id)){
+        if($is_exist_user){
 
             $user = [
                 'first_name'=>'Superadmin',

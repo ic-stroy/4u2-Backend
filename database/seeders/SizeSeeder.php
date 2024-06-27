@@ -45,7 +45,7 @@ class SizeSeeder extends Seeder
                 Sizes::create($size);
             }
         }else{
-            if(!isset($sizes->deleted_at)){
+            if($sizes->deleted_at){
                 echo "Size is exist status deleted";
             }else{
                 echo "Size is exist status active";

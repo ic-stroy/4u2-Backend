@@ -68,10 +68,10 @@ class OrderController extends Controller
             $order_has = false;
             $order_detail_is_ordered = false;
             $user_name = '';
-            if(!empty($order->user)){
-                $first_name = isset($order->user->first_name)?$order->user->first_name.' ':'';
-                $last_name = isset($order->user->last_name)?$order->user->last_name.' ':'';
-                $middle_name = isset($order->user->middle_name)?$order->user->middle_name:'';
+            if($order->user){
+                $first_name = $order->user->first_name?$order->user->first_name.' ':'';
+                $last_name = $order->user->last_name?$order->user->last_name.' ':'';
+                $middle_name = $order->user->middle_name?$order->user->middle_name:'';
                 $user_name = $first_name.''.$last_name.''.$middle_name;
             }
             foreach($order->orderDetail as $order_detail){
@@ -95,14 +95,14 @@ class OrderController extends Controller
                     $order_detail_all_price = (int)$order_detail->price * (int)$order_detail->quantity - (int)$order_detail->discount_price;
                     $company_discount_price = $company_discount_price + (int)$order_detail->discount_price;
 
-                    if(!empty($order_detail->warehouse_product)){
-                        $discount_withouth_expire = !empty($order_detail->warehouse_product->discount_withouth_expire)?$order_detail->warehouse_product->discount_withouth_expire->percent:0;
+                    if($order_detail->warehouse_product){
+                        $discount_withouth_expire = $order_detail->warehouse_product->discount_withouth_expire?$order_detail->warehouse_product->discount_withouth_expire->percent:0;
                     }else{
                         $discount_withouth_expire = 0;
                     }
 
-                    if(!empty($order_detail->warehouse_product)) {
-                        if (!empty($order_detail->warehouse_product->product)) {
+                    if($order_detail->warehouse_product) {
+                        if ($order_detail->warehouse_product->product) {
                             if ($order_detail->warehouse_product->product->images) {
                                 $images_ = json_decode($order_detail->warehouse_product->product->images);
                             } else {

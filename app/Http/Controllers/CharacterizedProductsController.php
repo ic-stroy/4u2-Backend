@@ -54,8 +54,12 @@ class CharacterizedProductsController extends Controller
         $model = new CharacterizedProducts();
         $model->product_id = $request->product_id;
         $model->sum = $request->sum;
-        $model->size_id = $request->size_id;
-        $model->color_id = $request->color_id;
+        if($request->size_id){
+            $model->size_id = $request->size_id;
+        }
+        if($request->color_id){
+            $model->color_id = $request->color_id;
+        }
         $model->count = $request->count;
         $model->save();
         return redirect()->route('characterizedProducts.index')->with('status', translate('Successfully created'));
@@ -69,27 +73,26 @@ class CharacterizedProductsController extends Controller
         $model = CharacterizedProducts::find($id);
         $colors_array = json_decode($model->colors_id);
         $colors = Color::select('name', 'code')->whereIn('id', $colors_array??[])->get();
-
         $category_ = '';
         $category_array = [];
         $sub_category_ = '';
         $sub_sub_category_ = '';
         if($product = $model->product){
-            if(!empty($product->category)){
+            if($product->category){
                 $category_ = $product->category->name;
                 $category_array = [$category_];
-            }elseif(!empty($product->subCategory)){
-                $category_ = !empty($product->subCategory->category)?$product->subCategory->category->name:'';
+            }elseif($product->subCategory){
+                $category_ = $product->subCategory->category?$product->subCategory->category->name:'';
                 $sub_category_ = $product->subCategory->name;
                 if($category_ != ''){
                     $category_array = [$category_, $sub_category_];
                 }else{
                     $category_array = [$sub_category_];
                 }
-            }elseif(!empty($product->subSubCategory)){
+            }elseif($product->subSubCategory){
                 $sub_sub_category_ = $product->subSubCategory->name;
-                if(!empty($product->subSubCategory->sub_category)){
-                    $category_ = !empty($product->subSubCategory->sub_category->category)?$product->subSubCategory->sub_category->category->name:'';
+                if($product->subSubCategory->sub_category){
+                    $category_ = $product->subSubCategory->sub_category?$product->subSubCategory->sub_category->category->name:'';
                     $sub_category_ = $product->subSubCategory->sub_category->name;
                     if($category_ != ''){
                         $category_array = [$category_, $sub_category_, $sub_sub_category_];
@@ -132,8 +135,12 @@ class CharacterizedProductsController extends Controller
         $model = CharacterizedProducts::find($id);
         $model->product_id = $request->product_id;
         $model->sum = $request->sum;
-        $model->size_id = $request->size_id;
-        $model->color_id = $request->color_id;
+        if($request->size_id){
+            $model->size_id = $request->size_id;
+        }
+        if($request->color_id){
+            $model->color_id = $request->color_id;
+        }
         $model->count = $request->count;
         $model->save();
         return redirect()->route('characterizedProducts.index')->with('status', translate('Successfully updated'));
@@ -188,13 +195,13 @@ class CharacterizedProductsController extends Controller
     }
 
     public function getProductCategory($product){
-        if(isset($product->subSubCategory->id)){
+        if($product->subSubCategory){
             $category_product = $product->subSubCategory;
             $is_category = 3;
-        }elseif(isset($product->subCategory->id)){
+        }elseif($product->subCategory){
             $category_product = $product->subCategory;
             $is_category = 2;
-        }elseif(isset($product->category->id)){
+        }elseif($product->category){
             $category_product = $product->category;
             $is_category = 1;
         }else{
@@ -206,10 +213,10 @@ class CharacterizedProductsController extends Controller
                 $current_category = $category_product;
                 break;
             case 2:
-                $current_category = isset($category_product->category)?$category_product->category:'no';
+                $current_category = $category_product->category?$category_product->category:'no';
                 break;
             case 3:
-                $current_category = isset($category_product->sub_category->category)?$category_product->sub_category->category:'no';
+                $current_category = $category_product->sub_category->category?$category_product->sub_category->category:'no';
                 break;
             default:
                 $current_category = 'no';

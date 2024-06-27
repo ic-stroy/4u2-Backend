@@ -34,17 +34,17 @@
                         </th>
                         <td>
                             <a class="show_page" href="{{route('subsubcategory.show', $subsubcategory->id)}}">
-                                @if(isset($subsubcategory->name)){{ $subsubcategory->name }}@else <div class="no_text"></div> @endif
+                                @if($subsubcategory->name){{ $subsubcategory->name }}@else <div class="no_text"></div> @endif
                             </a>
                         </td>
                         <td>
                             <a class="show_page" href="{{route('subsubcategory.show', $subsubcategory->id)}}">
-                                @if(isset($subsubcategory->sub_category->category->name)){{ $subsubcategory->sub_category->category->name }}@else <div class="no_text"></div> @endif
+                                @if($subsubcategory->sub_category->category->name)){{ $subsubcategory->sub_category->category->name }}@else <div class="no_text"></div> @endif
                             </a>
                         </td>
                         <td>
                             <a class="show_page" href="{{route('subsubcategory.show', $subsubcategory->id)}}">
-                                @if(isset($subsubcategory->updated_at)){{ $subsubcategory->updated_at }}@else <div class="no_text"></div> @endif
+                                @if($subsubcategory->updated_at){{ $subsubcategory->updated_at }}@else <div class="no_text"></div> @endif
                             </a>
                         </td>
                         <td class="function_column">

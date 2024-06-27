@@ -45,8 +45,10 @@ class UsersController extends Controller
         $random_array = [$letters[rand(0,25)], $letters[rand(0,25)], $letters[rand(0,25)], $letters[rand(0,25)], $letters[rand(0,25)]];
         $random = implode("", $random_array);
         $file = $request->file('avatar');
-
-        if (isset($file)) {
+        if($request->new_password != $request->password_confirmation){
+            return redirect()->back()->with('error', translate('Your new password confirmation is incorrect'));
+        }
+        if (isset($file) && $file) {
             $image_name = $random . '' . date('Y-m-dh-i-s') . '.' . $file->extension();
             $file->storeAs('public/user/', $image_name);
             $model->avatar = $image_name;
@@ -71,7 +73,7 @@ class UsersController extends Controller
     {
         $model = User::find($id);
         $year_old = 0;
-        if(isset($model->birth_date)){
+        if($model->birth_date){
             $now_time = strtotime('now');
             $birth_time = strtotime($model->birth_date);
             $month = date('m', ($now_time));
@@ -123,7 +125,7 @@ class UsersController extends Controller
         $random_array = [$letters[rand(0,25)], $letters[rand(0,25)], $letters[rand(0,25)], $letters[rand(0,25)], $letters[rand(0,25)]];
         $random = implode("", $random_array);
         $file = $request->file('avatar');
-        if (isset($file)) {
+        if (isset($file) && $file) {
             if($model->avatar){
                 $sms_avatar = storage_path('app/public/user/' . $model->avatar);
             }else{
@@ -144,7 +146,7 @@ class UsersController extends Controller
             if (Hash::check($request->password, $model->password) && $request->new_password == $request->password_confirmation) {
                 $model->password = Hash::make($request->new_password);
             }else{
-                if(Hash::check($request->password, $model->password)){
+                if(!Hash::check($request->password, $model->password)){
                     return redirect()->back()->with('error', translate('Your password is incorrect'));
                 }elseif($request->new_password != $request->password_confirmation){
                     return redirect()->back()->with('error', translate('Your new password confirmation is incorrect'));
@@ -166,7 +168,7 @@ class UsersController extends Controller
     public function destroy(string $id)
     {
         $model = User::find($id);
-        if (isset($model->avatar)) {
+        if ($model->avatar) {
             $sms_avatar = storage_path('app/public/user/'.$model->avatar);
         } else {
             $sms_avatar = 'no';
@@ -228,7 +230,7 @@ class UsersController extends Controller
     public function getPersonalInformation(Request $request){
         $user = Auth::user();
         $user_image = null;
-        if(isset($user->avatar)){
+        if($user->avatar){
             $sms_avatar = storage_path('app/public/user/' . $user->avatar);
         }else{
             $sms_avatar = storage_path('app/public/user/' . 'no');
@@ -271,7 +273,7 @@ class UsersController extends Controller
         $random_array = [$letters[rand(0,25)], $letters[rand(0,25)], $letters[rand(0,25)], $letters[rand(0,25)], $letters[rand(0,25)]];
         $random = implode("", $random_array);
         if($text == 'update'){
-            if(isset($user->avatar)){
+            if($user->avatar){
                 $sms_avatar = storage_path('app/public/user/' . $user->avatar);
             }else{
                 $sms_avatar = storage_path('app/public/user/' . 'no');
@@ -288,7 +290,7 @@ class UsersController extends Controller
 
     public function deleteUserImage(){
         $user = Auth::user();
-        if(isset($user->avatar)){
+        if($user->avatar){
             $sms_avatar = storage_path('app/public/user/' . $user->avatar);
         }else{
             $sms_avatar = storage_path('app/public/user/' . 'no');

@@ -27,7 +27,7 @@
                     <tr>
                         <td>
                             <a class="show_page" href="{{route('product.category.product', $category->id)}}">
-                                @if(isset($category->name)){{ $category->name }}@else <div class="no_text"></div> @endif
+                                @if($category->name){{ $category->name }}@else <div class="no_text"></div> @endif
                             </a>
                         </td>
                     </tr>

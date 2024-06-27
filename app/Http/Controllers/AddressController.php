@@ -46,7 +46,7 @@ class AddressController extends Controller
         if($address_count < 4){
             $address = new Address();
             $cities = Cities::find($request->city_id);
-            if(!isset($cities->id)){
+            if($cities){
                 return $this->error('City or Region not found', 400);
             }
             $address->city_id = $request->city_id;
@@ -64,11 +64,11 @@ class AddressController extends Controller
     public function editAddress(Request $request){
         $user = Auth::user();
         $address = Address::where('user_id', $user->id)->find($request->id);
-        if(!isset($address->id)){
+        if($address){
             return $this->error('Address not found', 400);
         }
         $cities = Cities::find($request->city_id);
-        if(!isset($cities->id)){
+        if($cities){
             return $this->error('City or Region not found', 400);
         }
         $address->city_id = $request->city_id;
@@ -118,7 +118,7 @@ class AddressController extends Controller
         $region = [];
         foreach ($user->addresses as $address_) {
             $region_city = [];
-            if(!empty($address_->cities)){
+            if($address_->cities){
                 if($address_->cities->type == 'district'){
                     $city = [
                         'id' => $address_->cities->id,
@@ -126,14 +126,14 @@ class AddressController extends Controller
                         'lat' => $address_->cities->lat??'',
                         'long' => $address_->cities->lng??'',
                     ];
-                    if(!empty($address_->cities->region)){
+                    if($address_->cities->region){
                         $region = [
                             'id' => $address_->cities->region->id,
                             'name' => $address_->cities->region->name??'',
                             'lat' => $address_->cities->region->lat??'',
                             'long' => $address_->cities->region->lng??'',
                         ];
-                        if(!empty($address_->cities->region->getDistricts)){
+                        if(!$address_->cities->region->getDistricts->isEmpty()){
                             foreach($address_->cities->region->getDistricts as $regionCity){
                                 $region_city[] = [
                                     'id' => $regionCity->id,
@@ -165,7 +165,7 @@ class AddressController extends Controller
                 'postcode'=>$address_->postcode??null,
             ];
         }
-        if(count($address)>0){
+        if(!empty($address)){
             return $this->success('Success', 200, $address);
         }else{
             return $this->error('No address', 400);
@@ -179,7 +179,7 @@ class AddressController extends Controller
         $addresses = Address::whereIn('user_id', $super_admins_id)->get();
         foreach ($addresses as $address_) {
             $region_city = [];
-            if(!empty($address_->cities)){
+            if($address_->cities){
                 if($address_->cities->type == 'district'){
                     $city = [
                         'id' => $address_->cities->id,
@@ -187,14 +187,14 @@ class AddressController extends Controller
                         'lat' => $address_->cities->lat??'',
                         'long' => $address_->cities->lng??'',
                     ];
-                    if(!empty($address_->cities->region)){
+                    if($address_->cities->region){
                         $region = [
                             'id' => $address_->cities->region->id,
                             'name' => $address_->cities->region->name??'',
                             'lat' => $address_->cities->region->lat??'',
                             'long' => $address_->cities->region->lng??'',
                         ];
-                        if(!empty($address_->cities->region->getDistricts)){
+                        if(!$address_->cities->region->getDistricts->isEmpty()){
                             foreach($address_->cities->region->getDistricts as $regionCity){
                                 $region_city[] = [
                                     'id' => $regionCity->id,
@@ -236,10 +236,10 @@ class AddressController extends Controller
     public function destroy(Request $request){
         $user = Auth::user();
         $address = Address::where('user_id', $user->id)->find($request->id);
-        if($address->order){
-            return $this->success(translate('prohibited'), 200);
-        }
-        if(isset($address->id)){
+        if($address){
+            if($address->order){
+                return $this->success(translate('prohibited'), 200);
+            }
             $address->delete();
             return $this->success('Success', 200);
         }else{

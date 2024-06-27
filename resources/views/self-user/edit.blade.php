@@ -44,7 +44,7 @@
                 <div class="row">
                     <div class="mb-3 col-6">
                         <div style="text-align: center">
-                            @if(isset($user->avatar))
+                            @if($user->avatar)
                                 @php
                                     $avatar = storage_path('app/public/user/'.$user->avatar)
                                 @endphp
@@ -64,8 +64,8 @@
                         <label for="gender" class="form-label">{{translate('Gender')}}</label>
                         <select id="gender" class="form-select" name="gender">
                             <option value="">{{translate('Choose..')}}</option>
-                            <option value="1" @if(isset($user)){{$user->gender==1?'selected':''}}@endif>{{translate('Man')}}</option>
-                            <option value="2" @if(isset($user)){{$user->gender==2?'selected':''}}@endif>{{translate('Woman')}}</option>
+                            <option value="1" @if($user->gender){{$user->gender==1?'selected':''}}@endif>{{translate('Man')}}</option>
+                            <option value="2" @if($user->gender){{$user->gender==2?'selected':''}}@endif>{{translate('Woman')}}</option>
                         </select>
                     </div>
                 </div>

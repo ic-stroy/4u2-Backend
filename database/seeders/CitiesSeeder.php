@@ -17,7 +17,7 @@ class CitiesSeeder extends Seeder
         $city_last = Cities::select('id')->orderBy('id', 'desc')->first();
         $response = Http::get(asset("assets/json/cities.json"));
         $cities = json_decode($response);
-        $city_id = isset($city_last->id)?$city_last->id:0;
+        $city_id = $city_last?$city_last->id:0;
         foreach ($cities as $city){
             $city_id++;
             $region_array[] = [

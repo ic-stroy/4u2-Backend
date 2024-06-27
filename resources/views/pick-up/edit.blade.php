@@ -55,7 +55,7 @@
     <script src="{{asset('assets/js/jquery-3.7.1.min.js')}}"></script>
     <script>
         let page = true
-        @if($address && isset($address->cities))
+        @if($address->cities)
             let current_region = "{{$address->cities->region?$address->cities->region->id:''}}"
             let current_district = "{{$address->cities->id??''}}"
         @else

@@ -24,14 +24,14 @@ class DiscountController extends Controller
             $discount_number = Discount::where('discount_number', $discount_distinct->discount_number)->count();
             $discount_data = Discount::where('discount_number', $discount_distinct->discount_number)->get();
             foreach($discount_data as $discount__data){
-                if(!empty($discount__data->category)){
+                if($discount__data->category){
                     if(!in_array($discount__data->category->name, $category)){
                         $category[] = $discount__data->category->name;
                     }
                     $subcategory = [1, 2];
                     $subsubcategory = [1, 2];
-                }elseif(!empty($discount__data->subCategory)){
-                    if(!empty($discount__data->subCategory->category)){
+                }elseif($discount__data->subCategory){
+                    if($discount__data->subCategory->category){
                         if(!in_array($discount__data->subCategory->category->name, $category)){
                             $category[] = $discount__data->subCategory->category->name;
                         }
@@ -40,9 +40,9 @@ class DiscountController extends Controller
                         $subcategory[] = $discount__data->subCategory->name;
                     }
                     $subsubcategory = [1, 2];
-                }elseif(!empty($discount__data->subSubCategory)){
-                    if(!empty($discount__data->subSubCategory->sub_category)){
-                        if(!empty($discount__data->subSubCategory->sub_category->category)){
+                }elseif($discount__data->subSubCategory){
+                    if($discount__data->subSubCategory->sub_category){
+                        if($discount__data->subSubCategory->sub_category->category){
                             if(!in_array($discount__data->subSubCategory->sub_category->category->name, $category)){
                                 $category[] = $discount__data->subSubCategory->sub_category->category->name;
                             }
@@ -112,6 +112,9 @@ class DiscountController extends Controller
             $discount_number = 1;
         }
         $products = $this->getProducts($request);
+        if($products->isEmpty()){
+            return redirect()->back()->with('error', translate('There is no product in this category'));
+        }
         foreach($products as $product){
             $discount = $this->newDiscount($request, $product->category_id);
             $discount->product_id = $product->id;
@@ -196,14 +199,14 @@ class DiscountController extends Controller
         $subsubcategory = [];
         $category = [];
         foreach($discounts as $discount){
-            if(!empty($discount->category)){
+            if($discount->category){
                 if(!in_array($discount->category->name, $category)){
                     $category[] = $discount->category->name;
                 }
                 $subcategory = [1, 2];
                 $subsubcategory = [1, 2];
-            }elseif(!empty($discount->subCategory)){
-                if(!empty($discount->subCategory->category)){
+            }elseif($discount->subCategory){
+                if($discount->subCategory->category){
                     if(!in_array($discount->subCategory->category->name, $category)){
                         $category[] = $discount->subCategory->category->name;
                     }
@@ -212,9 +215,9 @@ class DiscountController extends Controller
                     $subcategory[] = $discount->subCategory->name;
                 }
                 $subsubcategory = [1, 2];
-            }elseif(!empty($discount->subSubCategory)){
-                if(!empty($discount->subSubCategory->sub_category)){
-                    if(!empty($discount->subSubCategory->sub_category->category)){
+            }elseif($discount->subSubCategory){
+                if($discount->subSubCategory->sub_category){
+                    if($discount->subSubCategory->sub_category->category){
                         if(!in_array($discount->subSubCategory->sub_category->category->name, $category)){
                             $category[] = $discount->subSubCategory->sub_category->category->name;
                         }
@@ -275,14 +278,14 @@ class DiscountController extends Controller
         $discount_data = Discount::where('discount_number', $discount->discount_number)->get();
         foreach($discount_data as $discount__data){
             $quantity++;
-            if(!empty($discount__data->category)){
+            if($discount__data->category){
                 if(!in_array($discount__data->category->id, $category_id)){
                     $category_id[] = $discount__data->category->id;
                 }
                 $subcategory_id = ['a', 'a'];
                 $subsubcategory_id = ['a', 'a'];
-            }elseif(!empty($discount__data->subCategory)){
-                if(!empty($discount__data->subCategory->category)){
+            }elseif($discount__data->subCategory){
+                if($discount__data->subCategory->category){
                     if(!in_array($discount__data->subCategory->category->id, $category_id)){
                         $category_id[] = $discount__data->subCategory->category->id;
                     }
@@ -291,9 +294,9 @@ class DiscountController extends Controller
                     $subcategory_id[] = $discount__data->subCategory->id;
                 }
                 $subsubcategory_id = ['a', 'a'];
-            }elseif(!empty($discount__data->subSubCategory)){
-                if(!empty($discount__data->subSubCategory->sub_category)){
-                    if(!empty($discount__data->subSubCategory->sub_category->category)){
+            }elseif($discount__data->subSubCategory){
+                if($discount__data->subSubCategory->sub_category){
+                    if($discount__data->subSubCategory->sub_category->category){
                         if(!in_array($discount__data->subSubCategory->sub_category->category->id, $category_id)){
                             $category_id[] = $discount__data->subSubCategory->sub_category->category->id;
                         }
@@ -355,6 +358,9 @@ class DiscountController extends Controller
             $discount_number = 1;
         }
         $products = $this->getProducts($request);
+        if($products->isEmpty()){
+            return redirect()->back()->with('error', translate('There is no product in this category'));
+        }
         $current_discount = Discount::find($id);
         $current_discount_group = Discount::where('discount_number', $current_discount->discount_number)->get();
         foreach ($current_discount_group as $currentDiscount){

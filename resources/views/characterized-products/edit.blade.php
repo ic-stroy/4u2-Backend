@@ -29,10 +29,14 @@
                     </div>
                     <div style="width: 45%">
                         <label class="form-label">{{translate('Sum')}}</label>
-                        @if(isset($characterized_product->sum))
+                        @if($characterized_product->sum)
                             <input name="sum" class="form-control" required id="sum" value="{{$characterized_product->sum}}">
-                        @elseif(isset($characterized_product->product->sum))
-                            <input name="sum" class="form-control" required id="sum" value="{{$characterized_product->product->sum}}">
+                        @elseif($characterized_product->product)
+                            @if($characterized_product->product->sum)
+                                <input name="sum" class="form-control" required id="sum" value="{{$characterized_product->product->sum}}">
+                            @else
+                                <input name="sum" class="form-control" required id="sum" value="">
+                            @endif
                         @else
                             <input name="sum" class="form-control" required id="sum" value="">
                         @endif

@@ -24,11 +24,21 @@
                     </tr>
                     <tr>
                         <th>{{translate('Category')}}</th>
-                        <td>{{isset($model->sub_category->category->name)?$model->sub_category->category->name:''}}</td>
+                        <td>
+                            @if($model->sub_category)
+                                @if($model->sub_category->category)
+                                    {{$model->sub_category->category->name?$model->sub_category->category->name:''}}
+                                @endif
+                            @endif
+                        </td>
                     </tr>
                     <tr>
                         <th>{{translate('Sub category')}}</th>
-                        <td>{{isset($model->sub_category->name)?$model->sub_category->name:''}}</td>
+                        <td>
+                            @if($model->sub_category)
+                                {{$model->sub_category->name?$model->sub_category->name:''}}
+                            @endif
+                        </td>
                     </tr>
                     <tr>
                         <th>{{translate('Updated at')}}</th>

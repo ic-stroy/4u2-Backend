@@ -63,7 +63,7 @@
                                         </th>
                                         <td>
                                             <a class="show_page" href="{{route('characterizedProducts.category.characterized_product', $product->id)}}">
-                                                @if(isset($product->name))
+                                                @if($product->name)
                                                     @if(strlen($product->name)>34)
                                                         {{ substr($product->name, 0, 34) }}...
                                                     @else
@@ -91,7 +91,7 @@
                                         <td>
                                             <a class="show_page_color" href="{{route('characterizedProducts.category.characterized_product', $product->id)}}">
                                                 <div class="d-flex">
-                                                    @if(isset($product->images))
+                                                    @if($product->images)
                                                         @php
                                                             $images = json_decode($product->images);
                                                             $is_image = 0;
@@ -116,7 +116,7 @@
                                         </td>
                                         <td>
                                             <a class="show_page" href="{{route('characterizedProducts.category.characterized_product', $product->id)}}">
-                                                @if(isset($product->updated_at)){{ $product->updated_at }}@else <div class="no_text"></div> @endif
+                                                @if($product->updated_at){{ $product->updated_at }}@else <div class="no_text"></div> @endif
                                             </a>
                                         </td>
                                     </tr>

@@ -34,17 +34,17 @@
                         </th>
                         <td>
                             <a class="show_page" href="{{route('pick_up.show', $address['id'])}}">
-                                @if(isset($address['name'])){{ $address['name'] }}@else <div class="no_text"></div> @endif
+                                @if($address['name']){{ $address['name'] }}@else <div class="no_text"></div> @endif
                             </a>
                         </td>
                         <td>
                             <a class="show_page" href="{{route('pick_up.show', $address['id'])}}">
-                                @if(isset($address['city'])){{ $address['city'] }}@else <div class="no_text"></div> @endif
+                                @if($address['city']){{ $address['city'] }}@else <div class="no_text"></div> @endif
                             </a>
                         </td>
                         <td>
                             <a class="show_page" href="{{route('pick_up.show', $address['id'])}}">
-                                @if(isset($address['updated_at'])){{ $address['updated_at'] }}@else <div class="no_text"></div> @endif
+                                @if($address['updated_at']){{ $address['updated_at'] }}@else <div class="no_text"></div> @endif
                             </a>
                         </td>
                         <td class="function_column">

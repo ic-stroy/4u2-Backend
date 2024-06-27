@@ -17,7 +17,7 @@ class SubCategoryController extends Controller
         $all_categories = [];
         foreach($categories as $category){
             $sub_categories = $category->subcategory;
-            if(!empty($sub_categories)){
+            if(!$sub_categories->isEmpty()){
                 $all_categories[$category->id] = $sub_categories;
             }else{
                 $all_categories[$category->id] = [];
@@ -91,7 +91,7 @@ class SubCategoryController extends Controller
     public function destroy(string $id)
     {
         $model = Category::where('step', 1)->find($id);
-        if(!empty($model->subsubcategory)){
+        if($model){
             if(!$model->subsubcategory->isEmpty()){
                 return redirect()->back()->with('error', translate('You cannot delete this category because it has subsubcategories'));
             }
@@ -110,7 +110,7 @@ class SubCategoryController extends Controller
     public function getSubcategory($id)
     {
         $model = Category::where('parent_id', $id)->get();
-        if(isset($model) && count($model)>0){
+        if(!$model->isEmpty()){
             return response()->json([
                 'status'=>true,
                 'data'=>$model

@@ -102,7 +102,7 @@
             margin: 0px !important;
         }
     </style>
-    @if(!empty(!empty($all_orders['cancelledOrders']) || !empty($all_orders['acceptedByRecipientOrders'])))
+    @if(!empty($all_orders['cancelledOrders']) || !empty($all_orders['acceptedByRecipientOrders']))
         <div id="success-alert-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
             <div class="modal-dialog modal-sm">
                 <div class="modal-content">
@@ -363,11 +363,11 @@
                                                                 <span style="font-size:12px; opacity: 0.84">{{translate('Created at')}}
                                                                     <span style="font-size:12px; opacity:0.54">{{$order['order']->created_at}}</span>
                                                                 </span>
-                                                                @if(!empty($order['order']->address))
+                                                                @if($order['order']->address)
                                                                     <span style="font-size:12px; opacity: 0.84">{{translate('Address')}}
                                                                         <span style="font-size:12px; opacity: 0.64">
-                                                                            @if(!empty($order['order']->address->cities))
-                                                                                @if(!empty($order['order']->address->cities->region))
+                                                                            @if($order['order']->address->cities)
+                                                                                @if($order['order']->address->cities->region)
                                                                                     {{$order['order']->address->cities->region->name}}
                                                                                 @endif
                                                                                 {{$order['order']->address->cities->name}}
@@ -452,10 +452,12 @@
                                              data-bs-parent="#custom-accordion-one">
                                             @foreach($order['products'] as $products)
                                                 @php
-                                                    if(!empty($products[0]->warehouse_product) && $products[0]->warehouse_product->name){
-                                                        $product_name = $products[0]->warehouse_product->name??'';
-                                                    }else if(!empty($products[0]->warehouse_product->product) && $products[0]->warehouse_product->product->name){
-                                                        $product_name = $products[0]->warehouse_product->product->name??'';
+                                                    if($products[0]->warehouse_product){
+                                                        if($products[0]->warehouse_product->name){
+                                                             $product_name = $products[0]->warehouse_product->name;
+                                                        }elseif($products[0]->warehouse_product->product){
+                                                            $product_name = $products[0]->warehouse_product->product->name??'';
+                                                        }
                                                     }
                                                 @endphp
                                                 <hr class="hr_no_margin">
@@ -466,13 +468,9 @@
                                                     <div class="col-1"></div>
                                                     <div class="col-4 order_content">
                                                         <h4>{{translate('Order')}}</h4>
-                                                        @if(!empty($products[0]->warehouse_product) && $products[0]->warehouse_product->name)
-                                                            <span><b>{{$products[0]->warehouse_product->name}}</b></span>
-                                                        @elseif(!empty($products[0]->warehouse_product->product) && $products[0]->warehouse_product->product->name)
-                                                            <span><b>{{$products[0]->warehouse_product->product->name}}</b></span>
-                                                        @endif
+                                                        <span><b>{{$product_name}}</b></span>
                                                         @if($products[0]->price)
-                                                            <span>{{translate('Price')}}: <b>{{$products[0]->price}}</b> {!! !empty($products[0]->quantity)?translate('Quantity').': '."<b>".$products[0]->quantity."</b>":'' !!}</span>
+                                                            <span>{{translate('Price')}}: <b>{{$products[0]->price}}</b> {!! $products[0]->quantity?translate('Quantity').': '."<b>".$products[0]->quantity."</b>":'' !!}</span>
                                                         @endif
                                                         @if($products[1])
                                                             <span>{{translate('Sum')}}: <b>{{$products[1]}}</b></span>
@@ -482,7 +480,7 @@
                                                         @elseif($products['discount_withouth_expire'] != 0)
                                                             <span>{{translate('Discount')}}: <b style="color: red">{{(int)$products['discount_withouth_expire']}} %</b></span>
                                                         @endif
-                                                        @if(!empty($products[0]->size))
+                                                        @if($products[0]->size)
                                                             <span>{{translate('Size')}}: <b>{{$products[0]->size->name}}</b> {{translate('Color')}}: <b>{{$products[0]->color->name}}</b></span>
                                                         @endif
                                                         <span>{{translate('Ordered')}}: <b>{{$products[0]->updated_at}}</b></span>
@@ -523,9 +521,9 @@
                                                                 <button type="button" class="btn btn-success delete-datas btn-sm waves-effect" data-bs-toggle="modal" data-bs-target="#success-alert-modal" data-url=""
                                                                         onclick='accepting_order(
                                                                             "{{$products[0]->quantity}}",
-                                                                            "{{$products[0]->warehouse_product->count - $products[0]->quantity }}",
-                                                                            "{{!empty($products[0]->color)?$products[0]->color->name:''}}",
-                                                                            "{{!empty($products[0]->size)?$products[0]->size->name:''}}",
+                                                                            "{{$products[0]->warehouse_product?$products[0]->warehouse_product->count - $products[0]->quantity:0 }}",
+                                                                            "{{$products[0]->color?$products[0]->color->name:''}}",
+                                                                            "{{$products[0]->size?$products[0]->size->name:''}}",
                                                                             "{{$product_name}}",
                                                                             "{{isset($products['images'][0])?$products['images'][0]:''}}",
                                                                             "{{isset($products['images'][1])?$products['images'][1]:''}}",

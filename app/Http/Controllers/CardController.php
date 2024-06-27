@@ -57,7 +57,7 @@ class CardController extends Controller
     {
         $user = Auth::user();
         $user_card = UserCard::where('user_id', $user->id)->find($request->id);
-        if(isset($user_card->id)){
+        if($user_card){
             $data = [
                 'id'=>$user_card->id,
                 'name'=>$user_card->name??null,

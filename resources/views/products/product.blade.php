@@ -30,12 +30,12 @@
                 @foreach($products as $product)
                     @php
                         $i++;
-                        if(isset($product->subSubCategory->id)){
-                            $current_category = $product->subSubCategory->name;
-                        }elseif(isset($product->subCategory->id)){
-                            $current_category = $product->subCategory->name;
-                        }elseif(isset($product->category->id)){
-                            $current_category = $product->category->name;
+                        if(!$product->subSubCategory->isEmpty()){
+                            $current_category = $product->subSubCategory->name??'';
+                        }elseif(!$product->subCategory->isEmpty()){
+                            $current_category = $product->subCategory->name??'';
+                        }elseif(!$product->category->isEmpty()){
+                            $current_category = $product->category->name??'';
                         }
                     @endphp
                     <tr>
@@ -44,7 +44,7 @@
                         </th>
                         <td>
                             <a class="show_page" href="{{route('product.show', $product->id)}}">
-                                @if(isset($product->name))
+                                @if($product->name)
                                     @if(strlen($product->name)>34)
 
                                         {{ substr($product->name, 0, 34) }}...
@@ -58,7 +58,7 @@
                         </td>
                         <td>
                             <a class="show_page" href="{{route('product.show', $product->id)}}">
-                                @if(isset($current_category)){{ $current_category }}@else <div class="no_text"></div> @endif
+                                @if(isset($current_category) && $current_category !=''){{ $current_category }}@else <div class="no_text"></div> @endif
                             </a>
                         </td>
                         <td>
@@ -69,7 +69,7 @@
                         <td>
                             <a class="show_page_color" href="{{route('product.show', $product->id)}}">
                                 <div class="d-flex">
-                                    @if(isset($product->images))
+                                    @if($product->images)
                                         @php
                                             $images = json_decode($product->images);
                                             $is_image = 0;
@@ -94,7 +94,7 @@
                         </td>
                         <td>
                             <a class="show_page" href="{{route('product.show', $product->id)}}">
-                                @if(isset($product->updated_at)){{ $product->updated_at }}@else <div class="no_text"></div> @endif
+                                @if($product->updated_at){{ $product->updated_at }}@else <div class="no_text"></div> @endif
                             </a>
                         </td>
                         <td class="function_column">

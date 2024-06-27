@@ -60,12 +60,12 @@
                                     </th>
                                     <td>
                                         <a class="show_page" href="{{route('subcategory.show', $subcategory->id)}}">
-                                            @if(isset($subcategory->name)){{ $subcategory->name }}@else <div class="no_text"></div> @endif
+                                            @if($subcategory->name){{ $subcategory->name }}@else <div class="no_text"></div> @endif
                                         </a>
                                     </td>
                                     <td>
                                         <a class="show_page" href="{{route('subcategory.show', $subcategory->id)}}">
-                                            @if(isset($subcategory->updated_at)){{ $subcategory->updated_at }}@else <div class="no_text"></div> @endif
+                                            @if($subcategory->updated_at){{ $subcategory->updated_at }}@else <div class="no_text"></div> @endif
                                         </a>
                                     </td>
                                     <td class="function_column">

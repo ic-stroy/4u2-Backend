@@ -4,6 +4,7 @@
     $current_user = \Illuminate\Support\Facades\Auth::user();
     $locale = app()->getLocale();
 //    $language = ['en', 'uz', 'ru'];
+
 @endphp
 <head>
     <meta charset="utf-8" />
@@ -306,25 +307,25 @@
 
                 <!-- User box -->
                 <div class="user-box text-center">
-{{--                    @if(isset($current_user->personalInfo))--}}
-{{--                        @php--}}
-{{--                        if(!isset($current_user->personalInfo->avatar)){--}}
-{{--                            $current_user->personalInfo->avatar = 'no';--}}
-{{--                        }--}}
-{{--                            $sms_avatar = storage_path('app/public/user/'.$current_user->personalInfo->avatar);--}}
-{{--                        @endphp--}}
-{{--                        @if(file_exists($sms_avatar))--}}
-{{--                            <img class="rounded-circle img-thumbnail avatar-md" src="{{asset('storage/user/'.$current_user->personalInfo->avatar)}}" alt="">--}}
-{{--                        @else--}}
+                    @if($current_user)
+                        @php
+                        if(!$current_user->avatar){
+                            $current_user->avatar = 'no';
+                        }
+                            $sms_avatar = storage_path('app/public/user/'.$current_user->avatar);
+                        @endphp
+                        @if(file_exists($sms_avatar))
+                            <img class="rounded-circle img-thumbnail avatar-md" src="{{asset('storage/user/'.$current_user->avatar)}}" alt="">
+                        @else
                             <img class="rounded-circle img-thumbnail avatar-md" src="{{asset('assets/images/man.jpg')}}" alt="">
-{{--                        @endif--}}
-{{--                    @endif--}}
+                        @endif
+                    @endif
                     <div class="dropdown">
                         <a href="#" class="user-name dropdown-toggle h5 mt-2 mb-1 d-block"
                             data-bs-toggle="dropdown" aria-expanded="false">
-{{--                            @if(isset($current_user) && isset($current_user->personalInfo))--}}
-{{--                                {{$current_user?$current_user->personalInfo->first_name:''}} {{$current_user?$current_user->personalInfo->last_name:''}}--}}
-{{--                            @endif--}}
+                            @if($current_user)
+                                {{$current_user->first_name?$current_user->first_name:''}} {{$current_user->last_name?$current_user->last_name:''}}
+                            @endif
                         </a>
                         <div class="dropdown-menu user-pro-dropdown">
 

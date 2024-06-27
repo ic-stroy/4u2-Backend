@@ -11,6 +11,7 @@
         "laravel/sanctum": "^3.3",
         "laravel/tinker": "^2.8",
         "laravel/ui": "^4.2",
+        "pusher/pusher-php-server": "^7.0",
         "stichoza/google-translate-php": "^5.1"
     },
     "require-dev": {

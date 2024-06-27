@@ -14,17 +14,17 @@ class SizesController extends Controller
      */
     public function index()
     {
-        translate('You cannot delete this category because here is product associated with this size.');
-        translate('You cannot delete this category because it has subsubcategories');
-        translate('You cannot delete this category because here is product associated with this size.');
-        translate('You cannot delete this size because here is product associated with this size.');
-        translate('You cannot delete this product because here is some products in warehouse');
-        translate('You cannot delete this color because here is product associated with this color.');
-        translate('You cannot delete this product because here is product associated with an order.');
-        translate('You cannot delete this category because it has subcategories');
-        translate('You cannot delete this category because it has products');
-        translate('You cannot delete this address because here is order associated with this address.');
-        translate('You cannot delete this card because here is order associated with this card.');
+//        translate('You cannot delete this category because here is product associated with this size.');
+//        translate('You cannot delete this category because it has subsubcategories');
+//        translate('You cannot delete this category because here is product associated with this size.');
+//        translate('You cannot delete this size because here is product associated with this size.');
+//        translate('You cannot delete this product because here is some products in warehouse');
+//        translate('You cannot delete this color because here is product associated with this color.');
+//        translate('You cannot delete this product because here is product associated with an order.');
+//        translate('You cannot delete this category because it has subcategories');
+//        translate('You cannot delete this category because it has products');
+//        translate('You cannot delete this address because here is order associated with this address.');
+//        translate('You cannot delete this card because here is order associated with this card.');
         $sizes = Sizes::orderBy('created_at', 'desc')->get();
         return view('sizes.index', ['sizes'=> $sizes]);
     }

@@ -51,12 +51,12 @@
                         </td>
                         <td>
                             <a class="show_page" href="{{route('characterizedProducts.show', $product->id)}}">
-                                @if(isset($product->size->id)) {{ $product->size->name }} @else <div class="no_text"></div> @endif
+                                @if($product->size) {{ $product->size->name }} @else <div class="no_text"></div> @endif
                             </a>
                         </td>
                         <td>
                             <a class="show_page" href="{{route('characterizedProducts.show', $product->id)}}">
-                                @if(isset($product->sum)) {{ $product->sum }} @else <div class="no_text"></div> @endif
+                                @if($product->sum) {{ $product->sum }} @else <div class="no_text"></div> @endif
                             </a>
                         </td>
                         <td>
@@ -66,12 +66,12 @@
                         </td>
                         <td>
                             <a class="show_page" href="{{route('characterizedProducts.show', $product->id)}}">
-                                @if(isset($product->count)){{ $product->count }}@else <div class="no_text"></div> @endif
+                                @if($product->count){{ $product->count }}@else <div class="no_text"></div> @endif
                             </a>
                         </td>
                         <td>
                             <a class="show_page" href="{{route('characterizedProducts.show', $product->id)}}">
-                                @if(isset($product->updated_at)){{ $product->updated_at }}@else <div class="no_text"></div> @endif
+                                @if($product->updated_at){{ $product->updated_at }}@else <div class="no_text"></div> @endif
                             </a>
                         </td>
                         <td class="function_column">

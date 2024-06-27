@@ -32,17 +32,39 @@
                         <select id="category_id" name="category_id" class="form-control" required>
                             <option value="" selected disabled>{{translate('Select category')}}</option>
                             @foreach($categories as $category)
-                                <option @if(isset($subsubcategory->sub_category->category)){{$subsubcategory->sub_category->category->id == $category->id?'selected':''}}@endif value="{{$category->id}}">{{$category->name}}</option>
+                                <option
+                                    @if($subsubcategory->sub_category)
+                                        @if($subsubcategory->sub_category->category)
+                                            {{$subsubcategory->sub_category->category->id == $category->id?'selected':''}}
+                                        @endif
+                                    @endif
+                                    value="{{$category->id}}">{{$category->name}}
+                                </option>
                             @endforeach
                         </select>
                     </div>
-                    <div class="mb-3 col-6 @if(!isset($subsubcategory->sub_category->category->subcategory)) display-none @endif" id="subcategory_exists">
+                    <div class="mb-3 col-6
+                        @if($subsubcategory->sub_category)
+                            @if($subsubcategory->sub_category->category)
+                                @if($subsubcategory->sub_category->category->subcategory->isEmpty())
+                                    display-none
+                                @endif
+                            @else
+                                display-none
+                            @endif
+                        @else
+                            display-none
+                        @endif" id="subcategory_exists">
                         <label class="form-label">{{translate('Sub category')}}</label>
                         <select id="subcategory_id" name="subcategory_id" class="form-control" required>
-                            @if(isset($subsubcategory->sub_category->category->subcategory))
-                                @foreach($subsubcategory->sub_category->category->subcategory as $sub_category)
-                                    <option {{$sub_category->id == $subsubcategory->sub_category->id?'selected':''}} value="{{$sub_category->id}}">{{$sub_category->name}}</option>
-                                @endforeach
+                            @if($subsubcategory->sub_category)
+                                @if($subsubcategory->sub_category->category)
+                                    @if(!$subsubcategory->sub_category->category->subcategory->isEmpty())
+                                        @foreach($subsubcategory->sub_category->category->subcategory as $sub_category)
+                                            <option {{$sub_category->id == $subsubcategory->sub_category->id?'selected':''}} value="{{$sub_category->id}}">{{$sub_category->name}}</option>
+                                        @endforeach
+                                    @endif
+                                @endif
                             @endif
                         </select>
                     </div>

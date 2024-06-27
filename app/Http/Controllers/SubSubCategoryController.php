@@ -92,8 +92,17 @@ class SubSubCategoryController extends Controller
         if($model->product) {
             return redirect()->back()->with('error', translate('You cannot delete this category because here is product associated with this size.'));
         }
+        if($model->sub_category){
+            if($model->sub_category->category){
+                $category_id = $model->sub_category->category->id;
+            }else{
+                $category_id = $model->sub_category->id;
+            }
+        }else{
+            $category_id = $model->id;
+        }
         $model->delete();
-        return redirect()->route('subsubcategory.subcategory', $id)->with('status', translate('Successfully deleted'));
+        return redirect()->route('subsubcategory.subcategory', $category_id)->with('status', translate('Successfully deleted'));
     }
 
     public function category()
@@ -111,7 +120,7 @@ class SubSubCategoryController extends Controller
         $all_sub_sub_categories = [];
         foreach($subcategories as $subcategory){
             $sub_sub_categories = $subcategory->subsubcategory_;
-            if(!empty($sub_sub_categories)){
+            if(!$sub_sub_categories->isEmpty()){
                 $all_sub_sub_categories[$subcategory->id] = $sub_sub_categories;
             }else{
                 $all_sub_sub_categories[$subcategory->id] = [];
