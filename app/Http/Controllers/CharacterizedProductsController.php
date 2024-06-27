@@ -114,7 +114,7 @@ class CharacterizedProductsController extends Controller
     public function edit(string $id)
     {
         $characterized_product = CharacterizedProducts::find($id);
-        if(isset($characterized_product->product)){
+        if($characterized_product->product){
             $product = $characterized_product->product;
             $current_category = $this->getProductCategory($characterized_product->product);
             $sizes = Sizes::select('id', 'name', 'category_id')->where('category_id', $current_category->id)->get();

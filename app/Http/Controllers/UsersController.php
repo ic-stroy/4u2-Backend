@@ -117,6 +117,17 @@ class UsersController extends Controller
     public function update(Request $request, string $id)
     {
         $model = User::find($id);
+        if ($request->password && $request->new_password && $request->password_confirmation) {
+            if (Hash::check($request->password, $model->password) && $request->new_password == $request->password_confirmation) {
+                $model->password = Hash::make($request->new_password);
+            }else{
+                if(!Hash::check($request->password, $model->password)){
+                    return redirect()->back()->with('error', translate('Your password is incorrect'));
+                }elseif($request->new_password != $request->password_confirmation){
+                    return redirect()->back()->with('error', translate('Your new password confirmation is incorrect'));
+                }
+            }
+        }
         $model->first_name = $request->first_name;
         $model->last_name = $request->last_name;
         $model->middle_name = $request->middle_name;
@@ -142,17 +153,7 @@ class UsersController extends Controller
         $model->birth_date = $request->birth_date;
 
         $model->email = $request->email;
-        if ($request->password && $request->new_password && $request->password_confirmation) {
-            if (Hash::check($request->password, $model->password) && $request->new_password == $request->password_confirmation) {
-                $model->password = Hash::make($request->new_password);
-            }else{
-                if(!Hash::check($request->password, $model->password)){
-                    return redirect()->back()->with('error', translate('Your password is incorrect'));
-                }elseif($request->new_password != $request->password_confirmation){
-                    return redirect()->back()->with('error', translate('Your new password confirmation is incorrect'));
-                }
-            }
-        }
+
 
         if ($request->is_admin && $request->is_admin =! 0) {
             $model->is_admin = (int)$request->is_admin;
@@ -304,24 +305,26 @@ class UsersController extends Controller
     public function getUser(){
         $model = Auth::user();
         $year_old = 0;
-        if(isset($model->personalInfo->birth_date)){
-            $birth_date_array = explode(' ', $model->personalInfo->birth_date);
-            $now_time = strtotime('now');
-            $birth_time = strtotime($birth_date_array[0]);
-            $month = date('m', ($now_time));
-            $day = date('d', ($now_time));
-            $birth_month = date('m', ($birth_time));
-            $birth_date = date('d', ($birth_time));
-            $year = date('Y', ($now_time));
-            $birth_year = date('Y', ($birth_time));
-            $year_old = 0;
-            if($year > $birth_year){
-                $year_old = $year - $birth_year - 1;
-                if($month > $birth_month){
-                    $year_old = $year_old +1;
-                }elseif($month == $birth_month){
-                    if($day >= $birth_date){
+        if($model->personalInfo){
+            if($model->personalInfo->birth_date){
+                $birth_date_array = explode(' ', $model->personalInfo->birth_date);
+                $now_time = strtotime('now');
+                $birth_time = strtotime($birth_date_array[0]);
+                $month = date('m', ($now_time));
+                $day = date('d', ($now_time));
+                $birth_month = date('m', ($birth_time));
+                $birth_date = date('d', ($birth_time));
+                $year = date('Y', ($now_time));
+                $birth_year = date('Y', ($birth_time));
+                $year_old = 0;
+                if($year > $birth_year){
+                    $year_old = $year - $birth_year - 1;
+                    if($month > $birth_month){
                         $year_old = $year_old +1;
+                    }elseif($month == $birth_month){
+                        if($day >= $birth_date){
+                            $year_old = $year_old +1;
+                        }
                     }
                 }
             }
