@@ -56,6 +56,17 @@ class CharacterizedProductsController extends Controller
         $model->sum = $request->sum;
         if($request->size_id){
             $model->size_id = $request->size_id;
+        }elseif($request->size_name){
+            $size = Sizes::withTrashed()->where('name', $request->size_name)->whereNULL('category_id')->first();
+            if(!$size){
+                $size = new Sizes();
+                $size->name = $request->size_name;
+                $size->save();
+            }elseif($size->deleted_at){
+                $size->deleted_at = NULL;
+                $size->save();
+            }
+            $model->size_id = $size->id;
         }
         if($request->color_id){
             $model->color_id = $request->color_id;
@@ -137,9 +148,29 @@ class CharacterizedProductsController extends Controller
         $model->sum = $request->sum;
         if($request->size_id){
             $model->size_id = $request->size_id;
+        }elseif($request->size_name){
+            $size = Sizes::withTrashed()->where('name', $request->size_name)->whereNULL('category_id')->first();
+            if(!$size){
+                $size = new Sizes();
+                $size->name = $request->size_name;
+                $size->save();
+            }elseif($size->deleted_at){
+                $size->deleted_at = NULL;
+                $size->save();
+            }
+            $model->size_id = $size->id;
+        }else{
+            $size_quantity = Sizes::where('id', $model->size_id)->whereNULL('category_id')->count();
+            if($size_quantity == 1){
+                $size = Sizes::where('id', $model->size_id)->whereNULL('category_id')->first();
+                $size->delete();
+            }
+            $model->size_id = NULL;
         }
         if($request->color_id){
             $model->color_id = $request->color_id;
+        }else{
+            $model->color_id = NULL;
         }
         $model->count = $request->count;
         $model->save();
@@ -154,6 +185,11 @@ class CharacterizedProductsController extends Controller
         $model = CharacterizedProducts::find($id);
         if($model->order_detail){
             return redirect()->back()->with('error', translate('You cannot delete this product because here is product associated with an order.'));
+        }
+        $size_quantity = Sizes::whereNULL('category_id')->where('id', $model->size_id)->count();
+        if($size_quantity == 1){
+            $size = Sizes::where('id', $model->size_id)->whereNULL('category_id')->first();
+            $size->delete();
         }
         $model->delete();
         return redirect()->route('characterizedProducts.index')->with('status', translate('Successfully deleted'));
@@ -190,8 +226,7 @@ class CharacterizedProductsController extends Controller
         $colors = Color::all();
         $product = Products::find($id);
         $current_category = $this->getProductCategory($product);
-        $characterized_products = CharacterizedProducts::where('product_id', $id)->get();
-        return view('characterized-products.create_characterized_product', ['characterized_products'=>$characterized_products, 'product'=>$product, 'colors'=>$colors, 'current_category'=>$current_category]);
+        return view('characterized-products.create_characterized_product', ['product'=>$product, 'colors'=>$colors, 'current_category'=>$current_category]);
     }
 
     public function getProductCategory($product){

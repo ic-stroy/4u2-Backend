@@ -51,7 +51,11 @@
                         </td>
                         <td>
                             <a class="show_page" href="{{route('characterizedProducts.show', $product->id)}}">
-                                @if($product->size) {{ $product->size->name }} @else <div class="no_text"></div> @endif
+                                @if($product->size)
+                                    @if($product->size->name)
+                                        {{ $product->size->name}}
+                                    @else <div class="no_text"></div> @endif
+                                @else <div class="no_text"></div> @endif
                             </a>
                         </td>
                         <td>
@@ -60,9 +64,21 @@
                             </a>
                         </td>
                         <td>
-                            <a class="show_page_color" href="{{route('characterizedProducts.show', $product->id)}}">
-                                <div style="background-color: {{$product->color->code??''}}; height: 40px; width: 64px; border-radius: 4px; border: solid 1px"></div>
-                            </a>
+                            @if($product->color)
+                                @if($product->color->code)
+                                    <a class="show_page_color" href="{{route('characterizedProducts.show', $product->id)}}">
+                                        <div style="background-color: {{$product->color->code}}; height: 40px; width: 64px; border-radius: 4px; border: solid 1px"></div>
+                                    </a>
+                                @else
+                                    <a class="show_page" href="{{route('characterizedProducts.show', $product->id)}}">
+                                        <div class="no_text"></div>
+                                    </a>
+                                @endif
+                            @else
+                                <a class="show_page" href="{{route('characterizedProducts.show', $product->id)}}">
+                                    <div class="no_text"></div>
+                                </a>
+                            @endif
                         </td>
                         <td>
                             <a class="show_page" href="{{route('characterizedProducts.show', $product->id)}}">

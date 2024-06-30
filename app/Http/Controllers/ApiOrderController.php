@@ -173,8 +173,8 @@ class ApiOrderController extends Controller
                     }
 
                     $products[] = [$order_detail, $order_detail_all_price, 'images'=>$images,
-                        'discount_withouth_expire'=>$discount_withouth_expire, 'size'=>$order_detail->size,
-                        'color'=>$order_detail->color, 'name'=>$product_name
+                        'discount_withouth_expire'=>$discount_withouth_expire, 'size'=>$order_detail->size??'',
+                        'color'=>$order_detail->color??[], 'name'=>$product_name
                     ];
                 }
             }
@@ -266,8 +266,16 @@ class ApiOrderController extends Controller
                         $discount = $product_->discount;
                         $order_detail->warehouse_id = (int)$product_data['id'];
                         $order_detail->quantity = (int)$product_data['count'];
-                        $order_detail->size_id = $product->size_id;
-                        $order_detail->color_id = (int)$product_data['color']['id'];
+                        if($product->size_id){
+                            $order_detail->size_id = $product->size_id;
+                        }
+                        if(isset($product_data['color'])) {
+                            if ($product_data['color']['id']) {
+                                $order_detail->color_id = (int)$product_data['color']['id'];
+                            }
+                        }else{
+                            $order_detail->color_id = (int)$product->color_id;
+                        }
                         $order_detail->discount = isset($product_data['discount'])?(int)$product_data['discount']:null;
                         $order_detail->price = (int)$product->sum;
                         $order_detail->status = Constants::ORDER_DETAIL_ORDERED;
