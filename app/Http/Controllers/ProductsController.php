@@ -472,20 +472,20 @@ class ProductsController extends Controller
             foreach (array_unique($colors_array) as $color) {
                 $productsByColor = [];
                 foreach ($product->categorizedProducts as $categorizedProduct) {
-                    if($categorizedProduct->color) {
-                        $color_id = $categorizedProduct->color->id;
-                        $colorModel = $categorizedProduct->color;
-                        $color_ = [
-                            'id' => $categorizedProduct_->color->id,
-                            'name' => $categorizedProduct_->color->name,
-                            'code' => $categorizedProduct_->color->code,
-                        ];
-                    }else{
-                        $color_id = 'no';
-                        $colorModel = [];
-                        $color_ = [];
-                    }
                     if ($color == $color_id) {
+                        if($categorizedProduct->color) {
+                            $color_id = $categorizedProduct->color->id;
+                            $colorModel = $categorizedProduct->color;
+                            $color_ = [
+                                'id' => $categorizedProduct_->color->id,
+                                'name' => $categorizedProduct_->color->name,
+                                'code' => $categorizedProduct_->color->code,
+                            ];
+                        }else{
+                            $color_id = 'no';
+                            $colorModel = [];
+                            $color_ = [];
+                        }
                         if ($discount) {
                             $categorizedProductSum = $discount->percent ? $categorizedProduct->sum - $categorizedProduct->sum * (int)$discount->percent / 100 : $categorizedProduct->sum;
                         } else {
