@@ -483,9 +483,9 @@ class ProductsController extends Controller
                         if ($color__ == $color_id) {
                             if($categorizedProduct->color) {
                                 $color_ = [
-                                    'id' => $categorizedProduct_->color->id,
-                                    'name' => $categorizedProduct_->color->name,
-                                    'code' => $categorizedProduct_->color->code,
+                                    'id' => $categorizedProduct->color->id,
+                                    'name' => $categorizedProduct->color->name,
+                                    'code' => $categorizedProduct->color->code,
                                 ];
                             }else{
                                 $color_ = [];
