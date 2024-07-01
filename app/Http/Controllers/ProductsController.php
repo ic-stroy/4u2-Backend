@@ -472,22 +472,23 @@ class ProductsController extends Controller
                 }
                 foreach (array_unique($colors_array) as $color__) {
                     $productsByColor = [];
+                    $colorModel = [];
                     foreach ($product->categorizedProducts as $categorizedProduct) {
                         if($categorizedProduct->color) {
                             $color_id = $categorizedProduct->color->id;
-                            $colorModel = $categorizedProduct->color;
                         }else{
                             $color_id = 'no';
-                            $colorModel = [];
                         }
                         if ($color__ == $color_id) {
                             if($categorizedProduct->color) {
+                                $colorModel = $categorizedProduct->color;
                                 $color_ = [
                                     'id' => $categorizedProduct->color->id,
                                     'name' => $categorizedProduct->color->name,
                                     'code' => $categorizedProduct->color->code,
                                 ];
                             }else{
+                                $colorModel = [];
                                 $color_ = [];
                             }
                             if ($discount) {
@@ -506,6 +507,7 @@ class ProductsController extends Controller
                             ];
                         }
                     }
+                    if()
                     $categorizedByColor[] = [
                         'color' => $colorModel,
                         'products' => $productsByColor
@@ -825,22 +827,23 @@ class ProductsController extends Controller
                 }
                 foreach (array_unique($colors_array) as $color__) {
                     $productsByColor = [];
+                    $colorModel = [];
                     foreach ($product->categorizedProducts as $categorizedProduct) {
                         if($categorizedProduct->color) {
                             $color_id = $categorizedProduct->color->id;
-                            $colorModel = $categorizedProduct->color;
                         }else{
                             $color_id = 'no';
-                            $colorModel = [];
                         }
                         if ($color__ == $color_id) {
                             if($categorizedProduct->color) {
+                                $colorModel = $categorizedProduct->color;
                                 $color_ = [
                                     'id' => $categorizedProduct->color->id,
                                     'name' => $categorizedProduct->color->name,
                                     'code' => $categorizedProduct->color->code,
                                 ];
                             }else{
+                                $colorModel = [];
                                 $color_ = [];
                             }
                             if ($discount) {
