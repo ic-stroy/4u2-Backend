@@ -473,6 +473,7 @@ class ProductsController extends Controller
                 foreach (array_unique($colors_array) as $color__) {
                     $productsByColor = [];
                     $colorModel = [];
+                    $color_id = '';
                     foreach ($product->categorizedProducts as $categorizedProduct) {
                         if($categorizedProduct->color) {
                             $color_id = $categorizedProduct->color->id;
@@ -507,11 +508,12 @@ class ProductsController extends Controller
                             ];
                         }
                     }
-                    if()
-                    $categorizedByColor[] = [
-                        'color' => $colorModel,
-                        'products' => $productsByColor
-                    ];
+                    if($color_id != ''){
+                        $categorizedByColor[] = [
+                            'color' => $colorModel,
+                            'products' => $productsByColor
+                        ];
+                    }
                 }
             }
             $good = [];
@@ -828,6 +830,7 @@ class ProductsController extends Controller
                 foreach (array_unique($colors_array) as $color__) {
                     $productsByColor = [];
                     $colorModel = [];
+                    $color_id = '';
                     foreach ($product->categorizedProducts as $categorizedProduct) {
                         if($categorizedProduct->color) {
                             $color_id = $categorizedProduct->color->id;
@@ -862,10 +865,12 @@ class ProductsController extends Controller
                             ];
                         }
                     }
-                    $categorizedByColor[] = [
-                        'color' => $colorModel,
-                        'products' => $productsByColor
-                    ];
+                    if($color_id != ''){
+                        $categorizedByColor[] = [
+                            'color' => $colorModel,
+                            'products' => $productsByColor
+                        ];
+                    }
                 }
             }
             $images_ = json_decode($product->images);
