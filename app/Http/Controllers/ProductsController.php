@@ -673,7 +673,7 @@ class ProductsController extends Controller
                         'images'=>$images,
                         'company'=>$company_name,
                         'category'=>$category_name,
-                        'size_id'=>$product->size?$product->size->name:'',
+                        'size'=>$product->size?$product->size->name:'',
                         'color'=>$product->color?$product->color:[],
                         'count'=>$product->count,
                         'discount' => $product->discount?$product->discount->percent:null,
