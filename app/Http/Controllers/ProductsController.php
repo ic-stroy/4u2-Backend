@@ -486,7 +486,6 @@ class ProductsController extends Controller
                         $color_ = [];
                     }
                     if ($color == $color_id) {
-                        $colorModel = $categorizedProduct->color;
                         if ($discount) {
                             $categorizedProductSum = $discount->percent ? $categorizedProduct->sum - $categorizedProduct->sum * (int)$discount->percent / 100 : $categorizedProduct->sum;
                         } else {
