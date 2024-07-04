@@ -60,7 +60,7 @@ Route::group(['middleware'=>['isAdmin', 'language']], function(){
     Route::get('sub-sub-category/subsubcategory/{id}', [SubSubCategoryController::class, 'subsubcategory'])->name('subsubcategory.subsubcategory');
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
     Route::get('/set-cities', [HomeController::class, 'setCities']);
-
+    Route::post('/make-all-notifications-as-read', [OrderController::class, 'makeAllNotificationsAsRead'])->name('order.make_all_notifications_as_read');
     Route::get('/order', [OrderController::class, 'index'])->name('order.index');
     Route::get('/order-category', [OrderController::class, 'category'])->name('order.category');
     Route::get('/order/show/{id}', [OrderController::class, 'show'])->name('order.show');

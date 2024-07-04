@@ -410,4 +410,17 @@ class OrderController extends Controller
         }
         return $order_coupon_price;
     }
+
+    public function makeAllNotificationsAsRead(){
+        $user = Auth::user();
+        foreach($user->unreadnotifications as $notification){
+            if($notification->type == "App\Notifications\OrderNotification"){
+                if(!empty($notification->data)){
+                    $notification->read_at = date('Y-m-d H:i:s');
+                    $notification->save();
+                }
+            }
+        }
+        return redirect()->back();
+    }
 }

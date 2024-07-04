@@ -72,6 +72,30 @@
     data-sidebar-user='true'>
     <!-- Begin page -->
     <div id="wrapper">
+
+        <div id="clear_all_notifications" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="text-center">
+                                <i class="dripicons-warning h1 text-warning"></i>
+                                <h4 class="mt-2">{{ translate('Are you sure you want to make all notifications as read')}}</h4>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <form class="d-flex justify-content-between" action="{{route('order.make_all_notifications_as_read')}}" method="POST" id="perform_order">
+                                @csrf
+                                @method('POST')
+                                <button type="button" class="btn btn-danger my-2" data-bs-dismiss="modal"> {{ translate('No')}}</button>
+                                <button type="submit" class="btn btn-success my-2"> {{ translate('Yes')}} </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+            </div><!-- /.modal-dialog -->
+        </div>
         <!-- Topbar Start -->
         <div class="navbar-custom">
                 <ul class="list-unstyled topnav-menu float-end mb-0">
@@ -231,7 +255,7 @@
                             <div class="dropdown-item noti-title">
                                 <h5 class="m-0">
                                     <span class="float-end">
-                                        <a href="" class="text-dark">
+                                        <a class="text-dark" data-bs-toggle="modal" data-bs-target="#clear_all_notifications">
                                             <small>{{translate('Clear All')}}</small>
                                         </a>
                                     </span>{{translate('Notification')}}
