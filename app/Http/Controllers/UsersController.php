@@ -45,7 +45,7 @@ class UsersController extends Controller
         $random_array = [$letters[rand(0,25)], $letters[rand(0,25)], $letters[rand(0,25)], $letters[rand(0,25)], $letters[rand(0,25)]];
         $random = implode("", $random_array);
         $file = $request->file('avatar');
-        if($request->new_password != $request->password_confirmation){
+        if($request->new_password && $request->new_password != $request->password_confirmation){
             return redirect()->back()->with('error', translate('Your new password confirmation is incorrect'));
         }
         if (isset($file) && $file) {
@@ -127,6 +127,8 @@ class UsersController extends Controller
                     return redirect()->back()->with('error', translate('Your new password confirmation is incorrect'));
                 }
             }
+        }elseif($request->password && $request->new_password && !$request->password_confirmation){
+            return redirect()->back()->with('error', translate('Your new password confirmation is incorrect'));
         }
         $model->first_name = $request->first_name;
         $model->last_name = $request->last_name;

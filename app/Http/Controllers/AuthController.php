@@ -66,7 +66,6 @@ class AuthController extends Controller
             $eskizToken->expire_date = strtotime('+28 days');
             $eskizToken->save();
         }
-        $eskiz_token = '';
         $eskiz_token = EskizToken::first();
         $options = [
             'headers' => [

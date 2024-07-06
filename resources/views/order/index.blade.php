@@ -394,11 +394,11 @@
                                                                             @if($order['user_name']){{$order['user_name']}}@endif
                                                                             <span style="color: orange">{{translate('Ordered')}}</span>
                                                                             <b style="color: #10C469">{{$order['company_product_price']}}</b>
-                                                                            @if($order['order_coupon_price'] != 0)
+                                                                            @if($order['order_coupon_price'] > 0)
                                                                                 {{translate('Your coupon is costed')}}
                                                                                 <b style="color: red">{{$order['order_coupon_price']}}</b>
                                                                             @endif
-                                                                            @if($order['company_discount_price'] != 0)
+                                                                            @if($order['company_discount_price'] > 0)
                                                                                 {{translate('your discount is costed')}}
                                                                                 <b style="color: red">{{$order['company_discount_price']}}</b>
                                                                             @endif
@@ -410,11 +410,11 @@
                                                                             </h4>
                                                                         @if($order['order'])
                                                                             @if($order['order']->payment_method == \App\Constants::ONLINE && $order['order']->card)
-                                                                                <span style="font-size:12px; line-height: 3; opacity: 0.84">{{translate('Card number')}}
+                                                                                <span style="font-size:12px; line-height: 3; opacity: 0.84; color: grey">{{translate('Card number')}}
                                                                                     <span style="font-size:12px; opacity:0.54">{{$order['order']->card->name.' '.$order['order']->card->card_number}}</span>
                                                                                 </span>
                                                                             @endif
-                                                                            <span style="font-size:12px; opacity: 0.84">{{translate('Created at')}}
+                                                                            <span style="font-size:12px; opacity: 0.84; color: grey">{{translate('Created at')}}
                                                                                 <span style="font-size:12px; opacity:0.54">{{$order['order']->created_at}}</span>
                                                                             </span>
                                                                             @if($order['order']->address)
@@ -423,7 +423,7 @@
                                                                                     @method('POST')
                                                                                     <input type="hidden" name="latitude" value="{{$order['order']->address->latitude??''}}">
                                                                                     <input type="hidden" name="longitude" value="{{$order['order']->address->longitude??''}}">
-                                                                                    <span style="font-size:12px; opacity: 0.84">{{translate('Address')}}
+                                                                                    <span style="font-size:12px; opacity: 0.84; color: grey">{{translate('Address')}}
                                                                                         <span style="font-size:12px; opacity: 0.64">
                                                                                             @if($order['order']->address->cities)
                                                                                                 @if($order['order']->address->cities->region)
@@ -438,19 +438,19 @@
                                                                                 </form>
                                                                             @endif
                                                                         @endif
-                                                                        @if($order['performed_company_product_price'] != 0)
+                                                                        @if($order['performed_company_product_price'] > 0)
                                                                             <hr>
                                                                             <h4 style="line-height: 2; font-size: 16px">
                                                                                 <span style="color: #10C469">{{translate('Performed')}}</span>
-                                                                                @if($order['performed_product_types'] != 0)
+                                                                                @if($order['performed_product_types'] > 0)
                                                                                     <b>{{ $order['performed_product_types'] }}</b>
                                                                                     {{translate('you are selling for')}}
                                                                                     <b style="color: #10C469">{{$order['performed_company_product_price']}}</b>
-                                                                                    @if($order['performed_order_coupon_price'] != 0)
+                                                                                    @if($order['performed_order_coupon_price'] > 0)
                                                                                         {{translate('your coupon is costed')}}
                                                                                         <b style="color: red">{{$order['performed_order_coupon_price']}}</b>
                                                                                     @endif
-                                                                                    @if($order['performed_company_discount_price'] != 0)
+                                                                                    @if($order['performed_company_discount_price'] > 0)
                                                                                         {{translate('your discount is costed')}}
                                                                                         <b style="color: red">{{$order['performed_company_discount_price']}}</b>
                                                                                     @endif
@@ -536,9 +536,9 @@
                                                                         <span>{{translate('Sum')}}: <b>{{$products[1]}}</b></span>
                                                                     @endif
                                                                     @if((int)$products[0]->discount_price>0)
-                                                                        @if($products['discount_withouth_expire'] != 0)
+                                                                        @if($products['discount_withouth_expire'] > 0)
                                                                             <span>{{translate('Discount')}}: <b style="color: red">{{(int)$products['discount_withouth_expire']}} %</b></span>
-                                                                        @elseif($products['discount_withouth_expire'] != 0)
+                                                                        @elseif($products['discount_withouth_expire'] > 0)
                                                                             <span>{{translate('Discount')}}: <b style="color: red">{{(int)$products['discount_withouth_expire']}} %</b></span>
                                                                         @endif
                                                                     @endif

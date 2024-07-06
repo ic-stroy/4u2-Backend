@@ -25,13 +25,13 @@
                     <div class="mb-3 col-6">
                         <label class="form-label">{{translate('Region')}}</label>
                         <select name="region_id" class="form-control" id="region_id" required>
-                            <option disabled selected>{{translate('Select region')}}</option>
+                            <option value="" disabled selected>{{translate('Select region')}}</option>
                         </select>
                     </div>
                     <div class="mb-3 col-6">
                         <label class="form-label">{{translate('District')}}</label>
                         <select name="district_id" class="form-control" id="district_id" required>
-                            <option disabled selected>{{translate('Select district')}}</option>
+                            <option value="" disabled selected>{{translate('Select district')}}</option>
                         </select>
                     </div>
                     <div class="col-6">
