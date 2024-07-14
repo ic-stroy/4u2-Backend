@@ -101,6 +101,6 @@ class CardController extends Controller
             return $this->success(translate('prohibited'), 200);
         }
         $user_card->delete();
-        return $this->success("Success", 200, $user_card);
+        return $this->success("Success", 200);
     }
 }

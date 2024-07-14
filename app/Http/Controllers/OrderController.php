@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use App\Constants;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Controller;
+use App\Models\CharacterizedProducts;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\User;
+use App\Models\Warehouse;
 use Illuminate\Http\Request;
 use App\Notifications\OrderNotification;
 use Illuminate\Support\Facades\Auth;
@@ -210,6 +212,13 @@ class OrderController extends Controller
         $cancelled_has = false;
         if($orderDetail){
             $orderDetail->status = Constants::ORDER_DETAIL_CANCELLED;
+
+            $warehouse_product___ = CharacterizedProducts::find($orderDetail->warehouse_id);
+            if($warehouse_product___) {
+                $warehouse_product___->count = (int)$warehouse_product___->count + (int)$orderDetail->quantity;
+                $warehouse_product___->save();
+            }
+
             $orderDetail->save();
             $order = Order::whereIn('status', [Constants::ORDERED, Constants::PERFORMED, Constants::CANCELLED])->find($orderDetail->order_id);
             if($order){
@@ -283,6 +292,13 @@ class OrderController extends Controller
         $order_details_discount_price = 0;
         $order_detail_price = 0;
         if($orderDetail){
+            if($orderDetail->status ==  Constants::ORDER_DETAIL_CANCELLED){
+                $warehouse_product___ = CharacterizedProducts::find($orderDetail->warehouse_id);
+                if($warehouse_product___) {
+                    $warehouse_product___->count = (int)$warehouse_product___->count - (int)$orderDetail->quantity;
+                    $warehouse_product___->save();
+                }
+            }
             $orderDetail->status = Constants::ORDER_DETAIL_PERFORMED;
             $orderDetail->save();
             $order = Order::whereIn('status', [Constants::ORDERED, Constants::PERFORMED, Constants::CANCELLED])->find($orderDetail->order_id);

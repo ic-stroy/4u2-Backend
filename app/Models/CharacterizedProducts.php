@@ -40,8 +40,7 @@ class CharacterizedProducts extends Model
 
     public function discount_withouth_expire()
     {
-        $maxValue = Discount::max('end_date');
-        return $this->hasOne(Discount::class, 'product_id','product_id')->where('end_date', $maxValue);
+        return $this->hasOne(Discount::class, 'product_id','product_id')->orderBy('end_date', 'desc');
     }
 
     public function order_detail(){

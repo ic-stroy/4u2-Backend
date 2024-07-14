@@ -261,6 +261,12 @@ class ApiOrderController extends Controller
                 $discount_price = 0;
                 $product = CharacterizedProducts::find($product_data['id']);
                 if($product){
+                    if((int)$product->count < (int)$product_data['count']){
+                        return $this->error("There are only left $product->count quantity", 400);
+                    }else{
+                        $product->count = (int)$product->count - (int)$product_data['count'];
+                        $product->save();
+                    }
                     $product_ = Products::find($product->product_id);
                     if($product_){
                         $discount = $product_->discount;

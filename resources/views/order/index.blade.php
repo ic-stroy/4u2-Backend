@@ -718,7 +718,7 @@
         let size_text = "{{translate('size')}}"
         let order_color_text = "{{translate('Order color')}}"
         let order_quantity_text = "{{translate('Order quantity')}}"
-        let remaining_in_warehouse_text = "{{translate('Remaining in warehouse')}}"
+        let remaining_in_warehouse_text = "{{translate('remained in warehouse')}}"
         let out_of_stock_text = "{{translate('Out of stock')}}"
 
         let error_status = "{{session('error')}}"

@@ -573,19 +573,19 @@ class ProductsController extends Controller
                         $discount = $product_->discount;
                         if($product->sum){
                             if($discount){
-                                $categorizedProductSum = $discount->percent?$product->sum - (int)$product->sum*(int)$discount->percent/100:$product->sum;
-                                $categorizedAllProductSum = $discount->percent?$product->sum*(int)$selected_product['count'] - (int)$product->sum*$selected_product['count']*(int)$discount->percent/100:$product->sum*(int)$selected_product['count'];
+                                $categorizedProductSum = $discount->percent?(int)$product->sum - (int)$product->sum*(int)$discount->percent/100:(int)$product->sum;
+                                $categorizedAllProductSum = $discount->percent?(int)$product->sum*(int)$selected_product['count'] - (int)$product->sum*(int)$selected_product['count']*(int)$discount->percent/100:(int)$product->sum*(int)$selected_product['count'];
                             }else{
-                                $categorizedProductSum = $product->sum;
-                                $categorizedAllProductSum = $product->sum*(int)$selected_product['count'];
+                                $categorizedProductSum = (int)$product->sum;
+                                $categorizedAllProductSum = (int)$product->sum*(int)$selected_product['count'];
                             }
                         }else{
                             if($discount){
-                                $categorizedProductSum = $discount->percent?$product_->sum - $product_->sum*(int)$discount->percent/100:$product_->sum;
-                                $categorizedAllProductSum = $discount->percent?$product_->sum*(int)$selected_product['count'] - $product_->sum*(int)$selected_product['count']*(int)$discount->percent/100:$product_->sum;
+                                $categorizedProductSum = $discount->percent?(int)$product_->sum - (int)$product_->sum*(int)$discount->percent/100:(int)$product_->sum;
+                                $categorizedAllProductSum = $discount->percent?(int)$product_->sum*(int)$selected_product['count'] - (int)$product_->sum*(int)$selected_product['count']*(int)$discount->percent/100:(int)$product_->sum;
                             }else{
-                                $categorizedAllProductSum = $product_->sum*(int)$selected_product['count'];
-                                $categorizedProductSum = $product_->sum;
+                                $categorizedAllProductSum = (int)$product_->sum*(int)$selected_product['count'];
+                                $categorizedProductSum = (int)$product_->sum;
                             }
                         }
                         $images_ = json_decode($product_->images);
@@ -597,7 +597,7 @@ class ProductsController extends Controller
                         $company_name = $product_->company??null;
                         $category_name = $product_->category?$product_->category->name:null;
                     }
-                    $all_sum = $all_sum + $categorizedAllProductSum??$product->sum*(int)$selected_product['count'];
+                    $all_sum = $all_sum + $categorizedAllProductSum??(int)$product->sum*(int)$selected_product['count'];
                     $good[] = [
                         'id'=>$product->id,
                         'product_id'=>$product_->id,
@@ -607,10 +607,10 @@ class ProductsController extends Controller
                         'category'=>$category_name,
                         'size'=>$product->size?$product->size->name:'',
                         'color'=>$product->color?$product->color:[],
-                        'count'=>$product->count,
-                        'discount' => $product->discount?$product->discount->percent:null,
-                        'sum'=>$categorizedProductSum??$product->sum,
-                        'price'=>$product->sum??$product_->sum,
+                        'count'=>(int)$product->count,
+                        'discount' => $product->discount?(int)$product->discount->percent:null,
+                        'sum'=>(int)$categorizedProductSum??(int)$product->sum,
+                        'price'=>(int)$product->sum??(int)$product_->sum,
                     ];
                 }
             }
@@ -661,9 +661,9 @@ class ProductsController extends Controller
 
     public function setOrderCoupon($coupon, $price){
         if ($coupon->percent) {
-            $order_coupon_price = ($price/100)*($coupon->percent);
+            $order_coupon_price = ((int)$price/100)*((int)$coupon->percent);
         }elseif($coupon->price){
-            $order_coupon_price = $coupon->price;
+            $order_coupon_price = (int)$coupon->price;
         }
         return $order_coupon_price;
     }

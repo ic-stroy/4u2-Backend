@@ -46,7 +46,7 @@ class AddressController extends Controller
         if($address_count < 4){
             $address = new Address();
             $cities = Cities::find($request->city_id);
-            if($cities){
+            if(!$cities){
                 return $this->error('City or Region not found', 400);
             }
             $address->city_id = $request->city_id;
@@ -64,11 +64,11 @@ class AddressController extends Controller
     public function editAddress(Request $request){
         $user = Auth::user();
         $address = Address::where('user_id', $user->id)->find($request->id);
-        if($address){
+        if(!$address){
             return $this->error('Address not found', 400);
         }
         $cities = Cities::find($request->city_id);
-        if($cities){
+        if(!$cities){
             return $this->error('City or Region not found', 400);
         }
         $address->city_id = $request->city_id;
@@ -156,7 +156,7 @@ class AddressController extends Controller
 
             $address[] = [
                 'id'=>$address_->id,
-                'name'=>$address_->name??null,
+                'name'=>$address_->name??'',
                 'region'=>$region,
                 'city'=>$city,
                 'region_cities'=>$region_city,
@@ -217,7 +217,7 @@ class AddressController extends Controller
 
             $address[] = [
                 'id'=>$address_->id,
-                'name'=>$address_->name??null,
+                'name'=>$address_->name??'',
                 'region'=>$region,
                 'city'=>$city,
                 'region_cities'=>$region_city,
@@ -226,7 +226,7 @@ class AddressController extends Controller
                 'postcode'=>$address_->postcode??null,
             ];
         }
-        if(count($address)>0){
+        if(!empty($address)){
             return $this->success('Success', 200, $address);
         }else{
             return $this->error('No address', 400);
