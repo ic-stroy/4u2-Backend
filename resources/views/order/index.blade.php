@@ -585,7 +585,7 @@
                                                                                 <button type="button" class="btn btn-success delete-datas btn-sm waves-effect" data-bs-toggle="modal" data-bs-target="#success-alert-modal" data-url=""
                                                                                     onclick='accepting_order(
                                                                                         "{{$products[0]->quantity}}",
-                                                                                        "{{$products[0]->warehouse_product?$products[0]->warehouse_product->count - $products[0]->quantity:0 }}",
+                                                                                        "{{$products[0]->warehouse_product?(int)$products[0]->warehouse_product->count + $products[0]->quantity:0 }}",
                                                                                         "{{$products[0]->color?$products[0]->color->name:''}}",
                                                                                         "{{$products[0]->size?$products[0]->size->name:''}}",
                                                                                         "{{$product_name}}",
@@ -605,7 +605,7 @@
                                                                                 <button type="button" class="btn btn-success delete-datas btn-sm waves-effect" data-bs-toggle="modal" data-bs-target="#success-alert-modal" data-url=""
                                                                                     onclick='accepting_order(
                                                                                         "{{$products[0]->quantity}}",
-                                                                                        "{{$products[0]->warehouse_product?$products[0]->warehouse_product->count - $products[0]->quantity:0 }}",
+                                                                                        "{{$products[0]->warehouse_product?(int)$products[0]->warehouse_product->count:0 }}",
                                                                                         "{{$products[0]->color?$products[0]->color->name:''}}",
                                                                                         "{{$products[0]->size?$products[0]->size->name:''}}",
                                                                                         "{{$product_name}}",
@@ -636,7 +636,7 @@
                                                                                 <button type="button" class="btn btn-success delete-datas btn-sm waves-effect" data-bs-toggle="modal" data-bs-target="#success-alert-modal" data-url=""
                                                                                     onclick='accepting_order(
                                                                                         "{{$products[0]->quantity}}",
-                                                                                        "{{$products[0]->warehouse_product?$products[0]->warehouse_product->count - $products[0]->quantity:0 }}",
+                                                                                        "{{$products[0]->warehouse_product?(int)$products[0]->warehouse_product->count:0 }}",
                                                                                         "{{$products[0]->color?$products[0]->color->name:''}}",
                                                                                         "{{$products[0]->size?$products[0]->size->name:''}}",
                                                                                         "{{$product_name}}",
@@ -655,7 +655,7 @@
                                                                             <button type="button" class="btn btn-success delete-datas btn-sm waves-effect" data-bs-toggle="modal" data-bs-target="#success-alert-modal" data-url=""
                                                                                 onclick='accepting_order(
                                                                                     "{{$products[0]->quantity}}",
-                                                                                    "{{$products[0]->warehouse_product?$products[0]->warehouse_product->count - $products[0]->quantity:0 }}",
+                                                                                    "{{$products[0]->warehouse_product?(int)$products[0]->warehouse_product->count:0 }}",
                                                                                     "{{$products[0]->color?$products[0]->color->name:''}}",
                                                                                     "{{$products[0]->size?$products[0]->size->name:''}}",
                                                                                     "{{$product_name}}",
