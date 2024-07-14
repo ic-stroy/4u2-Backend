@@ -437,39 +437,37 @@ class ProductsController extends Controller
                 $firstProducts = [];
                 $categorizedByColor = [];
                 foreach ($product->categorizedProducts as $categorizedProduct_) {
-                    if((int)$categorizedProduct_->count > 0){
-                        if($discount){
-                            $categorizedProductSum_ = $discount->percent?$categorizedProduct_->sum - $categorizedProduct_->sum*(int)$discount->percent/100:$categorizedProduct_->sum;
-                        }else{
-                            $categorizedProductSum_ = $categorizedProduct_->sum;
-                        }
-                        if($categorizedProduct_->color) {
-                            $color_id = $categorizedProduct_->color->id;
-                            $colors_array[] = $categorizedProduct_->color->id;
-                        }else{
-                            $color_id = 'no';
-                            $colors_array[] = 'no';
-                        }
-                        if($colors_array[0] == $color_id){
-                            if($categorizedProduct_->color){
-                                $color = [
-                                    'id' => $categorizedProduct_->color->id,
-                                    'name' => $categorizedProduct_->color->name,
-                                    'code' => $categorizedProduct_->color->code,
-                                ];
-                            }else{
-                                $color = [];
-                            }
-                            $firstProducts[] = [
-                                'id' => $categorizedProduct_->id,
-                                'size' => $categorizedProduct_->size ? $categorizedProduct_->size->name : '',
-                                'color' => $color,
-                                'sum' => $categorizedProductSum_,
-                                'discount' => $product->discount ? $product->discount->percent : null,
-                                'price' => $categorizedProduct_->sum,
-                                'count' => $categorizedProduct_->count
+                    if($discount){
+                        $categorizedProductSum_ = $discount->percent?$categorizedProduct_->sum - $categorizedProduct_->sum*(int)$discount->percent/100:$categorizedProduct_->sum;
+                    }else{
+                        $categorizedProductSum_ = $categorizedProduct_->sum;
+                    }
+                    if($categorizedProduct_->color) {
+                        $color_id = $categorizedProduct_->color->id;
+                        $colors_array[] = $categorizedProduct_->color->id;
+                    }else{
+                        $color_id = 'no';
+                        $colors_array[] = 'no';
+                    }
+                    if($colors_array[0] == $color_id){
+                        if($categorizedProduct_->color){
+                            $color = [
+                                'id' => $categorizedProduct_->color->id,
+                                'name' => $categorizedProduct_->color->name,
+                                'code' => $categorizedProduct_->color->code,
                             ];
+                        }else{
+                            $color = [];
                         }
+                        $firstProducts[] = [
+                            'id' => $categorizedProduct_->id,
+                            'size' => $categorizedProduct_->size ? $categorizedProduct_->size->name : '',
+                            'color' => $color,
+                            'sum' => $categorizedProductSum_,
+                            'discount' => $product->discount ? $product->discount->percent : null,
+                            'price' => $categorizedProduct_->sum,
+                            'count' => $categorizedProduct_->count
+                        ];
                     }
                 }
                 foreach (array_unique($colors_array) as $color__) {
@@ -477,39 +475,37 @@ class ProductsController extends Controller
                     $colorModel = [];
                     $color_id = '';
                     foreach ($product->categorizedProducts as $categorizedProduct) {
-                        if((int)$categorizedProduct_->count > 0) {
+                        if ($categorizedProduct->color) {
+                            $color_id = $categorizedProduct->color->id;
+                        } else {
+                            $color_id = 'no';
+                        }
+                        if ($color__ == $color_id) {
                             if ($categorizedProduct->color) {
-                                $color_id = $categorizedProduct->color->id;
-                            } else {
-                                $color_id = 'no';
-                            }
-                            if ($color__ == $color_id) {
-                                if ($categorizedProduct->color) {
-                                    $colorModel = $categorizedProduct->color;
-                                    $color_ = [
-                                        'id' => $categorizedProduct->color->id,
-                                        'name' => $categorizedProduct->color->name,
-                                        'code' => $categorizedProduct->color->code,
-                                    ];
-                                } else {
-                                    $colorModel = [];
-                                    $color_ = [];
-                                }
-                                if ($discount) {
-                                    $categorizedProductSum = $discount->percent ? $categorizedProduct->sum - $categorizedProduct->sum * (int)$discount->percent / 100 : $categorizedProduct->sum;
-                                } else {
-                                    $categorizedProductSum = $categorizedProduct->sum;
-                                }
-                                $productsByColor[] = [
-                                    'id' => $categorizedProduct->id,
-                                    'size' => $categorizedProduct->size ? $categorizedProduct->size->name : '',
-                                    'sum' => $categorizedProductSum,
-                                    'color' => $color_,
-                                    'discount' => $product->discount ? $product->discount->percent : null,
-                                    'price' => $categorizedProduct->sum,
-                                    'count' => $categorizedProduct->count
+                                $colorModel = $categorizedProduct->color;
+                                $color_ = [
+                                    'id' => $categorizedProduct->color->id,
+                                    'name' => $categorizedProduct->color->name,
+                                    'code' => $categorizedProduct->color->code,
                                 ];
+                            } else {
+                                $colorModel = [];
+                                $color_ = [];
                             }
+                            if ($discount) {
+                                $categorizedProductSum = $discount->percent ? $categorizedProduct->sum - $categorizedProduct->sum * (int)$discount->percent / 100 : $categorizedProduct->sum;
+                            } else {
+                                $categorizedProductSum = $categorizedProduct->sum;
+                            }
+                            $productsByColor[] = [
+                                'id' => $categorizedProduct->id,
+                                'size' => $categorizedProduct->size ? $categorizedProduct->size->name : '',
+                                'sum' => $categorizedProductSum,
+                                'color' => $color_,
+                                'discount' => $product->discount ? $product->discount->percent : null,
+                                'price' => $categorizedProduct->sum,
+                                'count' => $categorizedProduct->count
+                            ];
                         }
                     }
                     if($color_id != ''){
@@ -798,79 +794,75 @@ class ProductsController extends Controller
             $categorizedByColor = [];
             if (!$product->categorizedProducts->isEmpty()) {
                 foreach ($product->categorizedProducts as $categorizedProduct_) {
-                        if((int)$categorizedProduct_->count > 0){
-                            if($discount){
-                                $categorizedProductSum_ = $discount->percent?$categorizedProduct_->sum - $categorizedProduct_->sum*(int)$discount->percent/100:$categorizedProduct_->sum;
-                            }else{
-                                $categorizedProductSum_ = $categorizedProduct_->sum;
-                            }
-                            if($categorizedProduct_->color) {
-                                $color_id = $categorizedProduct_->color->id;
-                                $colors_array[] = $categorizedProduct_->color->id;
-                            }else{
-                                $color_id = 'no';
-                                $colors_array[] = 'no';
-                            }
-                            if($colors_array[0] == $color_id){
-                                if($categorizedProduct_->color){
-                                    $color = [
-                                        'id' => $categorizedProduct_->color->id,
-                                        'name' => $categorizedProduct_->color->name,
-                                        'code' => $categorizedProduct_->color->code,
-                                    ];
-                                }else{
-                                    $color = [];
-                                }
-                                $firstProducts[] = [
-                                    'id' => $categorizedProduct_->id,
-                                    'size' => $categorizedProduct_->size ? $categorizedProduct_->size->name : '',
-                                    'color' => $color,
-                                    'sum' => $categorizedProductSum_,
-                                    'discount' => $product->discount ? $product->discount->percent : null,
-                                    'price' => $categorizedProduct_->sum,
-                                    'count' => $categorizedProduct_->count
-                                ];
-                            }
+                    if($discount){
+                        $categorizedProductSum_ = $discount->percent?$categorizedProduct_->sum - $categorizedProduct_->sum*(int)$discount->percent/100:$categorizedProduct_->sum;
+                    }else{
+                        $categorizedProductSum_ = $categorizedProduct_->sum;
+                    }
+                    if($categorizedProduct_->color) {
+                        $color_id = $categorizedProduct_->color->id;
+                        $colors_array[] = $categorizedProduct_->color->id;
+                    }else{
+                        $color_id = 'no';
+                        $colors_array[] = 'no';
+                    }
+                    if($colors_array[0] == $color_id){
+                        if($categorizedProduct_->color){
+                            $color = [
+                                'id' => $categorizedProduct_->color->id,
+                                'name' => $categorizedProduct_->color->name,
+                                'code' => $categorizedProduct_->color->code,
+                            ];
+                        }else{
+                            $color = [];
                         }
+                        $firstProducts[] = [
+                            'id' => $categorizedProduct_->id,
+                            'size' => $categorizedProduct_->size ? $categorizedProduct_->size->name : '',
+                            'color' => $color,
+                            'sum' => $categorizedProductSum_,
+                            'discount' => $product->discount ? $product->discount->percent : null,
+                            'price' => $categorizedProduct_->sum,
+                            'count' => $categorizedProduct_->count
+                        ];
+                    }
                 }
                 foreach (array_unique($colors_array) as $color__) {
                     $productsByColor = [];
                     $colorModel = [];
                     $color_id = '';
                     foreach ($product->categorizedProducts as $categorizedProduct) {
-                        if ((int)$categorizedProduct_->count > 0) {
+                        if ($categorizedProduct->color) {
+                            $color_id = $categorizedProduct->color->id;
+                        } else {
+                            $color_id = 'no';
+                        }
+                        if ($color__ == $color_id) {
                             if ($categorizedProduct->color) {
-                                $color_id = $categorizedProduct->color->id;
-                            } else {
-                                $color_id = 'no';
-                            }
-                            if ($color__ == $color_id) {
-                                if ($categorizedProduct->color) {
-                                    $colorModel = $categorizedProduct->color;
-                                    $color_ = [
-                                        'id' => $categorizedProduct->color->id,
-                                        'name' => $categorizedProduct->color->name,
-                                        'code' => $categorizedProduct->color->code,
-                                    ];
-                                } else {
-                                    $colorModel = [];
-                                    $color_ = [];
-                                }
-                                if ($discount) {
-                                    $categorizedProductSum = $discount->percent ? $categorizedProduct->sum - $categorizedProduct->sum * (int)$discount->percent / 100 : $categorizedProduct->sum;
-                                } else {
-                                    $categorizedProductSum = $categorizedProduct->sum;
-                                }
-                                $productsByColor[] = [
-                                    'id' => $categorizedProduct->id,
-                                    'size' => $categorizedProduct->size ? $categorizedProduct->size->name : '',
-                                    'sum' => $categorizedProductSum,
-                                    'color' => $color_,
-                                    'discount' => $product->discount ? $product->discount->percent : null,
-                                    'price' => $categorizedProduct->sum,
-                                    'count' => $categorizedProduct->count
+                                $colorModel = $categorizedProduct->color;
+                                $color_ = [
+                                    'id' => $categorizedProduct->color->id,
+                                    'name' => $categorizedProduct->color->name,
+                                    'code' => $categorizedProduct->color->code,
                                 ];
+                            } else {
+                                $colorModel = [];
+                                $color_ = [];
                             }
+                            if ($discount) {
+                                $categorizedProductSum = $discount->percent ? $categorizedProduct->sum - $categorizedProduct->sum * (int)$discount->percent / 100 : $categorizedProduct->sum;
+                            } else {
+                                $categorizedProductSum = $categorizedProduct->sum;
+                            }
+                            $productsByColor[] = [
+                                'id' => $categorizedProduct->id,
+                                'size' => $categorizedProduct->size ? $categorizedProduct->size->name : '',
+                                'sum' => $categorizedProductSum,
+                                'color' => $color_,
+                                'discount' => $product->discount ? $product->discount->percent : null,
+                                'price' => $categorizedProduct->sum,
+                                'count' => $categorizedProduct->count
+                            ];
                         }
                     }
                     if($color_id != ''){
