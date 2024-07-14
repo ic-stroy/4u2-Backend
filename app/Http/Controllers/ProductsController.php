@@ -429,6 +429,7 @@ class ProductsController extends Controller
 
     public function getProduct($id)
     {
+        $is_exist_in_warehouse = false;
         $product = Products::find($id);
         if($product){
             $discount = $product->discount;
@@ -437,6 +438,9 @@ class ProductsController extends Controller
                 $firstProducts = [];
                 $categorizedByColor = [];
                 foreach ($product->categorizedProducts as $categorizedProduct_) {
+                    if((int)$categorizedProduct_->count>0){
+                        $is_exist_in_warehouse = true;
+                    }
                     if($discount){
                         $categorizedProductSum_ = $discount->percent?$categorizedProduct_->sum - $categorizedProduct_->sum*(int)$discount->percent/100:$categorizedProduct_->sum;
                     }else{
@@ -475,6 +479,9 @@ class ProductsController extends Controller
                     $colorModel = [];
                     $color_id = '';
                     foreach ($product->categorizedProducts as $categorizedProduct) {
+                        if((int)$categorizedProduct->count>0){
+                            $is_exist_in_warehouse = true;
+                        }
                         if ($categorizedProduct->color) {
                             $color_id = $categorizedProduct->color->id;
                         } else {
@@ -537,6 +544,7 @@ class ProductsController extends Controller
             $good['company'] = $product->company ?? null;
             $good['characters'] = $categorizedByColor ?? [];
             $good['first_color_products'] = $firstProducts ?? [];
+            $good['is_exist_in_warehouse'] = $is_exist_in_warehouse;
             $good['images'] = $images ?? [];
             $good['basket_button'] = false;
             $good['category_link'] = $this->getProductCategoryLink($product)[0];
@@ -787,6 +795,7 @@ class ProductsController extends Controller
 
     public function getGoods($products){
         $goods = [];
+        $is_exist_in_warehouse = false;
         foreach ($products as $key => $product) {
             $discount = $product->discount;
             $colors_array = [];
@@ -794,6 +803,9 @@ class ProductsController extends Controller
             $categorizedByColor = [];
             if (!$product->categorizedProducts->isEmpty()) {
                 foreach ($product->categorizedProducts as $categorizedProduct_) {
+                    if((int)$categorizedProduct_->count>0){
+                        $is_exist_in_warehouse = true;
+                    }
                     if($discount){
                         $categorizedProductSum_ = $discount->percent?$categorizedProduct_->sum - $categorizedProduct_->sum*(int)$discount->percent/100:$categorizedProduct_->sum;
                     }else{
@@ -832,6 +844,9 @@ class ProductsController extends Controller
                     $colorModel = [];
                     $color_id = '';
                     foreach ($product->categorizedProducts as $categorizedProduct) {
+                        if((int)$categorizedProduct->count>0){
+                            $is_exist_in_warehouse = true;
+                        }
                         if ($categorizedProduct->color) {
                             $color_id = $categorizedProduct->color->id;
                         } else {
@@ -893,6 +908,7 @@ class ProductsController extends Controller
             $goods[$key]['company'] = $product->company ?? null;
             $goods[$key]['characters'] = $categorizedByColor??[];
             $goods[$key]['first_color_products'] = $firstProducts ?? [];
+            $goods[$key]['is_exist_in_warehouse'] = $is_exist_in_warehouse;
             $goods[$key]['images'] = $images ?? [];
             $goods[$key]['basket_button'] = false;
             $goods[$key]['created_at'] = $product->created_at ?? null;
