@@ -16,7 +16,7 @@
                     <tr>
                         <th>#</th>
                         <th>{{translate('Name')}}</th>
-                        <th>{{translate('Coupon quantity')}}</th>
+                        <th>{{translate('Coupon value')}}</th>
                         <th>{{translate('Minimum price')}}</th>
                         <th>{{translate('Orders\' quantity or number')}}</th>
                         <th class="text-center">{{translate('Functions')}}</th>
