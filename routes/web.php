@@ -69,6 +69,13 @@ Route::group(['middleware'=>['isAdmin', 'language']], function(){
     Route::post('/address', [OrderController::class, 'address'])->name('order.address');
     Route::post('/accepted-by-recipient/{id}', [OrderController::class, 'acceptedByRecipient'])->name('accepted_by_recipient');
     Route::post('/cancell-accepted-by-recipient/{id}', [OrderController::class, 'cancellAcceptedByRecipient'])->name('cancell_accepted_by_recipient');
+
+    Route::post('/order-delivered/{id}', [OrderController::class, 'orderDelivered'])->name('order_delivered');
+    Route::post('/ready-for-pickup/{id}', [OrderController::class, 'readyForPickup'])->name('ready_for_pickup');
+    Route::post('/cancell-order-delivered/{id}', [OrderController::class, 'cancellReadyForPickup'])->name('cancell_ready_for_pick_up');
+    Route::post('/cancell-ready-for-pickup/{id}', [OrderController::class, 'cancellOrderDelivered'])->name('cancell_order_delivered');
+    Route::post('/delete-order-detail/{id}', [OrderController::class, 'deleteOrderDetail'])->name('delete_order_detail');
+
     Route::delete('/order-detail/cancell/{id}', [OrderController::class, 'cancellOrderDetail'])->name('cancell_order_detail');
     Route::post('/order-detail/perform/{id}', [OrderController::class, 'performOrderDetail'])->name('perform_order_detail');
 

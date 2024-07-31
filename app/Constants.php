@@ -14,7 +14,9 @@ class Constants {
    const ORDERED = 2;
    const PERFORMED = 3;
    const CANCELLED = 4;
-   const ACCEPTED_BY_RECIPIENT = 5;
+   const ORDER_DELIVERED = 5;
+    const READY_FOR_PICKUP = 6;
+    const ACCEPTED_BY_RECIPIENT = 7;
 
    //Payment method
     const CASH = 1;
