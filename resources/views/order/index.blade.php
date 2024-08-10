@@ -280,8 +280,19 @@
             line-height: 20px;
             color: black !important;
         }
-        .card-header{
-            background-color: #F7F7F7;
+        .img-fluid{
+            height:400px !important;
+        }
+        .address_modal_link{
+            transition:0.4s;
+            border:0px;
+            border-radius: 4px;
+            font-size: 20px;
+            color: red;
+        }
+        .address_modal_link:hover{
+            transform:scale(1.24);
+            background-color:lightblue;
         }
     </style>
     @if(!empty($all_orders['orderedOrders']) || !empty($all_orders['performedOrders']) || !empty($all_orders['cancelledOrders'])
@@ -508,9 +519,9 @@
         <div id="user_info_modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content client_data">
-                    <div class="modal-body">
+                    <div class="modal-body" style="background-color: white; border-radius: 16px; box-shadow: 2px 2px 12px">
                         <div class="d-flex justify-content-between align-items-start">
-                            <h4 class="mt-2">{{ translate('Client data')}}</h4>
+                            <h4 class="mt-2" style="color:black !important">{{ translate('Client data')}}</h4>
                             <span class="mdi mdi-close" data-bs-dismiss="modal" style="font-size: 18px"></span>
                         </div>
                         <div class="d-flex flex-column">
@@ -541,6 +552,7 @@
                             <div class="d-flex client-info">
                                 <span class="client-title">{{translate('Address')}}:</span>
                                 <span class="client-data" id="user_address"></span>
+
                             </div>
                         </div>
                     </div>
@@ -687,7 +699,7 @@
                                         <td>
                                             <div class="accordion custom-accordion">
                                                 <div class="card mb-0">
-                                                    <div class="card-header" id="headingNine">
+                                                    <div class="card-header" id="headingNine" style="background-color: #F7F7F7">
                                                         @if($order['order'])
                                                             <span class="m-0 position-relative" style="width: 100%">
                                                                 <div class="text-reset d-block">
@@ -756,15 +768,24 @@
                                                                             <div class="d-flex flex-column">
                                                                                 <span class="order_content_header">{{translate('Address of the recipient:')}}</span>
                                                                                 @if(!empty($order['address']))
-                                                                                    <span class="order_content_item">
-                                                                                        @if($order['address']['name'])
-                                                                                            @if(strlen($order['address']['name'])>54)
-                                                                                                {{substr($order['address']['name'], 0, 54)}} ...
-                                                                                            @else
-                                                                                                {{$order['address']['name']}}
-                                                                                            @endif
-                                                                                        @endif
-                                                                                    </span>
+                                                                                    <form action="{{route('order.address')}}" method="POST">
+                                                                                        @csrf
+                                                                                        @method('POST')
+                                                                                        <input type="hidden" name="latitude" value="{{$order['order']->address->latitude??''}}">
+                                                                                        <input type="hidden" name="longitude" value="{{$order['order']->address->longitude??''}}">
+                                                                                        <span style="font-size:12px; opacity: 0.84; color: grey">{{translate('Address')}}
+                                                                                            <span class="order_content_item">
+                                                                                                @if($order['address']['name'])
+                                                                                                    @if(strlen($order['address']['name'])>44)
+                                                                                                        {{substr($order['address']['name'], 0, 44)}} ...
+                                                                                                    @else
+                                                                                                        {{$order['address']['name']}}
+                                                                                                    @endif
+                                                                                                @endif
+                                                                                            </span>
+                                                                                            <button type="submit" class="address_modal_link"><i class="mdi mdi-map-marker-outline"></i></button>
+                                                                                        </span>
+                                                                                    </form>
                                                                                 @endif
                                                                             </div>
                                                                         </div>
