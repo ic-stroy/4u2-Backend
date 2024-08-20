@@ -535,7 +535,7 @@ class CategorySeeder extends Seeder
             ]
         ];
         $category_id = Category::withTrashed()->select('id')->orderBy('id', 'desc')->first();
-        if($category_id){
+        if(!$category_id){
             $all_categories = [];
             $all_sub_categories = [];
             $all_sub_sub_categories = [];

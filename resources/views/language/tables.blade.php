@@ -47,16 +47,7 @@
                 <a href="{{ route('table.show', 'color') }}"><div class="translation_menu">{{translate('Color translate')}}</div></a>
             </li>
             <li class="translation_list">
-                <a href="{{ route('table.show', 'company') }}"><div class="translation_menu">{{translate('Company translate')}}</div></a>
-            </li>
-            <li class="translation_list">
                 <a href="{{ route('table.show', 'product') }}"><div class="translation_menu">{{translate('Product translate')}}</div></a>
-            </li>
-            <li class="translation_list">
-                <a href="{{ route('table.show', 'warehouse') }}"><div class="translation_menu">{{translate('Warehouse translate')}}</div></a>
-            </li>
-            <li class="translation_list">
-                <a href="{{ route('table.show', 'role') }}"><div class="translation_menu">{{translate('Role translate')}}</div></a>
             </li>
         </ul>
     </div>

@@ -6,8 +6,13 @@ use App\Constants;
 use App\Models\CharacterizedProducts;
 use App\Models\Color;
 use App\Models\Coupon;
+use App\Models\Discount;
+use App\Models\Language;
 use App\Models\Order;
+use App\Models\PaymentStatus;
+use App\Models\ProductDescriptionTranslations;
 use App\Models\Products;
+use App\Models\ProductTranslations;
 use App\Models\Sizes;
 use App\Models\Category;
 use Illuminate\Http\Request;
@@ -68,6 +73,13 @@ class ProductsController extends Controller
         $images = $request->file('images');
         $model->images = $this->imageSave($model, $images, 'store');
         $model->save();
+        foreach (Language::all() as $language) {
+            $product_translations = ProductTranslations::firstOrNew(['lang' => $language->code, 'product_id' => $model->id]);
+            $product_translations->lang = $language->code;
+            $product_translations->name = $model->name;
+            $product_translations->product_id = $model->id;
+            $product_translations->save();
+        }
         return redirect()->route('product.index')->with('status', translate('Successfully created'));
     }
 
@@ -166,7 +178,6 @@ class ProductsController extends Controller
     public function update(Request $request, string $id)
     {
         $model = Products::find($id);
-        $model->name = $request->name;
         if(isset($request->subsubcategory_id)){
             $model->category_id = $request->subsubcategory_id;
         }elseif($request->subcategory_id){
@@ -176,11 +187,34 @@ class ProductsController extends Controller
         }
         $model->company = $request->company;
         $model->status = $request->status;
-        $model->description = $request->description;
         $model->sum = $request->sum;
         $images = $request->file('images');
         $model->images = $this->imageSave($model, $images, 'update');
+        if($request->name != $model->name){
+            foreach (Language::all() as $language) {
+                $product_translations = ProductTranslations::firstOrNew(['lang' => $language->code, 'product_id' => $model->id]);
+                $product_translations->lang = $language->code;
+                $product_translations->name = $request->name;
+                $product_translations->product_id = $model->id;
+                $product_translations->save();
+            }
+
+        }
+        $model->description = $request->description;
+        $model->name = $request->name;
         $model->save();
+        if(!empty($model->categoryDiscount)){
+            if(empty($model->discount)){
+                $discount = new Discount();
+                $discount->percent = $model->categoryDiscount->percent;
+                $discount->start_date = $model->categoryDiscount->start_date;
+                $discount->end_date = $model->categoryDiscount->end_date;
+                $discount->category_id = $model->category_id;
+                $discount->product_id = $model->id;
+                $discount->discount_number = $model->categoryDiscount->discount_number;
+                $discount->save();
+            }
+        }
         return redirect()->route('product.index')->with('status', translate('Successfully updated'));
     }
 
@@ -200,6 +234,12 @@ class ProductsController extends Controller
                 if(file_exists($avatar_main)){
                     unlink($avatar_main);
                 }
+            }
+        }
+        foreach (Language::all() as $language) {
+            $product_translations = ProductTranslations::where(['lang' => $language->code, 'product_id' => $model->id])->get();
+            foreach ($product_translations as $product_translation){
+                $product_translation->delete();
             }
         }
         $model->delete();
@@ -241,7 +281,7 @@ class ProductsController extends Controller
         return $current_category;
     }
 
-    public function getProductCategoryLink($product){
+    public function getProductCategoryLink($product, $language){
             if($product->subSubCategory){
                 $category_product = $product->subSubCategory;
                 $is_category = 3;
@@ -258,8 +298,9 @@ class ProductsController extends Controller
             switch ($is_category){
                 case 1:
                     $category_product_id = $category_product->id-1;
+                    $category_translation_name = table_translate($category_product, 'category', $language);
                     $current_category_link = [
-                        'name'=>$category_product->name,
+                        'name'=>$category_translation_name,
                         'link'=>"/products/$category_product_id"
                     ];
                     $current_sub_category_link = [];
@@ -269,15 +310,17 @@ class ProductsController extends Controller
                     $current_category = $category_product->category?$category_product->category:'no';
                     $category_product_id = $current_category->id-1;
                     if($current_category != 'no'){
+                        $category_translation_name_ = table_translate($current_category, 'category', $language);
                         $current_category_link = [
-                            "name"=>$current_category->name,
+                            "name"=>$category_translation_name_,
                             "link"=>"/products/$category_product_id"
                         ];
                     }else{
                         $current_category_link = [];
                     }
+                    $category_translation_name = table_translate($category_product, 'category', $language);
                     $current_sub_category_link = [
-                        "name"=>$category_product->name,
+                        "name"=>$category_translation_name,
                         "link"=>"/sub-category-products/$category_product->id"
                     ];
                     $current_sub_sub_category_link = [];
@@ -290,8 +333,9 @@ class ProductsController extends Controller
                     }
                     $category_product_id = $current_category->id-1;
                     if($current_category != 'no'){
+                        $category_translation_name = table_translate($current_category, 'category', $language);
                         $current_category_link = [
-                            "name"=>$current_category->name,
+                            "name"=>$category_translation_name,
                             "link"=>"/products/$category_product_id"
                         ];
                     }else{
@@ -299,15 +343,17 @@ class ProductsController extends Controller
                     }
                     $sub_current_category = $category_product->sub_category?$category_product->sub_category:'no';
                     if($sub_current_category != 'no'){
+                        $category_translation_name_ = table_translate($sub_current_category, 'category', $language);
                         $current_sub_category_link = [
-                            "name"=>$sub_current_category->name,
+                            "name"=>$category_translation_name_,
                             "link"=>"/sub-category-products/$sub_current_category->id"
                         ];
                     }else{
                         $current_sub_category_link = [];
                     }
+                    $category_translation_name__ = table_translate($category_product, 'category', $language);
                     $current_sub_sub_category_link = [
-                        "name"=>$category_product->name,
+                        "name"=>$category_translation_name__,
                         "link"=>"/sub-category-products/$category_product->id"
                     ];
                     break;
@@ -402,10 +448,11 @@ class ProductsController extends Controller
         return response()->json($goods);
     }
 
-    public function getProducts()
+    public function getProducts(Request $request)
     {
+        $language = $request->header('language');
         $products = Products::all();
-        $goods = $this->getGoods($products);
+        $goods = $this->getGoods($products, $language);
 
 //        $goods = array_merge($goods,$goods,$goods,$goods,$goods,$goods,$goods,$goods,$goods,$goods);
 
@@ -416,10 +463,11 @@ class ProductsController extends Controller
         return response()->json($response, 200);
     }
 
-    public function getAllProducts()
+    public function getAllProducts(Request $request)
     {
+        $language = $request->header('language');
         $products = Products::all();
-        $goods = $this->getGoods($products);
+        $goods = $this->getGoods($products, $language);
         $response = [
             'status'=>true,
             'data'=>$goods
@@ -427,10 +475,11 @@ class ProductsController extends Controller
         return response()->json($response, 200);
     }
 
-    public function getProduct($id)
+    public function getProduct(Request $request)
     {
+        $language = $request->header('language');
         $is_exist_in_warehouse = false;
-        $product = Products::find($id);
+        $product = Products::find($request->header('id'));
         if($product){
             $discount = $product->discount;
             if (!$product->categorizedProducts->isEmpty()) {
@@ -455,9 +504,10 @@ class ProductsController extends Controller
                     }
                     if($colors_array[0] == $color_id){
                         if($categorizedProduct_->color){
+                            $translate_color_name = table_translate($categorizedProduct_->color, 'color', $language);
                             $color = [
                                 'id' => $categorizedProduct_->color->id,
-                                'name' => $categorizedProduct_->color->name,
+                                'name' => $translate_color_name??'',
                                 'code' => $categorizedProduct_->color->code,
                             ];
                         }else{
@@ -490,9 +540,11 @@ class ProductsController extends Controller
                         if ($color__ == $color_id) {
                             if ($categorizedProduct->color) {
                                 $colorModel = $categorizedProduct->color;
+
+                                $translate_color_name_ = table_translate($categorizedProduct->color, 'color', $language);
                                 $color_ = [
                                     'id' => $categorizedProduct->color->id,
-                                    'name' => $categorizedProduct->color->name,
+                                    'name' => $translate_color_name_??'',
                                     'code' => $categorizedProduct->color->code,
                                 ];
                             } else {
@@ -530,9 +582,11 @@ class ProductsController extends Controller
                 $images[] = asset('storage/products/' . $image_);
             }
             $good['id'] = $product->id;
-            $good['name'] = $product->name ?? null;
+            $translate_product_name = table_translate($product, 'product', $language);
+            $good['name'] = $translate_product_name ?? null;
             $current_category = $this->getProductCategory($product);
-            $good['category'] = $current_category->name ?? null;
+            $translate_category_name = table_translate($current_category, 'category', $language);
+            $good['category'] = $translate_category_name ?? null;
             $good['description'] = $product->description ?? null;
             if($discount){
                 $good['sum'] = $discount->percent?$product->sum - $product->sum*(int)$discount->percent/100:$product->sum;
@@ -547,9 +601,9 @@ class ProductsController extends Controller
             $good['is_exist_in_warehouse'] = $is_exist_in_warehouse;
             $good['images'] = $images ?? [];
             $good['basket_button'] = false;
-            $good['category_link'] = $this->getProductCategoryLink($product)[0];
-            $good['sub_category_link'] = $this->getProductCategoryLink($product)[1];
-            $good['sub_sub_category_link'] = $this->getProductCategoryLink($product)[2];
+            $good['category_link'] = $this->getProductCategoryLink($product, $language)[0];
+            $good['sub_category_link'] = $this->getProductCategoryLink($product, $language)[1];
+            $good['sub_sub_category_link'] = $this->getProductCategoryLink($product, $language)[2];
             $good['created_at'] = $product->created_at ?? null;
             $good['updated_at'] = $product->updated_at ?? null;
             $response = [
@@ -565,6 +619,7 @@ class ProductsController extends Controller
 
     public function getCharacterizedProduct(Request $request)
     {
+        $language = $request->header('language');
         $all_sum = 0;
         $order_coupon_price = 0;
         $good = [];
@@ -575,7 +630,7 @@ class ProductsController extends Controller
                 if($product){
                     $images = null;
                     $company_name = null;
-                    $category_name = null;
+                    $translate_category_name = null;
                     $product_ = Products::find($product->product_id);
                     if($product_){
                         $discount = $product_->discount;
@@ -603,16 +658,20 @@ class ProductsController extends Controller
                             $images = '';
                         }
                         $company_name = $product_->company??null;
-                        $category_name = $product_->category?$product_->category->name:null;
+                        if($product_->category){
+                            $translate_category_name = table_translate($product_->category, 'category', $language);
+                        }
                     }
                     $all_sum = $all_sum + $categorizedAllProductSum??(int)$product->sum*(int)$selected_product['count'];
+
+                    $translate_product_name = table_translate($product_, 'product', $language);
                     $good[] = [
                         'id'=>$product->id,
                         'product_id'=>$product_->id,
-                        'name'=>$product_->name,
+                        'name'=>$translate_product_name,
                         'images'=>$images,
                         'company'=>$company_name,
-                        'category'=>$category_name,
+                        'category'=>$translate_category_name,
                         'size'=>$product->size?$product->size->name:'',
                         'color'=>$product->color?$product->color:[],
                         'count'=>(int)$product->count,
@@ -678,6 +737,7 @@ class ProductsController extends Controller
 
     public function getFavouriteProducts(Request $request)
     {
+        $language = $request->header('language');
         $good = [];
         $is_exist_in_warehouse = false;
         $selected_products_id = $request->selected_products_id;
@@ -711,9 +771,10 @@ class ProductsController extends Controller
                         }
                         if($colors_array[0] == $color_id){
                             if($categorizedProduct_->color){
+                                $translate_color_name = table_translate($categorizedProduct_->color, 'color', $language);
                                 $color = [
                                     'id' => $categorizedProduct_->color->id,
-                                    'name' => $categorizedProduct_->color->name,
+                                    'name' => $translate_color_name,
                                     'code' => $categorizedProduct_->color->code,
                                 ];
                             }else{
@@ -746,9 +807,10 @@ class ProductsController extends Controller
                             if ($color__ == $color_id) {
                                 if ($categorizedProduct->color) {
                                     $colorModel = $categorizedProduct->color;
+                                    $translate_color_name_ = table_translate($categorizedProduct->color, 'color', $language);
                                     $color_ = [
                                         'id' => $categorizedProduct->color->id,
-                                        'name' => $categorizedProduct->color->name,
+                                        'name' => $translate_color_name_,
                                         'code' => $categorizedProduct->color->code,
                                     ];
                                 } else {
@@ -794,9 +856,10 @@ class ProductsController extends Controller
                 }
                 $company_name = $product->company ?? null;
                 $category_name = $product->category ? $product->category->name : null;
+                $translate_product_name = table_translate($product, 'product', $language);
                 $good[] = [
                     'id' => $product->id,
-                    'name' => $product->name,
+                    'name' => $translate_product_name,
                     'images' => $images,
                     'company' => $company_name,
                     'category' => $category_name,
@@ -820,10 +883,11 @@ class ProductsController extends Controller
         return response()->json($response, 200);
     }
 
-    public function BestSeller()
+    public function BestSeller(Request $request)
     {
+        $language = $request->header('language');
         $products = Products::orderBy('id', 'DESC')->get();
-        $goods = $this->getGoods($products);
+        $goods = $this->getGoods($products, $language);
         $response = [
             'status'=>true,
             'data'=>$goods
@@ -852,9 +916,10 @@ class ProductsController extends Controller
         return response()->json($respone, 200);
     }
 
-    public function getProductsByCategories(){
+    public function getProductsByCategories(Request $request){
+        $language = $request->header('language');
         $categories = Category::where('step', 0)->get();
-        $data = $this->getProductsByAllCategories($categories);
+        $data = $this->getProductsByAllCategories($categories, $language);
         return response()->json([
             'status'=>true,
             'message'=>'Success',
@@ -872,12 +937,12 @@ class ProductsController extends Controller
         ]);
     }
 
-    public function getProductsByAllCategories($categories){
+    public function getProductsByAllCategories($categories, $language){
         $data = [];
         foreach ($categories as $category){
             $category_ids = $this->getCategoriesId($category);
             $products = Products::whereIn('category_id', $category_ids)->get();
-            $goods = $this->getGoods($products);
+            $goods = $this->getGoods($products, $language);
             $data[] = [
                 'category'=>[
                     'id'=>$category->id,
@@ -889,7 +954,7 @@ class ProductsController extends Controller
         return $data;
     }
 
-    public function getGoods($products){
+    public function getGoods($products, $language){
         $goods = [];
         $is_exist_in_warehouse = false;
         foreach ($products as $key => $product) {
@@ -916,9 +981,10 @@ class ProductsController extends Controller
                     }
                     if($colors_array[0] == $color_id){
                         if($categorizedProduct_->color){
+                            $translate_color_name = table_translate($categorizedProduct_->color, 'color', $language);
                             $color = [
                                 'id' => $categorizedProduct_->color->id,
-                                'name' => $categorizedProduct_->color->name,
+                                'name' => $translate_color_name,
                                 'code' => $categorizedProduct_->color->code,
                             ];
                         }else{
@@ -951,9 +1017,11 @@ class ProductsController extends Controller
                         if ($color__ == $color_id) {
                             if ($categorizedProduct->color) {
                                 $colorModel = $categorizedProduct->color;
+
+                                $translate_color_name_ = table_translate($colorModel, 'color', $language);
                                 $color_ = [
                                     'id' => $categorizedProduct->color->id,
-                                    'name' => $categorizedProduct->color->name,
+                                    'name' => $translate_color_name_,
                                     'code' => $categorizedProduct->color->code,
                                 ];
                             } else {
@@ -990,9 +1058,12 @@ class ProductsController extends Controller
                 $images[] = asset('storage/products/' . $image_);
             }
             $goods[$key]['id'] = $product->id;
-            $goods[$key]['name'] = $product->name ?? null;
+
+            $translate_product_name = table_translate($product, 'product', $language);
+            $goods[$key]['name'] = $translate_product_name;
             $current_category = $this->getProductCategory($product);
-            $goods[$key]['category'] = $current_category->name??null;
+            $translate_category_name = table_translate($current_category, 'category', $language);
+            $goods[$key]['category'] = $translate_category_name;
             $goods[$key]['description'] = $product->description ?? null;
             if($discount){
                 $goods[$key]['sum'] = $discount->percent?$product->sum - $product->sum*(int)$discount->percent/100:$product->sum;
@@ -1066,5 +1137,39 @@ class ProductsController extends Controller
             'status'=>true,
             'message'=>'Success'
         ], 200);
+    }
+
+
+    public function paymentGetStatus(){
+        $payment = PaymentStatus::first();
+        $status = '';
+        if($payment){
+            if($payment->status == 0){
+                $status = 'Not active';
+            }elseif($payment->status == 1){
+                $status = 'Active';
+            }
+        }
+        return $this->success('Success', 200, [$status]);
+    }
+
+    public function payment(){
+        $payment = PaymentStatus::first();
+        return view('payment.index', ['payment'=>$payment]);
+    }
+
+    public function paymentStatus(Request $request){
+        $payment = PaymentStatus::find($request->id);
+        if($payment){
+            if($request->checked == 'true'){
+                $payment->status = Constants::ACTIVE;
+                $message = translate('Payment activated');
+            }elseif($request->checked == 'false'){
+                $payment->status = Constants::NOT_ACTIVE;
+                $message = translate('Payment disactivated');
+            }
+            $payment->save();
+        }
+        return $this->success($message, 200);
     }
 }

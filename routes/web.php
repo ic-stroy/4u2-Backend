@@ -15,6 +15,7 @@ use \App\Http\Controllers\DiscountController;
 use \App\Http\Controllers\UsersController;
 use \App\Http\Controllers\LanguageController;
 use \App\Http\Controllers\PickUpController;
+use \App\Http\Controllers\TableTranslationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,8 +30,12 @@ use \App\Http\Controllers\PickUpController;
 
 Auth::routes();
 
+Route::get('api/payment/get/status/', [ProductsController::class, 'paymentGetStatus'])->name('payment.get.status');
 Route::group(['middleware'=>['isAdmin', 'language']], function(){
     Route::get('/', [HomeController::class, 'index'])->name('dashboard');
+
+    Route::get('payment', [ProductsController::class, 'payment'])->name('payment.index');
+    Route::get('/payment/status/', [ProductsController::class, 'paymentStatus'])->name('payment.status');
     Route::resource('color', ColorController::class);
     Route::resource('size', SizesController::class);
     Route::resource('pick_up', PickUpController::class);
@@ -78,6 +83,15 @@ Route::group(['middleware'=>['isAdmin', 'language']], function(){
 
     Route::delete('/order-detail/cancell/{id}', [OrderController::class, 'cancellOrderDetail'])->name('cancell_order_detail');
     Route::post('/order-detail/perform/{id}', [OrderController::class, 'performOrderDetail'])->name('perform_order_detail');
+
+
+    Route::group(['prefix' => 'table'], function () {
+        Route::get('translation', [TableTranslationController::class, 'index'])->name('table.index');
+        Route::get('show/{type}', [TableTranslationController::class, 'show'])->name('table.show');
+        Route::get('table-show', [TableTranslationController::class, 'tableShow'])->name('table.tableShow');
+        Route::post('/translation/save/', [TableTranslationController::class, 'translation_save'])->name('table_translation.save');
+
+    });
 
     Route::group(['prefix' => 'language'], function () {
         Route::get('/', [LanguageController::class, 'index'])->name('language.index');

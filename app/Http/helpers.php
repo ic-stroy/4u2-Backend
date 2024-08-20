@@ -92,28 +92,16 @@ if (!function_exists('table_translate')) {
                     return $key->name;
                 }
                 break;
-
-            case 'warehouse':
-                // dd($key);
-                if ($warehouse_translation=DB::table('warehouse_translations')->where('warehouse_id',$key->warehouse_product_id)->where('lang',$lang)->first()) {
-                    // dd($warehouse_translation);
-                    return $warehouse_translation->name;
-                }else {
-                    return $key->warehouse_product_name;
-                }
-                break;
-            case 'warehouse_category':
-                // dd($key->name);
-                if ($warehouse_translation=DB::table('warehouse_translations')->where('warehouse_id',$key->id)->where('lang',$lang)->first()) {
-                    // dd($warehouse_translation);
-                    return $warehouse_translation->name;
+            case 'category':
+                if ($category_translations=DB::table('category_translations')->where('category_id',$key->id)->where('lang',$lang)->first()) {
+                    return $category_translations->name;
                 }else {
                     return $key->name;
                 }
                 break;
-            case 'category':
-                if ($category_translations=DB::table('category_translations')->where('category_id',$key->id)->where('lang',$lang)->first()) {
-                    return $category_translations->name;
+            case 'city':
+                if ($city_translations=DB::table('city_translations')->where('city_id',$key->id)->where('lang',$lang)->first()) {
+                    return $city_translations->name;
                 }else {
                     return $key->name;
                 }

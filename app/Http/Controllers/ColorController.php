@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Color;
+use App\Models\ColorTranslations;
+use App\Models\Language;
 use Illuminate\Http\Request;
 
 
@@ -41,6 +43,13 @@ class ColorController extends Controller
         $model->name = $request->name;
         $model->code = $request->code;
         $model->save();
+        foreach (Language::all() as $language) {
+            $color_translations = ColorTranslations::firstOrNew(['lang' => $language->code, 'color_id' => $model->id]);
+            $color_translations->lang = $language->code;
+            $color_translations->name = $model->name;
+            $color_translations->color_id = $model->id;
+            $color_translations->save();
+        }
         return redirect()->route('color.index')->with('status', translate('Successfully created'));
     }
 
@@ -75,6 +84,15 @@ class ColorController extends Controller
             'code.required'=>translate('Please select a color'),
         ]);
         $model = Color::find($id);
+        if($request->name != $model->name){
+            foreach (Language::all() as $language) {
+                $color_translations = ColorTranslations::firstOrNew(['lang' => $language->code, 'color_id' => $model->id]);
+                $color_translations->lang = $language->code;
+                $color_translations->name = $request->name;
+                $color_translations->color_id = $model->id;
+                $color_translations->save();
+            }
+        }
         $model->name = $request->name;
         $model->code = $request->code;
         $model->save();
@@ -89,6 +107,12 @@ class ColorController extends Controller
         $model = Color::find($id);
         if($model->CharacterizedProducts){
             return redirect()->back()->with('error', translate('You cannot delete this color because here is product associated with this color.'));
+        }
+        foreach (Language::all() as $language) {
+            $color_translations = ColorTranslations::where(['lang' => $language->code, 'color_id' => $model->id])->get();
+            foreach ($color_translations as $color_translation){
+                $color_translation->delete();
+            }
         }
         $model->delete();
         return redirect()->route('color.index')->with('status', translate('Successfully deleted'));

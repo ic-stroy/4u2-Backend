@@ -93,12 +93,13 @@ class ApiOrderController extends Controller
     }
 
 
-    public function getMyOrders(){
+    public function getMyOrders(Request $request){
+        $language = $request->header('language');
         $user = Auth::user();
-        $ordersOrdered = $this->getOrders($user->ordersOrdered);
-        $ordersPerformed = $this->getOrders($user->ordersPerformed);
-        $ordersCancelled = $this->getOrders($user->ordersCancelled);
-        $ordersAccepted = $this->getOrders($user->ordersAccepted);
+        $ordersOrdered = $this->getOrders($user->ordersOrdered, $language);
+        $ordersPerformed = $this->getOrders($user->ordersPerformed, $language);
+        $ordersCancelled = $this->getOrders($user->ordersCancelled, $language);
+        $ordersAccepted = $this->getOrders($user->ordersAccepted, $language);
         $orders = [
             "ordersOrdered" => $ordersOrdered,
             "ordersPerformed" => $ordersPerformed,
@@ -108,7 +109,7 @@ class ApiOrderController extends Controller
         return $this->success('Success', 200, $orders);
     }
 
-    public function getOrders($orders){
+    public function getOrders($orders, $language){
         $order_data = [];
         foreach($orders as $order){
 //        $not_read_order_quantity = OrderDetail::where('order_id', $id)->where('is_read', 0)->count();
@@ -122,6 +123,9 @@ class ApiOrderController extends Controller
             $order_detail_is_ordered = false;
             $delivery_type = '';
             foreach($order->orderDetail as $order_detail){
+                $translate_product_name = '';
+                $city_translate = '';
+                $region_translate = '';
                 if($order_detail->status == Constants::ORDER_DETAIL_ORDERED){
                     $order_detail_is_ordered = true;
                 }
@@ -168,13 +172,13 @@ class ApiOrderController extends Controller
                     $product_name = '';
                     if($order_detail->warehouse_product){
                         if($order_detail->warehouse_product->product){
-                            $product_name = $order_detail->warehouse_product->product->name;
+                            $translate_product_name = table_translate($order_detail->warehouse_product->product, 'product', $language);
                         }
                     }
 
                     $products[] = [$order_detail, $order_detail_all_price, 'images'=>$images,
                         'discount_withouth_expire'=>$discount_withouth_expire, 'size'=>$order_detail->size??'',
-                        'color'=>$order_detail->color??[], 'name'=>$product_name
+                        'color'=>$order_detail->color??[], 'name'=>$translate_product_name
                     ];
                 }
             }
@@ -200,12 +204,12 @@ class ApiOrderController extends Controller
                 }
                 $address = $order->address->name;
                 if($order->address->cities){
-                    $city = $order->address->cities->name;
+                    $city_translate = table_translate($order->address->cities,'city',$language);
                     if($order->address->cities->region){
-                        $region = $order->address->cities->region->name;
-                        $address_name = $address.' '.$city.' '.$region;
+                        $region_translate = table_translate($order->address->cities->region,'city',$language);
+                        $address_name = $address.' '.$city_translate.' '.$region_translate;
                     }else{
-                        $address_name = $address.' '.$city;
+                        $address_name = $address.' '.$city_translate;
                     }
                 }else{
                     $address_name = $address;

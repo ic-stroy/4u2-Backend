@@ -13,21 +13,24 @@ use Illuminate\Support\Facades\Http;
 class AddressController extends Controller
 {
     public function getCities(Request $request){
+        $language = $request->header('language');
         $cities = Cities::where('parent_id', 0)->orderBy('id', 'ASC')->get();
         $data = [];
         foreach ($cities as $city){
+            $city_translate = table_translate($city,'city',$language);
             $cities_ = [];
             foreach ($city->getDistricts as $district){
+                $district_translate = table_translate($district,'city',$language);
                 $cities_[] = [
                     'id'=>$district->id,
-                    'name'=>$district->name,
+                    'name'=>$district_translate,
                     'lat'=>$district->lat,
                     'long'=>$district->lng
                 ];
             }
             $data[] = [
                 'id'=>$city->id,
-                'name'=>$city->name,
+                'name'=>$city_translate,
                 'lat'=>$city->lat,
                 'long'=>$city->lng,
                 'cities'=>$cities_,
@@ -82,7 +85,7 @@ class AddressController extends Controller
         return $this->success('Success', 200);
     }
 
-    public function getAddress(){
+    public function getAddress(Request $request){
 //        $response = Http::get(asset("assets/json/cities.json"));
 //        $cities = json_decode($response);
 //        foreach ($cities as $city){
@@ -112,6 +115,7 @@ class AddressController extends Controller
 //        }
 //        return response()->json('good');
 
+        $language = $request->header('language');
         $user = Auth::user();
         $address = [];
         $city = [];
@@ -119,25 +123,28 @@ class AddressController extends Controller
         foreach ($user->addresses as $address_) {
             $region_city = [];
             if($address_->cities){
+                $city_translate = table_translate($address_->cities,'city',$language);
                 if($address_->cities->type == 'district'){
                     $city = [
                         'id' => $address_->cities->id,
-                        'name' => $address_->cities->name??'',
+                        'name' => $city_translate??'',
                         'lat' => $address_->cities->lat??'',
                         'long' => $address_->cities->lng??'',
                     ];
                     if($address_->cities->region){
+                        $region_translate = table_translate($address_->cities->region,'city',$language);
                         $region = [
                             'id' => $address_->cities->region->id,
-                            'name' => $address_->cities->region->name??'',
+                            'name' => $region_translate??'',
                             'lat' => $address_->cities->region->lat??'',
                             'long' => $address_->cities->region->lng??'',
                         ];
                         if(!$address_->cities->region->getDistricts->isEmpty()){
                             foreach($address_->cities->region->getDistricts as $regionCity){
+                                $region_city_translate = table_translate($regionCity,'city',$language);
                                 $region_city[] = [
                                     'id' => $regionCity->id,
-                                    'name' => $regionCity->name??'',
+                                    'name' => $region_city_translate??'',
                                     'lat' => $regionCity->lat??'',
                                     'long' => $regionCity->lng??'',
                                 ];
@@ -147,7 +154,7 @@ class AddressController extends Controller
                 }else{
                     $region = [
                         'id' => $address_->cities->id,
-                        'name' => $address_->cities->name??'',
+                        'name' => $city_translate??'',
                         'lat' => $address_->cities->lat??'',
                         'long' => $address_->cities->lng??'',
                     ];
@@ -171,34 +178,38 @@ class AddressController extends Controller
             return $this->error('No address', 400);
         }
     }
-    public function getPickUpAddress(){
+    public function getPickUpAddress(Request $request){
         $address = [];
         $city = [];
         $region = [];
         $super_admins_id = User::where('is_admin', 1)->pluck('id')->all();
         $addresses = Address::whereIn('user_id', $super_admins_id)->get();
+        $language = $request->header('language');
         foreach ($addresses as $address_) {
             $region_city = [];
             if($address_->cities){
+                $city_translate = table_translate($address_->cities,'city',$language);
                 if($address_->cities->type == 'district'){
                     $city = [
                         'id' => $address_->cities->id,
-                        'name' => $address_->cities->name??'',
+                        'name' => $city_translate??'',
                         'lat' => $address_->cities->lat??'',
                         'long' => $address_->cities->lng??'',
                     ];
                     if($address_->cities->region){
+                        $region_translate = table_translate($address_->cities->region,'city',$language);
                         $region = [
                             'id' => $address_->cities->region->id,
-                            'name' => $address_->cities->region->name??'',
+                            'name' => $region_translate??'',
                             'lat' => $address_->cities->region->lat??'',
                             'long' => $address_->cities->region->lng??'',
                         ];
                         if(!$address_->cities->region->getDistricts->isEmpty()){
                             foreach($address_->cities->region->getDistricts as $regionCity){
+                                $region_city_translate = table_translate($regionCity,'city',$language);
                                 $region_city[] = [
                                     'id' => $regionCity->id,
-                                    'name' => $regionCity->name??'',
+                                    'name' => $region_city_translate??'',
                                     'lat' => $regionCity->lat??'',
                                     'long' => $regionCity->lng??'',
                                 ];
@@ -208,7 +219,7 @@ class AddressController extends Controller
                 }else{
                     $region = [
                         'id' => $address_->cities->id,
-                        'name' => $address_->cities->name??'',
+                        'name' => $city_translate??'',
                         'lat' => $address_->cities->lat??'',
                         'long' => $address_->cities->lng??'',
                     ];

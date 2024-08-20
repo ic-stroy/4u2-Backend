@@ -22,7 +22,12 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             CategorySeeder::class,
             SizeSeeder::class,
-            LanguageSeeder::class
+            LanguageSeeder::class,
+            CityTranslationSeeder::class,
+            ColorTranslationSeeder::class,
+            CategoryTranslationSeeder::class,
+            ProductTranslationSeeder::class,
+            PaymentStatusSeeder::class,
         ]);
     }
 }

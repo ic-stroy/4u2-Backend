@@ -31,6 +31,7 @@ Route::post('google-login-or-register', [AuthController::class, 'googleLoginOrRe
 Route::get('get-products-by-category', [\App\Http\Controllers\CategoryController::class, 'getProductsByCategory']);
 Route::get('get-districts', [AddressController::class, 'getCities']);
 Route::get('categories', [\App\Http\Controllers\CategoryController::class, 'getCategories'])->name('get_categories');
+Route::get('categories_', [\App\Http\Controllers\CategoryController::class, 'getCategories_'])->name('get_categories_');
 Route::get('subcategory/{id}', [\App\Http\Controllers\SubCategoryController::class, 'getSubcategory'])->name('get_subcategory');
 Route::get('sizes-types/{id}', [\App\Http\Controllers\ProductsController::class, 'getSizes'])->name('get_sizes');
 Route::get('get-products-by-categories', [\App\Http\Controllers\ProductsController::class, 'getProductsByCategories']);
@@ -39,7 +40,7 @@ Route::get('get-categories-by-product/{id}', [\App\Http\Controllers\ProductsCont
 Route::get('products', [\App\Http\Controllers\ProductsController::class, 'getProducts']);
 Route::get('all-products', [\App\Http\Controllers\ProductsController::class, 'getAllProducts']);
 Route::get('products-by-category', [\App\Http\Controllers\ProductsController::class, 'getProductsByCategory']);
-Route::get('product/{id}', [\App\Http\Controllers\ProductsController::class, 'getProduct']);
+Route::get('product', [\App\Http\Controllers\ProductsController::class, 'getProduct']);
 Route::get('best-seller', [\App\Http\Controllers\ProductsController::class, 'BestSeller']);
 Route::post('get-favourite-products', [\App\Http\Controllers\ProductsController::class, 'getFavouriteProducts']);
 Route::group(['middleware'=>['auth:sanctum', 'is_auth']], function (){

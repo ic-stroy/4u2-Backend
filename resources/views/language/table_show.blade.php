@@ -70,42 +70,12 @@
                                     @if (($translate_lang) != null) value="{{ $translate_lang->name }}" @endif>
 
                                     @break
-
-                                @case('company')
-                                    @php
-                                       $translate_lang = \App\Models\CompanyTranslations::where('lang', $language->code??'')->where('company_id', $translation->company_id??'')->first();
-                                    @endphp
-                                    <input type="text" class="checkboxDivPerewvod value" id="input"
-                                    style="width:100%" name="values[{{ $translation->company_id }}]"
-                                    @if (($translate_lang) != null) value="{{ $translate_lang->name }}" @endif>
-
-                                    @break
-
                                 @case('product')
                                     @php
                                         $translate_lang = \App\Models\ProductTranslations::where('lang', $language->code??'')->where('product_id', $translation->product_id??'')->first();
                                     @endphp
                                     <input type="text" class="checkboxDivPerewvod value" id="input"
-                                    style="width:100%" name="values[{{ $translation->option_id }}]"
-                                    @if (($translate_lang) != null) value="{{ $translate_lang->name }}" @endif>
-
-                                    @break
-
-                                @case('role')
-                                    @php
-                                       $translate_lang = \App\Models\RoleTranslations::where('lang', $language->code??'')->where('role_id', $translation->role_id??'')->first();
-                                    @endphp
-                                    <input type="text" class="checkboxDivPerewvod value" id="input"
-                                    style="width:100%" name="values[{{ $translation->role_id }}]"
-                                    @if (($translate_lang) != null) value="{{ $translate_lang->name }}" @endif>
-
-                                    @break
-                                @case('warehouse')
-                                    @php
-                                    $translate_lang = \App\Models\WarehouseTranslations::where('lang', $language->code??'')->where('warehouse_id', $translation->warehouse_id??'')->first();
-                                    @endphp
-                                    <input type="text" class="checkboxDivPerewvod value" id="input"
-                                    style="width:100%" name="values[{{ $translation->warehouse_id }}]"
+                                    style="width:100%" name="values[{{ $translation->product_id }}]"
                                     @if (($translate_lang) != null) value="{{ $translate_lang->name }}" @endif>
 
                                     @break

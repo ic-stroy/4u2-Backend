@@ -540,12 +540,12 @@
                                     <li>
                                         <a href="{{route('language.index')}}"> {{translate('Language')}}  </a>
                                     </li>
-{{--                                    <li>--}}
-{{--                                        <a href="{{route('table.index')}}"> {{translate('Table translations')}}  </a>--}}
-{{--                                    </li>--}}
-{{--                                    <li>--}}
-{{--                                        <a href="{{route('role.index')}}">{{translate('Role')}}</a>--}}
-{{--                                    </li>--}}
+                                    <li>
+                                        <a href="{{route('table.index')}}"> {{translate('Table translations')}}  </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{route('payment.index')}}">{{translate('Payment status')}}</a>
+                                    </li>
                                 </ul>
                             </div>
                         </li>

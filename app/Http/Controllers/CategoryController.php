@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\CategoryTranslations;
 use App\Models\CharacterizedProducts;
+use App\Models\Language;
 use App\Models\Products;
 use App\Models\Warehouse;
 use Illuminate\Http\Request;
@@ -41,6 +43,14 @@ class CategoryController extends Controller
         $model->parent_id = 0;
         $model->step = 0;
         $model->save();
+
+        foreach (Language::all() as $language) {
+            $category_translations = CategoryTranslations::firstOrNew(['lang' => $language->code, 'category_id' => $model->id]);
+            $category_translations->lang = $language->code;
+            $category_translations->name = $model->name;
+            $category_translations->category_id = $model->id;
+            $category_translations->save();
+        }
         return redirect()->route('category.index')->with('status', translate('Successfully created'));
     }
 
@@ -68,6 +78,15 @@ class CategoryController extends Controller
     public function update(Request $request, string $id)
     {
         $model = Category::where('step', 0)->find($id);
+        if($request->name != $model->name){
+            foreach (Language::all() as $language) {
+                $category_translations = CategoryTranslations::firstOrNew(['lang' => $language->code, 'category_id' => $model->id]);
+                $category_translations->lang = $language->code;
+                $category_translations->name = $request->name;
+                $category_translations->category_id = $model->id;
+                $category_translations->save();
+            }
+        }
         $model->name = $request->name;
         $model->step = 0;
         $model->save();
@@ -88,28 +107,46 @@ class CategoryController extends Controller
         if($model->product){
             return redirect()->back()->with('error', translate('You cannot delete this category because it has products'));
         }
+        foreach (Language::all() as $language) {
+            $categories_translations = CategoryTranslations::where(['lang' => $language->code, 'category_id' => $model->id])->get();
+            foreach ($categories_translations as $category_translation){
+                $category_translation->delete();
+            }
+        }
         $model->delete();
         return redirect()->route('category.index')->with('status', translate('Successfully deleted'));
     }
 
     //Json api
 
-    public function getCategories(){
+    public function getCategories(Request $request){
+        $language = $request->header('language');
         $categories = Category::where('step', 0)->get();
         foreach ($categories as $category){
+            $translate_category_name = table_translate($category, 'category', $language);
+            $translate_category_en_name = table_translate($category, 'category', 'en');
             $subcategories = $category->subcategory;
-            $sub_sub_category = [];
             $sub_category = [];
             foreach ($subcategories as $subcategory){
+                $sub_sub_category = [];
+                $translate_sub_category_name = table_translate($subcategory, 'category', $language);
+                foreach($subcategory->subsubcategory as $subsubcategory){
+                    $sub_sub_category[] = [
+                        'id'=>$subsubcategory->id,
+                        'name'=>table_translate($subsubcategory, 'category', $language),
+                    ];
+                }
+
                 $sub_category[]=[
                     'id'=> $subcategory->id,
-                    'name'=> $subcategory->name,
-                    'sub_sub_category'=>$subcategory->subsubcategory??[]
+                    'name'=> $translate_sub_category_name??'',
+                    'sub_sub_category'=>$sub_sub_category
                 ];
             }
             $data_category[] = [
               'id'=> $category->id,
-              'name'=> $category->name,
+              'name'=> $translate_category_name??'',
+              'en_name'=> $translate_category_en_name??'',
               'sub_category'=>$sub_category
             ];
         }

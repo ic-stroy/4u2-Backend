@@ -29,6 +29,11 @@ class Products extends Model
     public function subSubCategory(){
         return $this->hasOne(Category::class, 'id','category_id')->where('step', 2);
     }
+    public function categoryDiscount()
+    {
+        return $this->hasOne(Discount::class, 'category_id','category_id')->where('start_date', '<=', date('Y-m-d H:i:s'))->where('end_date', '>=', date('Y-m-d H:i:s'));
+    }
+
     public function discount()
     {
         return $this->hasOne(Discount::class, 'product_id','id')->where('start_date', '<=', date('Y-m-d H:i:s'))->where('end_date', '>=', date('Y-m-d H:i:s'));

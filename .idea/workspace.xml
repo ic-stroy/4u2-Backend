@@ -2,12 +2,37 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="baeeb12c-03b2-4eb7-b2be-dc7d3697fa3c" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/app/Models/CategoryTranslations.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/Models/CityTranslations.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/Models/ColorTranslations.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/Models/ProductTranslations.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/database/migrations/2023_12_11_134725_create_color_translations_table.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/database/migrations/2023_12_11_134741_create_city_translations_table.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/database/migrations/2023_12_11_134839_create_product_translations_table.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/database/migrations/2023_12_11_134849_create_category_translations_table.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/database/seeders/CategoryTranslationSeeder.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/database/seeders/CityTranslationSeeder.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/database/seeders/ColorTranslationSeeder.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/database/seeders/ProductTranslationSeeder.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/4u2-Backend.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/4u2-Backend.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/AddressController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/AddressController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/ApiOrderController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/ApiOrderController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/OrderController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/OrderController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/CategoryController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/CategoryController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/ColorController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/ColorController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/LanguageController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/LanguageController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/ProductsController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/ProductsController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/database.php" beforeDir="false" afterPath="$PROJECT_DIR$/config/database.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/order/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/order/index.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/helpers.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/helpers.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/Products.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Products.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/seeders/CategorySeeder.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/seeders/CategorySeeder.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/seeders/DatabaseSeeder.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/seeders/DatabaseSeeder.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/seeders/LanguageSeeder.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/seeders/LanguageSeeder.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/seeders/UserSeeder.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/seeders/UserSeeder.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/language/table_show.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/language/table_show.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/language/tables.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/language/tables.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/layout/layout.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/layout/layout.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/routes/api.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/api.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/web.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -140,6 +165,10 @@
       <path value="$PROJECT_DIR$/vendor/symfony/process" />
       <path value="$PROJECT_DIR$/vendor/symfony/polyfill-uuid" />
       <path value="$PROJECT_DIR$/vendor/psy/psysh" />
+      <path value="$PROJECT_DIR$/vendor/pusher/pusher-php-server" />
+      <path value="$PROJECT_DIR$/vendor/carbonphp/carbon-doctrine-types" />
+      <path value="$PROJECT_DIR$/vendor/paragonie/random_compat" />
+      <path value="$PROJECT_DIR$/vendor/paragonie/sodium_compat" />
     </include_path>
   </component>
   <component name="ProjectId" id="2fUUVZRcPQDmWSmhYdIypA0ImTL" />
@@ -151,13 +180,17 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../LaravelEasyPrint" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\NewOSPanel\domains\4u2-Backend\public\assets\js" />
+      <recent name="C:\OSPanel\domains\4u2-Backend\public\assets\css" />
+      <recent name="C:\OSPanel\domains\4u2-Backend\database\seeders" />
+      <recent name="C:\OSPanel\domains\4u2-Backend\resources\views" />
+      <recent name="C:\OSPanel\domains\4u2-Backend\database\migrations" />
+      <recent name="C:\OSPanel\domains\4u2-Backend\app\Models" />
     </key>
   </component>
   <component name="RunManager">
@@ -185,10 +218,35 @@
       <workItem from="1714568804466" duration="1721000" />
       <workItem from="1714633300906" duration="4031000" />
       <workItem from="1714711639708" duration="13845000" />
+      <workItem from="1722950705088" duration="1312000" />
+      <workItem from="1723007153382" duration="562000" />
+      <workItem from="1723096781185" duration="1277000" />
+      <workItem from="1723266778600" duration="620000" />
+      <workItem from="1723294419714" duration="2179000" />
+      <workItem from="1723308529483" duration="3162000" />
+      <workItem from="1723381917200" duration="3072000" />
+      <workItem from="1723396948866" duration="2734000" />
+      <workItem from="1723789292967" duration="3941000" />
+      <workItem from="1723807074466" duration="6334000" />
+      <workItem from="1723882215493" duration="444000" />
+      <workItem from="1723977254568" duration="721000" />
+      <workItem from="1724064426083" duration="5554000" />
+      <workItem from="1724136860943" duration="8341000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
 </project>
