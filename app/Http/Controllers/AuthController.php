@@ -40,7 +40,7 @@ class AuthController extends Controller
                 ],
                 [
                     'name' => 'password',
-                    'contents' => '4TYvyjOof4CmOUk5CisHHUzzQ5Mcn1mirx0VBuQV'
+                    'contents' => '**********************************'
                 ]
             ]
         ];
