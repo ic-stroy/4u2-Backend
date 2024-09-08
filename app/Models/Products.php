@@ -47,5 +47,14 @@ class Products extends Model
     public function categorizedProducts(){
         return $this->hasMany(CharacterizedProducts::class, 'product_id', 'id');
     }
+    public function productDescriptionUz(){
+        return $this->hasOne(ProductDescriptionTranslations::class, 'product_id', 'id')->where('lang', 'uz');
+    }
+    public function productDescriptionRu(){
+        return $this->hasOne(ProductDescriptionTranslations::class, 'product_id', 'id')->where('lang', 'ru');
+    }
+    public function productDescriptionEn(){
+        return $this->hasOne(ProductDescriptionTranslations::class, 'product_id', 'id')->where('lang', 'en');
+    }
 
 }

@@ -92,6 +92,14 @@ if (!function_exists('table_translate')) {
                     return $key->name;
                 }
                 break;
+            case 'product_description':
+                // dd($key);
+                if ($product_description_translation=DB::table('product_description_translations')->where('product_id',$key->id)->where('lang',$lang)->first()) {
+                    return $product_description_translation->name;
+                }else {
+                    return $key->name;
+                }
+                break;
             case 'category':
                 if ($category_translations=DB::table('category_translations')->where('category_id',$key->id)->where('lang',$lang)->first()) {
                     return $category_translations->name;

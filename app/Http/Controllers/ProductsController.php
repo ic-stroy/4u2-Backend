@@ -66,19 +66,46 @@ class ProductsController extends Controller
         }else{
             $model->category_id = $request->category_id;
         }
+//        dd()
         $model->company = $request->company;
         $model->status = $request->status;
         $model->sum = $request->sum;
-        $model->description = $request->description;
+        $model->description = $request->description_uz;
         $images = $request->file('images');
         $model->images = $this->imageSave($model, $images, 'store');
         $model->save();
+        $product_description_translations = ProductDescriptionTranslations::firstOrNew(['lang' => 'uz', 'product_id' => $model->id]);
+        $product_description_translations->lang = 'uz';
+        if($request->description_uz){
+            $product_description_translations->name = $request->description_uz;
+        }
+        $product_description_translations->product_id = $model->id;
+        $product_description_translations->save();
+        $product_description_translations = ProductDescriptionTranslations::firstOrNew(['lang' => 'ru', 'product_id' => $model->id]);
+        $product_description_translations->lang = 'ru';
+        if(!$request->description_ru){
+            $product_description_translations->name = $request->description_uz;
+        }else{
+            $product_description_translations->name = $request->description_ru;
+        }
+        $product_description_translations->product_id = $model->id;
+        $product_description_translations->save();
+        $product_description_translations_en = ProductDescriptionTranslations::firstOrNew(['lang' => 'en', 'product_id' => $model->id]);
+        $product_description_translations_en->lang = 'en';
+        if(!$request->description_en){
+            $product_description_translations_en->name = $request->description_uz;
+        }else{
+            $product_description_translations_en->name = $request->description_en;
+        }
+        $product_description_translations_en->product_id = $model->id;
+        $product_description_translations_en->save();
         foreach (Language::all() as $language) {
             $product_translations = ProductTranslations::firstOrNew(['lang' => $language->code, 'product_id' => $model->id]);
             $product_translations->lang = $language->code;
             $product_translations->name = $model->name;
             $product_translations->product_id = $model->id;
             $product_translations->save();
+
         }
         return redirect()->route('product.index')->with('status', translate('Successfully created'));
     }
@@ -200,7 +227,34 @@ class ProductsController extends Controller
             }
 
         }
-        $model->description = $request->description;
+//        if($model->description != $request->description_uz){
+            $product_description_translations_uz = ProductDescriptionTranslations::firstOrNew(['lang' => 'uz', 'product_id' => $model->id]);
+            $product_description_translations_uz->lang = 'uz';
+            $product_description_translations_uz->product_id = $model->id;
+            if($request->description_uz){
+                $product_description_translations_uz->name = $request->description_uz;
+            }
+            $product_description_translations_uz->save();
+            $product_description_translations_ru = ProductDescriptionTranslations::firstOrNew(['lang' => 'ru', 'product_id' => $model->id]);
+            $product_description_translations_ru->lang = 'ru';
+            $product_description_translations_ru->product_id = $model->id;
+            if(!$request->description_ru){
+                $product_description_translations_ru->name = $request->description_uz;
+            }else{
+                $product_description_translations_ru->name = $request->description_ru;
+            }
+            $product_description_translations_ru->save();
+            $product_description_translations_en = ProductDescriptionTranslations::firstOrNew(['lang' => 'en', 'product_id' => $model->id]);
+            $product_description_translations_en->lang = 'en';
+            if(!$request->description_en){
+                $product_description_translations_en->name = $request->description_uz;
+            }else{
+                $product_description_translations_en->name = $request->description_en;
+            }
+            $product_description_translations_en->product_id = $model->id;
+            $product_description_translations_en->save();
+            $model->description = $request->description_uz;
+//        }
         $model->name = $request->name;
         $model->save();
         if(!empty($model->categoryDiscount)){
@@ -581,13 +635,14 @@ class ProductsController extends Controller
             foreach($images_ as $image_) {
                 $images[] = asset('storage/products/' . $image_);
             }
+            $translate_product_description = table_translate($product, 'product_description', $language);
             $good['id'] = $product->id;
             $translate_product_name = table_translate($product, 'product', $language);
             $good['name'] = $translate_product_name ?? null;
             $current_category = $this->getProductCategory($product);
             $translate_category_name = table_translate($current_category, 'category', $language);
             $good['category'] = $translate_category_name ?? null;
-            $good['description'] = $product->description ?? null;
+            $good['description'] = $translate_product_description ?? null;
             if($discount){
                 $good['sum'] = $discount->percent?$product->sum - $product->sum*(int)$discount->percent/100:$product->sum;
             }else{
@@ -1057,6 +1112,7 @@ class ProductsController extends Controller
             foreach ($images_ as $image_) {
                 $images[] = asset('storage/products/' . $image_);
             }
+            $translate_product_description = table_translate($product, 'product_description', $language);
             $goods[$key]['id'] = $product->id;
 
             $translate_product_name = table_translate($product, 'product', $language);
@@ -1064,7 +1120,7 @@ class ProductsController extends Controller
             $current_category = $this->getProductCategory($product);
             $translate_category_name = table_translate($current_category, 'category', $language);
             $goods[$key]['category'] = $translate_category_name;
-            $goods[$key]['description'] = $product->description ?? null;
+            $goods[$key]['description'] = $translate_product_description ?? null;
             if($discount){
                 $goods[$key]['sum'] = $discount->percent?$product->sum - $product->sum*(int)$discount->percent/100:$product->sum;
             }else{

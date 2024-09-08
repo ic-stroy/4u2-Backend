@@ -136,8 +136,20 @@
                 </div>
                 <div class="mb-3">
                     <label class="form-label">{{translate('Description')}}</label>
-                    <textarea class="form-control" name="description" id="description" cols="20" rows="10">
-                        {{$product->description??''}}
+                    <textarea class="form-control" name="description_uz" id="description_uz" cols="20" rows="10">
+                        {{$product->productDescriptionUz?$product->productDescriptionUz->name:''}}
+                    </textarea>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">{{translate('Description in english')}}</label>
+                    <textarea class="form-control" name="description_en" id="description_en" cols="20" rows="10">
+                        {{$product->productDescriptionRu?$product->productDescriptionEn->name:''}}
+                    </textarea>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">{{translate('Description in russian')}}</label>
+                    <textarea class="form-control" name="description_ru" id="description_ru" cols="20" rows="10">
+                        {{$product->productDescriptionEn?$product->productDescriptionRu->name:''}}
                     </textarea>
                 </div>
                 <div>
@@ -150,7 +162,17 @@
     <script src="{{asset('assets/js/ckeditor/ckeditor.js')}}"></script>
     <script>
         ClassicEditor
-            .create( document.querySelector( '#description' ) )
+            .create( document.querySelector('#description_uz'))
+            .catch( error => {
+                console.error( error );
+            } );
+        ClassicEditor
+            .create( document.querySelector('#description_en'))
+            .catch( error => {
+                console.error( error );
+            } );
+        ClassicEditor
+            .create( document.querySelector('#description_ru'))
             .catch( error => {
                 console.error( error );
             } );
