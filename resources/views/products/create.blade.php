@@ -77,7 +77,7 @@
                     </div>
                 </div>
                 <div class="mb-3">
-                    <label class="form-label">{{translate('Description')}}</label>
+                    <label class="form-label">{{translate('Description in uzbek')}}</label>
                     <textarea class="form-control" name="description_uz" id="description_uz" cols="20" rows="10">
                     </textarea>
                 </div>
