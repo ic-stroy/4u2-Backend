@@ -43,7 +43,8 @@ class ColorController extends Controller
         $model->name = $request->name;
         $model->code = $request->code;
         $model->save();
-        foreach (Language::all() as $language) {
+        $languages = Language::get();
+        foreach ($languages as $language) {
             $color_translations = ColorTranslations::firstOrNew(['lang' => $language->code, 'color_id' => $model->id]);
             $color_translations->lang = $language->code;
             $color_translations->name = $model->name;
@@ -85,7 +86,8 @@ class ColorController extends Controller
         ]);
         $model = Color::find($id);
         if($request->name != $model->name){
-            foreach (Language::all() as $language) {
+            $languages = Language::get();
+            foreach ($languages as $language) {
                 $color_translations = ColorTranslations::firstOrNew(['lang' => $language->code, 'color_id' => $model->id]);
                 $color_translations->lang = $language->code;
                 $color_translations->name = $request->name;
@@ -104,15 +106,13 @@ class ColorController extends Controller
      */
     public function destroy(string $id)
     {
-        $model = Color::find($id);
+        $model = Color::with('CharacterizedProducts')->find($id);
         if($model->CharacterizedProducts){
             return redirect()->back()->with('error', translate('You cannot delete this color because here is product associated with this color.'));
         }
-        foreach (Language::all() as $language) {
-            $color_translations = ColorTranslations::where(['lang' => $language->code, 'color_id' => $model->id])->get();
-            foreach ($color_translations as $color_translation){
-                $color_translation->delete();
-            }
+        $languages = Language::get();
+        foreach ($languages as $language) {
+            $color_translations = ColorTranslations::where(['lang' => $language->code, 'color_id' => $model->id])->delete();
         }
         $model->delete();
         return redirect()->route('color.index')->with('status', translate('Successfully deleted'));

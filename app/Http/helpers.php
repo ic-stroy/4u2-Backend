@@ -25,7 +25,7 @@ if (!function_exists('translate')) {
                 ->where('lang', $lang)
                 ->first();
             if ($translate === null){
-                foreach (Language::all() as $language) {
+                foreach (Language::get() as $language) {
                     if(!Translation::where('lang_key', $key)->where('lang', $language->code)->exists()){
                         Translation::create([
                             'lang'=>$language->code,
@@ -59,7 +59,7 @@ if (!function_exists('translate_api')) {
                 // dd($translate);
             if ($translate === null){
                 // dd($translate);
-                foreach (Language::all() as $language) {
+                foreach (Language::get() as $language) {
                     if(!Translation::where('lang_key', $key)->where('lang', $language->code)->exists()){
                         Translation::create([
                             'lang'=>$language->code,

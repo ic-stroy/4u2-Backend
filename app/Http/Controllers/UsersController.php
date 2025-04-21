@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Constants;
-use App\Models\Company;
 use App\Models\Role;
 use Illuminate\Http\Request;
 use App\Models\User;
@@ -305,7 +304,7 @@ class UsersController extends Controller
     }
 
     public function getUser(){
-        $model = Auth::user();
+        $model = Auth::user()->load('personalInfo');
         $year_old = 0;
         if($model->personalInfo){
             if($model->personalInfo->birth_date){

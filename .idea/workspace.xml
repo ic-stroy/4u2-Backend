@@ -2,38 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="baeeb12c-03b2-4eb7-b2be-dc7d3697fa3c" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/app/Models/CategoryTranslations.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/Models/CityTranslations.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/Models/ColorTranslations.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/Models/ProductTranslations.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/database/migrations/2023_12_11_134725_create_color_translations_table.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/database/migrations/2023_12_11_134741_create_city_translations_table.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/database/migrations/2023_12_11_134839_create_product_translations_table.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/database/migrations/2023_12_11_134849_create_category_translations_table.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/database/seeders/CategoryTranslationSeeder.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/database/seeders/CityTranslationSeeder.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/database/seeders/ColorTranslationSeeder.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/database/seeders/ProductTranslationSeeder.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/4u2-Backend.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/4u2-Backend.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/AddressController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/AddressController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/ApiOrderController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/ApiOrderController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/CategoryController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/CategoryController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/ColorController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/ColorController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/LanguageController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/LanguageController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/ProductsController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/ProductsController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/helpers.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/helpers.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/Products.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Products.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/seeders/CategorySeeder.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/seeders/CategorySeeder.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/seeders/DatabaseSeeder.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/seeders/DatabaseSeeder.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/seeders/LanguageSeeder.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/seeders/LanguageSeeder.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/seeders/UserSeeder.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/seeders/UserSeeder.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/language/table_show.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/language/table_show.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/language/tables.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/language/tables.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/layout/layout.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/layout/layout.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/api.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/api.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/web.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -180,7 +149,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../Marketflow" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
@@ -231,7 +200,17 @@
       <workItem from="1723882215493" duration="444000" />
       <workItem from="1723977254568" duration="721000" />
       <workItem from="1724064426083" duration="5554000" />
-      <workItem from="1724136860943" duration="8341000" />
+      <workItem from="1724136860943" duration="9823000" />
+      <workItem from="1725552734324" duration="2091000" />
+      <workItem from="1725719406873" duration="73000" />
+      <workItem from="1725787203658" duration="6334000" />
+      <workItem from="1730997209985" duration="43000" />
+      <workItem from="1730998087434" duration="2944000" />
+      <workItem from="1731347406399" duration="2606000" />
+      <workItem from="1731432659373" duration="729000" />
+      <workItem from="1731434462177" duration="43000" />
+      <workItem from="1734254605704" duration="4860000" />
+      <workItem from="1735455123764" duration="664000" />
     </task>
     <servers />
   </component>

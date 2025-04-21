@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('yy_cities', function (Blueprint $table) {
             $table->id();
             $table->string('name')->nullable();
-            $table->string('type')->nullable();
             $table->integer('parent_id')->nullable();
             $table->double('distance')->nullable();
             $table->double('lat')->nullable();

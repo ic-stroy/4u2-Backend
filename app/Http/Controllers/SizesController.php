@@ -91,7 +91,7 @@ class SizesController extends Controller
      */
     public function destroy(string $id)
     {
-        $model = Sizes::find($id);
+        $model = Sizes::with('CharacterizedProducts')->find($id);
         if($model->CharacterizedProducts){
             return redirect()->back()->with('error', translate('You cannot delete this size because here is product associated with this size.'));
         }

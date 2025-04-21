@@ -15,4 +15,8 @@ class ColorTranslations extends Model
         'color_id',
         'lang'
     ];
+
+    public function getModel(){
+        return $this->hasOne(Color::class, 'id','color_id');
+    }
 }

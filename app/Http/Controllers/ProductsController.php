@@ -25,20 +25,25 @@ class ProductsController extends Controller
      */
     public function index()
     {
-        $categories = Category::where('step', 0)->get();
+        $categories = Category::with([
+            'subcategory',
+            'subcategory.products',
+            'subcategory.subsubcategory',
+            'subcategory.subsubcategory.products',
+            'products',
+        ])->where('step', 0)->get();
         $all_products = [];
         foreach($categories as $category){
-            $categories_id = [];
-            $sub_categories_id = Category::where('parent_id', $category->id)->pluck('id')->all();
-            foreach($sub_categories_id as $sub_category_id){
-                $sub_sub_categories_id = Category::where('parent_id', $sub_category_id)->pluck('id')->all();
-                $categories_id = array_merge($categories_id, $sub_sub_categories_id);
+            $all_products[$category->id] = $category->products;
+            foreach($category->subcategory as $subcategory){
+                $all_products[$category->id] = $all_products[$category->id]->merge($subcategory->products);
+                $all_products[$subcategory->id] = $subcategory->products;
+                foreach($subcategory->subsubcategory as $subsubcategory){
+                    $all_products[$category->id] = $all_products[$category->id]->merge($subsubcategory->products);
+                    $all_products[$subcategory->id] = $all_products[$subcategory->id]->merge($subsubcategory->products);
+                    $all_products[$subsubcategory->id] = $subsubcategory->products;
+                }
             }
-            $categories_id = array_merge($categories_id, $sub_categories_id);
-            array_push($categories_id, $category->id);
-            $products = Products::orderBy('created_at', 'desc')->whereIn('category_id', $categories_id)->get();
-
-            $all_products[$category->id] = $products;
         }
         return view('products.index', ['all_products'=> $all_products, 'categories'=> $categories]);
     }
@@ -66,7 +71,6 @@ class ProductsController extends Controller
         }else{
             $model->category_id = $request->category_id;
         }
-//        dd()
         $model->company = $request->company;
         $model->status = $request->status;
         $model->sum = $request->sum;
@@ -99,13 +103,13 @@ class ProductsController extends Controller
         }
         $product_description_translations_en->product_id = $model->id;
         $product_description_translations_en->save();
-        foreach (Language::all() as $language) {
+        $languages = Language::get();
+        foreach ($languages as $language) {
             $product_translations = ProductTranslations::firstOrNew(['lang' => $language->code, 'product_id' => $model->id]);
             $product_translations->lang = $language->code;
             $product_translations->name = $model->name;
             $product_translations->product_id = $model->id;
             $product_translations->save();
-
         }
         return redirect()->route('product.index')->with('status', translate('Successfully created'));
     }
@@ -115,7 +119,12 @@ class ProductsController extends Controller
      */
     public function show(string $id)
     {
-        $model = Products::find($id);
+        $model = Products::with([
+            'category',
+            'subCategory.category',
+            'subSubCategory.sub_category',
+            'subSubCategory.sub_category.category',
+        ])->find($id);
         $category_array = [];
         if($model->category){
             $category_ = $model->category->name;
@@ -154,7 +163,12 @@ class ProductsController extends Controller
      */
     public function edit(string $id)
     {
-        $product = Products::find($id);
+        $product = Products::with([
+            'subCategory',
+            'subCategory.category',
+            'subSubCategory.sub_category',
+            'subSubCategory.sub_category.category',
+        ])->find($id);
         if($product->subCategory){
             $category_product = $product->subCategory;
             $is_category = 2;
@@ -204,7 +218,10 @@ class ProductsController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $model = Products::find($id);
+        $model = Products::with([
+            'categoryDiscount',
+            'discount'
+        ])->find($id);
         if(isset($request->subsubcategory_id)){
             $model->category_id = $request->subsubcategory_id;
         }elseif($request->subcategory_id){
@@ -218,7 +235,8 @@ class ProductsController extends Controller
         $images = $request->file('images');
         $model->images = $this->imageSave($model, $images, 'update');
         if($request->name != $model->name){
-            foreach (Language::all() as $language) {
+            $languages = Language::get();
+            foreach ($languages as $language) {
                 $product_translations = ProductTranslations::firstOrNew(['lang' => $language->code, 'product_id' => $model->id]);
                 $product_translations->lang = $language->code;
                 $product_translations->name = $request->name;
@@ -227,34 +245,32 @@ class ProductsController extends Controller
             }
 
         }
-//        if($model->description != $request->description_uz){
-            $product_description_translations_uz = ProductDescriptionTranslations::firstOrNew(['lang' => 'uz', 'product_id' => $model->id]);
-            $product_description_translations_uz->lang = 'uz';
-            $product_description_translations_uz->product_id = $model->id;
-            if($request->description_uz){
-                $product_description_translations_uz->name = $request->description_uz;
-            }
-            $product_description_translations_uz->save();
-            $product_description_translations_ru = ProductDescriptionTranslations::firstOrNew(['lang' => 'ru', 'product_id' => $model->id]);
-            $product_description_translations_ru->lang = 'ru';
-            $product_description_translations_ru->product_id = $model->id;
-            if(!$request->description_ru){
-                $product_description_translations_ru->name = $request->description_uz;
-            }else{
-                $product_description_translations_ru->name = $request->description_ru;
-            }
-            $product_description_translations_ru->save();
-            $product_description_translations_en = ProductDescriptionTranslations::firstOrNew(['lang' => 'en', 'product_id' => $model->id]);
-            $product_description_translations_en->lang = 'en';
-            if(!$request->description_en){
-                $product_description_translations_en->name = $request->description_uz;
-            }else{
-                $product_description_translations_en->name = $request->description_en;
-            }
-            $product_description_translations_en->product_id = $model->id;
-            $product_description_translations_en->save();
-            $model->description = $request->description_uz;
-//        }
+        $product_description_translations_uz = ProductDescriptionTranslations::firstOrNew(['lang' => 'uz', 'product_id' => $model->id]);
+        $product_description_translations_uz->lang = 'uz';
+        $product_description_translations_uz->product_id = $model->id;
+        if($request->description_uz){
+            $product_description_translations_uz->name = $request->description_uz;
+        }
+        $product_description_translations_uz->save();
+        $product_description_translations_ru = ProductDescriptionTranslations::firstOrNew(['lang' => 'ru', 'product_id' => $model->id]);
+        $product_description_translations_ru->lang = 'ru';
+        $product_description_translations_ru->product_id = $model->id;
+        if(!$request->description_ru){
+            $product_description_translations_ru->name = $request->description_uz;
+        }else{
+            $product_description_translations_ru->name = $request->description_ru;
+        }
+        $product_description_translations_ru->save();
+        $product_description_translations_en = ProductDescriptionTranslations::firstOrNew(['lang' => 'en', 'product_id' => $model->id]);
+        $product_description_translations_en->lang = 'en';
+        if(!$request->description_en){
+            $product_description_translations_en->name = $request->description_uz;
+        }else{
+            $product_description_translations_en->name = $request->description_en;
+        }
+        $product_description_translations_en->product_id = $model->id;
+        $product_description_translations_en->save();
+        $model->description = $request->description_uz;
         $model->name = $request->name;
         $model->save();
         if(!empty($model->categoryDiscount)){
@@ -277,7 +293,7 @@ class ProductsController extends Controller
      */
     public function destroy(string $id)
     {
-        $model = Products::find($id);
+        $model = Products::with('categorizedProducts')->find($id);
         if(!$model->categorizedProducts->isEmpty()){
             return redirect()->back()->with('error', translate('You cannot delete this product because here is some products in warehouse'));
         }
@@ -290,11 +306,9 @@ class ProductsController extends Controller
                 }
             }
         }
-        foreach (Language::all() as $language) {
-            $product_translations = ProductTranslations::where(['lang' => $language->code, 'product_id' => $model->id])->get();
-            foreach ($product_translations as $product_translation){
-                $product_translation->delete();
-            }
+        $languages = Language::get();
+        foreach ($languages as $language) {
+            $product_translations = ProductTranslations::where(['lang' => $language->code, 'product_id' => $model->id])->delete();
         }
         $model->delete();
         return redirect()->route('product.index')->with('status', translate('Successfully deleted'));
@@ -336,88 +350,92 @@ class ProductsController extends Controller
     }
 
     public function getProductCategoryLink($product, $language){
-            if($product->subSubCategory){
-                $category_product = $product->subSubCategory;
-                $is_category = 3;
-            }elseif($product->subCategory){
-                $category_product = $product->subCategory;
-                $is_category = 2;
-            }elseif($product->category){
-                $category_product = $product->category;
-                $is_category = 1;
-            }else{
-                $category_product = 'no';
-                $is_category = 0;
-            }
-            switch ($is_category){
-                case 1:
-                    $category_product_id = $category_product->id-1;
-                    $category_translation_name = table_translate($category_product, 'category', $language);
-                    $current_category_link = [
-                        'name'=>$category_translation_name,
-                        'link'=>"/products/$category_product_id"
-                    ];
-                    $current_sub_category_link = [];
-                    $current_sub_sub_category_link = [];
-                    break;
-                case 2:
-                    $current_category = $category_product->category?$category_product->category:'no';
-                    $category_product_id = $current_category->id-1;
-                    if($current_category != 'no'){
-                        $category_translation_name_ = table_translate($current_category, 'category', $language);
-                        $current_category_link = [
-                            "name"=>$category_translation_name_,
-                            "link"=>"/products/$category_product_id"
-                        ];
-                    }else{
-                        $current_category_link = [];
-                    }
-                    $category_translation_name = table_translate($category_product, 'category', $language);
-                    $current_sub_category_link = [
-                        "name"=>$category_translation_name,
-                        "link"=>"/sub-category-products/$category_product->id"
-                    ];
-                    $current_sub_sub_category_link = [];
-                    break;
-                case 3:
-                    if($category_product->sub_category){
-                        $current_category = $category_product->sub_category->category?$category_product->sub_category->category:'no';
-                    }else{
-                        $current_category = 'no';
-                    }
-                    $category_product_id = $current_category->id-1;
-                    if($current_category != 'no'){
-                        $category_translation_name = table_translate($current_category, 'category', $language);
-                        $current_category_link = [
-                            "name"=>$category_translation_name,
-                            "link"=>"/products/$category_product_id"
-                        ];
-                    }else{
-                        $current_category_link = [];
-                    }
-                    $sub_current_category = $category_product->sub_category?$category_product->sub_category:'no';
-                    if($sub_current_category != 'no'){
-                        $category_translation_name_ = table_translate($sub_current_category, 'category', $language);
-                        $current_sub_category_link = [
-                            "name"=>$category_translation_name_,
-                            "link"=>"/sub-category-products/$sub_current_category->id"
-                        ];
-                    }else{
-                        $current_sub_category_link = [];
-                    }
-                    $category_translation_name__ = table_translate($category_product, 'category', $language);
-                    $current_sub_sub_category_link = [
-                        "name"=>$category_translation_name__,
-                        "link"=>"/sub-category-products/$category_product->id"
-                    ];
-                    break;
-                default:
-                    $current_category_link = [];
-                    $current_sub_category_link = [];
-                    $current_sub_sub_category_link = [];
-            }
-            return [$current_category_link, $current_sub_category_link, $current_sub_sub_category_link];
+        if($product->subSubCategory){
+            $category_product = $product->subSubCategory;
+            $is_category = 3;
+        }elseif($product->subCategory){
+            $category_product = $product->subCategory;
+            $is_category = 2;
+        }elseif($product->category){
+            $category_product = $product->category;
+            $is_category = 1;
+        }else{
+            $category_product = 'no';
+            $is_category = 0;
         }
+        switch ($is_category){
+            case 1:
+                $category_product_id = $category_product->id-1;
+                $category_translation_name = optional($category_product->getTranslatedModel)->name??$category_product->name;
+                $current_category_link = [
+                    'name'=>$category_translation_name,
+                    'link'=>"/products/$category_product_id"
+                ];
+                $current_sub_category_link = [];
+                $current_sub_sub_category_link = [];
+                break;
+            case 2:
+                $current_category = $category_product->category?$category_product->category:'no';                
+                $sub_category_translation_name = optional($category_product->getTranslatedModel)->name??$category_product->name;
+                $category_translation_name = $current_category != 'no'?(optional($current_category->getTranslatedModel)->name??$current_category->name):'';
+                $category_product_id = $current_category->id-1;
+                if($current_category != 'no'){
+                    $current_category_link = [
+                        "name"=>$sub_category_translation_name,
+                        "link"=>"/products/$category_product_id"
+                    ];
+                }else{
+                    $current_category_link = [];
+                }
+                $current_sub_category_link = [
+                    "name"=>$category_translation_name,
+                    "link"=>"/sub-category-products/$category_product->id"
+                ];
+                $current_sub_sub_category_link = [];
+                break;
+            case 3:
+                if($category_product->sub_category){
+                    $current_category = $category_product->sub_category->category??'no';
+                }else{
+                    $current_category = 'no';
+                }
+                $category_translation_name = $current_category != 'no'?(optional($current_category->getTranslatedModel)->name??$current_category->name):'';
+                $category_product_id = $current_category->id-1;
+                if($current_category != 'no'){
+                    $current_category_link = [
+                        "name"=>$category_translation_name,
+                        "link"=>"/products/$category_product_id"
+                    ];
+                }else{
+                    $current_category_link = [];
+                }
+                $sub_current_category = $category_product->sub_category??'no';
+                $sub_category_translation_name = $sub_current_category != 'no'?(optional($sub_current_category->getTranslatedModel)->name??$sub_current_category->name):'';
+                if($sub_current_category != 'no'){
+                    $current_sub_category_link = [
+                        "name"=>$sub_category_translation_name,
+                        "link"=>"/sub-category-products/$sub_current_category->id"
+                    ];
+                }else{
+                    $current_sub_category_link = [];
+                }
+                $sub_sub_category_translation_name = optional($category_product->getTranslatedModel)->name??$category_product->name;
+                $current_sub_sub_category_link = [
+                    "name"=>$sub_sub_category_translation_name,
+                    "link"=>"/sub-category-products/$category_product->id"
+                ];
+                break;
+            default:
+                $current_category_link = [];
+                $current_sub_category_link = [];
+                $current_sub_sub_category_link = [];
+        }
+        return [$current_category_link, $current_sub_category_link, $current_sub_sub_category_link];
+    }
+
+    public function getTranslatedText($current_category){
+        return optional($current_category->getTranslatedModel)->name??$category_product->name;
+    }
 
     public function category()
     {
@@ -427,15 +445,14 @@ class ProductsController extends Controller
 
     public function product($id)
     {
-        $category = Category::find($id);
-        $subcategories = $category->subcategory;
-        foreach ($subcategories as $subcategory){
-            $category_ids[] = $subcategory->id;
-        }
-        $subsubcategories = Category::WhereIn('parent_id', $category_ids)->get();
-        foreach ($subsubcategories as $subsubcategory){
-            $category_ids[] = $subsubcategory->id;
-        }
+        $category = Category::with([
+            'subcategoriesId',
+        ])->find($id);
+        $category_ids = $category->subcategoriesId->map(function($subcategory){
+            return $subcategory->id;
+        });
+        $subsubcategories = Category::WhereIn('parent_id', $category_ids)->pluck('id')->toArray();
+        $category_ids = array_merge($category_ids, $subsubcategories);
         $category_ids[] = $category->id;
         $products = Products::whereIn('category_id', $category_ids)->get();
         return view('products.product', ['products'=>$products]);
@@ -471,7 +488,10 @@ class ProductsController extends Controller
 
     public function getProductsByCategory()
     {
-        $categories = Category::where('step', 0)->get();
+        $categories = Category::with([
+            'subcategory',
+            'subcategory.subsubcategory',
+        ])->where('step', 0)->get();
         foreach ($categories as $category) {
             $subcategory_ids[$category->id][] = $category->id;
             $categories_id[] = [
@@ -481,31 +501,59 @@ class ProductsController extends Controller
                     'id'=>[]
                 ]
             ];
-            if(!$category->subcategory->isEmpty()){
-                foreach ($category->subcategory as $subcategory){
-                    $subcategory_ids[$category->id][] = $subcategory->id;
-                    $categories_id[] = [
-                        'id'=>$category->id,
-                        'name'=>$category->name,
-                    ];
-                    foreach ($subcategory->subsubcategory as $subsubcategory){
-                        $subcategory_ids[$category->id][] = $subsubcategory->id;
-                        $subsubcategories_id[] = $subsubcategory->id;
-                    }
-                }
+            foreach ($category->subcategory as $subcategory){
+                $subcategory_ids[$category->id][] = $subcategory->id;
+                $categories_id[] = [
+                    'id'=>$category->id,
+                    'name'=>$category->name,
+                ];
+                $subsubcategories_id = $subcategory->subsubcategory->map(function($subsubcategory){
+                    return $subsubcategory->id;
+                });
+                $subcategory_ids[$category->id] = array_merge($subcategory_ids[$category->id], $subsubcategories_id);
             }
         }
         $goods = [];
+        $products = Products::whereIn('category_id', array_unique(array_merge(...array_values($subcategory_ids))))->get();
         foreach ($categories as $category) {
-            $goods[$category->name] = Products::whereIn('category_id', $subcategory_ids[$category->id])->get();
+            $goods[$category->name] = $products->whereIn('category_id', $subcategory_ids[$category->id])->values();
         }
         return response()->json($goods);
     }
 
     public function getProducts(Request $request)
     {
-        $language = $request->header('language');
-        $products = Products::all();
+        $language = $request->header('language')??'en';
+        $products = Products::with([
+            'discount',
+            'categorizedProducts',
+            'categorizedProducts.color',
+            'categorizedProducts.color.getTranslatedModel' => function($query) use($language){
+                $query->where('lang', $language);
+            },
+            'categorizedProducts.size',
+            'getTranslatedDescriptionModel' => function($query) use($language){
+                $query->where('lang', $language);
+            },
+            'getTranslatedModel' => function($query) use($language){
+                $query->where('lang', $language);
+            },
+            'subSubCategory',
+            'subCategory',
+            'category',
+            'subSubCategory.getTranslatedModel' => function($query) use($language){
+                $query->where('lang', $language);
+            },
+            'subCategory.getTranslatedModel' => function($query) use($language){
+                $query->where('lang', $language);
+            },
+            'category.getTranslatedModel' => function($query) use($language){
+                $query->where('lang', $language);
+            },
+            'subSubCategory.sub_category',
+            'subSubCategory.sub_category.category',
+            'subCategory.category',
+        ])->get();
         $goods = $this->getGoods($products, $language);
 
 //        $goods = array_merge($goods,$goods,$goods,$goods,$goods,$goods,$goods,$goods,$goods,$goods);
@@ -519,8 +567,37 @@ class ProductsController extends Controller
 
     public function getAllProducts(Request $request)
     {
-        $language = $request->header('language');
-        $products = Products::all();
+        $language = $request->header('language')??'en';
+        $products = Products::with([
+            'discount',
+            'categorizedProducts',
+            'categorizedProducts.color',
+            'categorizedProducts.color.getTranslatedModel' => function($query) use($language){
+                $query->where('lang', $language);
+            },
+            'categorizedProducts.size',
+            'getTranslatedDescriptionModel' => function($query) use($language){
+                $query->where('lang', $language);
+            },
+            'getTranslatedModel' => function($query) use($language){
+                $query->where('lang', $language);
+            },
+            'subSubCategory',
+            'subCategory',
+            'category',
+            'subSubCategory.getTranslatedModel' => function($query) use($language){
+                $query->where('lang', $language);
+            },
+            'subCategory.getTranslatedModel' => function($query) use($language){
+                $query->where('lang', $language);
+            },
+            'category.getTranslatedModel' => function($query) use($language){
+                $query->where('lang', $language);
+            },
+            'subSubCategory.sub_category',
+            'subSubCategory.sub_category.category',
+            'subCategory.category',
+        ])->get();
         $goods = $this->getGoods($products, $language);
         $response = [
             'status'=>true,
@@ -531,110 +608,141 @@ class ProductsController extends Controller
 
     public function getProduct(Request $request)
     {
-        $language = $request->header('language');
+        $language = $request->header('language')??'en';
         $is_exist_in_warehouse = false;
-        $product = Products::find($request->header('id'));
-
+        $product = Products::with([
+            'subSubCategory',
+            'subCategory',
+            'category',
+            'subCategory.category',
+            'subSubCategory.sub_category',
+            'subSubCategory.sub_category.category',
+            'subSubCategory.getTranslatedModel' => function($query) use($language){
+                $query->where('lang', $language);
+            },
+            'subCategory.getTranslatedModel' => function($query) use($language){
+                $query->where('lang', $language);
+            },
+            'category.getTranslatedModel' => function($query) use($language){
+                $query->where('lang', $language);
+            },
+            'subCategory.category.getTranslatedModel' => function($query) use($language){
+                $query->where('lang', $language);
+            },
+            'subSubCategory.sub_category.getTranslatedModel' => function($query) use($language){
+                $query->where('lang', $language);
+            },
+            'subSubCategory.sub_category.category.getTranslatedModel' => function($query) use($language){
+                $query->where('lang', $language);
+            },
+            'discount',
+            'categorizedProducts',
+            'categorizedProducts.size',
+            'categorizedProducts.color',
+            'categorizedProducts.color.getTranslatedModel' => function($query) use($language){
+                $query->where('lang', $language);
+            },
+            'getTranslatedDescriptionModel' => function($query) use($language){
+                $query->where('lang', $language);
+            },
+            'getTranslatedModel' => function($query) use($language){
+                $query->where('lang', $language);
+            }
+        ])->find($request->header('id'));
         if($product){
             $discount = $product->discount;
-            if (!$product->categorizedProducts->isEmpty()) {
-                $colors_array = [];
-                $firstProducts = [];
-                $categorizedByColor = [];
-                foreach ($product->categorizedProducts as $categorizedProduct_) {
+            $colors_array = [];
+            $firstProducts = [];
+            $categorizedByColor = [];
+            foreach ($product->categorizedProducts as $categorizedProduct_) {
+                $is_exist_in_warehouse = false;
+                if((int)$categorizedProduct_->count>0){
+                    $is_exist_in_warehouse = true;
+                }
+                if($is_exist_in_warehouse){
+                    if($discount){
+                        $categorizedProductSum_ = $discount->percent?$categorizedProduct_->sum - $categorizedProduct_->sum*(int)$discount->percent/100:$categorizedProduct_->sum;
+                    }else{
+                        $categorizedProductSum_ = $categorizedProduct_->sum;
+                    }
+                    if($categorizedProduct_->color) {
+                        $color_id = $categorizedProduct_->color->id;
+                        $colors_array[] = $categorizedProduct_->color->id;
+                    }else{
+                        $color_id = 'no';
+                        $colors_array[] = 'no';
+                    }
+                    if($colors_array[0] == $color_id){
+                        if($categorizedProduct_->color){
+                            $translate_color_name = optional($categorizedProduct_->color->getTranslatedModel)->name??$categorizedProduct_->color->name;
+                            $color = [
+                                'id' => $categorizedProduct_->color->id,
+                                'name' => $translate_color_name??'',
+                                'code' => $categorizedProduct_->color->code,
+                            ];
+                        }else{
+                            $color = [];
+                        }
+                        $firstProducts[] = [
+                            'id' => $categorizedProduct_->id,
+                            'size' => $categorizedProduct_->size ? $categorizedProduct_->size->name : '',
+                            'color' => $color,
+                            'sum' => $categorizedProductSum_,
+                            'discount' => $product->discount ? $product->discount->percent : null,
+                            'price' => $categorizedProduct_->sum,
+                            'count' => $categorizedProduct_->count
+                        ];
+                    }
+                }
+
+            }
+            foreach (array_unique($colors_array) as $color__) {
+                $productsByColor = [];
+                $colorModel = [];
+                $color_id = '';
+                foreach ($product->categorizedProducts as $categorizedProduct) {
                     $is_exist_in_warehouse = false;
-                    if((int)$categorizedProduct_->count>0){
+                    if((int)$categorizedProduct->count>0){
                         $is_exist_in_warehouse = true;
                     }
                     if($is_exist_in_warehouse){
-                        if($discount){
-                            $categorizedProductSum_ = $discount->percent?$categorizedProduct_->sum - $categorizedProduct_->sum*(int)$discount->percent/100:$categorizedProduct_->sum;
-                        }else{
-                            $categorizedProductSum_ = $categorizedProduct_->sum;
-                        }
-                        if($categorizedProduct_->color) {
-                            $color_id = $categorizedProduct_->color->id;
-                            $colors_array[] = $categorizedProduct_->color->id;
-                        }else{
-                            $color_id = 'no';
-                            $colors_array[] = 'no';
-                        }
-                        if($colors_array[0] == $color_id){
-                            if($categorizedProduct_->color){
-                                $translate_color_name = table_translate($categorizedProduct_->color, 'color', $language);
-                                $color = [
-                                    'id' => $categorizedProduct_->color->id,
-                                    'name' => $translate_color_name??'',
-                                    'code' => $categorizedProduct_->color->code,
+                        $color_id = optional($categorizedProduct->color)->id??'no';
+                        if ($color__ == $color_id) {
+                            if ($categorizedProduct->color) {
+                                $colorModel = $categorizedProduct->color;
+
+                                $translate_color_name_ = optional($categorizedProduct->color->getTranslatedModel)->name??$categorizedProduct->color->name;
+                                $color_ = [
+                                    'id' => $categorizedProduct->color->id,
+                                    'name' => $translate_color_name_??'',
+                                    'code' => $categorizedProduct->color->code,
                                 ];
-                            }else{
-                                $color = [];
+                            } else {
+                                $colorModel = [];
+                                $color_ = [];
                             }
-                            $firstProducts[] = [
-                                'id' => $categorizedProduct_->id,
-                                'size' => $categorizedProduct_->size ? $categorizedProduct_->size->name : '',
-                                'color' => $color,
-                                'sum' => $categorizedProductSum_,
+                            if ($discount) {
+                                $categorizedProductSum = $discount->percent ? $categorizedProduct->sum - $categorizedProduct->sum * (int)$discount->percent / 100 : $categorizedProduct->sum;
+                            } else {
+                                $categorizedProductSum = $categorizedProduct->sum;
+                            }
+                            $productsByColor[] = [
+                                'id' => $categorizedProduct->id,
+                                'size' => $categorizedProduct->size ? $categorizedProduct->size->name : '',
+                                'sum' => $categorizedProductSum,
+                                'color' => $color_,
                                 'discount' => $product->discount ? $product->discount->percent : null,
-                                'price' => $categorizedProduct_->sum,
-                                'count' => $categorizedProduct_->count
+                                'price' => $categorizedProduct->sum,
+                                'count' => $categorizedProduct->count
                             ];
                         }
                     }
-
                 }
-                foreach (array_unique($colors_array) as $color__) {
-                    $productsByColor = [];
-                    $colorModel = [];
-                    $color_id = '';
-                    foreach ($product->categorizedProducts as $categorizedProduct) {
-                        $is_exist_in_warehouse = false;
-                        if((int)$categorizedProduct->count>0){
-                            $is_exist_in_warehouse = true;
-                        }
-                        if($is_exist_in_warehouse){
-                            if ($categorizedProduct->color) {
-                                $color_id = $categorizedProduct->color->id;
-                            } else {
-                                $color_id = 'no';
-                            }
-                            if ($color__ == $color_id) {
-                                if ($categorizedProduct->color) {
-                                    $colorModel = $categorizedProduct->color;
-
-                                    $translate_color_name_ = table_translate($categorizedProduct->color, 'color', $language);
-                                    $color_ = [
-                                        'id' => $categorizedProduct->color->id,
-                                        'name' => $translate_color_name_??'',
-                                        'code' => $categorizedProduct->color->code,
-                                    ];
-                                } else {
-                                    $colorModel = [];
-                                    $color_ = [];
-                                }
-                                if ($discount) {
-                                    $categorizedProductSum = $discount->percent ? $categorizedProduct->sum - $categorizedProduct->sum * (int)$discount->percent / 100 : $categorizedProduct->sum;
-                                } else {
-                                    $categorizedProductSum = $categorizedProduct->sum;
-                                }
-                                $productsByColor[] = [
-                                    'id' => $categorizedProduct->id,
-                                    'size' => $categorizedProduct->size ? $categorizedProduct->size->name : '',
-                                    'sum' => $categorizedProductSum,
-                                    'color' => $color_,
-                                    'discount' => $product->discount ? $product->discount->percent : null,
-                                    'price' => $categorizedProduct->sum,
-                                    'count' => $categorizedProduct->count
-                                ];
-                            }
-                        }
-                    }
-                    if($color_id != ''){
-                        $categorizedByColor[] = [
-                            'color' => $colorModel,
-                            'products' => $productsByColor
-                        ];
-                    }
+                if($color_id != ''){
+                    $categorizedByColor[] = [
+                        'color' => $colorModel,
+                        'products' => $productsByColor
+                    ];
                 }
             }
             $good = [];
@@ -643,13 +751,16 @@ class ProductsController extends Controller
             foreach($images_ as $image_) {
                 $images[] = asset('storage/products/' . $image_);
             }
-            $translate_product_description = table_translate($product, 'product_description', $language);
+            $translate_product_description = optional($product->getTranslatedDescriptionModel)->name??$product->description;
             $good['id'] = $product->id;
-            $translate_product_name = table_translate($product, 'product', $language);
+            $translate_product_name = optional($product->getTranslatedModel)->name??$product->name;
             $good['name'] = $translate_product_name ?? null;
             $current_category = $this->getProductCategory($product);
-            $translate_category_name = table_translate($current_category, 'category', $language);
-            $good['category'] = $translate_category_name ?? null;
+            $translate_category_name = null;
+            if($current_category != 'no'){
+                $translate_category_name = optional($current_category->getTranslatedModel)->name??null;
+            }
+            $good['category'] = $translate_category_name;
             $good['description'] = $translate_product_description ?? null;
             if($discount){
                 $good['sum'] = $discount->percent?$product->sum - $product->sum*(int)$discount->percent/100:$product->sum;
@@ -657,7 +768,7 @@ class ProductsController extends Controller
                 $good['sum'] = $product->sum ?? null;
             }
             $good['price'] = $product->sum;
-            $good['discount'] = $product->discount?$product->discount->percent:null;
+            $good['discount'] = optional($product->discount)->percent??null;
             $good['company'] = $product->company ?? null;
             $good['characters'] = $categorizedByColor ?? [];
             $good['first_color_products'] = $firstProducts ?? [];
@@ -682,19 +793,31 @@ class ProductsController extends Controller
 
     public function getCharacterizedProduct(Request $request)
     {
-        $language = $request->header('language');
+        $language = $request->header('language')??'en';
         $all_sum = 0;
         $order_coupon_price = 0;
         $good = [];
         $selected_products = $request->selected_products;
         if(is_array($selected_products)){
             foreach($selected_products as $selected_product){
-                $product = CharacterizedProducts::find($selected_product['id']);
+                $product = CharacterizedProducts::with([
+                    'product',
+                    'product.discount',
+                    'product',
+                    'product.category',
+                    'product.category.getTranslatedModel' => function($query) use($language){
+                        $query->where('lang', $language);
+                    },
+                    'product.getTranslatedModel' => function($query) use($language){
+                        $query->where('lang', $language);
+                    },
+                    'discount'
+                ])->find($selected_product['id']);
                 if($product){
                     $images = null;
                     $company_name = null;
                     $translate_category_name = null;
-                    $product_ = Products::find($product->product_id);
+                    $product_ = $product->product;
                     if($product_){
                         $discount = $product_->discount;
                         if($product->sum){
@@ -721,13 +844,11 @@ class ProductsController extends Controller
                             $images = '';
                         }
                         $company_name = $product_->company??null;
-                        if($product_->category){
-                            $translate_category_name = table_translate($product_->category, 'category', $language);
-                        }
+                        $translate_category_name = optional(optional($product_->category)->getTranslatedModel)->name??'';
                     }
                     $all_sum = $all_sum + $categorizedAllProductSum??(int)$product->sum*(int)$selected_product['count'];
 
-                    $translate_product_name = table_translate($product_, 'product', $language);
+                    $translate_product_name = optional($product_->getTranslatedModel)->name??'';
                     $good[] = [
                         'id'=>$product->id,
                         'product_id'=>$product_->id,
@@ -736,7 +857,7 @@ class ProductsController extends Controller
                         'company'=>$company_name,
                         'category'=>$translate_category_name,
                         'size'=>$product->size?$product->size->name:'',
-                        'color'=>$product->color?$product->color:[],
+                        'color'=>$product->color??[],
                         'count'=>(int)$product->count,
                         'discount' => $product->discount?(int)$product->discount->percent:null,
                         'sum'=>(int)$categorizedProductSum??(int)$product->sum,
@@ -800,7 +921,7 @@ class ProductsController extends Controller
 
     public function getFavouriteProducts(Request $request)
     {
-        $language = $request->header('language');
+        $language = $request->header('language')??'en';
         $good = [];
         $is_exist_in_warehouse = false;
         $selected_products_id = $request->selected_products_id;
@@ -808,9 +929,23 @@ class ProductsController extends Controller
             $images = null;
             $company_name = null;
             $category_name = null;
-            $product = Products::find($selected_product_id);
+            $product = Products::with([
+                'discount',
+                'category',
+                'category.getTranslatedModel' => function($query) use($language){
+                    $query->where('lang', $language);
+                },
+                'getTranslatedModel' => function($query) use($language){
+                    $query->where('lang', $language);
+                },
+                'categorizedProducts',
+                'categorizedProducts.color',
+                'categorizedProducts.color.getTranslatedModel' => function($query) use($language){
+                    $query->where('lang', $language);
+                },
+                'categorizedProducts.size'
+            ])->find($selected_product_id);
             if($product){
-
                 $discount = $product->discount;
                 if (!$product->categorizedProducts->isEmpty()) {
                     $colors_array = [];
@@ -834,7 +969,7 @@ class ProductsController extends Controller
                         }
                         if($colors_array[0] == $color_id){
                             if($categorizedProduct_->color){
-                                $translate_color_name = table_translate($categorizedProduct_->color, 'color', $language);
+                                $translate_color_name = optional($categorizedProduct_->color->getTranslatedModel)->name??$categorizedProduct_->color->name;
                                 $color = [
                                     'id' => $categorizedProduct_->color->id,
                                     'name' => $translate_color_name,
@@ -870,7 +1005,7 @@ class ProductsController extends Controller
                             if ($color__ == $color_id) {
                                 if ($categorizedProduct->color) {
                                     $colorModel = $categorizedProduct->color;
-                                    $translate_color_name_ = table_translate($categorizedProduct->color, 'color', $language);
+                                    $translate_color_name_ = optional($categorizedProduct_->color->getTranslatedModel)->name??$categorizedProduct_->color->name;
                                     $color_ = [
                                         'id' => $categorizedProduct->color->id,
                                         'name' => $translate_color_name_,
@@ -918,8 +1053,8 @@ class ProductsController extends Controller
                     $images[] = asset('storage/products/' . $image_);
                 }
                 $company_name = $product->company ?? null;
-                $category_name = $product->category ? $product->category->name : null;
-                $translate_product_name = table_translate($product, 'product', $language);
+                $category_name = optional(optional($product->category)->getTranslatedModel)->name??(optional($product->category)->name??null);
+                $translate_product_name = optional($product->getTranslatedModel)->name??($product->name??'');
                 $good[] = [
                     'id' => $product->id,
                     'name' => $translate_product_name,
@@ -948,8 +1083,37 @@ class ProductsController extends Controller
 
     public function BestSeller(Request $request)
     {
-        $language = $request->header('language');
-        $products = Products::orderBy('id', 'DESC')->get();
+        $language = $request->header('language')??'en';
+        $products = Products::with([
+            'discount',
+            'categorizedProducts',
+            'categorizedProducts.color',
+            'categorizedProducts.color.getTranslatedModel' => function($query) use($language){
+                $query->where('lang', $language);
+            },
+            'categorizedProducts.size',
+            'getTranslatedDescriptionModel' => function($query) use($language){
+                $query->where('lang', $language);
+            },
+            'getTranslatedModel' => function($query) use($language){
+                $query->where('lang', $language);
+            },
+            'subSubCategory',
+            'subCategory',
+            'category',
+            'subSubCategory.getTranslatedModel' => function($query) use($language){
+                $query->where('lang', $language);
+            },
+            'subCategory.getTranslatedModel' => function($query) use($language){
+                $query->where('lang', $language);
+            },
+            'category.getTranslatedModel' => function($query) use($language){
+                $query->where('lang', $language);
+            },
+            'subSubCategory.sub_category',
+            'subSubCategory.sub_category.category',
+            'subCategory.category',
+        ])->orderBy('id', 'DESC')->get();
         $goods = $this->getGoods($products, $language);
         $response = [
             'status'=>true,
@@ -980,7 +1144,7 @@ class ProductsController extends Controller
     }
 
     public function getProductsByCategories(Request $request){
-        $language = $request->header('language');
+        $language = $request->header('language')??'en';
         $categories = Category::where('step', 0)->get();
         $data = $this->getProductsByAllCategories($categories, $language);
         return response()->json([
@@ -1002,9 +1166,39 @@ class ProductsController extends Controller
 
     public function getProductsByAllCategories($categories, $language){
         $data = [];
+        $all_products = Products::with([
+            'discount',
+            'categorizedProducts',
+            'categorizedProducts.color',
+            'categorizedProducts.color.getTranslatedModel' => function($query) use($language){
+                $query->where('lang', $language);
+            },
+            'categorizedProducts.size',
+            'getTranslatedDescriptionModel' => function($query) use($language){
+                $query->where('lang', $language);
+            },
+            'getTranslatedModel' => function($query) use($language){
+                $query->where('lang', $language);
+            },
+            'subSubCategory',
+            'subCategory',
+            'category',
+            'subSubCategory.getTranslatedModel' => function($query) use($language){
+                $query->where('lang', $language);
+            },
+            'subCategory.getTranslatedModel' => function($query) use($language){
+                $query->where('lang', $language);
+            },
+            'category.getTranslatedModel' => function($query) use($language){
+                $query->where('lang', $language);
+            },
+            'subSubCategory.sub_category',
+            'subSubCategory.sub_category.category',
+            'subCategory.category',
+        ])->get();
         foreach ($categories as $category){
             $category_ids = $this->getCategoriesId($category);
-            $products = Products::whereIn('category_id', $category_ids)->get();
+            $products = $all_products->whereIn('category_id', $category_ids)->values();
             $goods = $this->getGoods($products, $language);
             $data[] = [
                 'category'=>[
@@ -1025,100 +1219,93 @@ class ProductsController extends Controller
             $colors_array = [];
             $firstProducts = [];
             $categorizedByColor = [];
-            if (!$product->categorizedProducts->isEmpty()) {
-                foreach ($product->categorizedProducts as $categorizedProduct_) {
+            foreach ($product->categorizedProducts as $categorizedProduct_) {
+                $is_exist_in_warehouse = false;
+                if((int)$categorizedProduct_->count>0){
+                    $is_exist_in_warehouse = true;
+                }
+                if($is_exist_in_warehouse){
+                    if($discount){
+                        $categorizedProductSum_ = $discount->percent?$categorizedProduct_->sum - $categorizedProduct_->sum*(int)$discount->percent/100:$categorizedProduct_->sum;
+                    }else{
+                        $categorizedProductSum_ = $categorizedProduct_->sum;
+                    }
+                    if($categorizedProduct_->color) {
+                        $color_id = $categorizedProduct_->color->id;
+                        $colors_array[] = $categorizedProduct_->color->id;
+                    }else{
+                        $color_id = 'no';
+                        $colors_array[] = 'no';
+                    }
+                    if($colors_array[0] == $color_id){
+                        if($categorizedProduct_->color){
+                            $translate_color_name = optional($categorizedProduct_->color->getTranslatedModel)->name??'';
+                            $color = [
+                                'id' => $categorizedProduct_->color->id,
+                                'name' => $translate_color_name,
+                                'code' => $categorizedProduct_->color->code,
+                            ];
+                        }else{
+                            $color = [];
+                        }
+                        $firstProducts[] = [
+                            'id' => $categorizedProduct_->id,
+                            'size' => optional($categorizedProduct_->size)->name ?? '',
+                            'color' => $color,
+                            'sum' => $categorizedProductSum_,
+                            'discount' => optional($product->discount)->percent ?? null,
+                            'price' => $categorizedProduct_->sum,
+                            'count' => $categorizedProduct_->count
+                        ];
+                    }
+                }
+            }
+            foreach (array_unique($colors_array) as $color__) {
+                $productsByColor = [];
+                $colorModel = [];
+                $color_id = '';
+                foreach ($product->categorizedProducts as $categorizedProduct) {
                     $is_exist_in_warehouse = false;
-                    if((int)$categorizedProduct_->count>0){
+                    if((int)$categorizedProduct->count>0){
                         $is_exist_in_warehouse = true;
                     }
                     if($is_exist_in_warehouse){
-                        if($discount){
-                            $categorizedProductSum_ = $discount->percent?$categorizedProduct_->sum - $categorizedProduct_->sum*(int)$discount->percent/100:$categorizedProduct_->sum;
-                        }else{
-                            $categorizedProductSum_ = $categorizedProduct_->sum;
-                        }
-                        if($categorizedProduct_->color) {
-                            $color_id = $categorizedProduct_->color->id;
-                            $colors_array[] = $categorizedProduct_->color->id;
-                        }else{
-                            $color_id = 'no';
-                            $colors_array[] = 'no';
-                        }
-                        if($colors_array[0] == $color_id){
-                            if($categorizedProduct_->color){
-                                $translate_color_name = table_translate($categorizedProduct_->color, 'color', $language);
-                                $color = [
-                                    'id' => $categorizedProduct_->color->id,
-                                    'name' => $translate_color_name,
-                                    'code' => $categorizedProduct_->color->code,
+                        $color_id = optional($categorizedProduct->color)->id??'no';
+                        if ($color__ == $color_id) {
+                            if ($categorizedProduct->color) {
+                                $colorModel = $categorizedProduct->color;
+                                $translate_color_name_ = optional($colorModel)->name??'';
+                                $color_ = [
+                                    'id' => $categorizedProduct->color->id,
+                                    'name' => $translate_color_name_,
+                                    'code' => $categorizedProduct->color->code,
                                 ];
-                            }else{
-                                $color = [];
+                            } else {
+                                $colorModel = [];
+                                $color_ = [];
                             }
-                            $firstProducts[] = [
-                                'id' => $categorizedProduct_->id,
-                                'size' => $categorizedProduct_->size ? $categorizedProduct_->size->name : '',
-                                'color' => $color,
-                                'sum' => $categorizedProductSum_,
-                                'discount' => $product->discount ? $product->discount->percent : null,
-                                'price' => $categorizedProduct_->sum,
-                                'count' => $categorizedProduct_->count
+                            if ($discount) {
+                                $categorizedProductSum = $discount->percent ? $categorizedProduct->sum - $categorizedProduct->sum * (int)$discount->percent / 100 : $categorizedProduct->sum;
+                            } else {
+                                $categorizedProductSum = $categorizedProduct->sum;
+                            }
+                            $productsByColor[] = [
+                                'id' => $categorizedProduct->id,
+                                'size' => optional($categorizedProduct->size)->name ?? '',
+                                'sum' => $categorizedProductSum,
+                                'color' => $color_,
+                                'discount' => optional($product->discount)->percent ?? null,
+                                'price' => $categorizedProduct->sum,
+                                'count' => $categorizedProduct->count
                             ];
                         }
                     }
                 }
-                foreach (array_unique($colors_array) as $color__) {
-                    $productsByColor = [];
-                    $colorModel = [];
-                    $color_id = '';
-                    foreach ($product->categorizedProducts as $categorizedProduct) {
-                        $is_exist_in_warehouse = false;
-                        if((int)$categorizedProduct->count>0){
-                            $is_exist_in_warehouse = true;
-                        }
-                        if($is_exist_in_warehouse){
-                            if ($categorizedProduct->color) {
-                                $color_id = $categorizedProduct->color->id;
-                            } else {
-                                $color_id = 'no';
-                            }
-                            if ($color__ == $color_id) {
-                                if ($categorizedProduct->color) {
-                                    $colorModel = $categorizedProduct->color;
-
-                                    $translate_color_name_ = table_translate($colorModel, 'color', $language);
-                                    $color_ = [
-                                        'id' => $categorizedProduct->color->id,
-                                        'name' => $translate_color_name_,
-                                        'code' => $categorizedProduct->color->code,
-                                    ];
-                                } else {
-                                    $colorModel = [];
-                                    $color_ = [];
-                                }
-                                if ($discount) {
-                                    $categorizedProductSum = $discount->percent ? $categorizedProduct->sum - $categorizedProduct->sum * (int)$discount->percent / 100 : $categorizedProduct->sum;
-                                } else {
-                                    $categorizedProductSum = $categorizedProduct->sum;
-                                }
-                                $productsByColor[] = [
-                                    'id' => $categorizedProduct->id,
-                                    'size' => $categorizedProduct->size ? $categorizedProduct->size->name : '',
-                                    'sum' => $categorizedProductSum,
-                                    'color' => $color_,
-                                    'discount' => $product->discount ? $product->discount->percent : null,
-                                    'price' => $categorizedProduct->sum,
-                                    'count' => $categorizedProduct->count
-                                ];
-                            }
-                        }
-                    }
-                    if($color_id != ''){
-                        $categorizedByColor[] = [
-                            'color' => $colorModel,
-                            'products' => $productsByColor
-                        ];
-                    }
+                if($color_id != ''){
+                    $categorizedByColor[] = [
+                        'color' => $colorModel,
+                        'products' => $productsByColor
+                    ];
                 }
             }
             $images_ = json_decode($product->images);
@@ -1126,13 +1313,12 @@ class ProductsController extends Controller
             foreach ($images_ as $image_) {
                 $images[] = asset('storage/products/' . $image_);
             }
-            $translate_product_description = table_translate($product, 'product_description', $language);
+            $translate_product_description = optional($product->getTranslatedDescriptionModel)->name??$product->name;
             $goods[$key]['id'] = $product->id;
-
-            $translate_product_name = table_translate($product, 'product', $language);
+            $translate_product_name = optional($product->getTranslatedModel)->name??$product->name;
             $goods[$key]['name'] = $translate_product_name;
             $current_category = $this->getProductCategory($product);
-            $translate_category_name = table_translate($current_category, 'category', $language);
+            $translate_category_name = optional($current_category->getTranslatedModel)->name??'';
             $goods[$key]['category'] = $translate_category_name;
             $goods[$key]['description'] = $translate_product_description ?? null;
             if($discount){

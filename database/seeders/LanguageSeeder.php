@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Language;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class LanguageSeeder extends Seeder
 {
@@ -32,9 +33,7 @@ class LanguageSeeder extends Seeder
                     'code'=>'en',
                 ],
             ];
-            foreach ($datas as $data){
-                Language::create($data);
-            }
+            DB::table('languages')->insert($datas);
         }else{
             echo "Language is exist status active";
         }

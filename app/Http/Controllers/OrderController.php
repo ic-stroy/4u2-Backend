@@ -21,12 +21,96 @@ class OrderController extends Controller
 
     public function index(){
         $user = Auth::user();
-        $orderedOrders_ = Order::where('status', Constants::ORDERED)->orderBy('updated_at', 'desc')->get();
-        $performedOrders_ = Order::where('status', Constants::PERFORMED)->orderBy('updated_at', 'desc')->get();
-        $cancelledOrders_ = Order::where('status', Constants::CANCELLED)->orderBy('updated_at', 'desc')->limit(101)->get();
-        $deliveredOrders_ = Order::where('status', Constants::ORDER_DELIVERED)->orderBy('updated_at', 'asc')->get();
-        $readyForPickup_ = Order::where('status', Constants::READY_FOR_PICKUP)->orderBy('updated_at', 'asc')->get();
-        $acceptedByRecipientOrders_ = Order::where('status', Constants::ACCEPTED_BY_RECIPIENT)->orderBy('updated_at', 'desc')->limit(101)->get();
+        $orderedOrders_ = Order::with([
+            'user',
+            'address',
+            'address.user',
+            "address.cities",
+            "address.cities.getTranslatedContent",
+            "address.cities.region",
+            "address.cities.region.getTranslatedContent",
+            'orderDetail',
+            'orderDetail.color',
+            'orderDetail.size',
+            'orderDetail.warehouse_product',
+            'orderDetail.warehouse_product.product',
+            'orderDetail.warehouse_product.discount_withouth_expire',
+        ])->where('status', Constants::ORDERED)->orderBy('updated_at', 'desc')->get();
+        $performedOrders_ = Order::with([
+            'user',
+            'address',
+            'address.user',
+            "address.cities",
+            "address.cities.getTranslatedContent",
+            "address.cities.region",
+            "address.cities.region.getTranslatedContent",
+            'orderDetail',
+            'orderDetail.color',
+            'orderDetail.size',
+            'orderDetail.warehouse_product',
+            'orderDetail.warehouse_product.product',
+            'orderDetail.warehouse_product.discount_withouth_expire',
+        ])->where('status', Constants::PERFORMED)->orderBy('updated_at', 'desc')->get();
+        $cancelledOrders_ = Order::with([
+            'user',
+            'address',
+            'address.user',
+            "address.cities",
+            "address.cities.getTranslatedContent",
+            "address.cities.region",
+            "address.cities.region.getTranslatedContent",
+            'orderDetail',
+            'orderDetail.color',
+            'orderDetail.size',
+            'orderDetail.warehouse_product',
+            'orderDetail.warehouse_product.product',
+            'orderDetail.warehouse_product.discount_withouth_expire',
+        ])->where('status', Constants::CANCELLED)->orderBy('updated_at', 'desc')->limit(101)->get();
+        $deliveredOrders_ = Order::with([
+            'user',
+            'address',
+            'address.user',
+            "address.cities",
+            "address.cities.getTranslatedContent",
+            "address.cities.region",
+            "address.cities.region.getTranslatedContent",
+            'orderDetail',
+            'orderDetail.color',
+            'orderDetail.size',
+            'orderDetail.warehouse_product',
+            'orderDetail.warehouse_product.product',
+            'orderDetail.warehouse_product.discount_withouth_expire',
+        ])->where('status', Constants::ORDER_DELIVERED)->orderBy('updated_at', 'asc')->get();
+        $readyForPickup_ = Order::with([
+            'user',
+            'address',
+            'address.user',
+            "address.cities",
+            "address.cities.getTranslatedContent",
+            "address.cities.region",
+            "address.cities.region.getTranslatedContent",
+            'orderDetail',
+            'orderDetail.color',
+            'orderDetail.size',
+            'orderDetail.warehouse_product',
+            'orderDetail.warehouse_product.product',
+            'orderDetail.warehouse_product.discount_withouth_expire',
+        ])->where('status', Constants::READY_FOR_PICKUP)->orderBy('updated_at', 'asc')->get();
+        $acceptedByRecipientOrders_ = Order::with([
+            'user',
+            'address',
+            'address.user',
+            "address.cities",
+            "address.cities.getTranslatedContent",
+            "address.cities.region",
+            "address.cities.region.getTranslatedContent",
+            'orderDetail',
+            'orderDetail.color',
+            'orderDetail.size',
+            'orderDetail.warehouse_product',
+            'orderDetail.warehouse_product.product',
+            'orderDetail.warehouse_product.discount_withouth_expire',
+        ])->where('status', Constants::ACCEPTED_BY_RECIPIENT)->orderBy('updated_at', 'desc')->limit(101)->get();
         $orderedOrders = $this->getOrders($orderedOrders_);
         $performedOrders = $this->getOrders($performedOrders_);
         $cancelledOrders = $this->getOrders($cancelledOrders_);
@@ -49,8 +133,36 @@ class OrderController extends Controller
 
     public function finishedAllOrders(){
         $user = Auth::user();
-        $cancelledOrders_ = Order::where('status', Constants::CANCELLED)->orderBy('updated_at', 'desc')->get();
-        $acceptedByRecipientOrders_ = Order::where('status', Constants::ACCEPTED_BY_RECIPIENT)->orderBy('updated_at', 'desc')->get();
+        $cancelledOrders_ = Order::with([
+            'user',
+            'address',
+            'address.user',
+            "address.cities",
+            "address.cities.getTranslatedContent",
+            "address.cities.region",
+            "address.cities.region.getTranslatedContent",
+            'orderDetail',
+            'orderDetail.color',
+            'orderDetail.size',
+            'orderDetail.warehouse_product',
+            'orderDetail.warehouse_product.product',
+            'orderDetail.warehouse_product.discount_withouth_expire',
+        ])->where('status', Constants::CANCELLED)->orderBy('updated_at', 'desc')->get();
+        $acceptedByRecipientOrders_ = Order::with([
+            'user',
+            'address',
+            'address.user',
+            "address.cities",
+            "address.cities.getTranslatedContent",
+            "address.cities.region",
+            "address.cities.region.getTranslatedContent",
+            'orderDetail',
+            'orderDetail.color',
+            'orderDetail.size',
+            'orderDetail.warehouse_product',
+            'orderDetail.warehouse_product.product',
+            'orderDetail.warehouse_product.discount_withouth_expire',
+        ])->where('status', Constants::ACCEPTED_BY_RECIPIENT)->orderBy('updated_at', 'desc')->get();
         $acceptedByRecipientOrders = $this->getOrders($acceptedByRecipientOrders_);
         $cancelledOrders = $this->getOrders($cancelledOrders_);
         $all_orders = [
@@ -294,7 +406,9 @@ class OrderController extends Controller
             }
 
             $orderDetail->save();
-            $order = Order::whereIn('status', [Constants::ORDERED, Constants::PERFORMED, Constants::CANCELLED])->find($orderDetail->order_id);
+            $order = Order::with([
+                'orderDetail',
+            ])->whereIn('status', [Constants::ORDERED, Constants::PERFORMED, Constants::CANCELLED])->find($orderDetail->order_id);
             if($order){
                 sleep(1);
                 $order_details_status = OrderDetail::where('order_id', $orderDetail->order_id)->pluck('status')->all();
@@ -348,12 +462,12 @@ class OrderController extends Controller
 
     public function performOrderDetail($id){
         $user = Auth::user();
-        $orderDetail = OrderDetail::find($id);
+        $orderDetail = OrderDetail::with('warehouse_product')->find($id);
         $order_details_discount_price = 0;
         $order_detail_price = 0;
         if($orderDetail){
             if($orderDetail->status ==  Constants::ORDER_DETAIL_CANCELLED){
-                $warehouse_product___ = CharacterizedProducts::find($orderDetail->warehouse_id);
+                $warehouse_product___ = $orderDetail->warehouse_product;
                 if($warehouse_product___) {
                     $warehouse_product___->count = (int)$warehouse_product___->count - (int)$orderDetail->quantity;
                     $warehouse_product___->save();
@@ -361,7 +475,9 @@ class OrderController extends Controller
             }
             $orderDetail->status = Constants::ORDER_DETAIL_PERFORMED;
             $orderDetail->save();
-            $order = Order::whereIn('status', [Constants::ORDERED, Constants::PERFORMED, Constants::CANCELLED])->find($orderDetail->order_id);
+            $order = Order::with([
+                'orderDetail',
+            ])->whereIn('status', [Constants::ORDERED, Constants::PERFORMED, Constants::CANCELLED])->find($orderDetail->order_id);
             if($order){
                 sleep(1);
                 $order_details_status = OrderDetail::where('order_id', $orderDetail->order_id)->pluck('status')->all();
@@ -438,7 +554,10 @@ class OrderController extends Controller
     }
 
     public function cancellAcceptedByRecipient($id){
-        $order = Order::where('status', Constants::ACCEPTED_BY_RECIPIENT)->find($id);
+        $order = Order::with([
+            'address',
+            'address.user'
+        ])->where('status', Constants::ACCEPTED_BY_RECIPIENT)->find($id);
         if($order){
             if($order->address) {
                 if ($order->address->user) {

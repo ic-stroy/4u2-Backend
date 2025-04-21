@@ -12,17 +12,13 @@
         <input type="hidden" name="type" value="{{ $type??''}}">
         {{-- @dd($language->id); --}}
         <h5 class="mb-md-0 h6">{{ $language->name??'' }}</h5>
-        <table id="datatable-buttons" class="table table-striped table-bordered dt-responsive nowrap">
+        <table id="datatable" class="table table-striped datatable table-bordered dt-responsive nowrap">
             <thead>
-            <tr>
-                <th>#</th>
-                {{-- <th>{{ translate('status') }}</th> --}}
-                <th>{{ translate('Key') }}</th>
-                {{-- <th>{{ translate('company') }}</th> --}}
-                <th> {{ translate('Translation') }}</th>
-                {{-- <th>{{ translate('cars list') }}</th> --}}
-
-            </tr>
+                <tr>
+                    <th>#</th>
+                    <th>{{ translate('Key') }}</th>
+                    <th> {{ translate('Translation') }}</th>
+                </tr>
             </thead>
 
             <tbody>
@@ -31,53 +27,30 @@
                     $n = 1;
                 @endphp
                 @foreach ($lang_keys as $key => $translation)
-                    {{-- @dd($translation->country_id); --}}
                     <tr>
                         <td>{{ $n++ }}</td>
-                        <td class="lang_key">{{ $translation->name??'' }}</td>
+                        <td class="lang_key">{{ optional($translation->getModel)->name??'' }}</td>
                         <td class="lang_value">
-                            {{-- @dd($translation) --}}
-
-
                             @switch($type)
-
                                 @case('city')
-                                    @php
-                                        $translate_lang = \App\Models\CityTranslations::where('lang', $language->code??'')->where('city_id', $translation->city_id??'')->first();
-                                    @endphp
                                     <input type="text" class="checkboxDivPerewvod value" id="input"
                                     style="width:100%" name="values[{{ $translation->city_id }}]"
-                                    @if (($translate_lang) != null) value="{{ $translate_lang->name }}" @endif>
-
+                                    value="{{ $translation->name??'' }}">
                                     @break
-
                                 @case('category')
-                                    @php
-                                       $translate_lang = \App\Models\CategoryTranslations::where('lang', $language->code??'')->where('category_id', $translation->category_id??'')->first();
-                                    @endphp
                                     <input type="text" class="checkboxDivPerewvod value" id="input"
                                     style="width:100%" name="values[{{ $translation->category_id }}]"
-                                    @if (($translate_lang) != null) value="{{ $translate_lang->name }}" @endif>
-
+                                    value="{{ $translation->name??'' }}">
                                     @break
-
                                 @case('color')
-                                    @php
-                                        $translate_lang = \App\Models\ColorTranslations::where('lang', $language->code??'')->where('color_id', $translation->color_id??'')->first();
-                                    @endphp
                                     <input type="text" class="checkboxDivPerewvod value" id="input"
                                     style="width:100%" name="values[{{ $translation->color_id }}]"
-                                    @if (($translate_lang) != null) value="{{ $translate_lang->name }}" @endif>
-
+                                    value="{{ $translation->name??'' }}">
                                     @break
                                 @case('product')
-                                    @php
-                                        $translate_lang = \App\Models\ProductTranslations::where('lang', $language->code??'')->where('product_id', $translation->product_id??'')->first();
-                                    @endphp
                                     <input type="text" class="checkboxDivPerewvod value" id="input"
                                     style="width:100%" name="values[{{ $translation->product_id }}]"
-                                    @if (($translate_lang) != null) value="{{ $translate_lang->name }}" @endif>
-
+                                    value="{{ $translation->name??'' }}">
                                     @break
                                 @default
                                     <span>Something went wrong, please try again</span>

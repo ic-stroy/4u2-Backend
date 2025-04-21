@@ -8,17 +8,13 @@
     @csrf
     <input type="hidden" id="language_code" value="{{ $language->code??'' }}">
     <input type="hidden" name="id" value="{{ $language->id??'' }}">
-    <h5 class="mb-md-0 h6">{{ $language->name??'' }}</h5>
+    <h5 class="mb-md-0 h6">{{ optional($translation->getModel)->name??'' }}</h5>
     <table class="table table-striped table-bordered dt-responsive nowrap">
         <thead>
             <tr>
                 <th>#</th>
-                {{-- <th>{{ translate('status') }}</th> --}}
                 <th>{{ translate('Key') }}</th>
-                {{-- <th>{{ translate('company') }}</th> --}}
                 <th> {{ translate('Translation') }}</th>
-                {{-- <th>{{ translate('cars list') }}</th> --}}
-
             </tr>
         </thead>
 
@@ -28,14 +24,13 @@
                     $n = 1;
                 @endphp
                 @foreach ($lang_keys as $key => $translation)
-                {{-- @dd($val->carList); --}}
                     <tr>
                         <td>{{ $n++ }}</td>
                         <td class="lang_key">{{ $translation->lang_key??'' }}</td>
                         <td class="lang_value">
                             <input type="text" class="checkboxDivPerewvod value" id="input"
                         style="width:100%" name="values[{{ $translation->lang_key??'' }}]"
-                        @if (($traslate_lang = \App\Models\Translation::where('lang', $language->code??'')->where('lang_key', $translation->lang_key??'')->first()) != null) value="{{ $traslate_lang->lang_value??'' }}" @endif>
+                        value="{{ $translation->name??'' }}" @endif>
                         </td>
                     </tr>
                 @endforeach

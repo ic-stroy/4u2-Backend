@@ -18,7 +18,6 @@ use \App\Http\Controllers\UsersController;
 |
 */
 
-Route::get('get-districts', [AddressController::class, 'getCities']);
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
@@ -66,5 +65,6 @@ Route::group(['middleware'=>['auth:sanctum', 'is_auth']], function (){
     Route::get('delete-user-image', [UsersController::class, 'deleteUserImage']);
     Route::get('my-orders', [\App\Http\Controllers\ApiOrderController::class, 'getMyOrders']);
 });
+Route::post('register-with-email', [AuthController::class, 'registerWithEmail']);
 Route::post('delete-product', [\App\Http\Controllers\ProductsController::class, 'deleteProductImage']);
 Route::post('delete-warehouse', [\App\Http\Controllers\CharacterizedProductsController::class, 'deleteWarehouseImage']);

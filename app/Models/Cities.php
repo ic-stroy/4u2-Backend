@@ -19,4 +19,14 @@ class Cities extends Model
     public function region(){
         return $this->hasOne(Cities::class, 'id', 'parent_id');
     }
+
+    public function getTranslatedContent(){
+        return $this->hasOne(CityTranslations::class, 'city_id', 'id')->where('lang', app()->getLocale());
+    }
+
+    public function getTranslatedModel()
+    {
+        return $this->hasOne(CityTranslations::class, 'city_id', 'id');
+    }
+
 }

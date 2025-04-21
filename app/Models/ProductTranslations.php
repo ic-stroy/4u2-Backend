@@ -15,4 +15,8 @@ class ProductTranslations extends Model
         'product_id',
         'lang'
     ];
+
+    public function getModel(){
+        return $this->hasOne(Products::class, 'id','product_id');
+    }
 }

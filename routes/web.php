@@ -16,6 +16,7 @@ use \App\Http\Controllers\UsersController;
 use \App\Http\Controllers\LanguageController;
 use \App\Http\Controllers\PickUpController;
 use \App\Http\Controllers\TableTranslationController;
+use \App\Http\Controllers\AddressController;
 
 /*
 |--------------------------------------------------------------------------
@@ -48,6 +49,7 @@ Route::group(['middleware'=>['isAdmin', 'language']], function(){
     Route::get('product-by-category/{id}', [CharacterizedProductsController::class, 'product'])->name('characterizedProducts.category.product');
     Route::get('characterized-product-by-category/{id}', [CharacterizedProductsController::class, 'characterizedProduct'])->name('characterizedProducts.category.characterized_product');
     Route::get('create-characterized-product-by-category/{id}', [CharacterizedProductsController::class, 'createCharacterizedProduct'])->name('characterizedProducts.category.create_characterized_product');
+    Route::get('get-addresss', [AddressController::class, 'getAddress']);
 
     Route::get('get-user', [UsersController::class, 'getUser'])->name('getUser');
     Route::get('edit-user', [UsersController::class, 'editUser'])->name('editUser');

@@ -15,13 +15,16 @@ class PickUpController extends Controller
     public function index()
     {
         $super_admins_id = User::where('is_admin', 1)->pluck('id')->all();
-        $addresses_ = Address::whereIn('user_id', $super_admins_id)->get();
+        $addresses_ = Address::with([
+            'cities',
+            'cities.region',
+        ])->whereIn('user_id', $super_admins_id)->get();
         $addresses = [];
         foreach ($addresses_ as $model){
             $city = '';
             $region = '';
             if($model->cities){
-                if($model->cities->type == 'district'){
+                if($model->cities->parent_id != '0'){
                     $city = $model->cities->name??'';
                     if($model->cities->region){
                         $region = $model->cities->region->name??'';
@@ -82,12 +85,15 @@ class PickUpController extends Controller
 
     public function show(string $id)
     {
-        $model = Address::find($id);
+        $model = Address::with([
+            'cities',
+            'cities.region'
+        ])->find($id);
         $address = '';
         $city = '';
         $region = '';
         if($model->cities){
-            if($model->cities->type == 'district'){
+            if($model->cities->parent_id != '0'){
                 $city = $model->cities->name??'';
                 if($model->cities->region){
                     $region = $model->cities->region->name??'';

@@ -21,10 +21,9 @@ class SubSubCategoryController extends Controller
      */
     public function create()
     {
-        $subcategories = Category::select('parent_id')->where('step', 1)->groupBy('parent_id')->distinct()->get();
-        foreach ($subcategories as $subcategory){
-            $category_ids[] = $subcategory->parent_id;
-        }
+        $category_ids = Category::select('parent_id')->where('step', 1)->groupBy('parent_id')->distinct()->get()->map(function($subcategory){
+            return $subcategory->parent_id;
+        });
         $categories = Category::whereIn('id', $category_ids)->get();
         return view('sub-sub-category.create', ['categories'=>$categories]);
     }
@@ -62,10 +61,9 @@ class SubSubCategoryController extends Controller
     public function edit(string $id)
     {
         $SubSubCategory = Category::where('step', 2)->find($id);
-        $subcategories = Category::select('parent_id')->where('step', 1)->groupBy('parent_id')->distinct()->get();
-        foreach ($subcategories as $subcategory){
-            $category_ids[] = $subcategory->parent_id;
-        }
+        $category_ids = Category::select('parent_id')->where('step', 1)->groupBy('parent_id')->distinct()->get()->map(function($subcategory){
+            return $subcategory->parent_id;
+        });
         $categories = Category::whereIn('id', $category_ids)->get();
         return view('sub-sub-category.edit', ['subsubcategory'=>$SubSubCategory, 'categories'=>$categories]);
     }
@@ -88,7 +86,11 @@ class SubSubCategoryController extends Controller
      */
     public function destroy(string $id)
     {
-        $model = Category::where('step', 2)->find($id);
+        $model = Category::with([
+            'sub_category',
+            'sub_category.category',
+            'product'
+        ])->where('step', 2)->find($id);
         if($model->product) {
             return redirect()->back()->with('error', translate('You cannot delete this category because here is product associated with this size.'));
         }
@@ -113,10 +115,7 @@ class SubSubCategoryController extends Controller
 
     public function subcategory($id)
     {
-        $subcategories = Category::where('parent_id', $id)->orderBy('created_at', 'desc')->get();
-
-
-//        $categories = Category::where('step', 0)->get();
+        $subcategories = Category::with('subsubcategory_')->where('parent_id', $id)->orderBy('created_at', 'desc')->get();
         $all_sub_sub_categories = [];
         foreach($subcategories as $subcategory){
             $sub_sub_categories = $subcategory->subsubcategory_;
@@ -124,11 +123,8 @@ class SubSubCategoryController extends Controller
                 $all_sub_sub_categories[$subcategory->id] = $sub_sub_categories;
             }else{
                 $all_sub_sub_categories[$subcategory->id] = [];
-
             }
         }
-
-
         return view('sub-sub-category.subcategory', ['subcategories'=>$subcategories, 'all_sub_sub_categories'=>$all_sub_sub_categories]);
     }
 

@@ -202,6 +202,30 @@ class AuthController extends Controller
             'data'=>$data
         ], 200);
     }
+    
+    public function registerWithEmail(Request $request)
+    {
+        $user = new User();
+        $fields = $request->validate([
+            'email' => 'required|string',
+            'password' => 'required|string|confirmed'
+        ]);
+        $user->password = bcrypt($fields['password']);
+        $user->email = $fields['email'];
+        $user->save();
+        $token = $user->createToken('myapptoken')->plainTextToken;
+        $user->token = $token;
+        $user->save();
+        $data = [
+            'user' => $user,
+            'token' => $user->token??null
+        ];
+        return response()->json([
+            'status'=>true,
+            'message'=>'Success',
+            'data'=>$data
+        ], 200);
+    }
 
     public function login(Request $request) {
         $fields = $request->validate([
@@ -230,24 +254,17 @@ class AuthController extends Controller
     }
 
     public function googleLoginOrRegister(Request $request){
-        $fields = $request->validate([
-            'first_name' => 'nullable|string',
-            'last_name' => 'nullable|string',
-            'email' => 'required|string',
-            'password' => 'required',
-            'picture' => 'required|string'
-        ]);
-        $user = User::where('email', $fields['email'])->first();
+        $user = User::where('email', $request->email)->first();
         $is_registered = 0;
-        if($user) {
+        if(!$user) {
             $is_registered = 1;
             $user = new User();
         }
-        $user->first_name = $fields['first_name'];
-        $user->last_name = $fields['last_name'];
-        $user->email = $fields['email'];
-        $user->password = $fields['password'];
-        $user->avatar = $fields['picture'];
+        $user->first_name = $request->first_name??'';
+        $user->last_name = $request->last_name;
+        $user->email = $request->email;
+        $user->password = $request->password;
+        $user->avatar = $request->picture;
         $user->save();
         $token = $user->createToken('myapptoken')->plainTextToken;
         $user->token = $token;

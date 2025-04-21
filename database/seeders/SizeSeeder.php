@@ -7,6 +7,7 @@ use App\Models\Category;
 use App\Models\Sizes;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class SizeSeeder extends Seeder
 {
@@ -41,9 +42,7 @@ class SizeSeeder extends Seeder
                     }
                 }
             }
-            foreach($size_array as $size){
-                Sizes::create($size);
-            }
+            DB::table('sizes')->insert($size_array);
         }else{
             if($sizes->deleted_at){
                 echo "Size is exist status deleted";

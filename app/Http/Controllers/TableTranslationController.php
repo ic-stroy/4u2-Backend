@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\CategoryTranslations;
-use App\Models\CompanyTranslations;
 use App\Models\ProductDescriptionTranslations;
 use App\Models\ProductTranslations;
 use App\Models\SizeTranslations;
@@ -33,120 +32,54 @@ class TableTranslationController extends Controller
     }
 
     public function tableShow(Request $request ){
-        // dd($request->all());
-        $type=$request->type;
-        $id=$request->language_id;
+        $type = $request->type;
+        $id = $request->language_id;
+        $search = $request->search;
         $language = Language::findOrFail($id);
-       // $lang_keys = Translation::where('lang', env('DEFAULT_LANGUAGE', 'en'))->get();
         $sort_search = null;
-        switch ($type){
-            case 'city':
-                $lang_keys = CityTranslations::where('lang', env('DEFAULT_LANGUAGE', 'uz'))->get();
-                if ($request->has('search')) {
-                    $sort_search = $request->search;
-                    // dd($sort_search);
-                    // $lang_keys = $lang_keys->where('lang_key', 'like', '%' . $sort_search . '%');
-                    $lang_keys = $lang_keys->where('lang_key', request()->input('search'));
-                    // dd(request()->input('search'));
-                }
-                return view('language.table_show', ['lang_keys'=>$lang_keys, 'language'=>$language , 'sort_search' => $sort_search, 'type'=>$type]);
-                break;
-            case 'category':
-                $lang_keys = CategoryTranslations::where('lang', env('DEFAULT_LANGUAGE', 'uz'))->get();
-                if ($request->has('search')) {
-                    $sort_search = $request->search;
-                    // dd($sort_search);
-                    // $lang_keys = $lang_keys->where('lang_key', 'like', '%' . $sort_search . '%');
-                    $lang_keys = $lang_keys->where('lang_key', request()->input('search'));
-                    // dd(request()->input('search'));
-                }
-                return view('language.table_show', ['lang_keys'=>$lang_keys, 'language'=>$language , 'sort_search' => $sort_search, 'type'=>$type]);
-                break;
-            case 'color':
-                $lang_keys = ColorTranslations::where('lang', env('DEFAULT_LANGUAGE', 'uz'))->get();
-                if ($request->has('search')) {
-                    $sort_search = $request->search;
-                    // dd($sort_search);
-                    // $lang_keys = $lang_keys->where('lang_key', 'like', '%' . $sort_search . '%');
-                    $lang_keys = $lang_keys->where('lang_key', request()->input('search'));
-                    // dd(request()->input('search'));
-                }
-                return view('language.table_show', ['lang_keys'=>$lang_keys, 'language'=>$language , 'sort_search' => $sort_search, 'type'=>$type]);
-                break;
-            case 'product':
-                $lang_keys = ProductTranslations::where('lang', env('DEFAULT_LANGUAGE', 'uz'))->get();
-                if ($request->has('search')) {
-                    $sort_search = $request->search;
-                    // dd($sort_search);
-                    // $lang_keys = $lang_keys->where('lang_key', 'like', '%' . $sort_search . '%');
-                    $lang_keys = $lang_keys->where('lang_key', request()->input('search'));
-                    // dd(request()->input('search'));
-                }
-                return view('language.table_show', ['lang_keys'=>$lang_keys, 'language'=>$language , 'sort_search' => $sort_search, 'type'=>$type]);
-                break;
-            default:
+        $typeClassMap = [
+            'city' => CityTranslations::class,
+            'category' => CategoryTranslations::class,
+            'color' => ColorTranslations::class,
+            'product' => ProductTranslations::class,
+        ];
+        
+        $lang_keys = match ($type) {
+            'city', 'category', 'color', 'product' => $typeClassMap[$type]::with('getModel')->where('lang', $language->code)->get(),
+            default => collect(),
+        };
+        if ($search) {
+            $lang_keys = $lang_keys->where('key', $search);
         }
+        return view('language.table_show', ['lang_keys'=>$lang_keys, 'language'=>$language , 'sort_search' => $sort_search, 'type'=>$type]);
     }
 
 
     public function translation_save(Request $request)
     {
-        // dd($request->all());
-        switch ($request->type){
-            case 'city':
-                $language = Language::findOrFail($request->id);
-                foreach ($request->values as $key => $value) {
-                    // dd($value);
-                    $translation_def = CityTranslations::where('city_id', $key)->where('lang', $language->code)->first();
-                    if ($translation_def) {
-                        $translation_def->name = $value;
-                        $translation_def->save();
+        $type = $request->type;
+        if($type){
+            $language = Language::findOrFail($request->id);
+            $typeMap = [
+                'city' => ['model' => CityTranslations::class, 'column' => 'city_id'],
+                'category' => ['model' => CategoryTranslations::class, 'column' => 'category_id'],
+                'color' => ['model' => ColorTranslations::class, 'column' => 'color_id'],
+                'product' => ['model' => ProductTranslations::class, 'column' => 'product_id'],
+            ];
+            if (isset($typeMap[$type])) {
+                $model = $typeMap[$type]['model'];
+                $column = $typeMap[$type]['column'];
+                $translates_id = $request->values;
+                foreach ($translates_id as $key => $value) {
+                    $translation = $model::where($column, $key)->where('lang', $language->code)->first();
+                    if ($translation) {
+                        $translation->name = $value;
+                        $translation->save();
                     }
                 }
-
-                return back();
-                break;
-            case 'category':
-                $language = Language::findOrFail($request->id);
-                foreach ($request->values as $key => $value) {
-                    // dd($value);
-                    $translation_def = CategoryTranslations::where('category_id', $key)->where('lang', $language->code)->first();
-                    if ($translation_def) {
-                        $translation_def->name = $value;
-                        $translation_def->save();
-                    }
-                }
-
-                return back();
-                break;
-            case 'color':
-                $language = Language::findOrFail($request->id);
-                foreach ($request->values as $key => $value) {
-                    // dd($key);
-                    $translation_def = ColorTranslations::where('color_id', $key)->where('lang', $language->code)->first();
-                    if ($translation_def) {
-                        $translation_def->name = $value;
-                        $translation_def->save();
-                    }
-                }
-
-                return back();
-                break;
-            case 'product':
-                $language = Language::findOrFail($request->id);
-                    foreach ($request->values as $key => $value) {
-                        // dd($value);
-                        $translation_def = ProductTranslations::where('product_id', $key)->where('lang', $language->code)->first();
-                        if ($translation_def) {
-                            $translation_def->name = $value;
-                            $translation_def->save();
-                        }
-                    }
-
-                    return back();
-                    break;
-            default:
+            }
         }
+        return redirect()->back();
 
     }
 }

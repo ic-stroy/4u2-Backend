@@ -23,6 +23,9 @@ class Category extends Model
     public function subcategory(){
         return $this->hasmany(Category::class, 'parent_id', 'id')->where('step', 1);
     }
+    public function subcategoriesId(){
+        return $this->hasmany(Category::class, 'parent_id', 'id')->select('id', 'parent_id')->where('step', 1);
+    }
     public function sub_category(){
         return $this->hasone(Category::class, 'id', 'parent_id')->where('step', 1);
     }
@@ -30,7 +33,7 @@ class Category extends Model
         return $this->hasone(Category::class, 'id', 'parent_id')->where('step', 0);
     }
     public function subsubcategory(){
-        return $this->hasmany(Category::class, 'parent_id', 'id')->select('id', 'name')->where('step', 2);
+        return $this->hasmany(Category::class, 'parent_id', 'id')->select('id', 'name', 'parent_id')->where('step', 2);
     }
     public function subsubcategory_(){
         return $this->hasmany(Category::class, 'parent_id', 'id')->where('step', 2);
@@ -43,5 +46,18 @@ class Category extends Model
     }
     public function product(){
         return $this->hasOne(Products::class, 'category_id','id');
+    }
+
+    public function products(){
+        return $this->hasMany(Products::class, 'category_id', 'id');
+    }
+
+    public function getTranslatedContent(){
+        return $this->hasOne(CategoryTranslations::class, 'category_id', 'id')->where('lang', app()->getLocale());
+    }
+
+    public function getTranslatedModel()
+    {
+        return $this->hasOne(CategoryTranslations::class, 'category_id', 'id')->select('id', 'category_id', 'name');
     }
 }

@@ -23,7 +23,6 @@ class ApiOrderController extends Controller
             ->where('start_date', '<=', date('Y-m-d H:i:s'))
             ->where('end_date', '>=', date('Y-m-d H:i:s'))->first();
         $user = Auth::user();
-
         if($coupon){
             $good = [];
             $products = $request->products;
@@ -31,27 +30,26 @@ class ApiOrderController extends Controller
             $order_coupon_price = 0;
             $order_count = Order::where('user_id', $user->id)->where('status', '!=', Constants::BASKED)->count();
             foreach($products as $product_data){
-                $product = CharacterizedProducts::find($product_data['id']);
-                if($product){
-                    $product_ = Products::find($product->product_id);
-                    if($product_){
-                        $discount = $product_->discount;
-                        if($product->sum){
-                            if($discount){
-                                $categorizedProductSum = $discount->percent?$product->sum*(int)$product_data['count'] - $product->sum*(int)$product_data['count']*(int)$discount->percent/100:$product->sum*(int)$product_data['count'];
-                            }else{
-                                $categorizedProductSum = $product->sum*(int)$product_data['count'];
-                            }
+                $product = CharacterizedProducts::with([
+                    'product',
+                    'product.discount'
+                 ])->whereHas('product')->find($product_data['id']);
+                    $product_ = $product->product;
+                    $discount = $product_->discount;
+                    if($product->sum){
+                        if($discount){
+                            $categorizedProductSum = $discount->percent?$product->sum*(int)$product_data['count'] - $product->sum*(int)$product_data['count']*(int)$discount->percent/100:$product->sum*(int)$product_data['count'];
                         }else{
-                            if($discount){
-                                $categorizedProductSum = $discount->percent?$product_->sum*(int)$product_data['count'] - $product_->sum*(int)$product_data['count']*(int)$discount->percent/100:$product_->sum*(int)$product_data['count'];
-                            }else{
-                                $categorizedProductSum = $product_->sum*(int)$product_data['count'];
-                            }
+                            $categorizedProductSum = $product->sum*(int)$product_data['count'];
+                        }
+                    }else{
+                        if($discount){
+                            $categorizedProductSum = $discount->percent?$product_->sum*(int)$product_data['count'] - $product_->sum*(int)$product_data['count']*(int)$discount->percent/100:$product_->sum*(int)$product_data['count'];
+                        }else{
+                            $categorizedProductSum = $product_->sum*(int)$product_data['count'];
                         }
                     }
                     $all_sum = $all_sum + $categorizedProductSum;
-                }
             }
             if($all_sum < $coupon->min_price){
                 $message = "this order sum isn't enough for coupon. Coupon min price $coupon->min_price";
@@ -94,8 +92,77 @@ class ApiOrderController extends Controller
 
 
     public function getMyOrders(Request $request){
-        $language = $request->header('language');
-        $user = Auth::user();
+        $language = $request->header('language')??'en';
+        $user = Auth::user()->load([
+            'ordersOrdered',
+            'ordersOrdered.address',
+            'ordersOrdered.address.user',
+            "ordersOrdered.address.cities",
+            "ordersOrdered.address.cities.getTranslatedModel" => function ($query) use ($language) {
+                $query->where('lang', $language);
+            },
+            "ordersOrdered.address.cities.region",
+            "ordersOrdered.address.cities.region.getTranslatedModel" => function ($query) use ($language) {
+                 $query->where('lang', $language);
+            },
+            'ordersOrdered.orderDetail',
+            'ordersOrdered.orderDetail.color',
+            'ordersOrdered.orderDetail.size',
+            'ordersOrdered.orderDetail.warehouse_product',
+            'ordersOrdered.orderDetail.warehouse_product.product',
+            'ordersOrdered.orderDetail.warehouse_product.discount_withouth_expire',
+            'ordersPerformed',
+            'ordersPerformed.address',
+            'ordersPerformed.address.user',
+            "ordersPerformed.address.cities",
+            "ordersPerformed.address.cities.getTranslatedModel" => function ($query) use ($language) {
+                $query->where('lang', $language);
+            },
+            "ordersPerformed.address.cities.region",
+            "ordersPerformed.address.cities.region.getTranslatedModel" => function ($query) use ($language) {
+                $query->where('lang', $language);
+            },
+            'ordersPerformed.orderDetail',
+            'ordersPerformed.orderDetail.color',
+            'ordersPerformed.orderDetail.size',
+            'ordersPerformed.orderDetail.warehouse_product',
+            'ordersPerformed.orderDetail.warehouse_product.product',
+            'ordersPerformed.orderDetail.warehouse_product.discount_withouth_expire',
+            'ordersCancelled',
+            'ordersCancelled.address',
+            'ordersCancelled.address.user',
+            "ordersCancelled.address.cities",
+            "ordersCancelled.address.cities.getTranslatedModel" => function ($query) use ($language) {
+                 $query->where('lang', $language);
+            },
+            "ordersCancelled.address.cities.region",
+            "ordersCancelled.address.cities.region.getTranslatedModel" => function ($query) use ($language) {
+                $query->where('lang', $language);
+            },
+            'ordersCancelled.orderDetail',
+            'ordersCancelled.orderDetail.color',
+            'ordersCancelled.orderDetail.size',
+            'ordersCancelled.orderDetail.warehouse_product',
+            'ordersCancelled.orderDetail.warehouse_product.product',
+            'ordersCancelled.orderDetail.warehouse_product.discount_withouth_expire',
+            'ordersAccepted',
+            'ordersAccepted.address',
+            'ordersAccepted.address.user',
+            "ordersAccepted.address.cities",
+            "ordersAccepted.address.cities.getTranslatedModel" => function ($query) use ($language) {
+                $query->where('lang', $language);
+            },
+            "ordersAccepted.address.cities.region",
+            "ordersAccepted.address.cities.region.getTranslatedModel" => function ($query) use ($language) {
+                $query->where('lang', $language);
+            },
+            'ordersAccepted.orderDetail',
+            'ordersAccepted.orderDetail.color',
+            'ordersAccepted.orderDetail.size',
+            'ordersAccepted.orderDetail.warehouse_product',
+            'ordersAccepted.orderDetail.warehouse_product.product',
+            'ordersAccepted.orderDetail.warehouse_product.discount_withouth_expire'
+        ]);
         $ordersOrdered = $this->getOrders($user->ordersOrdered, $language);
         $ordersPerformed = $this->getOrders($user->ordersPerformed, $language);
         $ordersCancelled = $this->getOrders($user->ordersCancelled, $language);
@@ -111,7 +178,7 @@ class ApiOrderController extends Controller
 
     public function getOrders($orders, $language){
         $order_data = [];
-        foreach($orders as $order){
+        $order_data = $orders->map(function($order){
 //        $not_read_order_quantity = OrderDetail::where('order_id', $id)->where('is_read', 0)->count();
             $products = [];
             $performed_product_types = 0;
@@ -169,12 +236,7 @@ class ApiOrderController extends Controller
                     }else{
                         $images = [];
                     }
-                    $product_name = '';
-                    if($order_detail->warehouse_product){
-                        if($order_detail->warehouse_product->product){
-                            $translate_product_name = table_translate($order_detail->warehouse_product->product, 'product', $language);
-                        }
-                    }
+                    $translate_product_name = optional(optional(optional($order_detail->warehouse_product)->product)->getTranslatedContent)->name??'';
 
                     $products[] = [$order_detail, $order_detail_all_price, 'images'=>$images,
                         'discount_withouth_expire'=>$discount_withouth_expire, 'size'=>$order_detail->size??'',
@@ -204,9 +266,9 @@ class ApiOrderController extends Controller
                 }
                 $address = $order->address->name;
                 if($order->address->cities){
-                    $city_translate = table_translate($order->address->cities,'city',$language);
+                    $city_translate = optional(optional($order->address->cities)->getTranslatedContent)->name??'';
                     if($order->address->cities->region){
-                        $region_translate = table_translate($order->address->cities->region,'city',$language);
+                        $region_translate = optional(optional($order->address->cities->region)->getTranslatedContent)->name??'';
                         $address_name = $address.' '.$city_translate.' '.$region_translate;
                     }else{
                         $address_name = $address.' '.$city_translate;
@@ -218,7 +280,7 @@ class ApiOrderController extends Controller
                 $address_name = '';
             }
             if($order_has == true){
-                $order_data[] = [
+                return [
                     'order'=>$order,
                     'order_created'=>date('Y-m-d H:i:s', strtotime($order->created_at)),
                     'address'=>$address_name,
@@ -235,7 +297,7 @@ class ApiOrderController extends Controller
                     'performed_discount_price'=>$performed_company_discount_price
                 ];
             }
-        }
+        });
         return $order_data;
     }
 
@@ -249,6 +311,7 @@ class ApiOrderController extends Controller
     }
 
     public function confirmOrder(Request $request){
+        $language = $request->header('language')??'uz';
         if($request->selected_products && $request->payment && $request->address_id){
             $order = new Order();
             $order->save();
@@ -263,7 +326,10 @@ class ApiOrderController extends Controller
                 $order_detail = new OrderDetail();
                 $categorizedProductPrice = 0;
                 $discount_price = 0;
-                $product = CharacterizedProducts::find($product_data['id']);
+                $product = CharacterizedProducts::with([
+                    'product',
+                    'product.discount'
+                 ])->whereHas('product')->find($product_data['id']);
                 if($product){
                     if((int)$product->count < (int)$product_data['count']){
                         return $this->error("There are only left $product->count quantity", 400);
@@ -271,43 +337,41 @@ class ApiOrderController extends Controller
                         $product->count = (int)$product->count - (int)$product_data['count'];
                         $product->save();
                     }
-                    $product_ = Products::find($product->product_id);
-                    if($product_){
-                        $discount = $product_->discount;
-                        $order_detail->warehouse_id = (int)$product_data['id'];
-                        $order_detail->quantity = (int)$product_data['count'];
-                        if($product->size_id){
-                            $order_detail->size_id = $product->size_id;
+                    $product_ = $product->product;
+                    $discount = $product_->discount;
+                    $order_detail->warehouse_id = (int)$product_data['id'];
+                    $order_detail->quantity = (int)$product_data['count'];
+                    if($product->size_id){
+                        $order_detail->size_id = $product->size_id;
+                    }
+                    if(isset($product_data['color'])) {
+                        if ($product_data['color']['id']) {
+                            $order_detail->color_id = (int)$product_data['color']['id'];
                         }
-                        if(isset($product_data['color'])) {
-                            if ($product_data['color']['id']) {
-                                $order_detail->color_id = (int)$product_data['color']['id'];
-                            }
-                        }else{
-                            $order_detail->color_id = (int)$product->color_id;
-                        }
-                        $order_detail->discount = isset($product_data['discount'])?(int)$product_data['discount']:null;
-                        $order_detail->price = (int)$product->sum;
-                        $order_detail->status = Constants::ORDER_DETAIL_ORDERED;
-                        if($product->sum){
-                            $categorizedProductPrice = $product->sum*(int)$product_data['count'];
-                            if($discount){
-                                if((int)$discount->percent != 0){
-                                    $discount_price = $product->sum*(int)$product_data['count']*(int)$discount->percent/100;
-                                }
-                            }
-                        }else{
-                            $categorizedProductPrice = $product_->sum*(int)$product_data['count'];
-                            if($discount){
-                                if((int)$discount->percent != 0){
-                                    $discount_price = $product_->sum*(int)$product_data['count']*(int)$discount->percent/100;
-                                }
+                    }else{
+                        $order_detail->color_id = (int)$product->color_id;
+                    }
+                    $order_detail->discount = isset($product_data['discount'])?(int)$product_data['discount']:null;
+                    $order_detail->price = (int)$product->sum;
+                    $order_detail->status = Constants::ORDER_DETAIL_ORDERED;
+                    if($product->sum){
+                        $categorizedProductPrice = $product->sum*(int)$product_data['count'];
+                        if($discount){
+                            if((int)$discount->percent != 0){
+                                $discount_price = $product->sum*(int)$product_data['count']*(int)$discount->percent/100;
                             }
                         }
-                        if($discount_price > 0){
-                            $all_discount_price = $all_discount_price + $discount_price;
-                            $order_detail->discount_price = $discount_price;
+                    }else{
+                        $categorizedProductPrice = $product_->sum*(int)$product_data['count'];
+                        if($discount){
+                            if((int)$discount->percent != 0){
+                                $discount_price = $product_->sum*(int)$product_data['count']*(int)$discount->percent/100;
+                            }
                         }
+                    }
+                    if($discount_price > 0){
+                        $all_discount_price = $all_discount_price + $discount_price;
+                        $order_detail->discount_price = $discount_price;
                     }
                 }
                 $categorizedProductAllPrice = $categorizedProductAllPrice + $categorizedProductPrice;
@@ -387,7 +451,17 @@ class ApiOrderController extends Controller
 //                ];
 //                return $this->success('Success', 200, $good);
 //            }
-            $pick_up_info = $this->getPickUpInfo($order);
+            $pick_up_info = $this->getPickUpInfo($order->load([
+                'address',
+                'address.cities',
+                'address.cities.getTranslatedModel' => function ($query) use ($language) {
+                    $query->where('lang', $language);
+                },
+                'address.cities.region',
+                'address.cities.region.getTranslatedModel' => function ($query) use ($language) {
+                    $query->where('lang', $language);
+                },
+            ]));
             $pick_up_info['order']->save();
             $info = [
                 'code'=>$pick_up_info['order']->code,

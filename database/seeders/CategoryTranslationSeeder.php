@@ -7,6 +7,7 @@ use App\Models\CategoryTranslations;
 use App\Models\Language;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class CategoryTranslationSeeder extends Seeder
 {
@@ -15,21 +16,19 @@ class CategoryTranslationSeeder extends Seeder
      */
     public function run(): void
     {
-        $categories = Category::all();
-        $datas = [];
-        foreach ($categories as $category){
-            foreach (Language::all() as $language) {
-                if(!CategoryTranslations::where(['lang' => $language->code, 'category_id' => $category->id])->exists()){
-                    $datas[] = [
-                        'name'=>$category->name,
-                        'category_id'=>$category->id,
+        $category_translations = CategoryTranslations::first();
+        if(!$category_translations){
+            $languages = Language::get();
+            $datas = Category::get()->map(function($category) use ($languages){
+                return $languages->map(function($language) use ($category){
+                    return [
+                        'name' => $category->name,
+                        'category_id' => $category->id,
                         'lang' => $language->code
                     ];
-                }
-            }
-        }
-        foreach ($datas as $data){
-            CategoryTranslations::create($data);
+                });
+            })->collapse();
+            DB::table('category_translations')->insert($datas->toArray());
         }
     }
 }

@@ -7,6 +7,7 @@ use App\Models\ColorTranslations;
 use App\Models\Language;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class ColorTranslationSeeder extends Seeder
 {
@@ -15,10 +16,11 @@ class ColorTranslationSeeder extends Seeder
      */
     public function run(): void
     {
-        $colors = Color::all();
+        $colors = Color::get();
         $datas = [];
+        $languages = Language::get();
         foreach ($colors as $color){
-            foreach (Language::all() as $language) {
+            foreach ($languages as $language) {
                 if(!ColorTranslations::where(['lang' => $language->code, 'color_id' => $color->id])->exists()){
                     $datas[] = [
                         'name'=>$color->name,
@@ -28,8 +30,6 @@ class ColorTranslationSeeder extends Seeder
                 }
             }
         }
-        foreach ($datas as $data){
-            ColorTranslations::create($data);
-        }
+        DB::table('color_translations')->insert($datas);
     }
 }

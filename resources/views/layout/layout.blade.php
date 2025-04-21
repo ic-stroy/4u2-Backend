@@ -205,7 +205,7 @@
                                      style="border: none; background-color: transparent;" aria-labelledby="dropdownMenuButton">
                                     <div class="up-arrow"></div>
                                     <div class="dropdownMenyApplyUzbFlag">
-                                       @foreach (\App\Models\Language::all() as $key => $language)
+                                       @foreach (\App\Models\Language::get() as $key => $language)
                                             <a href="javascript:void(0)" data-flag="{{ $language->code??'' }}"
                                                class="dropdown-item dropdown-item dropdownLanguageItem @if ($locale == $language->code??'') active @endif" >
                                                 @switch($language->code)

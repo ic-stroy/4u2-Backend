@@ -20,8 +20,8 @@ return new class extends Migration
             $table->integer('sum')->nullable();
             $table->timestamps();
             $table->softDeletes();
-            $table->foreign('size_id')->references('id')->on('sizes')->onDelete('cascade');
-            $table->foreign('color_id')->references('id')->on('color')->onDelete('cascade');
+            // $table->foreign('size_id')->references('id')->on('sizes')->onDelete('cascade');
+            // $table->foreign('color_id')->references('id')->on('color')->onDelete('cascade');
         });
     }
 

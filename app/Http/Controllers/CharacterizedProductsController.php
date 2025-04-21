@@ -17,20 +17,25 @@ class CharacterizedProductsController extends Controller
      */
     public function index()
     {
-        $categories = Category::where('step', 0)->get();
+        $categories = Category::with([
+            'subcategory',
+            'subcategory.products',
+            'subcategory.subsubcategory',
+            'subcategory.subsubcategory.products',
+            'products',
+        ])->where('step', 0)->get();
         $all_products = [];
         foreach($categories as $category){
-            $categories_id = [];
-            $sub_categories_id = Category::where('parent_id', $category->id)->pluck('id')->all();
-            foreach($sub_categories_id as $sub_category_id){
-                $sub_sub_categories_id = Category::where('parent_id', $sub_category_id)->pluck('id')->all();
-                $categories_id = array_merge($categories_id, $sub_sub_categories_id);
+            $all_products[$category->id] = $category->products;
+            foreach($category->subcategory as $subcategory){
+                $all_products[$category->id] = $all_products[$category->id]->merge($subcategory->products);
+                $all_products[$subcategory->id] = $subcategory->products;
+                foreach($subcategory->subsubcategory as $subsubcategory){
+                    $all_products[$category->id] = $all_products[$category->id]->merge($subsubcategory->products);
+                    $all_products[$subcategory->id] = $all_products[$subcategory->id]->merge($subsubcategory->products);
+                    $all_products[$subsubcategory->id] = $subsubcategory->products;
+                }
             }
-            $categories_id = array_merge($categories_id, $sub_categories_id);
-            array_push($categories_id, $category->id);
-            $products = Products::orderBy('created_at', 'desc')->whereIn('category_id', $categories_id)->get();
-            $all_products[$category->id] = $products;
-
         }
 
         return view('characterized-products.index', ['all_products'=> $all_products, 'categories'=> $categories]);
@@ -41,8 +46,8 @@ class CharacterizedProductsController extends Controller
      */
     public function create()
     {
-        $products = Products::all();
-        $colors = Color::all();
+        $products = Products::get();
+        $colors = Color::get();
         return view('characterized-products.create', ['colors'=> $colors, 'products'=> $products]);
     }
 
@@ -81,7 +86,14 @@ class CharacterizedProductsController extends Controller
      */
     public function show(string $id)
     {
-        $model = CharacterizedProducts::find($id);
+        $model = CharacterizedProducts::with([
+            'product',
+            'product.category',
+            'product.subCategory.category',
+            'product.subSubCategory',
+            'product.subSubCategory.sub_category',
+            'product.subSubCategory.sub_category.category',
+        ])->find($id);
         $colors_array = json_decode($model->colors_id);
         $colors = Color::select('name', 'code')->whereIn('id', $colors_array??[])->get();
         $category_ = '';
@@ -124,7 +136,14 @@ class CharacterizedProductsController extends Controller
      */
     public function edit(string $id)
     {
-        $characterized_product = CharacterizedProducts::find($id);
+        $characterized_product = CharacterizedProducts::with([
+            'product',
+            'subSubCategory',
+            'subCategory',
+            'category',
+            'subSubCategory.sub_category',
+            'subCategory.category'
+        ])->find($id);
         if($characterized_product->product){
             $product = $characterized_product->product;
             $current_category = $this->getProductCategory($characterized_product->product);
@@ -134,7 +153,7 @@ class CharacterizedProductsController extends Controller
             $sizes = 'no';
             $product = 'no';
         }
-        $colors = Color::all();
+        $colors = Color::get();
         return view('characterized-products.edit', ['characterized_product'=> $characterized_product, 'sizes'=> $sizes, 'current_category'=> $current_category, 'colors'=> $colors, 'product'=> $product]);
     }
 
@@ -182,7 +201,7 @@ class CharacterizedProductsController extends Controller
      */
     public function destroy(string $id)
     {
-        $model = CharacterizedProducts::find($id);
+        $model = CharacterizedProducts::with('order_detail')->find($id);
         if($model->order_detail){
             return redirect()->back()->with('error', translate('You cannot delete this product because here is product associated with an order.'));
         }
@@ -203,18 +222,23 @@ class CharacterizedProductsController extends Controller
 
     public function product($id)
     {
-        $category = Category::find($id);
-        $subcategories = $category->subcategory;
-        $category_ids = [];
-        foreach ($subcategories as $subcategory){
-            $category_ids[] = $subcategory->id;
+        $category = Category::with([
+            'subcategory',
+            'subcategory.products',
+            'subcategory.subsubcategory',
+            'subcategory.subsubcategory.products',
+        ])->find($id);
+        if($category){
+            $products = $category->subcategory->flatMap(function($subcategory){
+                $subcategory->flatMap(function($subsubcategory){
+                    return $subsubcategory->products;
+                });
+                return $subcategory->products;
+            });
         }
-        $subsubcategories = Category::WhereIn('parent_id', $category_ids)->get();
-        foreach ($subsubcategories as $subsubcategory){
-            $category_ids[] = $subsubcategory->id;
+        if($category->products->isNotEmpty()){
+            $products->merge($category->products);
         }
-        $category_ids[] = $category->id;
-        $products = Products::whereIn('category_id', $category_ids)->get();
         return view('characterized-products.products', ['products'=>$products]);
     }
     public function characterizedProduct($id){
@@ -223,7 +247,7 @@ class CharacterizedProductsController extends Controller
         return view('characterized-products.characterizedproduct', ['characterized_products'=>$characterized_products, 'product'=>$product]);
     }
     public function createCharacterizedProduct($id){
-        $colors = Color::all();
+        $colors = Color::get();
         $product = Products::find($id);
         $current_category = $this->getProductCategory($product);
         return view('characterized-products.create_characterized_product', ['product'=>$product, 'colors'=>$colors, 'current_category'=>$current_category]);

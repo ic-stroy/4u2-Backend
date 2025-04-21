@@ -43,8 +43,8 @@ class CategoryController extends Controller
         $model->parent_id = 0;
         $model->step = 0;
         $model->save();
-
-        foreach (Language::all() as $language) {
+        $languages = Language::get();
+        foreach ($languages as $language) {
             $category_translations = CategoryTranslations::firstOrNew(['lang' => $language->code, 'category_id' => $model->id]);
             $category_translations->lang = $language->code;
             $category_translations->name = $model->name;
@@ -79,7 +79,8 @@ class CategoryController extends Controller
     {
         $model = Category::where('step', 0)->find($id);
         if($request->name != $model->name){
-            foreach (Language::all() as $language) {
+            $languages = Language::get();
+            foreach ($languages as $language) {
                 $category_translations = CategoryTranslations::firstOrNew(['lang' => $language->code, 'category_id' => $model->id]);
                 $category_translations->lang = $language->code;
                 $category_translations->name = $request->name;
@@ -107,7 +108,8 @@ class CategoryController extends Controller
         if($model->product){
             return redirect()->back()->with('error', translate('You cannot delete this category because it has products'));
         }
-        foreach (Language::all() as $language) {
+        $languages = Language::get();
+        foreach ($languages as $language) {
             $categories_translations = CategoryTranslations::where(['lang' => $language->code, 'category_id' => $model->id])->get();
             foreach ($categories_translations as $category_translation){
                 $category_translation->delete();
@@ -120,42 +122,63 @@ class CategoryController extends Controller
     //Json api
 
     public function getCategories(Request $request){
-        $language = $request->header('language');
-        $categories = Category::where('step', 0)->get();
-        foreach ($categories as $category){
-            $translate_category_name = table_translate($category, 'category', $language);
-            $translate_category_en_name = table_translate($category, 'category', 'en');
-            $subcategories = $category->subcategory;
-            $sub_category = [];
-            foreach ($subcategories as $subcategory){
-                $sub_sub_category = [];
-                $translate_sub_category_name = table_translate($subcategory, 'category', $language);
-                foreach($subcategory->subsubcategory as $subsubcategory){
-                    $sub_sub_category[] = [
+        $language = $request->header('language')??'en';
+        $categories = Category::with([
+            'getTranslatedModel' => function ($query) use ($language) {
+                $query->where('lang', $language);
+            },
+            'subcategory',
+            'subcategory.getTranslatedModel' => function ($query) use ($language) {
+                $query->where('lang', $language);
+            },
+            'subcategory.subsubcategory',
+            'subcategory.subsubcategory.getTranslatedModel' => function ($query) use ($language) {
+                $query->where('lang', $language);
+            },
+        ])->where('step', 0)->get()->map(function($category){
+            $translate_category_name = optional($category->getTranslatedModel)->name??'';
+            $translate_category_en_name = $category->name??'';
+            $sub_category = $category->subcategory->map(function($subcategory){
+                $translate_sub_category_name = optional($subcategory->getTranslatedModel)->name??'';
+                $sub_sub_category = $subcategory->subsubcategory->map(function($subsubcategory){
+                    return [
                         'id'=>$subsubcategory->id,
-                        'name'=>table_translate($subsubcategory, 'category', $language),
+                        'name'=>optional($subsubcategory->getTranslatedModel)->name??'',
                     ];
-                }
-
-                $sub_category[]=[
+                });
+                return [
                     'id'=> $subcategory->id,
                     'name'=> $translate_sub_category_name??'',
                     'sub_sub_category'=>$sub_sub_category
                 ];
-            }
-            $data_category[] = [
+            });
+            return [
               'id'=> $category->id,
               'name'=> $translate_category_name??'',
               'en_name'=> $translate_category_en_name??'',
               'sub_category'=>$sub_category
             ];
-        }
-        return response()->json($data_category, 200);
+        });
+        return response()->json($categories, 200);
     }
 
     public function getProductsByCategory(Request $request)
     {
-        $category = Category::find($request->category_id);
+        $language = $request->header('language')??'en';
+        $category = Category::with([
+            'category',
+            'sub_category',
+            'sub_category.category',
+            'category.getTranslatedModel' => function ($query) use ($language) {
+                $query->where('lang', $language);
+            },
+            'sub_category.getTranslatedModel' => function ($query) use ($language) {
+                $query->where('lang', $language);
+            },
+            'sub_category.category.getTranslatedModel' => function ($query) use ($language) {
+                $query->where('lang', $language);
+            }
+        ])->find($request->category_id);
         $data = [];
         $products_data = [];
         $category_ = [];
@@ -167,45 +190,53 @@ class CategoryController extends Controller
             if ($category->step == 0) {
                 $category_ = [
                     'id' => $category->id,
-                    'name' => $category->name,
+                    'name' => optional($category->getTranslatedModel)->name??'',
                 ];
                 $subCategory = [];
                 $subSubCategory = [];
             } elseif ($category->step == 1) {
                 $category_ = [
                     'id' => $category->category->id,
-                    'name' => $category->category->name,
+                    'name' => optional(optional($category->category)->getTranslatedModel)->name,
                 ];
 
                 $subCategory = [
                     'id' => $category->id,
-                    'name' => $category->name,
+                    'name' => optional($category->getTranslatedModel)->name,
                 ];
                 $subSubCategory = [];
             }elseif($category->step == 2) {
                 $category_ = [
-                    'id' => $category->sub_category->category->id,
-                    'name' => $category->sub_category->category->name,
+                    'id' => optional(optional($category->sub_category)->category)->id,
+                    'name' => optional(optional(optional($category->sub_category)->category)->getTranslatedModel)->name,
                 ];
 
                 $subCategory = [
                     'id' => $category->sub_category->id,
-                    'name' => $category->sub_category->name,
+                    'name' => optional(optional($category->sub_category)->getTranslatedModel)->name,
                 ];
 
                 $subSubCategory = [
                     'id' => $category->id,
-                    'name' => $category->name,
+                    'name' => optional($category->getTranslatedModel)->name,
                 ];
             }
 
-            $products = Products::select('id', 'name', 'category_id', 'images',  'sum', 'description')->with('discount')->where('category_id', $category->id)->get();
+            $products = Products::with([
+                'discount',
+                'getTranslatedModel' => function ($query) use ($language) {
+                    $query->where('lang', $language);
+                },
+                'getTranslatedDescriptionModel' => function ($query) use ($language) {
+                    $query->where('lang', $language);
+                },
+            ])->select('id', 'name', 'category_id', 'images',  'sum', 'description')->where('category_id', $category->id)->get();
         } else {
             $subCategory = [];
-            $products = [];
+            $products = collect();
             $category_= [];
         }
-        foreach ($products as $product) {
+        $products_data = $products->map(function($product){
             $images_array = [];
             if (!is_array($product->images)) {
                 $images = json_decode($product->images);
@@ -224,17 +255,17 @@ class CategoryController extends Controller
             }
 
             $productId[] = $product->id;
-            $products_data[] = [
+            return [
                 'id' => $product->id,
-                'name' => $product->name,
+                'name' => optional($product->getTranslatedModel)->name,
                 'category_id' => $product->category_id,
                 'images' => $images_array,
-                'description' => $product->description,
+                'description' => optional($product->getTranslatedDescriptionModel)->description??'',
                 'price' => $product->sum,
-                'discount' => $product->discount ? $product->discount->percent : NULL,
-                'price_discount' => $product->discount? $product->price - ($product->price / 100 * $product->discount->percent) : NULL,
+                'discount' => optional($product->discount)->percent ?? NULL,
+                'price_discount' => $product->discount? (int)$product->price - ((int)$product->price / 100 * (int)$product->discount->percent) : NULL,
             ];
-        }
+        });
 
         $data[] = [
             'category' => $category_,

@@ -15,4 +15,8 @@ class CityTranslations extends Model
         'city_id',
         'lang'
     ];
+
+    public function getModel(){
+        return $this->hasOne(Cities::class, 'id','city_id');
+    }
 }

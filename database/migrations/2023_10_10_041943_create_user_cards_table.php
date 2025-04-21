@@ -17,7 +17,6 @@ return new class extends Migration
             $table->bigInteger('card_number')->nullable();
             $table->integer('user_id')->nullable();
             $table->string('validity_period', 100)->nullable();
-            $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();
             $table->softDeletes();
         });

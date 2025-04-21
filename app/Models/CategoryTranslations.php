@@ -15,4 +15,8 @@ class CategoryTranslations extends Model
         'category_id',
         'lang'
     ];
+
+    public function getModel(){
+        return $this->hasOne(Category::class, 'id','category_id');
+    }
 }

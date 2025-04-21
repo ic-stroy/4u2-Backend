@@ -13,17 +13,15 @@ class SubCategoryController extends Controller
      */
     public function index()
     {
-        $categories = Category::where('step', 0)->get();
-        $all_categories = [];
+        $categories = Category::with('subcategory')->where('step', 0)->get();
         foreach($categories as $category){
             $sub_categories = $category->subcategory;
             if(!$sub_categories->isEmpty()){
                 $all_categories[$category->id] = $sub_categories;
             }else{
                 $all_categories[$category->id] = [];
-
             }
-        }
+        };
         return view('sub-category.index', ['all_categories'=> $all_categories, 'categories'=>$categories]);
     }
 
@@ -90,7 +88,7 @@ class SubCategoryController extends Controller
      */
     public function destroy(string $id)
     {
-        $model = Category::where('step', 1)->find($id);
+        $model = Category::with(['subsubcategory', 'product'])->where('step', 1)->find($id);
         if($model){
             if(!$model->subsubcategory->isEmpty()){
                 return redirect()->back()->with('error', translate('You cannot delete this category because it has subsubcategories'));
@@ -109,7 +107,15 @@ class SubCategoryController extends Controller
 
     public function getSubcategory($id)
     {
-        $model = Category::where('parent_id', $id)->get();
+        $model = Category::with('getTranslatedContent')->where('parent_id', $id)->get()->map(function($query){
+            return [
+                'id' => $query->id,
+                'name' => $query->name,
+                'parent_id' => $query->parent_id,
+                'step' => $query->step,
+            ];
+        });
+
         if(!$model->isEmpty()){
             return response()->json([
                 'status'=>true,

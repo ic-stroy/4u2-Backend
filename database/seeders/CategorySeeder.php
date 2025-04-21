@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Category;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class CategorySeeder extends Seeder
 {
@@ -579,9 +580,7 @@ class CategorySeeder extends Seeder
                 }
             }
             $all_categories_ = array_merge($all_categories, $all_sub_categories, $all_sub_sub_categories);
-            foreach ($all_categories_ as $all_category){
-                Category::create($all_category);
-            }
+            DB::table('categories')->insert($all_categories_);
         }else{
             $category_deleted_at = Category::withTrashed()->select('deleted_at')->find($category_id->id);
             if($category_deleted_at->deleted_at){

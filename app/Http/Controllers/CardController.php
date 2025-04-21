@@ -15,19 +15,18 @@ class CardController extends Controller
     public function getCards(Request $request)
     {
         $user = Auth::user();
-        $user_cards = UserCard::where('user_id', $user->id)->get();
-        foreach ($user_cards as $user_card){
-            $data[] = [
-              'id'=>$user_card->id,
-              'name'=>$user_card->name??null,
-              'user_name'=>$user_card->user_name??null,
-              'card_number'=>$user_card->card_number??null,
-              'validity_period'=>$user_card->validity_period??null,
-              'user_id'=>$user_card->user_id??null,
+        $data = UserCard::where('user_id', $user->id)->get()->map(function($user_card){
+            return [
+                'id'=>$user_card->id,
+                'name'=>$user_card->name??null,
+                'user_name'=>$user_card->user_name??null,
+                'card_number'=>$user_card->card_number??null,
+                'validity_period'=>$user_card->validity_period??null,
+                'user_id'=>$user_card->user_id??null,
             ];
-        }
-        if(isset($data)){
-            return $this->success("Success", 200, $data);
+        });
+        if($data->isNotEmpty()){
+            return $this->success("Success", 200, $data->toArray());
         }else{
             return $this->error('No cards', 400);
         }

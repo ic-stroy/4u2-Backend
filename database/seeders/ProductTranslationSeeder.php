@@ -7,6 +7,7 @@ use App\Models\Products;
 use App\Models\ProductTranslations;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class ProductTranslationSeeder extends Seeder
 {
@@ -18,7 +19,7 @@ class ProductTranslationSeeder extends Seeder
         $products = Products::all();
         $datas = [];
         foreach ($products as $product){
-            foreach (Language::all() as $language) {
+            foreach (Language::get() as $language) {
                 if(!ProductTranslations::where(['lang' => $language->code, 'product_id' => $product->id])->exists()){
                     $datas[] = [
                         'name'=>$product->name,
@@ -28,8 +29,6 @@ class ProductTranslationSeeder extends Seeder
                 }
             }
         }
-        foreach ($datas as $data){
-            ProductTranslations::create($data);
-        }
+        DB::table('product_translations')->insert($datas);
     }
 }

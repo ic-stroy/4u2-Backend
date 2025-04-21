@@ -13,31 +13,34 @@ use Illuminate\Support\Facades\Http;
 class AddressController extends Controller
 {
     public function getCities(Request $request){
-        $language = $request->header('language');
-        $cities = Cities::where('parent_id', 0)->orderBy('id', 'ASC')->get();
-        $data = [];
-        foreach ($cities as $city){
-            $city_translate = table_translate($city,'city',$language);
-            $cities_ = [];
-            foreach ($city->getDistricts as $district){
-                $district_translate = table_translate($district,'city',$language);
-                $cities_[] = [
-                    'id'=>$district->id,
-                    'name'=>$district_translate,
-                    'lat'=>$district->lat,
-                    'long'=>$district->lng
+        $language = $request->header('language')??'en';
+        $data = Cities::with([
+            'getTranslatedModel' => function ($query) use ($language) {
+                $query->where('lang', $language);
+            },
+            'getDistricts',
+            'getDistricts.getTranslatedModel' => function ($query) use ($language) {
+                $query->where('lang', $language);
+            },
+        ])->where('parent_id', 0)->orderBy('id', 'ASC')->get()->map(function($city){
+            $cities_ = $city->getDistricts->map(function($district){
+                return [
+                    'id' => $district->id,
+                    'name' => optional($district->getTranslatedModel)->name??($city->name??''),
+                    'lat' => $district->lat,
+                    'long' => $district->lng,
                 ];
-            }
-            $data[] = [
-                'id'=>$city->id,
-                'name'=>$city_translate,
+            });
+            return [
+                'id' => $city->id,
+                'name' => optional($city->getTranslatedModel)->name??($city->name??''),
                 'lat'=>$city->lat,
                 'long'=>$city->lng,
-                'cities'=>$cities_,
+                'cities'=>$cities_->toArray(),
             ];
-        }
-        if(count($data)>0){
-            return $this->success('Success', 200, $data);
+        });
+        if($data->isNotEmpty()){
+            return $this->success('Success', 200, $data->toArray());
         }else{
             return $this->error('No cities', 400);
         }
@@ -86,82 +89,63 @@ class AddressController extends Controller
     }
 
     public function getAddress(Request $request){
-//        $response = Http::get(asset("assets/json/cities.json"));
-//        $cities = json_decode($response);
-//        foreach ($cities as $city){
-//            if(!Cities::where('name', $city->region)->exists()){
-//                $model_region = new Cities();
-//                $model_region->name = $city->region;
-//                $model_region->type = 'region';
-//                $model_region->parent_id = 0;
-//                $model_region->lng = $city->long;
-//                $model_region->lat = $city->lat;
-//                $model_region->save();
-//                foreach ($city->cities as $city_district){
-//                    $model = new Cities();
-//                    $model->name = $city_district->name;
-//                    $model->type = 'district';
-//                    $model->parent_id = $model_region->id;
-//                    $model->lng = $city_district->long;
-//                    $model->lat = $city_district->lat;
-//                    $model->save();
-//                }
-//            }else{
-//                $model_region = Cities::where('name', $city->region)->first();
-//                $model_region->lng = $city->long;
-//                $model_region->lat = $city->lat;
-//                $model_region->save();
-//            }
-//        }
-//        return response()->json('good');
-
-        $language = $request->header('language');
-        $user = Auth::user();
-        $address = [];
-        $city = [];
-        $region = [];
-        foreach ($user->addresses as $address_) {
+        $language = $request->header('language') ?? 'ru';
+        
+        $user = Auth::user()->load([
+            "addresses", 
+            "addresses.cities",
+            "addresses.cities.getTranslatedModel" => function ($query) use ($language) {
+                $query->where('lang', $language);
+            },
+            "addresses.cities.region",
+            "addresses.cities.region.getTranslatedModel" => function ($query) use ($language) {
+                $query->where('lang', $language);
+            },
+            "addresses.cities.region.getDistricts",
+            "addresses.cities.region.getDistricts.getTranslatedModel" => function ($query) use ($language) {
+                $query->where('lang', $language);
+            }
+        ]);
+        $address_data = $user->addresses->map(function($address_){
+            $city = [];
+            $region = [];
             $region_city = [];
-            if($address_->cities){
-                $city_translate = table_translate($address_->cities,'city',$language);
-                if($address_->cities->type == 'district'){
+            $city_translate = $address_->cities;
+            if($city_translate){
+                if($city_translate->parent_id != '0'){
                     $city = [
-                        'id' => $address_->cities->id,
-                        'name' => $city_translate??'',
-                        'lat' => $address_->cities->lat??'',
-                        'long' => $address_->cities->lng??'',
+                        'id' => $city_translate->id,
+                        'name' => optional($city_translate->getTranslatedModel)->name??'',
+                        'lat' => $city_translate->lat??'',
+                        'long' => $city_translate->lng??'',
                     ];
-                    if($address_->cities->region){
-                        $region_translate = table_translate($address_->cities->region,'city',$language);
+                    if($city_translate->region){
                         $region = [
-                            'id' => $address_->cities->region->id,
-                            'name' => $region_translate??'',
-                            'lat' => $address_->cities->region->lat??'',
-                            'long' => $address_->cities->region->lng??'',
+                            'id' => $city_translate->region->id,
+                            'name' => optional($city_translate->region->getTranslatedModel)->name??'',
+                            'lat' => $city_translate->region->lat??'',
+                            'long' => $city_translate->region->lng??'',
                         ];
-                        if(!$address_->cities->region->getDistricts->isEmpty()){
-                            foreach($address_->cities->region->getDistricts as $regionCity){
-                                $region_city_translate = table_translate($regionCity,'city',$language);
-                                $region_city[] = [
-                                    'id' => $regionCity->id,
-                                    'name' => $region_city_translate??'',
-                                    'lat' => $regionCity->lat??'',
-                                    'long' => $regionCity->lng??'',
-                                ];
-                            }
-                        }
+                        $region_city = $city_translate->region->getDistricts->map(function($regionCity){
+                            return [
+                                'id' => $regionCity->id,
+                                'name' => optional($regionCity->getTranslatedModel)->name??'',
+                                'lat' => $regionCity->lat??'',
+                                'long' => $regionCity->lng??'',
+                            ];
+                        });
                     }
                 }else{
                     $region = [
-                        'id' => $address_->cities->id,
-                        'name' => $city_translate??'',
-                        'lat' => $address_->cities->lat??'',
-                        'long' => $address_->cities->lng??'',
+                        'id' => $city_translate->id,
+                        'name' => optional($city_translate->getTranslatedModel)->name??'',
+                        'lat' => $city_translate->lat??'',
+                        'long' => $city_translate->lng??'',
                     ];
                 }
             }
-
-            $address[] = [
+            
+            return [
                 'id'=>$address_->id,
                 'name'=>$address_->name??'',
                 'region'=>$region,
@@ -171,50 +155,59 @@ class AddressController extends Controller
                 'longitude'=>$address_->longitude??null,
                 'postcode'=>$address_->postcode??null,
             ];
-        }
-        if(!empty($address)){
-            return $this->success('Success', 200, $address);
+        });
+        if($address_data->isNotEmpty()){
+            return $this->success('Success', 200, $address_data->toArray());
         }else{
             return $this->error('No address', 400);
         }
     }
+
     public function getPickUpAddress(Request $request){
-        $address = [];
-        $city = [];
-        $region = [];
         $super_admins_id = User::where('is_admin', 1)->pluck('id')->all();
-        $addresses = Address::whereIn('user_id', $super_admins_id)->get();
-        $language = $request->header('language');
-        foreach ($addresses as $address_) {
+        $language = $request->header('language')??'en';
+        $addresses = Address::with([
+            "cities",
+            "cities.getTranslatedModel" => function ($query) use ($language) {
+                $query->where('lang', $language);
+            },
+            "cities.region",
+            "cities.region.getTranslatedModel" => function ($query) use ($language) {
+                $query->where('lang', $language);
+            },
+            "cities.region.getDistricts",
+            "cities.region.getDistricts.getTranslatedModel" => function ($query) use ($language) {
+                $query->where('lang', $language);
+            }
+        ])->whereIn('user_id', $super_admins_id)->get();
+        $address_data = $addresses->map(function($address_){
+            $city = [];
+            $region = [];
             $region_city = [];
+            $city_translate = optional($address_->cities->getTranslatedModel)->name??'';
             if($address_->cities){
-                $city_translate = table_translate($address_->cities,'city',$language);
-                if($address_->cities->type == 'district'){
+                if($address_->cities->parent_id != '0'){
                     $city = [
                         'id' => $address_->cities->id,
-                        'name' => $city_translate??'',
+                        'name' => optional($address_->cities->getTranslatedModel)->name??'',
                         'lat' => $address_->cities->lat??'',
                         'long' => $address_->cities->lng??'',
                     ];
                     if($address_->cities->region){
-                        $region_translate = table_translate($address_->cities->region,'city',$language);
                         $region = [
                             'id' => $address_->cities->region->id,
-                            'name' => $region_translate??'',
+                            'name' => optional($address_->cities->region->getTranslatedModel)->name??'',
                             'lat' => $address_->cities->region->lat??'',
                             'long' => $address_->cities->region->lng??'',
                         ];
-                        if(!$address_->cities->region->getDistricts->isEmpty()){
-                            foreach($address_->cities->region->getDistricts as $regionCity){
-                                $region_city_translate = table_translate($regionCity,'city',$language);
-                                $region_city[] = [
-                                    'id' => $regionCity->id,
-                                    'name' => $region_city_translate??'',
-                                    'lat' => $regionCity->lat??'',
-                                    'long' => $regionCity->lng??'',
-                                ];
-                            }
-                        }
+                        $region_city = $address_->cities->region->getDistricts->map(function($regionCity){
+                            return [
+                                'id' => $regionCity->id,
+                                'name' => optional($regionCity->getTranslatedModel)->name??'',
+                                'lat' => $regionCity->lat??'',
+                                'long' => $regionCity->lng??'',
+                            ];
+                        });
                     }
                 }else{
                     $region = [
@@ -225,8 +218,8 @@ class AddressController extends Controller
                     ];
                 }
             }
-
-            $address[] = [
+            
+            return [
                 'id'=>$address_->id,
                 'name'=>$address_->name??'',
                 'region'=>$region,
@@ -236,9 +229,9 @@ class AddressController extends Controller
                 'longitude'=>$address_->longitude??null,
                 'postcode'=>$address_->postcode??null,
             ];
-        }
-        if(!empty($address)){
-            return $this->success('Success', 200, $address);
+        });
+        if($address_data->isNotEmpty()){
+            return $this->success('Success', 200, $address_data->toArray());
         }else{
             return $this->error('No address', 400);
         }
