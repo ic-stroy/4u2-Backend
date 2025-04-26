@@ -5,15 +5,17 @@ namespace App\Http\Controllers;
 use App\Models\Address;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class PickUpController extends Controller
 {
+    public $current_page = 'pick-up';
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
+        $getCommonData = $this->getCommonData();
         $super_admins_id = User::where('is_admin', 1)->pluck('id')->all();
         $addresses_ = Address::with([
             'cities',
@@ -46,7 +48,7 @@ class PickUpController extends Controller
 
         }
 
-        return view('pick-up.index', ['addresses'=>$addresses]);
+        return view('pick-up.index', array_merge(['addresses'=>$addresses, 'current_page'=>$this->current_page], $getCommonData));
     }
 
     /**
@@ -54,7 +56,8 @@ class PickUpController extends Controller
      */
     public function create()
     {
-        return view('pick-up.create');
+        $getCommonData = $this->getCommonData();
+        return view('pick-up.create', array_merge($getCommonData, ['current_page'=>$this->current_page]));
     }
 
     /**
@@ -85,11 +88,11 @@ class PickUpController extends Controller
 
     public function show(string $id)
     {
+        $getCommonData = $this->getCommonData();
         $model = Address::with([
             'cities',
             'cities.region'
         ])->find($id);
-        $address = '';
         $city = '';
         $region = '';
         if($model->cities){
@@ -104,7 +107,7 @@ class PickUpController extends Controller
         }
 
         $address = $region.' '.$city;
-        return view('pick-up.show', ['model'=>$model, 'address'=>$address]);
+        return view('pick-up.show', array_merge(['model'=>$model, 'address'=>$address, 'current_page'=>$this->current_page], $getCommonData));
     }
 
     /**
@@ -112,8 +115,9 @@ class PickUpController extends Controller
      */
     public function edit(string $id)
     {
+        $getCommonData = $this->getCommonData();
         $address = Address::find($id);
-        return view('pick-up.edit', ['address'=>$address]);
+        return view('pick-up.edit', array_merge(['address'=>$address, 'current_page'=>$this->current_page], $getCommonData));
     }
 
     /**

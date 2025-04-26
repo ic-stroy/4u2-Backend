@@ -17,6 +17,7 @@ use \App\Http\Controllers\LanguageController;
 use \App\Http\Controllers\PickUpController;
 use \App\Http\Controllers\TableTranslationController;
 use \App\Http\Controllers\AddressController;
+use \App\Http\Controllers\TelegramBotController;
 
 /*
 |--------------------------------------------------------------------------
@@ -112,5 +113,6 @@ Route::group(['middleware'=>['isAdmin', 'language']], function(){
 
 Route::get('/welcome', [App\Http\Controllers\HomeController::class, 'welcome'])->name('welcome');
 Route::post('/test', [App\Http\Controllers\HomeController::class, 'test'])->name('test');
+Route::get('telegram-bot', [TelegramBotController::class, 'index'])->name('telegram_bot');
 
 

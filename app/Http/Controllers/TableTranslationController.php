@@ -3,35 +3,34 @@
 namespace App\Http\Controllers;
 
 use App\Models\CategoryTranslations;
-use App\Models\ProductDescriptionTranslations;
 use App\Models\ProductTranslations;
-use App\Models\SizeTranslations;
-use App\Models\RoleTranslations;
 use App\Models\ColorTranslations;
-use App\Models\WarehouseTranslations;
 use Illuminate\Http\Request;
 use App\Models\Language;
-use App\Models\Translation;
 use App\Models\CityTranslations;
-use Illuminate\Support\Facades\DB;
 
 
 class TableTranslationController extends Controller
 {
+    public $current_page = 'table-translation';
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return view('language.tables');
+        $getCommonData = $this->getCommonData();
+        return view('language.tables', array_merge($getCommonData, ['current_page'=>$this->current_page]));
     }
 
     public function show($type){
+        $getCommonData = $this->getCommonData();
         $languages = Language::orderBy('id', 'ASC')->get();
-        return view('language.table_lang', ['type'=>$type, 'languages'=>$languages]);
+        return view('language.table_lang', array_merge(['type'=>$type, 'languages'=>$languages, 'current_page'=>$this->current_page], $getCommonData));
     }
 
     public function tableShow(Request $request ){
+        $getCommonData = $this->getCommonData();
         $type = $request->type;
         $id = $request->language_id;
         $search = $request->search;
@@ -43,7 +42,7 @@ class TableTranslationController extends Controller
             'color' => ColorTranslations::class,
             'product' => ProductTranslations::class,
         ];
-        
+
         $lang_keys = match ($type) {
             'city', 'category', 'color', 'product' => $typeClassMap[$type]::with('getModel')->where('lang', $language->code)->get(),
             default => collect(),
@@ -51,7 +50,7 @@ class TableTranslationController extends Controller
         if ($search) {
             $lang_keys = $lang_keys->where('key', $search);
         }
-        return view('language.table_show', ['lang_keys'=>$lang_keys, 'language'=>$language , 'sort_search' => $sort_search, 'type'=>$type]);
+        return view('language.table_show', array_merge(['lang_keys'=>$lang_keys, 'language'=>$language , 'sort_search' => $sort_search, 'type'=>$type, 'current_page'=>$this->current_page], $getCommonData));
     }
 
 

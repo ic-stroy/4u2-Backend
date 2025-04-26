@@ -114,7 +114,7 @@
                                 <div class="col-2 mb-3 product_image">
                                     <div class="d-flex justify-content-between">
                                         <img src="{{asset('storage/products/'.$image)}}" alt="" height="200px">
-                                        <button class="delete_product_func">X</button>
+                                        <button onclick="deleteProductImageFunc(event, this, `{{$image}}`)" class="delete_product_func">X</button>
                                     </div>
                                 </div>
                             @endif
@@ -182,35 +182,27 @@
         let product_image = document.getElementsByClassName('product_image')
         let delete_product_func = document.getElementsByClassName('delete_product_func')
         let deleted_text = "{{translate('Product image was deleted')}}"
-        let product_images = []
-        @if(is_array($images))
-        @foreach($images as $image)
-        product_images.push("{{$image}}")
-        @endforeach
-        @endif
-        function deleteProductFunc(item, val) {
-            delete_product_func[item].addEventListener('click', function (e) {
-                e.preventDefault()
-                $.ajax({
-                    url: '/api/delete-product',
-                    method: 'POST',
-                    dataType: 'json',
-                    data: {
-                        id:"{{$product->id}}",
-                        product_name: product_images[item]
-                    },
-                    success: function(data){
-                        if(data.status == true){
-                            toastr.success(deleted_text)
-                        }
+        function deleteProductImageFunc(e, this_element, image_name) {
+            e.preventDefault()
+            $.ajax({
+                url: '/api/delete-product',
+                method: 'POST',
+                dataType: 'json',
+                data: {
+                    id:"{{$product->id}}",
+                    product_name: image_name
+                },
+                success: function(data){
+                    if(data.status == true){
+                        toastr.success(deleted_text)
                     }
-                });
-                if(!product_image[item].classList.contains('display-none')){
-                    product_image[item].classList.add('display-none')
+                    let this_element_image = this_element.parentElement.parentElement
+                    if(!this_element_image.classList.contains('display-none')){
+                        this_element_image.classList.add('display-none')
+                    }
                 }
-            })
+            });
         }
-        Object.keys(delete_product_func).forEach(deleteProductFunc)
     </script>
     <script>
 

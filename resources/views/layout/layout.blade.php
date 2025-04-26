@@ -1,11 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-@php
-    $current_user = \Illuminate\Support\Facades\Auth::user();
-    $locale = app()->getLocale();
-//    $language = ['en', 'uz', 'ru'];
-
-@endphp
 <head>
     <meta charset="utf-8" />
     <title>{{ '4u2' }}</title>
@@ -205,7 +199,7 @@
                                      style="border: none; background-color: transparent;" aria-labelledby="dropdownMenuButton">
                                     <div class="up-arrow"></div>
                                     <div class="dropdownMenyApplyUzbFlag">
-                                       @foreach (\App\Models\Language::get() as $key => $language)
+                                       @foreach ($languages as $key => $language)
                                             <a href="javascript:void(0)" data-flag="{{ $language->code??'' }}"
                                                class="dropdown-item dropdown-item dropdownLanguageItem @if ($locale == $language->code??'') active @endif" >
                                                 @switch($language->code)
@@ -436,91 +430,91 @@
                 <!--- Sidemenu -->
                 <div id="sidebar-menu">
                     <ul id="side-menu">
-                        <li>
-                            <a href="{{route('dashboard')}}">
-                            <i class="mdi mdi-home-outline"></i>
+                        <li @if($current_page == 'home') class="menuitem-active" @endif>
+                            <a href="{{route('dashboard')}}" @if($current_page == 'home') class="active" @endif>
+                                <i class="mdi mdi-home-outline"></i>
                                  <span class="badge bg-success rounded-pill float-end">9+</span>
                                 <span> {{translate('Home')}} </span>
                             </a>
                         </li>
-                        <li>
-                            <a href="{{ route('order.index') }}">
+                        <li @if($current_page == 'order') class="menuitem-active" @endif>
+                            <a href="{{ route('order.index') }}" @if($current_page == 'order') class="active" @endif>
                                 <i class="mdi mdi-order-bool-ascending"></i>
                                 <!-- <span class="badge bg-success rounded-pill float-end">9+</span> -->
                                 {{-- <span> Order </span> --}}
                                 <span> {{ translate('Order') }} </span>
                             </a>
                         </li>
-                        <li>
-                            <a href="{{ route('user.index') }}">
+                        <li @if($current_page == 'users') class="menuitem-active" @endif>
+                            <a href="{{ route('user.index') }}" @if($current_page == 'users') class="active" @endif>
                                 <i class="mdi mdi-account-star-outline"></i>
                                 <span> {{ translate('Users') }} </span>
                             </a>
                         </li>
-                        <li>
-                            <a href="{{ route('color.index') }}">
+                        <li @if($current_page == 'color') class="menuitem-active" @endif>
+                            <a href="{{ route('color.index') }}" @if($current_page == 'color') class="active" @endif>
                                 <i class="mdi mdi-checkbox-blank-circle-outline"></i>
                                 <span> {{ translate('Color') }} </span>
                             </a>
                         </li>
-                        <li>
-                            <a href="{{ route('pick_up.index') }}">
+                        <li @if($current_page == 'pick-up') class="menuitem-active" @endif>
+                            <a href="{{ route('pick_up.index') }}" @if($current_page == 'pick-up') class="active" @endif>
                                 <i class="mdi mdi-map-marker-outline"></i>
                                 <span> {{ translate('Pick up point') }} </span>
                             </a>
                         </li>
-                        <li>
-                            <a href="{{ route('size.index') }}">
+                        <li @if($current_page == 'size') class="menuitem-active" @endif>
+                            <a href="{{ route('size.index') }}" @if($current_page == 'size') class="active" @endif>
                                 <i class="mdi mdi-account-outline"></i>
                                 <span> {{ translate('Sizes') }} </span>
                             </a>
                         </li>
-                        <li>
-                            <a href="{{ route('product.index') }}">
+                        <li @if($current_page == 'products') class="menuitem-active" @endif>
+                            <a href="{{ route('product.index') }}" @if($current_page == 'products') class="active" @endif>
                                 <i class="mdi mdi-basket-outline"></i>
                                 <span> {{ translate('Products') }} </span>
                             </a>
                         </li>
-                        <li>
-                            <a href="{{ route('discount.index') }}">
+                        <li @if($current_page == 'discount') class="menuitem-active" @endif>
+                            <a href="{{ route('discount.index') }}" @if($current_page == 'discount') class="active" @endif>
                                 <i class="mdi mdi-percent-outline"></i>
                                 <span> {{ translate('Discount') }} </span>
                             </a>
                         </li>
-                        <li>
-                            <a href="{{ route('coupons.index') }}">
+                        <li @if($current_page == 'coupon') class="menuitem-active" @endif>
+                            <a href="{{ route('coupons.index') }}" @if($current_page == 'coupon') class="active" @endif>
                                 <i class="mdi mdi-gift-outline"></i>
                                 <span> {{ translate('Coupon') }} </span>
                             </a>
                         </li>
-                        <li>
-                            <a href="{{ route('characterizedProducts.index') }}">
+                        <li @if($current_page == 'warehouse') class="menuitem-active" @endif>
+                            <a href="{{ route('characterizedProducts.index') }}" @if($current_page == 'warehouse') class="active" @endif>
                                 <i class="mdi mdi-shopping-outline"></i>
-                                <span> {{ translate('Characterized products') }} </span>
+                                <span> {{ translate('Warehouse') }} </span>
                             </a>
                         </li>
                         <li>
-                            <a href="#categoryMenus" data-bs-toggle="collapse">
+                            <a href="#categoryMenus" data-bs-toggle="collapse" id="categoryMenusId">
                                 <i class="mdi mdi-format-list-bulleted"></i>
                                 <span> {{ translate('Category') }} </span>
                                 <span class="menu-arrow"></span>
                             </a>
                             <div class="collapse" id="categoryMenus">
                                 <ul class="nav-second-level">
-                                    <li>
-                                        <a href="{{ route('category.index') }}">
+                                    <li @if($current_page == 'category') class="menuitem-active" @endif>
+                                        <a href="{{ route('category.index') }}" @if($current_page == 'category') class="active" @endif>
                                             <i class="mdi mdi-format-list-bulleted"></i>
                                             <span> {{ translate('Category') }} </span>
                                         </a>
                                     </li>
-                                    <li>
-                                        <a href="{{ route('subcategory.index') }}">
+                                    <li @if($current_page == 'sub-category') class="menuitem-active" @endif>
+                                        <a href="{{ route('subcategory.index') }}" @if($current_page == 'sub-category') class="active" @endif>
                                             <i class="mdi mdi-format-list-bulleted"></i>
                                             <span> {{ translate('Sub Category') }} </span>
                                         </a>
                                     </li>
-                                    <li>
-                                        <a href="{{ route('subsubcategory.category') }}">
+                                    <li @if($current_page == 'sub-sub-category') class="menuitem-active" @endif>
+                                        <a href="{{ route('subsubcategory.category') }}" @if($current_page == 'sub-sub-category') class="active" @endif>
                                             <i class="mdi mdi-format-list-bulleted"></i>
                                             <span> {{ translate('Sub Sub Category') }} </span>
                                         </a>
@@ -537,14 +531,14 @@
                             </a>
                             <div class="collapse" id="settings">
                                 <ul class="nav-second-level">
-                                    <li>
-                                        <a href="{{route('language.index')}}"> {{translate('Language')}}  </a>
+                                    <li @if($current_page == 'language') class="menuitem-active" @endif>
+                                        <a href="{{route('language.index')}}" @if($current_page == 'language') class="active" @endif> {{translate('Language')}}  </a>
                                     </li>
-                                    <li>
-                                        <a href="{{route('table.index')}}"> {{translate('Table translations')}}  </a>
+                                    <li @if($current_page == 'table') class="menuitem-active" @endif>
+                                        <a href="{{route('table.index')}}" @if($current_page == 'table') class="active" @endif> {{translate('Table translations')}}  </a>
                                     </li>
-                                    <li>
-                                        <a href="{{route('payment.index')}}">{{translate('Payment status')}}</a>
+                                    <li @if($current_page == 'payment') class="menuitem-active" @endif>
+                                        <a href="{{route('payment.index')}}" @if($current_page == 'payment') class="active" @endif>{{translate('Payment status')}}</a>
                                     </li>
                                 </ul>
                             </div>
@@ -876,6 +870,17 @@
 {{--    <script src="{{ asset('assets/js/pages/dashboard.init.js') }}"></script>--}}
     <script>
 
+        let categoryMenusId = document.getElementById('categoryMenusId')
+        let categoryMenus = document.getElementById('categoryMenus')
+
+        @if(in_array($current_page, ['category', 'sub-category', 'sub-sub-category']))
+            if(categoryMenusId.classList.contains('collapsed')){
+            categoryMenusId.classList.remove('collapsed')
+            }
+            if(!categoryMenus.classList.contains('show')){
+                categoryMenus.classList.add('show')
+            }
+        @endif
 //light mode or dark mode
         let light_mode = document.getElementById('light-mode-check')
         let dark_mode = document.getElementById('dark-mode-check')

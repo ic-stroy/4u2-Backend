@@ -3,12 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
-use App\Models\Color;
 use App\Models\Sizes;
 use Illuminate\Http\Request;
 
 class SizesController extends Controller
 {
+    public $current_page = 'size';
+
     /**
      * Display a listing of the resource.
      */
@@ -25,8 +26,9 @@ class SizesController extends Controller
 //        translate('You cannot delete this category because it has products');
 //        translate('You cannot delete this address because here is order associated with this address.');
 //        translate('You cannot delete this card because here is order associated with this card.');
+        $getCommonData = $this->getCommonData();
         $sizes = Sizes::orderBy('created_at', 'desc')->get();
-        return view('sizes.index', ['sizes'=> $sizes]);
+        return view('sizes.index', array_merge(['sizes'=> $sizes, 'current_page'=>$this->current_page], $getCommonData));
     }
 
     /**
@@ -34,8 +36,9 @@ class SizesController extends Controller
      */
     public function create()
     {
+        $getCommonData = $this->getCommonData();
         $categories = Category::select('id', 'name')->where('step', 0)->get();
-        return view('sizes.create', ['categories' => $categories]);
+        return view('sizes.create', array_merge(['categories' => $categories, 'current_page'=>$this->current_page], $getCommonData));
     }
 
     /**
@@ -60,8 +63,9 @@ class SizesController extends Controller
      */
     public function show(string $id)
     {
+        $getCommonData = $this->getCommonData();
         $model = Sizes::find($id);
-        return view('sizes.show', ['model'=>$model]);
+        return view('sizes.show', array_merge(['model'=>$model, 'current_page'=>$this->current_page], $getCommonData));
     }
 
     /**
@@ -69,9 +73,10 @@ class SizesController extends Controller
      */
     public function edit(string $id)
     {
+        $getCommonData = $this->getCommonData();
         $size = Sizes::find($id);
         $categories = Category::select('id', 'name')->where('step', 0)->get();
-        return view('sizes.edit', ['size'=> $size, 'categories' => $categories]);
+        return view('sizes.edit', array_merge(['size'=> $size, 'categories' => $categories, 'current_page'=>$this->current_page], $getCommonData));
     }
 
     /**

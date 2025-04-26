@@ -3,15 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Constants;
-use App\Events\PostNotification;
 use App\Models\CharacterizedProducts;
 use App\Models\Coupon;
 use App\Models\Order;
 use App\Models\OrderDetail;
-use App\Models\Products;
 use App\Models\User;
 use App\Notifications\OrderNotification;
-use App\Providers\AuthServiceProvider;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Notification;

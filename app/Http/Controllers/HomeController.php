@@ -5,13 +5,13 @@ namespace App\Http\Controllers;
 use App\Constants;
 use App\Events\PostNotification;
 use App\Models\Cities;
-use App\Models\Language;
 use App\Models\Order;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 
 class HomeController extends Controller
 {
+
+    public $current_page = 'home';
     /**
      * Create a new controller instance.
      *
@@ -34,16 +34,17 @@ class HomeController extends Controller
 //        //  flash(translate('Language changed to ') . $language->name)->success();
 //    }
     public function index(){
+        $getCommonData = $this->getCommonData();
         $ordered_orders = Order::where('status', Constants::ORDERED)->count();
         $performed_orders = Order::where('status', Constants::PERFORMED)->count();
         $cancelled_orders = Order::where('status', Constants::CANCELLED)->count();
         $accepted_orders = Order::where('status', Constants::ACCEPTED_BY_RECIPIENT)->count();
-        return view('index', [
+        return view('index', array_merge([
             'ordered_orders'=>$ordered_orders,
             'performed_orders'=>$performed_orders,
             'cancelled_orders'=>$cancelled_orders,
-            'accepted_orders'=>$accepted_orders
-        ]);
+            'accepted_orders'=>$accepted_orders, 'current_page'=>$this->current_page
+        ], $getCommonData));
     }
     public function welcome(){
 

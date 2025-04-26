@@ -2,7 +2,16 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="baeeb12c-03b2-4eb7-b2be-dc7d3697fa3c" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/4u2-Backend.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/4u2-Backend.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/CharacterizedProductsController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/CharacterizedProductsController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/LanguageController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/LanguageController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/ProductsController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/ProductsController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/Color.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Color.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/Products.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Products.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/language/show.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/language/show.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/products/edit.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/products/edit.blade.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -138,6 +147,8 @@
       <path value="$PROJECT_DIR$/vendor/carbonphp/carbon-doctrine-types" />
       <path value="$PROJECT_DIR$/vendor/paragonie/random_compat" />
       <path value="$PROJECT_DIR$/vendor/paragonie/sodium_compat" />
+      <path value="$PROJECT_DIR$/vendor/spatie/error-solutions" />
+      <path value="$PROJECT_DIR$/vendor/eleirbag89/telegrambotphp" />
     </include_path>
   </component>
   <component name="ProjectId" id="2fUUVZRcPQDmWSmhYdIypA0ImTL" />
@@ -149,7 +160,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../Marketflow" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
@@ -200,17 +211,12 @@
       <workItem from="1723882215493" duration="444000" />
       <workItem from="1723977254568" duration="721000" />
       <workItem from="1724064426083" duration="5554000" />
-      <workItem from="1724136860943" duration="9823000" />
-      <workItem from="1725552734324" duration="2091000" />
-      <workItem from="1725719406873" duration="73000" />
-      <workItem from="1725787203658" duration="6334000" />
-      <workItem from="1730997209985" duration="43000" />
-      <workItem from="1730998087434" duration="2944000" />
-      <workItem from="1731347406399" duration="2606000" />
-      <workItem from="1731432659373" duration="729000" />
-      <workItem from="1731434462177" duration="43000" />
-      <workItem from="1734254605704" duration="4860000" />
-      <workItem from="1735455123764" duration="664000" />
+      <workItem from="1724136860943" duration="8341000" />
+      <workItem from="1745301864430" duration="4380000" />
+      <workItem from="1745417402230" duration="10007000" />
+      <workItem from="1745479955048" duration="10645000" />
+      <workItem from="1745586013455" duration="16151000" />
+      <workItem from="1745650811927" duration="1256000" />
     </task>
     <servers />
   </component>

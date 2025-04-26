@@ -3,21 +3,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
-
 use Illuminate\Contracts\Support\Renderable;
-use Illuminate\Routing\Controller;
-use Illuminate\Support\Facades\Auth;
 use Stichoza\GoogleTranslate\GoogleTranslate;
 use App\Models\Language;
 use App\Models\Translation;
 use App\Models\LanguageTranslation;
-use Illuminate\Pagination\Paginator;
-use Illuminate\Support\Collection;
-use Illuminate\Pagination\LengthAwarePaginator;
-use App\Utils\Paginate;
 class LanguageController extends Controller
 {
+    public $current_page = 'language';
     /**
      * Display a listing of the resource.
      * @return Renderable
@@ -35,15 +28,16 @@ class LanguageController extends Controller
 
     public function index()
     {
-
+        $getCommonData = $this->getCommonData();
         $languages = Language::orderBy('id', 'ASC')->get();
-        return view('language.index', [
-            'languages' => $languages,
-        ]);
+        return view('language.index', array_merge([
+            'languages' => $languages, 'current_page'=>$this->current_page
+        ], $getCommonData));
     }
 
     public function show(Request $request, $id)
     {
+        $getCommonData = $this->getCommonData();
         $sort_search = null;
         $language = Language::findOrFail($id);
         $lang_keys = Translation::with('getModel')->where('lang', $language->code)->get();
@@ -51,11 +45,11 @@ class LanguageController extends Controller
             $sort_search = $request->search;
             $lang_keys = $lang_keys->where('lang_key', request()->input('search'));
         }
-        return view('language.show', [
+        return view('language.show', array_merge([
             'language' => $language,
             'lang_keys' => $lang_keys,
-            'sort_search' => $sort_search,
-        ]);
+            'sort_search' => $sort_search, 'current_page'=>$this->current_page
+        ], $getCommonData));
     }
 
 
@@ -88,11 +82,11 @@ class LanguageController extends Controller
      */
     public function languageEdit($id)
     {
-
+        $getCommonData = $this->getCommonData();
         $language = Language::findOrFail(decrypt($id));
-        return view('language.edit', [
-            'language'=>$language,
-        ]);
+        return view('language.edit', array_merge([
+            'language'=>$language, 'current_page'=>$this->current_page
+        ], $getCommonData));
 
     }
 
@@ -104,11 +98,9 @@ class LanguageController extends Controller
      */
     public function update(Request $request ,$id)
     {
-
         $language = Language::where('id', $id)->first();
         $language->name = $request->name;
         if ($language->save()) {
-
             if (LanguageTranslation::where('language_id', $language->id)->where('lang', default_language())->first()) {
                 $languages = Language::get();
                 foreach ($languages as $language) {

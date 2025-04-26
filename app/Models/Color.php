@@ -17,11 +17,15 @@ class Color extends Model
     }
 
     public function getTranslatedContent(){
-        return $this->hasOne(CategoryTranslations::class, 'category_id', 'id')->where('lang', app()->getLocale());
+        return $this->hasOne(ColorTranslations::class, 'color_id', 'id')->where('lang', app()->getLocale());
     }
 
     public function getTranslatedModel()
     {
-        return $this->hasOne(CategoryTranslations::class, 'category_id', 'id')->select('id', 'category_id', 'name');
+        return $this->hasOne(ColorTranslations::class, 'color_id', 'id')->select('id', 'color_id', 'name');
+    }
+
+    public function warehouses(){
+        return $this->hasMany(CharacterizedProducts::class, 'color_id', 'id');
     }
 }

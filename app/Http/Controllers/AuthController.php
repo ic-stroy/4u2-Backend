@@ -15,7 +15,6 @@ use Illuminate\Support\Facades\Hash;
 class AuthController extends Controller
 {
     public function PhoneRegister(Request $request){
-        date_default_timezone_set("Asia/Tashkent");
         $fields = $request->validate([
             'phone'=>'required|string'
         ]);
@@ -108,7 +107,6 @@ class AuthController extends Controller
     }
 
     public function PhoneVerify(Request $request){
-        date_default_timezone_set("Asia/Tashkent");
         $fields = $request->validate([
             'phone_number'=>'required',
             'verify_code'=>'required',
@@ -202,7 +200,7 @@ class AuthController extends Controller
             'data'=>$data
         ], 200);
     }
-    
+
     public function registerWithEmail(Request $request)
     {
         $user = new User();

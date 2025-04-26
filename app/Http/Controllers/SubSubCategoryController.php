@@ -7,13 +7,16 @@ use Illuminate\Http\Request;
 
 class SubSubCategoryController extends Controller
 {
+    public $current_page = 'sub-sub-category';
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
+        $getCommonData = $this->getCommonData();
         $SubSubCategory = Category::where('step', 2)->orderBy('created_at', 'desc')->get();
-        return view('sub-sub-category.index', ['subsubcategories'=> $SubSubCategory]);
+        return view('sub-sub-category.index', array_merge(['subsubcategories'=> $SubSubCategory, 'current_page'=>$this->current_page], $getCommonData));
     }
 
     /**
@@ -21,11 +24,12 @@ class SubSubCategoryController extends Controller
      */
     public function create()
     {
+        $getCommonData = $this->getCommonData();
         $category_ids = Category::select('parent_id')->where('step', 1)->groupBy('parent_id')->distinct()->get()->map(function($subcategory){
             return $subcategory->parent_id;
         });
         $categories = Category::whereIn('id', $category_ids)->get();
-        return view('sub-sub-category.create', ['categories'=>$categories]);
+        return view('sub-sub-category.create', array_merge(['categories'=>$categories, 'current_page'=>$this->current_page], $getCommonData));
     }
 
     /**
@@ -51,8 +55,9 @@ class SubSubCategoryController extends Controller
      */
     public function show(string $id)
     {
+        $getCommonData = $this->getCommonData();
         $model = Category::where('step', 2)->find($id);
-        return view('sub-sub-category.show', ['model'=>$model]);
+        return view('sub-sub-category.show', array_merge(['model'=>$model, 'current_page'=>$this->current_page], $getCommonData));
     }
 
     /**
@@ -60,12 +65,13 @@ class SubSubCategoryController extends Controller
      */
     public function edit(string $id)
     {
+        $getCommonData = $this->getCommonData();
         $SubSubCategory = Category::where('step', 2)->find($id);
         $category_ids = Category::select('parent_id')->where('step', 1)->groupBy('parent_id')->distinct()->get()->map(function($subcategory){
             return $subcategory->parent_id;
         });
         $categories = Category::whereIn('id', $category_ids)->get();
-        return view('sub-sub-category.edit', ['subsubcategory'=>$SubSubCategory, 'categories'=>$categories]);
+        return view('sub-sub-category.edit', array_merge(['subsubcategory'=>$SubSubCategory, 'categories'=>$categories, 'current_page'=>$this->current_page], $getCommonData));
     }
 
     /**
@@ -109,12 +115,14 @@ class SubSubCategoryController extends Controller
 
     public function category()
     {
+        $getCommonData = $this->getCommonData();
         $category = Category::where('step', 0)->get();
-        return view('sub-sub-category.category', ['categories'=>$category]);
+        return view('sub-sub-category.category', array_merge(['categories'=>$category, 'current_page'=>$this->current_page], $getCommonData));
     }
 
     public function subcategory($id)
     {
+        $getCommonData = $this->getCommonData();
         $subcategories = Category::with('subsubcategory_')->where('parent_id', $id)->orderBy('created_at', 'desc')->get();
         $all_sub_sub_categories = [];
         foreach($subcategories as $subcategory){
@@ -125,12 +133,13 @@ class SubSubCategoryController extends Controller
                 $all_sub_sub_categories[$subcategory->id] = [];
             }
         }
-        return view('sub-sub-category.subcategory', ['subcategories'=>$subcategories, 'all_sub_sub_categories'=>$all_sub_sub_categories]);
+        return view('sub-sub-category.subcategory', array_merge(['subcategories'=>$subcategories, 'all_sub_sub_categories'=>$all_sub_sub_categories, 'current_page'=>$this->current_page], $getCommonData));
     }
 
     public function subsubcategory($id)
     {
+        $getCommonData = $this->getCommonData();
         $SubSubCategory = Category::where('parent_id', $id)->orderBy('created_at', 'desc')->get();
-        return view('sub-sub-category.subsubcategory', ['subsubcategories'=>$SubSubCategory]);
+        return view('sub-sub-category.subsubcategory', array_merge(['subsubcategories'=>$SubSubCategory, 'current_page'=>$this->current_page], $getCommonData));
     }
 }

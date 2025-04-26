@@ -2,20 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Constants;
 use App\Models\Category;
-use App\Models\CharacterizedProducts;
-use App\Models\Coupon;
 use App\Models\Discount;
 use App\Models\Products;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class DiscountController extends Controller
 {
+    public $current_page = 'discount';
+
     public function index()
     {
+        $getCommonData = $this->getCommonData();
         $discounts_distinct = Discount::distinct('discount_number')->get();
         $discounts_data = [];
         foreach ($discounts_distinct as $discount_distinct) {
@@ -95,7 +94,7 @@ class DiscountController extends Controller
                 'subsubcategory'=>$subsubcategory
             ];
         }
-        return view('discount.index', ['discounts_data'=> $discounts_data]);
+        return view('discount.index', array_merge(['discounts_data'=> $discounts_data, 'current_page'=>$this->current_page], $getCommonData));
     }
 
     /**
@@ -103,8 +102,9 @@ class DiscountController extends Controller
      */
     public function create()
     {
+        $getCommonData = $this->getCommonData();
         $categories = Category::where('step', 0)->orderBy('id', 'asc')->get();
-        return view('discount.create', ['categories'=>$categories]);
+        return view('discount.create', array_merge(['categories'=>$categories, 'current_page'=>$this->current_page], $getCommonData));
     }
 
     /**
@@ -130,7 +130,7 @@ class DiscountController extends Controller
         }elseif(isset($request->category_id) && $request->category_id){
             $category_id_ = $request->category_id;
         }else{
-            $category_id_ = $category_id;
+            $category_id_ = '';
         }
         $discounts_data = $products->map(function($product) use($discount_number, $request, $category_id_) {
             return [
@@ -182,6 +182,7 @@ class DiscountController extends Controller
      */
     public function show(string $id)
     {
+        $getCommonData = $this->getCommonData();
         $model = Discount::select('discount_number')->find($id);
         $discount_number = Discount::where('discount_number', $model->discount_number)->count();
         $discounts = Discount::with([
@@ -258,7 +259,7 @@ class DiscountController extends Controller
             'subcategory'=>$subcategory,
             'subsubcategory'=>$subsubcategory
         ];
-        return view('discount.show', ['discount_data'=>$discount_data]);
+        return view('discount.show', array_merge(['discount_data'=>$discount_data, 'current_page'=>$this->current_page], $getCommonData));
     }
 
     /**
@@ -266,6 +267,7 @@ class DiscountController extends Controller
      */
     public function edit(string $id)
     {
+        $getCommonData = $this->getCommonData();
         $discount = Discount::find($id);
         $categories = Category::where('step', 0)->orderBy('id', 'asc')->get();
         $category_id = [];
@@ -340,14 +342,14 @@ class DiscountController extends Controller
         }
 
 
-        return view('discount.edit', [
+        return view('discount.edit', array_merge([
             'discount'=> $discount,
             'categories'=>$categories,
             'category_id'=>$category_id,
             'subcategory_id'=>$subcategory_id,
             'subsubcategory_id'=>$subsubcategory_id,
-            'quantity'=>$quantity
-        ]);
+            'quantity'=>$quantity, 'current_page'=>$this->current_page
+        ], $getCommonData));
     }
 
     /**
@@ -396,7 +398,7 @@ class DiscountController extends Controller
     public function destroy(string $id)
     {
         $current_discount = Discount::find($id);
-        $current_discount_group = Discount::where('discount_number', $current_discount->discount_number)->delete();
+        Discount::where('discount_number', $current_discount->discount_number)->delete();
         return redirect()->route('discount.index')->with('status', translate('Successfully created'));
     }
 }

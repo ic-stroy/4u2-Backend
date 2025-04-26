@@ -10,13 +10,15 @@ use Illuminate\Http\Request;
 
 class ColorController extends Controller
 {
+    public $current_page = 'color';
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
+        $getCommonData = $this->getCommonData();
         $color = Color::orderBy('created_at', 'desc')->get();
-        return view('color.index', ['colors'=> $color]);
+        return view('color.index', array_merge(['colors'=> $color, 'current_page'=>$this->current_page], $getCommonData));
     }
 
     /**
@@ -24,7 +26,8 @@ class ColorController extends Controller
      */
     public function create()
     {
-        return view('color.create');
+        $getCommonData = $this->getCommonData();
+        return view('color.create', array_merge($getCommonData, ['current_page'=>$this->current_page]));
     }
 
     /**
@@ -59,8 +62,9 @@ class ColorController extends Controller
      */
     public function show(string $id)
     {
+        $getCommonData = $this->getCommonData();
         $model = Color::find($id);
-        return view('color.show', ['model'=>$model]);
+        return view('color.show', array_merge(['model'=>$model, 'current_page'=>$this->current_page], $getCommonData));
     }
 
     /**
@@ -68,8 +72,9 @@ class ColorController extends Controller
      */
     public function edit(string $id)
     {
+        $getCommonData = $this->getCommonData();
         $color = Color::find($id);
-        return view('color.edit', ['color'=> $color]);
+        return view('color.edit', array_merge(['color'=> $color, 'current_page'=>$this->current_page], $getCommonData));
     }
 
     /**
@@ -112,7 +117,7 @@ class ColorController extends Controller
         }
         $languages = Language::get();
         foreach ($languages as $language) {
-            $color_translations = ColorTranslations::where(['lang' => $language->code, 'color_id' => $model->id])->delete();
+            ColorTranslations::where(['lang' => $language->code, 'color_id' => $model->id])->delete();
         }
         $model->delete();
         return redirect()->route('color.index')->with('status', translate('Successfully deleted'));

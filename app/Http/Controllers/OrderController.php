@@ -3,23 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Constants;
-use App\Http\Controllers\Auth\RegisterController;
-use App\Http\Controllers\Controller;
 use App\Models\CharacterizedProducts;
 use App\Models\Order;
 use App\Models\OrderDetail;
-use App\Models\User;
-use App\Models\Warehouse;
 use Illuminate\Http\Request;
-use App\Notifications\OrderNotification;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Notification;
 
 class OrderController extends Controller
 {
+    public $current_page = 'order';
 
     public function index(){
+        $getCommonData = $this->getCommonData();
         $user = Auth::user();
         $orderedOrders_ = Order::with([
             'user',
@@ -125,13 +120,14 @@ class OrderController extends Controller
             'readyForPickup'=>$readyForPickup,
             'acceptedByRecipientOrders'=>$acceptedByRecipientOrders,
         ];
-        return view('order.index', [
+        return view('order.index', array_merge([
             'all_orders'=>$all_orders,
-            'user'=>$user
-        ]);
+            'user'=>$user, 'current_page'=>$this->current_page
+        ], $getCommonData));
     }
 
     public function finishedAllOrders(){
+        $getCommonData = $this->getCommonData();
         $user = Auth::user();
         $cancelledOrders_ = Order::with([
             'user',
@@ -169,10 +165,10 @@ class OrderController extends Controller
             'cancelledOrders'=>$cancelledOrders,
             'acceptedByRecipientOrders'=>$acceptedByRecipientOrders,
         ];
-        return view('order.finished_all_orders', [
+        return view('order.finished_all_orders', array_merge([
             'all_orders'=>$all_orders,
-            'user'=>$user
-        ]);
+            'user'=>$user, 'current_page'=>$this->current_page
+        ], $getCommonData));
     }
 
     public function getOrders($orders){
@@ -343,6 +339,7 @@ class OrderController extends Controller
     }
 
     public function address(Request $request){
+        $getCommonData = $this->getCommonData();
         if($request->latitude){
             $latitude = $request->latitude;
         }else{
@@ -353,7 +350,7 @@ class OrderController extends Controller
         }else{
             $longitude = '';
         }
-        return view('order.address', ['latitude'=>$latitude, 'longitude'=>$longitude]);
+        return view('order.address', array_merge(['latitude'=>$latitude, 'longitude'=>$longitude, 'current_page'=>$this->current_page], $getCommonData));
     }
 
     public function category(){
@@ -382,12 +379,14 @@ class OrderController extends Controller
     }
 
     public function show($id){
+        $getCommonData = $this->getCommonData();
         $order = Order::find($id);
-        return view('order.show', ['order'=>$order]);
+        return view('order.show', array_merge(['order'=>$order, 'current_page'=>$this->current_page], $getCommonData));
     }
 
     public function destroy($id){
-        return view('order.show');
+        $getCommonData = $this->getCommonData();
+        return view('order.show', array_merge($getCommonData, ['current_page'=>$this->current_page]));
     }
 
     public function cancellOrderDetail($id){

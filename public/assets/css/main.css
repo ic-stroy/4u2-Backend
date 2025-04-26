@@ -9767,6 +9767,10 @@ a:hover {
 }
 .language_menu{
     list-style:none;
+}
 
+#sidebar-menu #side-menu li a.active{
+    background-color: #3EB944;
+    color:white !important;
 }
 /* -------------- */

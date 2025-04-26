@@ -3,16 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
-use App\Models\SubCategory;
 use Illuminate\Http\Request;
 
 class SubCategoryController extends Controller
 {
+    public $current_page = 'sub-category';
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
+        $getCommonData = $this->getCommonData();
         $categories = Category::with('subcategory')->where('step', 0)->get();
         foreach($categories as $category){
             $sub_categories = $category->subcategory;
@@ -22,7 +24,7 @@ class SubCategoryController extends Controller
                 $all_categories[$category->id] = [];
             }
         };
-        return view('sub-category.index', ['all_categories'=> $all_categories, 'categories'=>$categories]);
+        return view('sub-category.index', array_merge(['all_categories'=> $all_categories, 'categories'=>$categories, 'current_page'=>$this->current_page], $getCommonData));
     }
 
     /**
@@ -30,8 +32,9 @@ class SubCategoryController extends Controller
      */
     public function create()
     {
+        $getCommonData = $this->getCommonData();
         $categories = Category::where('step', 0)->get();
-        return view('sub-category.create', ['categories'=>$categories]);
+        return view('sub-category.create', array_merge(['categories'=>$categories, 'current_page'=>$this->current_page], $getCommonData));
     }
 
     /**
@@ -56,8 +59,9 @@ class SubCategoryController extends Controller
      */
     public function show(string $id)
     {
+        $getCommonData = $this->getCommonData();
         $model = Category::where('step', 1)->find($id);
-        return view('sub-category.show', ['model'=>$model]);
+        return view('sub-category.show', array_merge(['model'=>$model, 'current_page'=>$this->current_page], $getCommonData));
     }
 
     /**
@@ -65,9 +69,10 @@ class SubCategoryController extends Controller
      */
     public function edit(string $id)
     {
+        $getCommonData = $this->getCommonData();
         $SubCategory = Category::where('step', 1)->find($id);
         $categories = Category::where('step', 0)->get();
-        return view('sub-category.edit', ['subcategory'=>$SubCategory, 'categories'=>$categories]);
+        return view('sub-category.edit', array_merge(['subcategory'=>$SubCategory, 'categories'=>$categories, 'current_page'=>$this->current_page], $getCommonData));
     }
 
     /**
@@ -131,14 +136,16 @@ class SubCategoryController extends Controller
     }
     public function category()
     {
+        $getCommonData = $this->getCommonData();
         $category = Category::where('step', 0)->get();
-        return view('sub-category.category', ['categories'=>$category]);
+        return view('sub-category.category', array_merge(['categories'=>$category, 'current_page'=>$this->current_page], $getCommonData));
     }
 
     public function subcategory($id)
     {
+        $getCommonData = $this->getCommonData();
         $SubCategory = Category::where('parent_id', $id)->orderBy('created_at', 'desc')->get();
-        return view('sub-category.subcategory', ['subcategories'=>$SubCategory]);
+        return view('sub-category.subcategory', array_merge(['subcategories'=>$SubCategory, 'current_page'=>$this->current_page], $getCommonData));
     }
 
 }

@@ -2,17 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Language;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
+use Illuminate\Support\Facades\Auth;
 
 class Controller extends BaseController
 {
     use AuthorizesRequests, ValidatesRequests;
-
-    public function __construct(){
-        date_default_timezone_set("Asia/Tashkent");
-    }
 
     public function error(string $message, int $error_type, array $data = null)
     {
@@ -42,5 +40,16 @@ class Controller extends BaseController
         $random_array = [$letters[rand(0,25)], $letters[rand(0,25)], $letters[rand(0,25)], $letters[rand(0,25)], $letters[rand(0,25)]];
         $random = implode("", $random_array);
         return $random;
+    }
+
+    public function getCommonData(){
+        $current_user = Auth::user();
+        $locale = app()->getLocale();
+        $languages = Language::get();
+        return [
+            "current_user" => $current_user,
+            "locale" => $locale,
+            "languages" => $languages,
+        ];
     }
 }

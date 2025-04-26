@@ -4,21 +4,22 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\CategoryTranslations;
-use App\Models\CharacterizedProducts;
 use App\Models\Language;
 use App\Models\Products;
-use App\Models\Warehouse;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
+
+    public $current_page = 'category';
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
+        $getCommonData = $this->getCommonData();
         $category = Category::where('step', 0)->orderBy('created_at', 'desc')->get();
-        return view('category.index', ['categories'=> $category]);
+        return view('category.index', array_merge(['categories'=> $category, 'current_page'=>$this->current_page], $getCommonData));
     }
 
     /**
@@ -26,7 +27,8 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        return view('category.create');
+        $getCommonData = $this->getCommonData();
+        return view('category.create', array_merge($getCommonData, ['current_page'=>$this->current_page]));
     }
 
     /**
@@ -59,8 +61,9 @@ class CategoryController extends Controller
      */
     public function show(string $id)
     {
+        $getCommonData = $this->getCommonData();
         $model = Category::where('step', 0)->find($id);
-        return view('category.show', ['model'=>$model]);
+        return view('category.show', array_merge(['model'=>$model, 'current_page'=>$this->current_page], $getCommonData));
     }
 
     /**
@@ -68,8 +71,9 @@ class CategoryController extends Controller
      */
     public function edit(string $id)
     {
+        $getCommonData = $this->getCommonData();
         $category = Category::where('step', 0)->find($id);
-        return view('category.edit', ['category'=> $category]);
+        return view('category.edit', array_merge(['category'=> $category, 'current_page'=>$this->current_page], $getCommonData));
     }
 
     /**

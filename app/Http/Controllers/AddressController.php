@@ -2,13 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Models\Address;
 use App\Models\Cities;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Http;
 
 class AddressController extends Controller
 {
@@ -90,9 +88,9 @@ class AddressController extends Controller
 
     public function getAddress(Request $request){
         $language = $request->header('language') ?? 'ru';
-        
+
         $user = Auth::user()->load([
-            "addresses", 
+            "addresses",
             "addresses.cities",
             "addresses.cities.getTranslatedModel" => function ($query) use ($language) {
                 $query->where('lang', $language);
@@ -144,7 +142,7 @@ class AddressController extends Controller
                     ];
                 }
             }
-            
+
             return [
                 'id'=>$address_->id,
                 'name'=>$address_->name??'',
@@ -218,7 +216,7 @@ class AddressController extends Controller
                     ];
                 }
             }
-            
+
             return [
                 'id'=>$address_->id,
                 'name'=>$address_->name??'',

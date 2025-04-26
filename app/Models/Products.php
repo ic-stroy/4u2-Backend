@@ -48,6 +48,10 @@ class Products extends Model
         return $this->hasMany(CharacterizedProducts::class, 'product_id', 'id');
     }
 
+    public function warehouses(){
+        return $this->hasMany(CharacterizedProducts::class, 'product_id', 'id')->where('count', '>', 0);
+    }
+
     public function getTranslatedContent(){
         return $this->hasOne(ProductTranslations::class, 'product_id', 'id')->select('id', 'product_id', 'name')->where('lang', app()->getLocale());
     }

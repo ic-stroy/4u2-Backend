@@ -8,13 +8,15 @@ use Illuminate\Http\Request;
 
 class CouponController extends Controller
 {
+    public $current_page = 'coupon';
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
+        $getCommonData = $this->getCommonData();
         $coupons = Coupon::get();
-        return view('coupons.index', ['coupons'=> $coupons]);
+        return view('coupons.index', array_merge(['coupons'=> $coupons, 'current_page'=>$this->current_page], $getCommonData));
     }
 
     /**
@@ -22,7 +24,8 @@ class CouponController extends Controller
      */
     public function create()
     {
-        return view('coupons.create');
+        $getCommonData = $this->getCommonData();
+        return view('coupons.create', array_merge($getCommonData, ['current_page'=>$this->current_page]));
     }
 
     /**
@@ -58,8 +61,9 @@ class CouponController extends Controller
      */
     public function show(string $id)
     {
+        $getCommonData = $this->getCommonData();
         $model = Coupon::find($id);
-        return view('coupons.show', ['model'=>$model]);
+        return view('coupons.show', array_merge(['model'=>$model, 'current_page'=>$this->current_page], $getCommonData));
     }
 
     /**
@@ -67,8 +71,9 @@ class CouponController extends Controller
      */
     public function edit(string $id)
     {
+        $getCommonData = $this->getCommonData();
         $coupon = Coupon::find($id);
-        return view('coupons.edit', ['coupon'=> $coupon]);
+        return view('coupons.edit', array_merge(['coupon'=> $coupon, 'current_page'=>$this->current_page], $getCommonData));
     }
 
     /**

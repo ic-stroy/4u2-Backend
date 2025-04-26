@@ -8,7 +8,7 @@
     @csrf
     <input type="hidden" id="language_code" value="{{ $language->code??'' }}">
     <input type="hidden" name="id" value="{{ $language->id??'' }}">
-    <h5 class="mb-md-0 h6">{{ optional($translation->getModel)->name??'' }}</h5>
+    <h5 class="mb-md-0 h6">{{ $language->name??'' }}</h5>
     <table class="table table-striped table-bordered dt-responsive nowrap">
         <thead>
             <tr>
@@ -30,7 +30,7 @@
                         <td class="lang_value">
                             <input type="text" class="checkboxDivPerewvod value" id="input"
                         style="width:100%" name="values[{{ $translation->lang_key??'' }}]"
-                        value="{{ $translation->name??'' }}" @endif>
+                        value="{{ $translation->lang_value??'' }}">
                         </td>
                     </tr>
                 @endforeach

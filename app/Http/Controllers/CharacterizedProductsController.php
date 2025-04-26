@@ -12,11 +12,13 @@ use Illuminate\Http\Request;
 class CharacterizedProductsController extends Controller
 {
 
+    public $current_page = 'warehouse';
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
+        $getCommonData = $this->getCommonData();
         $categories = Category::with([
             'subcategory',
             'subcategory.products',
@@ -38,7 +40,7 @@ class CharacterizedProductsController extends Controller
             }
         }
 
-        return view('characterized-products.index', ['all_products'=> $all_products, 'categories'=> $categories]);
+        return view('characterized-products.index', array_merge(['all_products'=> $all_products, 'categories'=> $categories, 'current_page'=>$this->current_page], $getCommonData));
     }
 
     /**
@@ -46,9 +48,10 @@ class CharacterizedProductsController extends Controller
      */
     public function create()
     {
+        $getCommonData = $this->getCommonData();
         $products = Products::get();
         $colors = Color::get();
-        return view('characterized-products.create', ['colors'=> $colors, 'products'=> $products]);
+        return view('characterized-products.create', array_merge(['colors'=> $colors, 'products'=> $products, 'current_page'=>$this->current_page], $getCommonData));
     }
 
     /**
@@ -86,6 +89,7 @@ class CharacterizedProductsController extends Controller
      */
     public function show(string $id)
     {
+        $getCommonData = $this->getCommonData();
         $model = CharacterizedProducts::with([
             'product',
             'product.category',
@@ -128,7 +132,7 @@ class CharacterizedProductsController extends Controller
             }
         }
 
-        return view('characterized-products.show', ['model'=>$model, 'colors'=>$colors, 'category_array'=>$category_array]);
+        return view('characterized-products.show', array_merge(['model'=>$model, 'colors'=>$colors, 'category_array'=>$category_array, 'current_page'=>$this->current_page], $getCommonData));
     }
 
     /**
@@ -136,13 +140,14 @@ class CharacterizedProductsController extends Controller
      */
     public function edit(string $id)
     {
+        $getCommonData = $this->getCommonData();
         $characterized_product = CharacterizedProducts::with([
             'product',
-            'subSubCategory',
-            'subCategory',
-            'category',
-            'subSubCategory.sub_category',
-            'subCategory.category'
+            'product.subSubCategory',
+            'product.subCategory',
+            'product.category',
+            'product.subSubCategory.sub_category',
+            'product.subCategory.category'
         ])->find($id);
         if($characterized_product->product){
             $product = $characterized_product->product;
@@ -154,7 +159,7 @@ class CharacterizedProductsController extends Controller
             $product = 'no';
         }
         $colors = Color::get();
-        return view('characterized-products.edit', ['characterized_product'=> $characterized_product, 'sizes'=> $sizes, 'current_category'=> $current_category, 'colors'=> $colors, 'product'=> $product]);
+        return view('characterized-products.edit', array_merge(['characterized_product'=> $characterized_product, 'sizes'=> $sizes, 'current_category'=> $current_category, 'colors'=> $colors, 'product'=> $product, 'current_page'=>$this->current_page], $getCommonData));
     }
 
     /**
@@ -216,12 +221,14 @@ class CharacterizedProductsController extends Controller
 
     public function category()
     {
+        $getCommonData = $this->getCommonData();
         $category = Category::where('step', 0)->get();
-        return view('characterized-products.category', ['categories'=>$category]);
+        return view('characterized-products.category', array_merge(['categories'=>$category, 'current_page'=>$this->current_page], $getCommonData));
     }
 
     public function product($id)
     {
+        $getCommonData = $this->getCommonData();
         $category = Category::with([
             'subcategory',
             'subcategory.products',
@@ -239,18 +246,20 @@ class CharacterizedProductsController extends Controller
         if($category->products->isNotEmpty()){
             $products->merge($category->products);
         }
-        return view('characterized-products.products', ['products'=>$products]);
+        return view('characterized-products.products', array_merge(['products'=>$products, 'current_page'=>$this->current_page], $getCommonData));
     }
     public function characterizedProduct($id){
+        $getCommonData = $this->getCommonData();
         $characterized_products = CharacterizedProducts::where('product_id', $id)->get();
         $product = Products::select('id', 'name')->find($id);
-        return view('characterized-products.characterizedproduct', ['characterized_products'=>$characterized_products, 'product'=>$product]);
+        return view('characterized-products.characterizedproduct', array_merge(['characterized_products'=>$characterized_products, 'product'=>$product, 'current_page'=>$this->current_page], $getCommonData));
     }
     public function createCharacterizedProduct($id){
+        $getCommonData = $this->getCommonData();
         $colors = Color::get();
         $product = Products::find($id);
         $current_category = $this->getProductCategory($product);
-        return view('characterized-products.create_characterized_product', ['product'=>$product, 'colors'=>$colors, 'current_category'=>$current_category]);
+        return view('characterized-products.create_characterized_product', array_merge(['product'=>$product, 'colors'=>$colors, 'current_category'=>$current_category, 'current_page'=>$this->current_page], $getCommonData));
     }
 
     public function getProductCategory($product){
