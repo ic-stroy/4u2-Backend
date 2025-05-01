@@ -57,7 +57,6 @@ Route::group(['middleware'=>['auth:sanctum', 'is_auth']], function (){
     Route::post('get-coupon', [\App\Http\Controllers\ApiOrderController::class, 'getCoupon']);
     Route::post('confirm-order', [\App\Http\Controllers\ApiOrderController::class, 'confirmOrder']);
     Route::post('get-characterized-product', [\App\Http\Controllers\ProductsController::class, 'getCharacterizedProduct']);
-    Route::post('register', [AuthController::class, 'register']);
     Route::post('logout', [AuthController::class, 'logout']);
     Route::get('get-user', [AuthController::class, 'getUser']);
     Route::post('personal-information', [UsersController::class, 'setPersonalInformation']);
@@ -65,6 +64,7 @@ Route::group(['middleware'=>['auth:sanctum', 'is_auth']], function (){
     Route::get('delete-user-image', [UsersController::class, 'deleteUserImage']);
     Route::get('my-orders', [\App\Http\Controllers\ApiOrderController::class, 'getMyOrders']);
 });
+Route::post('register', [AuthController::class, 'register']);
 Route::post('register-with-email', [AuthController::class, 'registerWithEmail']);
 Route::post('delete-product', [\App\Http\Controllers\ProductsController::class, 'deleteProductImage']);
 Route::post('delete-warehouse', [\App\Http\Controllers\CharacterizedProductsController::class, 'deleteWarehouseImage']);
