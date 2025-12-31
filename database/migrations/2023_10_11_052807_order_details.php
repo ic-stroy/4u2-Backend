@@ -13,15 +13,14 @@ return new class extends Migration
     {
         Schema::create('order_details', function (Blueprint $table) {
             $table->id();
-            $table->integer('order_id')->nullable();
-            $table->integer('warehouse_id')->nullable();
+            $table->foreignId('order_id')->nullable()->constrained()->onDelete('restrict');
+            $table->foreignId('warehouse_id')->nullable()->references('id')->on('characterized_products')->onDelete('restrict');
             $table->integer('quantity');
-            $table->bigInteger('coupon_id')->nullable();
             $table->integer('discount')->nullable();
             $table->double('discount_price')->nullable();
             $table->double('price')->nullable();
-            $table->integer('size_id')->nullable();
-            $table->integer('color_id')->nullable();
+            $table->foreignId('size_id')->nullable()->constrained()->onDelete('restrict');
+            $table->foreignId('color_id')->nullable()->references('id')->on('color')->onDelete('restrict');
             $table->tinyInteger('status')->default(1);
             $table->timestamps();
             $table->softDeletes();

@@ -26,7 +26,7 @@ class PickUpController extends Controller
             $city = '';
             $region = '';
             if($model->cities){
-                if($model->cities->parent_id != '0'){
+                if($model->cities->parent_id){
                     $city = $model->cities->name??'';
                     if($model->cities->region){
                         $region = $model->cities->region->name??'';
@@ -96,7 +96,7 @@ class PickUpController extends Controller
         $city = '';
         $region = '';
         if($model->cities){
-            if($model->cities->parent_id != '0'){
+            if($model->cities->parent_id){
                 $city = $model->cities->name??'';
                 if($model->cities->region){
                     $region = $model->cities->region->name??'';

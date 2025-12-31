@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('sizes', function (Blueprint $table) {
             $table->id();
             $table->string('name')->nullable();
-            $table->integer('category_id')->nullable();
+            $table->foreignId('category_id')->nullable()->references('id')->on('categories')->onDelete('restrict');
             $table->timestamps();
             $table->softDeletes();
         });

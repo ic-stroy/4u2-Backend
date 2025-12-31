@@ -13,15 +13,13 @@ return new class extends Migration
     {
         Schema::create('characterized_products', function (Blueprint $table) {
             $table->id();
-            $table->integer('product_id')->nullable();
-            $table->integer('size_id')->nullable();
-            $table->integer('color_id')->nullable();
+            $table->foreignId('product_id')->nullable()->constrained()->onDelete('restrict');
+            $table->foreignId('size_id')->nullable()->constrained()->onDelete('restrict');
+            $table->foreignId('color_id')->nullable()->references('id')->on('color')->onDelete('restrict');
             $table->integer('count')->nullable();
             $table->integer('sum')->nullable();
             $table->timestamps();
             $table->softDeletes();
-            // $table->foreign('size_id')->references('id')->on('sizes')->onDelete('cascade');
-            // $table->foreign('color_id')->references('id')->on('color')->onDelete('cascade');
         });
     }
 

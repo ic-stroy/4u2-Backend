@@ -60,7 +60,7 @@ class ProductsController extends Controller
     public function create()
     {
         $getCommonData = $this->getCommonData();
-        $categories = Category::where('parent_id', 0)->orderBy('id', 'asc')->get();
+        $categories = Category::whereNull('parent_id')->orderBy('id', 'asc')->get();
         return view('products.create', array_merge(['categories'=> $categories, 'current_page'=>$this->current_page], $getCommonData));
     }
 
@@ -216,7 +216,7 @@ class ProductsController extends Controller
             $current_sub_category_id = 'no';
             $current_sub_sub_category_id = 'no';
         }
-        $categories = Category::where('parent_id', 0)->orderBy('id', 'asc')->get();
+        $categories = Category::whereNull('parent_id')->orderBy('id', 'asc')->get();
         return view('products.edit', array_merge([
             'product'=> $product, 'categories'=> $categories,
             'category_product'=> $category_product, 'is_category'=>$is_category,

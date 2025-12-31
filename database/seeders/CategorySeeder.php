@@ -547,9 +547,9 @@ class CategorySeeder extends Seeder
             foreach ($categories as $category){
                 $category_id_++;
                 $all_categories[] = [
-                    'id'=>(int)$category_id_,
-                    'name'=>$category['name'],
-                    'step'=>0, 'parent_id'=>0
+                    'id' => (int)$category_id_,
+                    'name' => $category['name'],
+                    'step' => 0, 'parent_id' => null
                 ];
                 if($last_category_id < $sub_category_id_){
                     $sub_category_id_ = $category_id_ + count($categories)-1;

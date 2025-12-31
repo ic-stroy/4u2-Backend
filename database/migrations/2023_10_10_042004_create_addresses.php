@@ -16,8 +16,9 @@ return new class extends Migration
             $table->string('name', 100)->nullable();
             $table->float('longitude')->nullable();
             $table->float('latitude')->nullable();
-            $table->integer('city_id')->nullable();
-            $table->integer('user_id')->nullable();
+            $table->foreignId('city_id')->nullable()->references('id')->on("yy_cities")->onDelete('restrict');
+            $table->foreignId('user_id')->nullable()->constrained()->onDelete('cascade');
+            $table->bigInteger('postcode')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

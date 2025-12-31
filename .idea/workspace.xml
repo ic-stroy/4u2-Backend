@@ -2,16 +2,45 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="baeeb12c-03b2-4eb7-b2be-dc7d3697fa3c" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/4u2-Backend.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/4u2-Backend.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/CharacterizedProductsController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/CharacterizedProductsController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/LanguageController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/LanguageController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/AddressController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/AddressController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/CategoryController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/CategoryController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/HomeController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/HomeController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/PickUpController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/PickUpController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/ProductsController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/ProductsController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/Color.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Color.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/Products.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Products.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/language/show.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/language/show.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/products/edit.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/products/edit.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/Cities.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Cities.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/composer.lock" beforeDir="false" afterPath="$PROJECT_DIR$/composer.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2014_10_12_000000_create_users_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2014_10_12_000000_create_users_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2014_10_31_075837_categories.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2014_10_31_075837_categories.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2023_06_08_065102_create_cities_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2023_06_08_065102_create_cities_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2023_09_25_055719_products.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2023_09_25_055719_products.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2023_10_06_105750_sizes.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2023_10_06_105750_sizes.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2023_10_06_105845_characterized_products.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2023_10_06_105845_characterized_products.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2023_10_10_041943_create_user_cards_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2023_10_10_041943_create_user_cards_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2023_10_10_042004_create_addresses.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2023_10_10_042004_create_addresses.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2023_10_11_052721_orders.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2023_10_11_052721_orders.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2023_10_11_052807_order_details.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2023_10_11_052807_order_details.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2023_10_11_052901_user_verifies.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2023_10_11_052901_user_verifies.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2023_11_01_062008_add_status_to_products_table.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2023_11_01_101641_add_sum_to_products_table.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2023_11_04_091529_add_description_to_products_table.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2023_11_08_072347_create_language_translations_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2023_11_08_072347_create_language_translations_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2023_11_08_072435_create_languages_table.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2023_11_22_053002_add_token_to_users_table.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2023_11_23_110738_create_discounts_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2023_11_23_110738_create_discounts_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2023_12_11_134725_create_color_translations_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2023_12_11_134725_create_color_translations_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2023_12_11_134741_create_city_translations_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2023_12_11_134741_create_city_translations_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2023_12_11_134839_create_product_translations_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2023_12_11_134839_create_product_translations_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2023_12_11_134849_create_category_translations_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2023_12_11_134849_create_category_translations_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2024_03_27_104042_add_user_name_to_user_cards_table.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2024_03_27_131831_remove_validity_type_to_user_cards_table.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2024_03_27_132329_add_validity_type_to_user_cards_table.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2024_04_09_131107_add_remove_coupon_id_to_order_details_table.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2024_06_17_135555_add_code_to_orders_table.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2024_06_18_080916_add_postcode_to_addresses_table.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2024_09_05_161754_product_description_translations.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2024_09_05_161754_product_description_translations.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/seeders/CategorySeeder.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/seeders/CategorySeeder.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/seeders/CitiesSeeder.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/seeders/CitiesSeeder.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -160,17 +189,17 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../backend" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\OSPanel\domains\4u2-Backend" />
+      <recent name="C:\OSPanel\domains\4u2-Backend\database\migrations" />
       <recent name="C:\OSPanel\domains\4u2-Backend\public\assets\css" />
       <recent name="C:\OSPanel\domains\4u2-Backend\database\seeders" />
       <recent name="C:\OSPanel\domains\4u2-Backend\resources\views" />
-      <recent name="C:\OSPanel\domains\4u2-Backend\database\migrations" />
-      <recent name="C:\OSPanel\domains\4u2-Backend\app\Models" />
     </key>
   </component>
   <component name="RunManager">
@@ -217,6 +246,7 @@
       <workItem from="1745479955048" duration="10645000" />
       <workItem from="1745586013455" duration="16151000" />
       <workItem from="1745650811927" duration="1256000" />
+      <workItem from="1767174042737" duration="2638000" />
     </task>
     <servers />
   </component>

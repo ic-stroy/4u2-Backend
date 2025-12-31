@@ -15,8 +15,9 @@ return new class extends Migration
             $table->id();
             $table->string('name', 100)->nullable();
             $table->bigInteger('card_number')->nullable();
-            $table->integer('user_id')->nullable();
-            $table->string('validity_period', 100)->nullable();
+            $table->foreignId('user_id')->nullable()->constrained()->onDelete('restrict');
+            $table->string('user_name')->nullable();
+            $table->timestamp('validity_period')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

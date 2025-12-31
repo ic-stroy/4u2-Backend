@@ -20,7 +20,7 @@ class AddressController extends Controller
             'getDistricts.getTranslatedModel' => function ($query) use ($language) {
                 $query->where('lang', $language);
             },
-        ])->where('parent_id', 0)->orderBy('id', 'ASC')->get()->map(function($city){
+        ])->whereNull('parent_id')->orderBy('id', 'ASC')->get()->map(function($city){
             $cities_ = $city->getDistricts->map(function($district){
                 return [
                     'id' => $district->id,
@@ -110,7 +110,7 @@ class AddressController extends Controller
             $region_city = [];
             $city_translate = $address_->cities;
             if($city_translate){
-                if($city_translate->parent_id != '0'){
+                if($city_translate->parent_id){
                     $city = [
                         'id' => $city_translate->id,
                         'name' => optional($city_translate->getTranslatedModel)->name??'',
@@ -182,9 +182,9 @@ class AddressController extends Controller
             $city = [];
             $region = [];
             $region_city = [];
-            $city_translate = optional($address_->cities->getTranslatedModel)->name??'';
             if($address_->cities){
-                if($address_->cities->parent_id != '0'){
+                $city_translate = optional($address_->cities->getTranslatedModel)->name??'';
+                if($address_->cities->parent_id){
                     $city = [
                         'id' => $address_->cities->id,
                         'name' => optional($address_->cities->getTranslatedModel)->name??'',

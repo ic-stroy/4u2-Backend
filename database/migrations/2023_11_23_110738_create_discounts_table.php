@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('discounts', function (Blueprint $table) {
             $table->id();
             $table->string('percent', 100)->nullable();
-            $table->integer('product_id')->nullable();
-            $table->integer('category_id')->nullable();
+            $table->foreignId('product_id')->nullable()->constrained()->onDelete('cascade');
+            $table->foreignId('category_id')->nullable()->references('id')->on('categories')->onDelete('cascade');
             $table->integer('discount_number')->nullable();
             $table->timestamp('start_date')->nullable();
             $table->timestamp('end_date')->nullable();

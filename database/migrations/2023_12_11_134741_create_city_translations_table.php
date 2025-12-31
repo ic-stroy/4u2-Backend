@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('city_translations', function (Blueprint $table) {
             $table->id();
-            $table->integer('city_id')->nullable();
+            $table->foreignId('city_id')->nullable()->references('id')->on('yy_cities')->onDelete('cascade');
             $table->string('name', 100)->nullable();
             $table->string('lang', 100)->nullable();
             $table->timestamps();

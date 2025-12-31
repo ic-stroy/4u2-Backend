@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('category_translations', function (Blueprint $table) {
             $table->id();
-            $table->integer('category_id')->nullable();
+            $table->foreignId('category_id')->nullable()->references('id')->on('categories')->onDelete('cascade');
             $table->string('name', 100)->nullable();
             $table->string('lang', 100)->nullable();
             $table->timestamps();

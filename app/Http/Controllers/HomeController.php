@@ -60,7 +60,7 @@ class HomeController extends Controller
                     $model_region = new Cities();
                     $model_region->name = $city->region;
                     $model_region->type = 'region';
-                    $model_region->parent_id = 0;
+                    $model_region->parent_id = null;
                     $model_region->lng = $city->long;
                     $model_region->lat = $city->lat;
                     $model_region->save();

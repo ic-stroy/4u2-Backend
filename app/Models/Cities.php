@@ -13,7 +13,7 @@ class Cities extends Model
     public $table = 'yy_cities';
 
     public function getDistricts(){
-        return $this->hasMany(Cities::class, 'parent_id', 'id')->where('parent_id', '!=', 0);
+        return $this->hasMany(Cities::class, 'parent_id', 'id')->whereNotNull('parent_id');
     }
 
     public function region(){

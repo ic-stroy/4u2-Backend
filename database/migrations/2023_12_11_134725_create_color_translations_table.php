@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('color_translations', function (Blueprint $table) {
             $table->id();
-            $table->integer('color_id')->nullable();
+            $table->foreignId('color_id')->nullable()->references('id')->on('color')->onDelete('cascade');
             $table->string('name', 100)->nullable();
             $table->string('lang', 100)->nullable();
             $table->timestamps();

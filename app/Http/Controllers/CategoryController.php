@@ -42,7 +42,7 @@ class CategoryController extends Controller
             $model->id = (int)$last_category->id + 1;
         }
         $model->name = $request->name;
-        $model->parent_id = 0;
+        $model->parent_id = null;
         $model->step = 0;
         $model->save();
         $languages = Language::get();
