@@ -38,6 +38,8 @@ Route::get('get-products-by-sub-categories/{id}', [\App\Http\Controllers\Product
 Route::get('get-categories-by-product/{id}', [\App\Http\Controllers\ProductsController::class, 'getCategoriesByProduct'])->name('get_categories_by_product');
 Route::get('products', [\App\Http\Controllers\ProductsController::class, 'getProducts']);
 Route::get('all-products', [\App\Http\Controllers\ProductsController::class, 'getAllProducts']);
+Route::get('ten-products', [\App\Http\Controllers\ProductsController::class, 'getTenProducts']);
+Route::get('four-products', [\App\Http\Controllers\ProductsController::class, 'getFourProducts']);
 Route::get('products-by-category', [\App\Http\Controllers\ProductsController::class, 'getProductsByCategory']);
 Route::get('product', [\App\Http\Controllers\ProductsController::class, 'getProduct']);
 Route::get('best-seller', [\App\Http\Controllers\ProductsController::class, 'BestSeller']);

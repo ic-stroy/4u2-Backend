@@ -22,7 +22,7 @@ class AuthController extends Controller
         $eskiz_token = EskizToken::first();
         $user_verify = UserVerify::withTrashed()->where('phone_number', (int)$fields['phone'])->first();
         $random = rand(100000, 999999);
-        if($user_verify){
+        if(!$user_verify){
             $user_verify = new UserVerify();
             $user_verify->phone_number = (int)$request->phone;
             $user_verify->status_id = 1;
@@ -31,65 +31,66 @@ class AuthController extends Controller
                 $user_verify->deleted_at = NULL;
             }
         }
-        $token_options = [
-            'multipart' => [
-                [
-                    'name' => 'email',
-                    'contents' => 'easysolutiongroupuz@gmail.com'
-                ],
-                [
-                    'name' => 'password',
-                    'contents' => '4TYvyjOof4CmOUk5CisHHUzzQ5Mcn1mirx0VBuQV'
-                ]
-            ]
-        ];
-        if($user_verify){
-            if(strtotime($user_verify->updated_at) + 60 > strtotime('now')){
-                return $this->error("Fail message not sent. You must wait 1 minute to resend sms", 400);
-            }
-        }
-        if($eskiz_token->expire_date){
-            $guzzle_request = new GuzzleRequest('POST', 'https://notify.eskiz.uz/api/auth/login');
-            $res = $client->sendAsync($guzzle_request, $token_options)->wait();
-            $res_array = json_decode($res->getBody());
-            $eskizToken = new EskizToken();
-            $eskizToken->token = $res_array->data->token;
-            $eskizToken->expire_date = strtotime('+28 days');
-            $eskizToken->save();
-        }elseif(strtotime('now') > (int)$eskiz_token->expire_date){
-            $guzzle_request = new GuzzleRequest('POST', 'https://notify.eskiz.uz/api/auth/login');
-            $res = $client->sendAsync($guzzle_request, $token_options)->wait();
-            $res_array = json_decode($res->getBody());
-            $eskizToken = EskizToken::first();
-            $eskizToken->token = $res_array->data->token;
-            $eskizToken->expire_date = strtotime('+28 days');
-            $eskizToken->save();
-        }
-        $eskiz_token = EskizToken::first();
-        $options = [
-            'headers' => [
-                'Accept'        => 'application/json',
-                'Authorization' => "Bearer $eskiz_token->token",
-            ],
-            'multipart' => [
-                [
-                    'name' => 'mobile_phone',
-                    'contents' => $request->phone
-                ],
-                [
-                    'name' => 'message',
-                    'contents' => translate('4u2 - Sizni bir martalik tasdiqlash kodingiz').': '.$random
-                ],
-                [
-                    'name' => 'from',
-                    'contents' => '4546'
-                ],
-            ]
-        ];
-        $guzzle_request = new GuzzleRequest('POST', 'https://notify.eskiz.uz/api/message/sms/send');
-        $res = $client->sendAsync($guzzle_request, $options)->wait();
-        $result = $res->getBody();
-        $result = json_decode($result);
+//        $token_options = [
+//            'multipart' => [
+//                [
+//                    'name' => 'email',
+//                    'contents' => 'easysolutiongroupuz@gmail.com'
+//                ],
+//                [
+//                    'name' => 'password',
+//                    'contents' => '4TYvyjOof4CmOUk5CisHHUzzQ5Mcn1mirx0VBuQV'
+//                ]
+//            ]
+//        ];
+//        if($user_verify){
+//            if(strtotime($user_verify->updated_at) + 60 > strtotime('now')){
+//                return $this->error("Fail message not sent. You must wait 1 minute to resend sms", 400);
+//            }
+//        }
+//        if($eskiz_token->expire_date){
+//            $guzzle_request = new GuzzleRequest('POST', 'https://notify.eskiz.uz/api/auth/login');
+//            $res = $client->sendAsync($guzzle_request, $token_options)->wait();
+//            $res_array = json_decode($res->getBody());
+//            $eskizToken = new EskizToken();
+//            $eskizToken->token = $res_array->data->token;
+//            $eskizToken->expire_date = strtotime('+28 days');
+//            $eskizToken->save();
+//        }elseif(strtotime('now') > (int)$eskiz_token->expire_date){
+//            $guzzle_request = new GuzzleRequest('POST', 'https://notify.eskiz.uz/api/auth/login');
+//            $res = $client->sendAsync($guzzle_request, $token_options)->wait();
+//            $res_array = json_decode($res->getBody());
+//            $eskizToken = EskizToken::first();
+//            $eskizToken->token = $res_array->data->token;
+//            $eskizToken->expire_date = strtotime('+28 days');
+//            $eskizToken->save();
+//        }
+//        $eskiz_token = EskizToken::first();
+//        $options = [
+//            'headers' => [
+//                'Accept'        => 'application/json',
+//                'Authorization' => "Bearer $eskiz_token->token",
+//            ],
+//            'multipart' => [
+//                [
+//                    'name' => 'mobile_phone',
+//                    'contents' => $request->phone
+//                ],
+//                [
+//                    'name' => 'message',
+//                    'contents' => translate('4u2 - Sizni bir martalik tasdiqlash kodingiz').': '.$random
+//                ],
+//                [
+//                    'name' => 'from',
+//                    'contents' => '4546'
+//                ],
+//            ]
+//        ];
+//        $guzzle_request = new GuzzleRequest('POST', 'https://notify.eskiz.uz/api/message/sms/send');
+//        $res = $client->sendAsync($guzzle_request, $options)->wait();
+//        $result = $res->getBody();
+//        $result = json_decode($result);
+        $result = 'sdfsdf';
         if($result){
             $user_verify->verify_code = $random;
             $user_verify->save();
@@ -112,7 +113,6 @@ class AuthController extends Controller
             'verify_code'=>'required',
         ]);
         $model = UserVerify::withTrashed()->where('phone_number', (int)$fields['phone_number'])->first();
-
         if($model){
             if(strtotime('-7 minutes') > strtotime($model->updated_at)){
                 $model->verify_code = rand(100000, 999999);
@@ -128,7 +128,7 @@ class AuthController extends Controller
             if($model->verify_code == $fields['verify_code']){
                 $is_registred = false;
                 $user = User::withTrashed()->find($model->user_id);
-                if($user){
+                if(!$user){
                     $new_user = new User();
                     $new_user->phone_number = (int)$fields['phone_number'];
                     $new_user->save();

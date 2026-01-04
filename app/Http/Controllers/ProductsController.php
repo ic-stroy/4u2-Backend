@@ -623,6 +623,66 @@ class ProductsController extends Controller
         return response()->json($response, 200);
     }
 
+    public function getTenProducts(Request $request)
+    {
+        $language = $request->header('language')??'en';
+        $products = Products::with([
+            'discount',
+            'getTranslatedModel' => function($query) use($language){
+                $query->where('lang', $language);
+            }
+        ])->inRandomOrder()->take(10)->get();
+        $goods = $this->getGoods($products);
+        $response = [
+            'status'=>true,
+            'data'=>$goods
+        ];
+        return response()->json($response, 200);
+    }
+
+    public function getFourProducts(Request $request)
+    {
+        $language = $request->header('language')??'en';
+        $products = Products::with([
+            'discount',
+            'getTranslatedModel' => function($query) use($language){
+                $query->where('lang', $language);
+            }
+        ])->inRandomOrder()->take(4)->get();
+        $goods = $this->getGoodsBasicInfo($products);
+        $response = [
+            'status'=>true,
+            'data'=>$goods
+        ];
+        return response()->json($response, 200);
+    }
+
+    public function getGoodsBasicInfo($products){
+        $goods = $products->map(function($product){
+            $discount = $product->discount;
+            $images_ = json_decode($product->images);
+            $images = [];
+            foreach ($images_ as $image_) {
+                $images[] = asset('storage/products/' . $image_);
+            }
+            if($discount){
+                $sum = $discount->percent?$product->sum - $product->sum*(int)$discount->percent/100:$product->sum;
+            }else{
+                $sum = $product->sum ?? null;
+            }
+
+            return [
+                'id' => $product->id,
+                'name' => optional($product->getTranslatedModel)->name??$product->name,
+                'sum' => number_format($sum, 0, '', ' '),
+                'price' => number_format($product->sum, 0, '', ' '),
+                'discount' => $product->discount?$product->discount->percent:null,
+                'images' => $images,
+            ];
+        });
+        return $goods;
+    }
+
     public function getProduct(Request $request)
     {
         $product_id = $request->header('id');
