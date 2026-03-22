@@ -35,24 +35,6 @@
 
 
     <script src="{{ asset('assets/libs/jquery/jquery.min.js') }}"></script>
-{{--    <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>--}}
-{{--    <script>--}}
-{{--        Pusher.logToConsole = true;--}}
-
-{{--        // in blade.php--}}
-{{--        var pusher = new Pusher('4bf904d1d86b8b8ff046', {--}}
-{{--            cluster: 'ap1'--}}
-{{--        });--}}
-
-{{--        var channel = pusher.subscribe('4u2-channel');--}}
-{{--        channel.bind('4u2-event', function(data) {--}}
-{{--            console.log(data)--}}
-{{--            // alert(JSON.stringify(data))--}}
-{{--            alert('Xurshid kurrani kuti')--}}
-{{--            // toastr.success(data)--}}
-{{--        });--}}
-{{--        // Enable pusher logging - don't include this in production--}}
-{{--    </script>--}}
 </head>
 <style>
 #dropdownMenuButton{

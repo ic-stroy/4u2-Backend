@@ -9770,7 +9770,9 @@ a:hover {
 }
 
 #sidebar-menu #side-menu li a.active{
-    background-color: #3EB944;
-    color:white !important;
+    background-color: rgb(0, 0, 0, 0.1);
+}
+body[data-leftbar-color='dark'] #sidebar-menu #side-menu li a.active{
+    background-color: rgb(255, 255, 255, 0.1);
 }
 /* -------------- */

@@ -17,6 +17,7 @@ use App\Models\Category;
 use App\Service\ProductService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class ProductsController extends Controller
 {
@@ -540,10 +541,8 @@ class ProductsController extends Controller
         return response()->json($goods);
     }
 
-    public function getProducts(Request $request)
-    {
-        $language = $request->header('language')??'en';
-        $products = Products::with([
+    public function getProductsQuery($language){
+        return Products::query()->with([
             'discount',
             'warehouses',
             'warehouses.color',
@@ -572,55 +571,82 @@ class ProductsController extends Controller
             'subSubCategory.sub_category',
             'subSubCategory.sub_category.category',
             'subCategory.category',
-        ])->get();
+        ]);
+    }
+
+    public function getProducts(Request $request)
+    {
+        $language = $request->header('language')??'en';
+        $search_data = $request->search_data??'';
+        $items_per_page = (int)($request->items_per_page??10);
+        $current_page = max(1, (int)$request->current_page);
+        $products = $this->getProductsQuery($language);
+        $this->setFilter($products, $search_data);
+        // Count va pagination
+        $all_orders_quantity = $products->count();
+        $last_page = ceil($all_orders_quantity / $items_per_page);
+        $products = $products->skip($items_per_page * ((int)$current_page - 1))
+            ->take($items_per_page)
+            ->get();
+        $paginates = $this->paginateData($last_page, $current_page);
         $goods = $this->getGoods($products);
         $response = [
-            'status'=>true,
-            'data'=>$goods
+            'status' => true,
+            'data' => $goods,
+            'paginates' => $paginates
         ];
         return response()->json($response, 200);
     }
 
-    public function getAllProducts(Request $request)
-    {
-        $language = $request->header('language')??'en';
-        $products = Products::with([
-            'discount',
-            'warehouses',
-            'warehouses.color',
-            'warehouses.color.warehouses',
-            'warehouses.color.getTranslatedModel' => function($query) use($language){
-                $query->where('lang', $language);
-            },
-            'warehouses.size',
-            'getTranslatedDescriptionModel' => function($query) use($language){
-                $query->where('lang', $language);
-            },
-            'getTranslatedModel' => function($query) use($language){
-                $query->where('lang', $language);
-            },
-            'subSubCategory',
-            'subCategory',
-            'category',
-            'subSubCategory.getTranslatedModel' => function($query) use($language){
-                $query->where('lang', $language);
-            },
-            'subCategory.getTranslatedModel' => function($query) use($language){
-                $query->where('lang', $language);
-            },
-            'category.getTranslatedModel' => function($query) use($language){
-                $query->where('lang', $language);
-            },
-            'subSubCategory.sub_category',
-            'subSubCategory.sub_category.category',
-            'subCategory.category',
-        ])->get();
-        $goods = $this->getGoods($products);
-        $response = [
-            'status'=>true,
-            'data'=>$goods
+    public function paginateData($last_page, $current_page){
+        $previous_dots = false;
+        $next_dots = false;
+        if ($last_page <= 2) {
+            $pages = [];
+        } else {
+            $start = max(2, $current_page - 2);
+            $end = min($last_page - 1, $current_page + 2);
+            if ($start > 2) $previous_dots = true;
+            if ($end < $last_page - 1) $next_dots = true;
+            if($start < $end){
+                $pages = range($start, $end);
+            }elseif($start == 2){
+                $pages = [2];
+            }else{
+                $pages = [];
+            }
+        }
+        return [
+            'pages' => $pages,
+            'last_page' => $last_page,
+            'previous_dots' => $previous_dots,
+            'next_dots' => $next_dots,
+            'current_page' => $current_page,
         ];
-        return response()->json($response, 200);
+    }
+
+    public function setFilter($products, $search_data){
+
+        if($search_data){
+//            optional($product->getTranslatedModel)->name??$product->name;
+            $products->where(function($query) use($search_data){
+                $query->whereHas('getTranslatedModel', function($query) use($search_data){
+                    if (DB::getDriverName() === 'pgsql') {
+                        // PostgreSQL uchun
+                        $query->where('name', 'ilike', "%$search_data%");
+                    } else {
+                        // MySQL yoki boshqa DB uchun
+                        $query->where('name', 'like', "%$search_data%");
+                    }
+                })->orWhere(function($query) use($search_data){
+                    if (DB::getDriverName() === 'pgsql') {
+                        $query->where('name', 'ilike', "%$search_data%");
+                    } else {
+                        $query->where('name', 'like', "%$search_data%");
+                    }
+                });
+            });
+        }
     }
 
     public function getTenProducts(Request $request)
@@ -670,6 +696,7 @@ class ProductsController extends Controller
             }else{
                 $sum = $product->sum ?? null;
             }
+
 
             return [
                 'id' => $product->id,
@@ -928,29 +955,29 @@ class ProductsController extends Controller
         $good = [];
         $is_exist_in_warehouse = false;
         $selected_products_id = $request->selected_products_id;
-        foreach($selected_products_id as $selected_product_id){
+        $products = Products::with([
+            'discount',
+            'category',
+            'category.getTranslatedModel' => function($query) use($language){
+                $query->where('lang', $language);
+            },
+            'getTranslatedModel' => function($query) use($language){
+                $query->where('lang', $language);
+            },
+            'warehouses',
+            'warehouses.color',
+            'warehouses.color.warehouses' => function($query) use($selected_products_id) {
+                $query->whereIn('product_id', $selected_products_id);
+            },
+            'warehouses.color.getTranslatedModel' => function($query) use($language){
+                $query->where('lang', $language);
+            },
+            'warehouses.size'
+        ])->whereIn('id', $selected_products_id)->get();
+        foreach($products as $product){
             $images = null;
             $company_name = null;
             $category_name = null;
-            $product = Products::with([
-                'discount',
-                'category',
-                'category.getTranslatedModel' => function($query) use($language){
-                    $query->where('lang', $language);
-                },
-                'getTranslatedModel' => function($query) use($language){
-                    $query->where('lang', $language);
-                },
-                'warehouses',
-                'warehouses.color',
-                'warehouses.color.warehouses' => function($query) use($selected_product_id) {
-                    $query->where('product_id', $selected_product_id);
-                },
-                'warehouses.color.getTranslatedModel' => function($query) use($language){
-                    $query->where('lang', $language);
-                },
-                'warehouses.size'
-            ])->find($selected_product_id);
             if($product){
                 $discount = $product->discount;
                 if (!$product->warehouses->isEmpty()) {
@@ -962,9 +989,9 @@ class ProductsController extends Controller
                     }
                     $categorizedByColor = $product->warehouses
                         ->filter(fn($categorizedProduct_) => !empty($categorizedProduct_->color))
-                        ->map(function($categorizedProduct_) use($discount, $selected_product_id){
+                        ->map(function($categorizedProduct_) use($discount){
                             $colorModel = $categorizedProduct_->color;
-                            $productsByColor = $this->productService->getProductsByColor($colorModel->warehouses, $discount, $selected_product_id);
+                            $productsByColor = $this->productService->getProductsByColor($colorModel->warehouses, $discount, $categorizedProduct_->product_id);
                             return [
                                 'color' => $colorModel,
                                 'products' => $productsByColor
@@ -1016,36 +1043,7 @@ class ProductsController extends Controller
     public function BestSeller(Request $request)
     {
         $language = $request->header('language')??'en';
-        $products = Products::with([
-            'discount',
-            'warehouses',
-            'warehouses.color',
-            'warehouses.color.getTranslatedModel' => function($query) use($language){
-                $query->where('lang', $language);
-            },
-            'warehouses.size',
-            'getTranslatedDescriptionModel' => function($query) use($language){
-                $query->where('lang', $language);
-            },
-            'getTranslatedModel' => function($query) use($language){
-                $query->where('lang', $language);
-            },
-            'subSubCategory',
-            'subCategory',
-            'category',
-            'subSubCategory.getTranslatedModel' => function($query) use($language){
-                $query->where('lang', $language);
-            },
-            'subCategory.getTranslatedModel' => function($query) use($language){
-                $query->where('lang', $language);
-            },
-            'category.getTranslatedModel' => function($query) use($language){
-                $query->where('lang', $language);
-            },
-            'subSubCategory.sub_category',
-            'subSubCategory.sub_category.category',
-            'subCategory.category',
-        ])->orderBy('id', 'DESC')->get();
+        $products = $this->getProductsQuery($language)->inRandomOrder()->take(10)->get();
         $goods = $this->getGoods($products);
         $response = [
             'status'=>true,
@@ -1145,36 +1143,7 @@ class ProductsController extends Controller
 
     public function getProductsByAllSubCategories($category, $language){
         $category_ids = $this->getCategoriesId($category);
-        $products = Products::with([
-            'discount',
-            'warehouses',
-            'warehouses.color',
-            'warehouses.color.getTranslatedModel' => function($query) use($language){
-                $query->where('lang', $language);
-            },
-            'warehouses.size',
-            'getTranslatedDescriptionModel' => function($query) use($language){
-                $query->where('lang', $language);
-            },
-            'getTranslatedModel' => function($query) use($language){
-                $query->where('lang', $language);
-            },
-            'subSubCategory',
-            'subCategory',
-            'category',
-            'subSubCategory.getTranslatedModel' => function($query) use($language){
-                $query->where('lang', $language);
-            },
-            'subCategory.getTranslatedModel' => function($query) use($language){
-                $query->where('lang', $language);
-            },
-            'category.getTranslatedModel' => function($query) use($language){
-                $query->where('lang', $language);
-            },
-            'subSubCategory.sub_category',
-            'subSubCategory.sub_category.category',
-            'subCategory.category',
-        ])->whereIn('category_id', $category_ids)->get();
+        $products = $this->getProductsQuery($language)->whereIn('category_id', $category_ids)->get();
         $goods = $this->getGoods($products);
         $data = [
             'category'=>[
